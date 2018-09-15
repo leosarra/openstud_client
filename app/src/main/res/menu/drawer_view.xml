@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <group
+            android:id="@+id/groupFeatures">
+            <item
+                android:id="@+id/profile_menu"
+                android:icon="@drawable/ic_baseline_account_circle"
+                android:title="@string/profile" />
+            <item
+                android:id="@+id/exams_menu"
+                android:icon="@drawable/ic_baseline_class"
+                android:title="@string/exams" />
+            <item
+                android:id="@+id/stats_menu"
+                android:icon="@drawable/ic_baseline_assessment"
+                android:title="@string/stats" />
+            <item
+                android:id="@+id/payments_menu"
+                android:icon="@drawable/ic_baseline_payment"
+                android:title="@string/payments" />
+       </group>
+
+        <group
+            android:id="@+id/groupExtra">
+            <item
+                android:id="@+id/settings_menu"
+                android:icon="@drawable/ic_baseline_settings"
+                android:title="@string/settings" />
+            <item
+                android:id="@+id/about_menu"
+                android:icon="@drawable/ic_baseline_info"
+                android:title="@string/about" />
+            <item
+                android:id="@+id/exit_menu"
+                android:icon="@drawable/ic_baseline_exit_to_app"
+                android:title="@string/exit" />
+        </group>
+
+    </group>
+</menu>
