@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">OpenStud</string>
+    <string name="studentId">Matricola</string>
+    <string name="login">Accedi</string>
+    <string name="saveLogin">Ricorda credenziali</string>
+    <string name="course">Corso</string>
+    <string name="department">Facoltà</string>
+    <string name="status">Stato studente</string>
+    <string name="year_course">Anno corso</string>
+    <string name="birthDate">Data di nascita</string>
+    <string name="birthPlace">Luogo di nascita</string>
+    <string name="profile">Profilo</string>
+    <string name="about">Info</string>
+    <string name="settings">Impostazioni</string>
+    <string name="stats">Statistiche</string>
+    <string name="exams">Esami</string>
+    <string name="payments">Bollettini</string>
+    <string name="exit">Esci</string>
+    <string name="paid">Pagate</string>
+    <string name="unpaid">Non pagate</string>
+    <string name="isee_not_avaiable">Non dichiarato</string>
+    <string name="blank_username_error">"L'username non è può essere lasciato vuoto!</string>
+    <string name="blank_password_error">"La password non è può essere lasciata vuota!</string>
+    <string name="blank_username_password_error">"Username e password non possono essere lasciati vuoti!</string>
+    <string name="connection_error">Errore di connessione</string>
+    <string name="retry">Retry</string>
+    <string name="invalid_response_error">Infostud non sembra funzionare correttamente</string>
+    <string name="user_not_enabled_error">Utente non abilitato alla gestione su Infostud</string>
+    <string name="invalid_password_error">La credenziali inseriti sono errate</string>
+    <string name="device_no_internet">Il tuo dispositivo non risulta connesso a internet</string>
+</resources>
