@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.icu.text.IDNA;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,10 +16,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import com.lithium.leona.openstud.fragments.TabFragment;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +38,7 @@ public class PaymentsActivity extends AppCompatActivity {
     private NavigationView nv;
     private Openstud os;
     private Student student;
+    private Map<Integer,Snackbar> snackBarMap = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,4 +120,28 @@ public class PaymentsActivity extends AppCompatActivity {
             }
         });
     }
+
+    public synchronized void createTextSnackBar(int string_id, int length) {
+        if (snackBarMap.containsKey(string_id)) return;
+        Snackbar snackbar = ClientHelper.createTextSnackBar(mDrawerLayout,string_id,length);
+        snackBarMap.put(string_id,snackbar);
+    }
+
+    public synchronized  void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
+        if (snackBarMap.containsKey(string_id)) return;
+        Snackbar snackbar = Snackbar
+                .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);
+        snackBarMap.put(string_id,snackbar);
+        snackbar.addCallback(new Snackbar.Callback(){
+            public void onDismissed(Snackbar snackbar, int event) {
+                removeKeyFromMap(string_id);
+            }
+        });
+        snackbar.show();
+    }
+
+    private synchronized void removeKeyFromMap(int id){
+        snackBarMap.remove(id);
+    }
+
 }
