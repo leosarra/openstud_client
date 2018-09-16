@@ -26,6 +26,8 @@
                 android:id="@+id/mainDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:padding="1dp"
                 android:textColor="@android:color/black" />
 
@@ -62,9 +64,9 @@
             android:id="@+id/payment_amount"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginEnd="10dp"
-            android:layout_weight="0.05"
+            android:layout_weight="0.15"
             android:gravity="center"
             android:textColor="@android:color/black"
             android:textSize="20sp"
