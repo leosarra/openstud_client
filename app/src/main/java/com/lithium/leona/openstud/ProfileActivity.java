@@ -42,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
         private final WeakReference<ProfileActivity> mActivity;
 
         public ProfileEventHandler(ProfileActivity activity) {
-            mActivity = new WeakReference<ProfileActivity>(activity);
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override
@@ -186,12 +186,12 @@ public class ProfileActivity extends AppCompatActivity {
     private void applyInfos(Student st, Isee isee){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(st.getFirstName()+" "+ st.getLastName());
+        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         collapsingToolbarLayout.setTitle(st.getFirstName()+" "+st.getLastName());
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
         navSubtitle.setText(String.valueOf(st.getStudentID()));
         studentId.setText(String.valueOf(st.getStudentID()));
-        LocalDate date = (LocalDate) st.getBirthDate();
+        LocalDate date = st.getBirthDate();
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());
         if(isee == null) isee_field.setText(getResources().getString(R.string.isee_not_avaiable));

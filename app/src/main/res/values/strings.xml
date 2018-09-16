@@ -2,6 +2,7 @@
     <string name="app_name">OpenStud</string>
     <string name="studentId">Student ID</string>
     <string name="password">Password</string>
+    <string name="fullname">%1$s %2$s</string>
     <string name="login">Login</string>
     <string name="saveLogin">Remember me</string>
     <string name="title_activity_profile">ProfileActivity</string>
