@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ public class PaymentsActivity extends AppCompatActivity {
     private NavigationView nv;
     private Openstud os;
     private Student student;
-    private Map<Integer,Snackbar> snackBarMap = new HashMap<>();
+    private SparseArray<Snackbar> snackBarMap = new SparseArray<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +62,8 @@ public class PaymentsActivity extends AppCompatActivity {
         View headerLayout = nv.getHeaderView(0);
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
-        navTitle.setText(student.getFirstName()+ " "+ student.getLastName());
+        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         navSubtitle.setText(String.valueOf(student.getStudentID()));
-
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame,new TabFragment()).commit();
@@ -129,13 +129,13 @@ public class PaymentsActivity extends AppCompatActivity {
     }
 
     public synchronized void createTextSnackBar(int string_id, int length) {
-        if (snackBarMap.containsKey(string_id)) return;
+        if (snackBarMap.get(string_id,null)!=null) return;
         Snackbar snackbar = ClientHelper.createTextSnackBar(mDrawerLayout,string_id,length);
         snackBarMap.put(string_id,snackbar);
     }
 
     public synchronized  void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
-        if (snackBarMap.containsKey(string_id)) return;
+        if (snackBarMap.get(string_id,null)!=null) return;
         Snackbar snackbar = Snackbar
                 .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);
         snackBarMap.put(string_id,snackbar);
