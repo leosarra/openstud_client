@@ -105,8 +105,8 @@ public class ProfileActivity extends AppCompatActivity {
         if (os == null || student == null || isee == null) {
             InfoManager.clearSharedPreferences(getApplication());
             Intent i = new Intent(ProfileActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            return;
+            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
         }
         applyInfos(student,isee);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
