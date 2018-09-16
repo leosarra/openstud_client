@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         login();
-        btn.setEnabled(true);
     }
 
     private static class LoginEventHandler extends Handler {
@@ -80,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
                     activity.createTextSnackBar(R.string.invalid_password_error, Snackbar.LENGTH_LONG);
                 }
+                activity.btn.setEnabled(true);
             }
         }
     }
@@ -97,14 +97,14 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         String username = this.username.getText().toString();
         String password = this.password.getText().toString();
-        if (username == null || username.isEmpty()) {
+        if (username.isEmpty()) {
             if (password.isEmpty())
                 ClientHelper.createTextSnackBar(layout, R.string.blank_username_password_error, Snackbar.LENGTH_LONG);
             else
                 ClientHelper.createTextSnackBar(layout, R.string.blank_username_error, Snackbar.LENGTH_LONG);
             return;
         }
-        if (password == null || password.isEmpty()) {
+        if (password.isEmpty()) {
             ClientHelper.createTextSnackBar(layout, R.string.blank_password_error, Snackbar.LENGTH_LONG);
             return;
         }
@@ -117,16 +117,19 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         os = InfoManager.getOpenStud(getApplication(), id, password, rememberFlag.isChecked());
-        new Thread(new Runnable(){
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 _login(os);
             }
-            }).start();
-
+        }).start();
     }
 
     private synchronized void _login(Openstud os){
+        if (os == null) {
+            h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+            return;
+        }
         try {
             os.login();
             InfoManager.getInfoStudent(this, os);
@@ -160,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void createTextSnackBar(int string_id, int length) {
-        ClientHelper.createTextSnackBar(layout,string_id,length);;
+        ClientHelper.createTextSnackBar(layout,string_id,length);
     }
 
     private void requestInternetPermission(){
