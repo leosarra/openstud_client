@@ -81,8 +81,10 @@ public class LoginActivity extends AppCompatActivity {
                 else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
                     activity.createTextSnackBar(R.string.invalid_password_error, Snackbar.LENGTH_LONG);
                 }
-                activity.btn.setEnabled(true);
-                activity.rememberFlag.setEnabled(true);
+                if (msg.what != ClientHelper.Status.OK.getValue()) {
+                    activity.btn.setEnabled(true);
+                    activity.rememberFlag.setEnabled(true);
+                }
             }
         }
     }
