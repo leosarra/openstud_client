@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
+import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class PaymentsFragment extends android.support.v4.app.Fragment {
@@ -65,7 +66,10 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+                    InfoManager.clearSharedPreferences(activity.getApplication());
+                    Intent i = new Intent(activity, LauncherActivity.class);
+                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    activity.finish();
                 }
             }
         }
@@ -147,6 +151,9 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
                     e.printStackTrace();
                 } catch (OpenstudInvalidResponseException e) {
                     h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                    e.printStackTrace();
+                } catch (OpenstudInvalidCredentialsException e) {
+                    h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                     e.printStackTrace();
                 }
                 if (update==null || taxes.equals(update)) {
