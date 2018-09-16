@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             LoginActivity activity = mActivity.get();
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
-                    Intent intent = new Intent(activity,ProfileActivity.class);
+                    Intent intent = new Intent(activity,ExamsActivity.class);
                     activity.startActivity(intent);
                 }
                 else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {

@@ -14,7 +14,7 @@ public class LauncherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
         if (!InfoManager.getSaveFlag(getApplication())) InfoManager.clearSharedPreferences(getApplication());
         if (InfoManager.hasLogin(getApplication())) {
-            Intent intent = new Intent(LauncherActivity.this, ProfileActivity.class);
+            Intent intent = new Intent(LauncherActivity.this, ExamsActivity.class);
             startActivity(intent);
         }
         else {
