@@ -15,21 +15,26 @@
         <activity
             android:name=".LauncherActivity"
             android:theme="@style/NoActionBarAppTheme">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
             android:noHistory="true"
-            android:theme="@style/NoActionBarAppTheme">
-        </activity>
+            android:theme="@style/NoActionBarAppTheme"></activity>
         <activity
             android:name=".ProfileActivity"
             android:theme="@style/NoActionBarAppTheme" />
         <activity
             android:name=".PaymentsActivity"
             android:theme="@style/NoActionBarAppTheme" />
+        <activity
+            android:name=".ExamsActivity"
+            android:label="@string/title_activity_exams"
+            android:theme="@style/NoActionBarAppTheme"></activity>
     </application>
+
 </manifest>

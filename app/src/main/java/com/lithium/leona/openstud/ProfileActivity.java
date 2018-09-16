@@ -34,6 +34,7 @@ import lithium.openstud.driver.core.Isee;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
+import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -62,7 +63,10 @@ public class ProfileActivity extends AppCompatActivity {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+                    InfoManager.clearSharedPreferences(activity.getApplication());
+                    Intent i = new Intent(activity, LauncherActivity.class);
+                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    activity.finish();
                 }
             }
         }
@@ -97,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         setupListeners();
-        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         headerLayout = nv.getHeaderView(0);
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(getApplication(),os);
@@ -165,6 +169,9 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (OpenstudInvalidResponseException e) {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
+        } catch (OpenstudInvalidCredentialsException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            e.printStackTrace();
         }
     }
 
@@ -185,6 +192,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void applyInfos(Student st, Isee isee){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         collapsingToolbarLayout.setTitle(st.getFirstName()+" "+st.getLastName());
@@ -203,15 +216,6 @@ public class ProfileActivity extends AppCompatActivity {
         cfu.setText(String.valueOf(st.getCfu()));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
