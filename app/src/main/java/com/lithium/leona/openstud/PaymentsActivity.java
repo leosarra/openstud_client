@@ -53,7 +53,6 @@ public class PaymentsActivity extends AppCompatActivity {
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             finish();
         }
-
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
         getSupportActionBar().setTitle(R.string.payments);
@@ -67,13 +66,6 @@ public class PaymentsActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame,new TabFragment()).commit();
-    }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        if (!InfoManager.getSaveFlag(getApplication())) {
-            InfoManager.clearSharedPreferences(getApplication());
-        }
     }
 
     @Override
