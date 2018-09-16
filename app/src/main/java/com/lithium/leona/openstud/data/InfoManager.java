@@ -124,7 +124,7 @@ public class InfoManager {
         return gson.fromJson(oldObj,listType);
     }
 
-    public static Student getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+    public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -140,7 +140,7 @@ public class InfoManager {
             prefsEditor.putString("lastPaidTaxesUpdate", json);
             prefsEditor.commit();
         }
-        return student;
+        return newPaidTaxes;
     }
 
     public static List<Tax> getUnpaidTaxesCached(Context context, Openstud os) {
@@ -156,7 +156,7 @@ public class InfoManager {
         return gson.fromJson(oldObj,listType);
     }
 
-    public static Student getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+    public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -172,7 +172,7 @@ public class InfoManager {
             prefsEditor.putString("lastUnpaidTaxesUpdate", json);
             prefsEditor.commit();
         }
-        return student;
+        return newUnpaidTaxes;
     }
 
     public static synchronized boolean isStudentUpdateRecommended(Context context, int maxMinutes) {
