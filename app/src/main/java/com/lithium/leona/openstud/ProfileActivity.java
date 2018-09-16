@@ -135,7 +135,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected void onRestart() {
         super.onRestart();
-        if (InfoManager.isStudentUpdateRecommended(getApplication(),30)) {
+        if (InfoManager.isStudentUpdateRecommended(getApplication(),60)) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
