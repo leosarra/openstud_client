@@ -19,6 +19,7 @@ import lithium.openstud.driver.core.OpenstudBuilder;
 import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.core.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
+import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class InfoManager {
@@ -34,6 +35,7 @@ public class InfoManager {
     }
 
     public static Openstud getOpenStud(Context context){
+        setupSharedPreferences(context);
         if (os!=null) return os;
         if (getStudentId(context)== -1 || getPassword(context)==null) return null;
         os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(2).build();
@@ -63,7 +65,7 @@ public class InfoManager {
     }
 
 
-    public static Student getInfoStudent(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+    public static Student getInfoStudent(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -93,7 +95,7 @@ public class InfoManager {
         return gson.fromJson(oldObj,Isee.class);
     }
 
-    public static Isee getIsee(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+    public static Isee getIsee(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -124,7 +126,7 @@ public class InfoManager {
         return gson.fromJson(oldObj,listType);
     }
 
-    public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+    public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -156,7 +158,7 @@ public class InfoManager {
         return gson.fromJson(oldObj,listType);
     }
 
-    public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+    public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
