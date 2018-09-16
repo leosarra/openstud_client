@@ -149,9 +149,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("CANCELLOOOO\n\n");
         if (!InfoManager.getSaveFlag(getApplication())) {
-            System.out.println("CANCELLOOOO2\n\n");
             InfoManager.clearSharedPreferences(getApplication());
         }
     }

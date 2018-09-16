@@ -69,6 +69,13 @@ public class PaymentsActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.content_frame,new TabFragment()).commit();
     }
 
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!InfoManager.getSaveFlag(getApplication())) {
+            InfoManager.clearSharedPreferences(getApplication());
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
