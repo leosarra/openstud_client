@@ -12,8 +12,6 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
-        //Intent int2 = new Intent(this,PaymentsActivity.class);
-        //startActivity(int2);
         if (!InfoManager.getSaveFlag(getApplication())) InfoManager.clearSharedPreferences(getApplication());
         if (InfoManager.hasLogin(getApplication())) {
             Intent intent = new Intent(LauncherActivity.this, ProfileActivity.class);
