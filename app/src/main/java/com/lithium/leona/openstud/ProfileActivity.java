@@ -243,6 +243,11 @@ public class ProfileActivity extends AppCompatActivity {
                         startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                         break;
                     }
+                    case R.id.exams_menu: {
+                        Intent intent = new Intent(ProfileActivity.this, ExamsActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                 }
             }
 
