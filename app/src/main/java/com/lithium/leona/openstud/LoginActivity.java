@@ -43,10 +43,12 @@ public class LoginActivity extends AppCompatActivity {
     }
     @OnClick(R.id.button) void onClick(View v){
         btn.setEnabled(false);
+        rememberFlag.setEnabled(false);
         //requestInternetPermission();
         if (!ClientHelper.isNetworkAvailable(getApplication())) {
             ClientHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
             btn.setEnabled(true);
+            rememberFlag.setEnabled(true);
             return;
         }
         login();
@@ -80,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                     activity.createTextSnackBar(R.string.invalid_password_error, Snackbar.LENGTH_LONG);
                 }
                 activity.btn.setEnabled(true);
+                activity.rememberFlag.setEnabled(true);
             }
         }
     }
