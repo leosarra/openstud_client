@@ -56,7 +56,6 @@ public class PaymentsActivity extends AppCompatActivity {
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
         getSupportActionBar().setTitle(R.string.payments);
-        nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         setupListeners();
         View headerLayout = nv.getHeaderView(0);
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
@@ -93,6 +92,11 @@ public class PaymentsActivity extends AppCompatActivity {
                         InfoManager.clearSharedPreferences(getApplication());
                         Intent i = new Intent(PaymentsActivity.this, LauncherActivity.class);
                         startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        break;
+                    }
+                    case R.id.exams_menu: {
+                        Intent intent = new Intent(PaymentsActivity.this, ExamsActivity.class);
+                        startActivity(intent);
                         break;
                     }
                 }
