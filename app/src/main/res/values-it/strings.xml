@@ -18,6 +18,13 @@
     <string name="exit">Esci</string>
     <string name="paid">Pagate</string>
     <string name="unpaid">Non pagate</string>
+    <string name="payment_number">Bollettino n. %1$s</string>
+    <string name="payment_number_ext">Numero bollettino: %1$s</string>
+    <string name="course_code_pay">Codice corso: %1$s</string>
+    <string name="accademic_year_pay">Anno accademico: %1$s</string>
+    <string name="payment_date">Data pagamento: %1$s</string>
+    <string name="payment_description">Causale: %1$s</string>
+
     <string name="isee_not_avaiable">Non dichiarato</string>
     <string name="blank_username_error">"L'username non è può essere lasciato vuoto!</string>
     <string name="blank_password_error">"La password non è può essere lasciata vuota!</string>

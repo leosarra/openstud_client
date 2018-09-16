@@ -13,8 +13,11 @@ import com.lithium.leona.openstud.R;
 
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import lithium.openstud.driver.core.PaymentDescription;
 import lithium.openstud.driver.core.Tax;
 
@@ -24,7 +27,7 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
         PAID(0), UNPAID(1);
         private final int value;
 
-        private Mode(int value) {
+        Mode(int value) {
             this.value = value;
         }
 
@@ -65,9 +68,15 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
     }
 
     public static class TaxHolder extends RecyclerView.ViewHolder  {
-        private TextView txtCode,txtCourse,txtPaymentDescription,txtAcademicYear,txtPaymentAmount,txtPaymentDate;
+        @BindView(R.id.codeTax) TextView txtCode;
+        @BindView(R.id.codeCourse) TextView txtCourse;
+        @BindView(R.id.mainDescription) TextView txtPaymentDescription;
+        @BindView(R.id.academicYear) TextView txtAcademicYear;
+        @BindView(R.id.payment_amount) TextView txtPaymentAmount;
+        @BindView(R.id.paymentDate) TextView txtPaymentDate;
         private int mode;
         private Context context;
+
         private void setMode(int mode){
             this.mode = mode;
         }
@@ -78,30 +87,27 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
 
         public TaxHolder(View itemView) {
             super(itemView);
-            txtCode = itemView.findViewById(R.id.codeTax);
-            txtCourse = itemView.findViewById(R.id.codeCourse);
-            txtPaymentDescription = itemView.findViewById(R.id.mainDescription);
-            txtAcademicYear = itemView.findViewById(R.id.academicYear);
-            txtPaymentAmount = itemView.findViewById(R.id.payment_amount);
-            txtPaymentDate = itemView.findViewById(R.id.paymentDate);
+            ButterKnife.bind(this,itemView);
             }
 
         public void setDetails(Tax tax) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-            txtCourse.setText(context.getResources().getString(R.string.course_code_pay)+": "+tax.getCodeCourse());
-            txtAcademicYear.setText(context.getResources().getString(R.string.accademic_year_pay)+": "+String.valueOf(tax.getAcademicYear()));
-            txtPaymentAmount.setText(String.valueOf(tax.getAmount()+"€"));
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            txtCourse.setText(context.getString(R.string.course_code_pay, tax.getCodeCourse()));
+            txtAcademicYear.setText(context.getString(R.string.accademic_year_pay, String.valueOf(tax.getAcademicYear())));
+            if(tax.getAmount() % 1 != 0) txtPaymentAmount.setText(context.getString(R.string.payment_amount,decimalFormat.format(tax.getAmount())));
+            else txtPaymentAmount.setText(context.getString(R.string.payment_amount,String.valueOf((int)tax.getAmount())));
             if (mode == Mode.UNPAID.getValue()) {
-                txtCode.setText(context.getResources().getString(R.string.payment_number)+" "+tax.getCode());
+                txtCode.setText(context.getString(R.string.payment_number, tax.getCode()));
                 txtCode.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.big_text_tax));
                 txtPaymentDescription.setVisibility(View.GONE);
                 txtPaymentDate.setVisibility(View.GONE);
                 txtPaymentDescription.setVisibility(View.GONE);
             }
             else {
-                txtCode.setText(context.getResources().getString(R.string.payment_number_ext)+": "+tax.getCode());
+                txtCode.setText(context.getString(R.string.payment_number_ext, tax.getCode()));
                 txtPaymentDescription.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.big_text_tax));
-                txtPaymentDate.setText(context.getResources().getString(R.string.payment_date)+": "+tax.getPaymentDate().format(formatter).toString());
+                txtPaymentDate.setText(context.getString(R.string.payment_date, tax.getPaymentDate().format(formatter)));
                 List<PaymentDescription> list = tax.getPaymentDescriptionList();
                 if (!list.isEmpty()) txtPaymentDescription.setText(tax.getPaymentDescriptionList().get(0).getDescription());
             }
