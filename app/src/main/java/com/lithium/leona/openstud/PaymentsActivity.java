@@ -52,6 +52,7 @@ public class PaymentsActivity extends AppCompatActivity {
             Intent i = new Intent(PaymentsActivity.this, LauncherActivity.class);
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             finish();
+            return;
         }
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
