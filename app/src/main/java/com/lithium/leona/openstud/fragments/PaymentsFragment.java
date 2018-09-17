@@ -126,7 +126,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         if (firstStart) {
             firstStart = false;
         }
-        else if (isUpdateRecommended()) refresh();
+        else if (getActivity()!= null && isUpdateRecommended()) refresh();
     }
 
     private void  refresh(){
