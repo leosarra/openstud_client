@@ -111,7 +111,9 @@ public class ProfileActivity extends AppCompatActivity {
             Intent i = new Intent(ProfileActivity.this, LauncherActivity.class);
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             finish();
+            return;
         }
+
         applyInfos(student,isee);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -151,12 +153,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    protected void onDestroy() {
-        super.onDestroy();
-        if (!InfoManager.getSaveFlag(getApplication())) {
-            InfoManager.clearSharedPreferences(getApplication());
-        }
-    }
 
 
     private void refresh(Openstud os) {
