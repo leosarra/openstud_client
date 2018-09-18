@@ -59,20 +59,10 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : {
-                    Bundle bdl = new Bundle();
-                    bdl.putInt("mode", TaxAdapter.Mode.UNPAID.getValue());
-                    PaymentsFragment frag = new PaymentsFragment();
-                    frag.setArguments(bdl);
-                    return frag;
-                }
-                case 1 : {
-                    Bundle bdl = new Bundle();
-                    bdl.putInt("mode", TaxAdapter.Mode.PAID.getValue());
-                    PaymentsFragment frag = new PaymentsFragment();
-                    frag.setArguments(bdl);
-                    return frag;
-                }
+                case 0 :
+                    return PaymentsFragment.newInstance(TaxAdapter.Mode.UNPAID.getValue());
+                case 1 :
+                    return PaymentsFragment.newInstance(TaxAdapter.Mode.PAID.getValue());
             }
             return null;
         }

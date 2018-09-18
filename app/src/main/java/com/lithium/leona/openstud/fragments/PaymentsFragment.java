@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.UiThread;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,17 +15,17 @@ import android.view.ViewGroup;
 
 import android.support.annotation.Nullable;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.lithium.leona.openstud.LauncherActivity;
 import com.lithium.leona.openstud.PaymentsActivity;
-import com.lithium.leona.openstud.ProfileActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
+import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
@@ -96,25 +94,38 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     private Openstud os;
     private PaymentsHandler h = new PaymentsHandler(this);
     private boolean firstStart = true;
+    private LocalDateTime lastUpdate;
+
+
+    public static PaymentsFragment newInstance(int mode) {
+        PaymentsFragment frag = new PaymentsFragment();
+        Bundle args = new Bundle();
+        args.putInt("mode", mode);
+        frag.setArguments(args);
+        return frag;
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.payments_fragment,null);
+        View v = inflater.inflate(R.layout.base_swipe_fragment,null);
         ButterKnife.bind(this, v);
         Bundle bundle=getArguments();
         mode = bundle.getInt("mode");
         emptyView.setVisibility(View.GONE);
-        taxes = new LinkedList<>();
         os = InfoManager.getOpenStud(getActivity().getApplication());
-        if (mode == TaxAdapter.Mode.PAID.getValue()) taxes = InfoManager.getPaidTaxesCached(getActivity().getApplication(),os);
-        else if (mode == TaxAdapter.Mode.UNPAID.getValue()) taxes = InfoManager.getUnpaidTaxesCached(getActivity().getApplication(),os);
-        if (taxes == null)  taxes = new LinkedList<>();
         if (os == null) {
             InfoManager.clearSharedPreferences(getActivity().getApplication());
             Intent i = new Intent(getActivity(), LauncherActivity.class);
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            return v;
         }
+        taxes = new LinkedList<>();
+        List<Tax> taxes_cached = null;
+        if (mode == TaxAdapter.Mode.PAID.getValue()) taxes_cached = InfoManager.getPaidTaxesCached(getActivity().getApplication(),os);
+        else if (mode == TaxAdapter.Mode.UNPAID.getValue()) taxes_cached = InfoManager.getUnpaidTaxesCached(getActivity().getApplication(),os);
+        if (taxes_cached != null && !taxes_cached.isEmpty())  taxes.addAll(taxes_cached);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
@@ -135,10 +146,11 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        LocalDateTime time = getTimer();
         if (firstStart) {
             firstStart = false;
         }
-        else if (getActivity()!= null && isUpdateRecommended()) refresh();
+        else if (getActivity()!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refresh();
     }
 
     private void  refresh(){
@@ -169,6 +181,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
                     else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                     e.printStackTrace();
                 }
+                updateTimer();
                 if (update==null || taxes.equals(update)) {
                     setRefreshing(false);
                     return;
@@ -215,11 +228,13 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    private boolean isUpdateRecommended(){
-        if(mode == TaxAdapter.Mode.PAID.getValue()) return InfoManager.isPaidTaxesUpdateRecommended(getActivity(),60);
-        else if(mode == TaxAdapter.Mode.UNPAID.getValue()) return InfoManager.isUnpaidTaxesUpdateRecommended(getActivity(),60);
-        return false;
+
+    private synchronized void updateTimer(){
+        lastUpdate = LocalDateTime.now();
     }
 
+    private synchronized LocalDateTime getTimer(){
+        return lastUpdate;
+    }
 
 }
