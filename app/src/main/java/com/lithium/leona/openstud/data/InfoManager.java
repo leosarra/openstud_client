@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
+import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.Isee;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudBuilder;
@@ -29,6 +30,7 @@ public class InfoManager {
     private static Isee isee;
     private static List<Tax> paidTaxes;
     private static List<Tax> unpaidTaxes;
+    private static List<ExamPassed> examsDone;
     private static void setupSharedPreferences(Context context){
         if (pref!=null) return;
         pref = context.getSharedPreferences("OpenStudPref", 0); // 0 - for private mode
@@ -72,12 +74,9 @@ public class InfoManager {
         Student newStudent = os.getInfoStudent();
         synchronized (InfoManager.class){
             student = newStudent;
-            LocalDateTime now = LocalDateTime.now();
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = gson.toJson(student);
             prefsEditor.putString("student", json);
-            json = gson.toJson(now);
-            prefsEditor.putString("lastProfileUpdate", json);
             prefsEditor.commit();
         }
         return student;
@@ -102,12 +101,9 @@ public class InfoManager {
         Isee newIsee = os.getCurrentIsee();
         synchronized (InfoManager.class){
             isee = newIsee;
-            LocalDateTime now = LocalDateTime.now();
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = gson.toJson(isee);
             prefsEditor.putString("isee", json);
-            json = gson.toJson(now);
-            prefsEditor.putString("lastIseeUpdate", json);
             prefsEditor.commit();
         }
         return isee;
@@ -126,6 +122,35 @@ public class InfoManager {
         return gson.fromJson(oldObj,listType);
     }
 
+    public static List<ExamPassed> getExamsDoneCached(Context context, Openstud os) {
+        if (os==null) return null;
+        if (!hasLogin(context)) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (examsDone!=null) return examsDone;
+            oldObj =  pref.getString("examsDone", "null");
+        }
+        Type listType = new TypeToken<List<ExamPassed>>(){}.getType();
+        return gson.fromJson(oldObj,listType);
+    }
+
+    public static List<ExamPassed> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        if (os==null) return null;
+        if (!hasLogin(context)) return null;
+        Gson gson = new Gson();
+        List<ExamPassed> newExamsDone = os.getExamsPassed();
+        synchronized (InfoManager.class){
+            examsDone = newExamsDone;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            Type listType = new TypeToken<List<Tax>>(){}.getType();
+            String json = gson.toJson(paidTaxes);
+            prefsEditor.putString("examsDone", json);
+            prefsEditor.commit();
+        }
+        return newExamsDone;
+    }
+
     public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
@@ -133,13 +158,10 @@ public class InfoManager {
         List<Tax> newPaidTaxes = os.getPaidTaxes();
         synchronized (InfoManager.class){
             paidTaxes = newPaidTaxes;
-            LocalDateTime now = LocalDateTime.now();
             SharedPreferences.Editor prefsEditor = pref.edit();
             Type listType = new TypeToken<List<Tax>>(){}.getType();
             String json = gson.toJson(paidTaxes);
             prefsEditor.putString("paidTaxes", json);
-            json = gson.toJson(now);
-            prefsEditor.putString("lastPaidTaxesUpdate", json);
             prefsEditor.commit();
         }
         return newPaidTaxes;
@@ -165,44 +187,15 @@ public class InfoManager {
         List<Tax> newUnpaidTaxes = os.getUnpaidTaxes();
         synchronized (InfoManager.class){
             unpaidTaxes = newUnpaidTaxes;
-            LocalDateTime now = LocalDateTime.now();
             SharedPreferences.Editor prefsEditor = pref.edit();
             Type listType = new TypeToken<List<Tax>>(){}.getType();
             String json = gson.toJson(newUnpaidTaxes);
             prefsEditor.putString("unpaidTaxes", json);
-            json = gson.toJson(now);
-            prefsEditor.putString("lastUnpaidTaxesUpdate", json);
             prefsEditor.commit();
         }
         return newUnpaidTaxes;
     }
 
-    public static synchronized boolean isStudentUpdateRecommended(Context context, int maxMinutes) {
-        setupSharedPreferences(context);
-        Gson gson = new Gson();
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime old = gson.fromJson(pref.getString("lastProfileUpdate",null), LocalDateTime.class);
-        if (old == null || Duration.between(old,now).toMinutes()>maxMinutes) return true;
-        return false;
-    }
-
-    public static synchronized boolean isUnpaidTaxesUpdateRecommended(Context context, int maxMinutes) {
-        setupSharedPreferences(context);
-        Gson gson = new Gson();
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime old = gson.fromJson(pref.getString("lastUnpaidTaxesUpdate",null), LocalDateTime.class);
-        if (old == null || Duration.between(old,now).toMinutes()>maxMinutes) return true;
-        return false;
-    }
-
-    public static synchronized boolean isPaidTaxesUpdateRecommended(Context context, int maxMinutes) {
-        setupSharedPreferences(context);
-        Gson gson = new Gson();
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime old = gson.fromJson(pref.getString("lastPaidTaxesUpdate",null), LocalDateTime.class);
-        if (old == null || Duration.between(old,now).toMinutes()>maxMinutes) return true;
-        return false;
-    }
 
     public static boolean hasLogin(Context context){
         setupSharedPreferences(context);
