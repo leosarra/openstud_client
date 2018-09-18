@@ -1,7 +1,6 @@
 package com.lithium.leona.openstud;
 
 import android.content.Intent;
-import android.icu.text.IDNA;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -62,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 }
-                else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
+                else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -166,7 +165,8 @@ public class ProfileActivity extends AppCompatActivity {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
-            h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
             e.printStackTrace();
         }
     }
@@ -180,7 +180,12 @@ public class ProfileActivity extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                refresh(os);
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        refresh(os);
+                                    }
+                                });
                             }
                         });
         snackbar.show();

@@ -11,9 +11,9 @@ import android.view.inputmethod.InputMethodManager;
 public class ClientHelper {
 
     public enum Status {
-        OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5);
+        OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5), EXPIRED_CREDENTIALS(6);
         private final int value;
-        private Status(int value) {
+        Status(int value) {
             this.value = value;
         }
 
@@ -25,6 +25,7 @@ public class ClientHelper {
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager == null) return false;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

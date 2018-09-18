@@ -26,8 +26,10 @@ public class LauncherActivity extends AppCompatActivity {
 
     protected void onDestroy() {
         super.onDestroy();
+        /**
         if (!InfoManager.getSaveFlag(getApplication())) {
             InfoManager.clearSharedPreferences(getApplication());
         }
+         **/
     }
 }
