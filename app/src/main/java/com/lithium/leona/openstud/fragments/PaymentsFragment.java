@@ -57,15 +57,27 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
             PaymentsActivity activity = (PaymentsActivity) paymentFrag.getActivity();
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    activity.createTextSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG);
+                    View.OnClickListener ocl = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            paymentFrag.refresh();
+                        }
+                    };
+                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                    View.OnClickListener ocl = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            paymentFrag.refresh();
+                        }
+                    };
+                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 }
-                else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
+                else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -130,7 +142,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     }
 
     private void  refresh(){
-        swipeRefreshLayout.setRefreshing(true);
+        setRefreshing(true);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -153,16 +165,12 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
                     h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                     e.printStackTrace();
                 } catch (OpenstudInvalidCredentialsException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                    if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                    else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                     e.printStackTrace();
                 }
                 if (update==null || taxes.equals(update)) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
+                    setRefreshing(false);
                     return;
                 }
                 refreshDataSet(update);
@@ -197,6 +205,15 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         });
     }
 
+
+    private void setRefreshing(final boolean bool){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setRefreshing(bool);
+            }
+        });
+    }
 
     private boolean isUpdateRecommended(){
         if(mode == TaxAdapter.Mode.PAID.getValue()) return InfoManager.isPaidTaxesUpdateRecommended(getActivity(),60);
