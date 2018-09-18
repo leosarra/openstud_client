@@ -26,6 +26,7 @@
     <string name="blank_username_error">"You can't leave the username field blank!</string>
     <string name="blank_password_error">"You can't leave the password field blank!</string>
     <string name="blank_username_password_error">"You can't leave the username and password fields blank!</string>
+    <string name="expired_password_error">The password is expired and needs to be changed!</string>
     <string name="connection_error">Connection error!</string>
     <string name="retry">Retry</string>
     <string name="invalid_response_error">InfoStud doesn\'t seems to work properly</string>
@@ -40,6 +41,9 @@
     <string name="payment_date">Payment date: %1$s</string>
     <string name="payment_description">Description: %1$s</string>
     <string name="payment_amount">%1$s €</string>
+    <string name="exams_completed">Completed</string>
+    <string name="reservations">Reservations</string>
+    <string name="search">Search</string>
 
     <string name="title_activity_drawer">DrawerActivity</string>
     <string name="title_section1">Section 1</string>
