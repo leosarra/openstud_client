@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.fragments.ExamsFragment;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
@@ -35,14 +37,14 @@ public class ExamsActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                case R.id.navigation_completed:
+                    switchToExamsCompletedFragment();
                     return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                case R.id.navigation_reservations:
+                    switchToExamsCompletedFragment();
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_search:
+                    switchToExamsCompletedFragment();
                     return true;
             }
             return false;
@@ -123,5 +125,10 @@ public class ExamsActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    public void switchToExamsCompletedFragment(){
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.content_frame, new ExamsFragment()).commit();
     }
 }
