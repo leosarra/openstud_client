@@ -22,7 +22,9 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
+import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.lang.ref.WeakReference;
@@ -92,6 +94,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Isee isee;
     private Openstud os;
     private ProfileEventHandler h = new ProfileEventHandler(this);
+    private LocalDateTime lastUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +143,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected void onRestart() {
         super.onRestart();
-        if (InfoManager.isStudentUpdateRecommended(getApplication(),60)) {
+        LocalDateTime time = getTimer();
+        if (time == null || Duration.between(time,LocalDateTime.now()).toMinutes()>60) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -169,6 +173,7 @@ public class ProfileActivity extends AppCompatActivity {
             else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
             e.printStackTrace();
         }
+        updateTimer();
     }
 
     private void createTextSnackBar(int string_id, int length){
@@ -264,4 +269,13 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private synchronized void updateTimer(){
+        lastUpdate = LocalDateTime.now();
+    }
+
+    private synchronized LocalDateTime getTimer(){
+        return lastUpdate;
+    }
+
 }
