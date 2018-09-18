@@ -81,6 +81,9 @@ public class LoginActivity extends AppCompatActivity {
                 else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
                     activity.createTextSnackBar(R.string.invalid_password_error, Snackbar.LENGTH_LONG);
                 }
+                else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
+                    activity.createTextSnackBar(R.string.expired_password_error, Snackbar.LENGTH_LONG);
+                }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
                     activity.btn.setEnabled(true);
                     activity.rememberFlag.setEnabled(true);
@@ -100,6 +103,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
+        btn.setEnabled(false);
+        rememberFlag.setEnabled(false);
         String username = this.username.getText().toString();
         String password = this.password.getText().toString();
         if (username.isEmpty()) {
@@ -141,7 +146,8 @@ public class LoginActivity extends AppCompatActivity {
             InfoManager.getIsee(this,os);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
-            h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
             e.printStackTrace();
         } catch (OpenstudUserNotEnabledException e) {
             h.sendEmptyMessage(ClientHelper.Status.USER_NOT_ENABLED.getValue());
