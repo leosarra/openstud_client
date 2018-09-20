@@ -5,6 +5,7 @@ import android.icu.text.IDNA;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -40,7 +41,10 @@ public class PaymentsActivity extends AppCompatActivity {
     private Openstud os;
     private Student student;
     private SparseArray<Snackbar> snackBarMap = new SparseArray<>();
+    private int selectedItem = -1;
+    private TabFragment tabFrag;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payments);
@@ -63,9 +67,13 @@ public class PaymentsActivity extends AppCompatActivity {
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         navSubtitle.setText(String.valueOf(student.getStudentID()));
-
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame,new TabFragment()).commit();
+        if (savedInstanceState != null) {
+            selectedItem = savedInstanceState.getInt("tabSelected", -1);
+        }
+        tabFrag = TabFragment.newInstance(selectedItem);
+        fragmentManager.beginTransaction().replace(R.id.content_frame, tabFrag).commit();
+
     }
 
     @Override
@@ -148,4 +156,12 @@ public class PaymentsActivity extends AppCompatActivity {
         snackBarMap.remove(id);
     }
 
+    public void updateSelectTab(int item) {
+        selectedItem = item;
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("tabSelected", selectedItem);
+    }
 }

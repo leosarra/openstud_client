@@ -1,5 +1,6 @@
 package com.lithium.leona.openstud.fragments;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,17 +12,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lithium.leona.openstud.PaymentsActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
 
 public class TabFragment extends Fragment {
 
-    public static TabLayout tabLayout;
-    public static ViewPager viewPager;
-    public static int int_items = 2;
+    public TabLayout tabLayout;
+    public ViewPager viewPager;
+    public int int_items = 2;
+    private int selectedTab = -1;
 
-    @Nullable
-    @Override
+
+    public static TabFragment newInstance(int page) {
+        TabFragment frag = new TabFragment();
+        Bundle args = new Bundle();
+        args.putInt("tabSelected", page);
+        frag.setArguments(args);
+        return frag;
+    }
+
+
+    public void onCreate(Bundle bdl) {
+        super.onCreate(bdl);
+        selectedTab = getArguments().getInt("tabSelected");
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //this inflates out tab layout file.
@@ -29,11 +45,12 @@ public class TabFragment extends Fragment {
         // set up stuff.
         tabLayout = (TabLayout) x.findViewById(R.id.tabs);
         viewPager = (ViewPager) x.findViewById(R.id.viewpager);
-
         // create a new adapter for our pageViewer. This adapters returns child com.lithium.leona.openstud.fragments as per the positon of the page Viewer.
         viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
-
-        // this is a workaround
+        if (selectedTab != -1) {
+            viewPager.setCurrentItem(selectedTab);
+            notifyItemChanged(selectedTab);
+        }
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -44,7 +61,22 @@ public class TabFragment extends Fragment {
         //to preload the adjacent tabs. This makes transition smooth.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                notifyItemChanged(tab.getPosition());
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         return x;
     }
 
@@ -69,9 +101,7 @@ public class TabFragment extends Fragment {
 
         @Override
         public int getCount() {
-
             return int_items;
-
         }
 
         //This method returns the title of the tab according to the position.
@@ -85,6 +115,13 @@ public class TabFragment extends Fragment {
                     return getResources().getString(R.string.paid);
             }
             return null;
+        }
+    }
+
+    private void notifyItemChanged(int item){
+        PaymentsActivity act = (PaymentsActivity) getActivity();
+        if (act != null) {
+            act.updateSelectTab(item);
         }
     }
 }
