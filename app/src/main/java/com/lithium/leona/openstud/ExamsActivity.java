@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -16,7 +16,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.data.InfoManager;
-import com.lithium.leona.openstud.fragments.ExamsFragment;
+import com.lithium.leona.openstud.fragments.ExamsDoneFragment;
+import com.lithium.leona.openstud.fragments.ReservationsFragment;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
@@ -30,7 +32,7 @@ public class ExamsActivity extends AppCompatActivity {
     private NavigationView nv;
     private DelayedDrawerListener ddl;
     private View headerLayout;
-
+    private ExamsDoneFragment examsCompleted;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -41,10 +43,10 @@ public class ExamsActivity extends AppCompatActivity {
                     switchToExamsCompletedFragment();
                     return true;
                 case R.id.navigation_reservations:
-                    switchToExamsCompletedFragment();
+                    switchToExamsReservationsFragment();
                     return true;
                 case R.id.navigation_search:
-                    switchToExamsCompletedFragment();
+                    switchToExamsSearchFragment();
                     return true;
             }
             return false;
@@ -64,6 +66,7 @@ public class ExamsActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         setupListeners();
+        switchToExamsCompletedFragment();
     }
 
 
@@ -127,8 +130,57 @@ public class ExamsActivity extends AppCompatActivity {
                 });
     }
 
-    public void switchToExamsCompletedFragment(){
+    private void switchToExamsCompletedFragment(){
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.content_frame, new ExamsFragment()).commit();
+        if (manager.findFragmentByTag("completed") != null) {
+            manager.beginTransaction().show(manager.findFragmentByTag("completed")).commit();
+        }
+        else manager.beginTransaction().replace(R.id.content_frame, new ExamsDoneFragment(),"completed").commit();
+        if (manager.findFragmentByTag("reservations") !=null ){
+            manager.beginTransaction().hide(manager.findFragmentByTag("reservations"));
+        }
+        if (manager.findFragmentByTag("search") !=null ){
+            manager.beginTransaction().hide(manager.findFragmentByTag("search"));
+        }
+    }
+
+    private void switchToExamsReservationsFragment(){
+        FragmentManager manager = getSupportFragmentManager();
+        if (manager.findFragmentByTag("reservations") != null) {
+            manager.beginTransaction().show(manager.findFragmentByTag("reservations")).commit();
+        }
+        else manager.beginTransaction().replace(R.id.content_frame, new ReservationsFragment(),"reservations").commit();
+        if (manager.findFragmentByTag("completed") !=null ){
+            manager.beginTransaction().hide(manager.findFragmentByTag("completed"));
+        }
+        if (manager.findFragmentByTag("search") !=null ){
+            manager.beginTransaction().hide(manager.findFragmentByTag("search"));
+        }
+    }
+
+    private void switchToExamsSearchFragment(){
+        FragmentManager manager = getSupportFragmentManager();
+        if (manager.findFragmentByTag("search") != null) {
+            manager.beginTransaction().show(manager.findFragmentByTag("search")).commit();
+        }
+        else manager.beginTransaction().replace(R.id.content_frame, new ExamsDoneFragment(),"search").commit();
+        if (manager.findFragmentByTag("completed") !=null ){
+            manager.beginTransaction().hide(manager.findFragmentByTag("completed"));
+        }
+        if (manager.findFragmentByTag("reservations") !=null ){
+            manager.beginTransaction().hide(manager.findFragmentByTag("reservations"));
+        }
+    }
+
+
+    public synchronized void createTextSnackBar(int string_id, int length) {
+        Snackbar snackbar = ClientHelper.createTextSnackBar(mDrawerLayout,string_id,length);
+        snackbar.show();
+    }
+
+    public synchronized  void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
+        Snackbar snackbar = Snackbar
+                .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);
+        snackbar.show();
     }
 }
