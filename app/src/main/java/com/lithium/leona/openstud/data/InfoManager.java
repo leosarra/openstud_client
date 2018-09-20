@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import lithium.openstud.driver.core.ExamPassed;
+import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Isee;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudBuilder;
@@ -31,6 +32,7 @@ public class InfoManager {
     private static List<Tax> paidTaxes;
     private static List<Tax> unpaidTaxes;
     private static List<ExamPassed> examsDone;
+    private static List<ExamReservation> reservations;
     private static void setupSharedPreferences(Context context){
         if (pref!=null) return;
         pref = context.getSharedPreferences("OpenStudPref", 0); // 0 - for private mode
@@ -143,9 +145,38 @@ public class InfoManager {
         synchronized (InfoManager.class){
             examsDone = newExamsDone;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<Tax>>(){}.getType();
-            String json = gson.toJson(paidTaxes);
+            Type listType = new TypeToken<List<ExamPassed>>(){}.getType();
+            String json = gson.toJson(examsDone,listType);
             prefsEditor.putString("examsDone", json);
+            prefsEditor.commit();
+        }
+        return newExamsDone;
+    }
+
+    public static List<ExamReservation> getActiveReservationsCached(Context context, Openstud os) {
+        if (os==null) return null;
+        if (!hasLogin(context)) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (reservations!=null) return reservations;
+            oldObj =  pref.getString("reservations", "null");
+        }
+        Type listType = new TypeToken<List<ExamReservation>>(){}.getType();
+        return gson.fromJson(oldObj,listType);
+    }
+
+    public static List<ExamReservation> getActiveReservations(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        if (os==null) return null;
+        if (!hasLogin(context)) return null;
+        Gson gson = new Gson();
+        List<ExamReservation> newExamsDone = os.getActiveReservations();
+        synchronized (InfoManager.class){
+            reservations = newExamsDone;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            Type listType = new TypeToken<List<ExamReservation>>(){}.getType();
+            String json = gson.toJson(reservations,listType);
+            prefsEditor.putString("reservations", json);
             prefsEditor.commit();
         }
         return newExamsDone;
@@ -160,7 +191,7 @@ public class InfoManager {
             paidTaxes = newPaidTaxes;
             SharedPreferences.Editor prefsEditor = pref.edit();
             Type listType = new TypeToken<List<Tax>>(){}.getType();
-            String json = gson.toJson(paidTaxes);
+            String json = gson.toJson(paidTaxes, listType);
             prefsEditor.putString("paidTaxes", json);
             prefsEditor.commit();
         }
@@ -189,7 +220,7 @@ public class InfoManager {
             unpaidTaxes = newUnpaidTaxes;
             SharedPreferences.Editor prefsEditor = pref.edit();
             Type listType = new TypeToken<List<Tax>>(){}.getType();
-            String json = gson.toJson(newUnpaidTaxes);
+            String json = gson.toJson(newUnpaidTaxes, listType);
             prefsEditor.putString("unpaidTaxes", json);
             prefsEditor.commit();
         }
@@ -207,6 +238,13 @@ public class InfoManager {
     public static synchronized void clearSharedPreferences(Context context){
         setupSharedPreferences(context);
         pref.edit().clear().commit();
+        os = null;
+        student= null;
+        isee = null;
+        paidTaxes = null;
+        unpaidTaxes = null;
+        examsDone = null;
+        reservations = null;
     }
 
     private static synchronized int getStudentId(Context context){
