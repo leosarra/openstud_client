@@ -1,6 +1,7 @@
 package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -100,6 +101,7 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
             if (mode == Mode.UNPAID.getValue()) {
                 txtCode.setText(context.getString(R.string.payment_number, tax.getCode()));
                 txtCode.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.big_text_tax));
+                txtCode.setTypeface(null, Typeface.BOLD);
                 txtPaymentDescription.setVisibility(View.GONE);
                 txtPaymentDate.setVisibility(View.GONE);
                 txtPaymentDescription.setVisibility(View.GONE);
@@ -107,6 +109,7 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
             else {
                 txtCode.setText(context.getString(R.string.payment_number_ext, tax.getCode()));
                 txtPaymentDescription.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.big_text_tax));
+                txtPaymentDescription.setTypeface(null, Typeface.BOLD);
                 txtPaymentDate.setText(context.getString(R.string.payment_date, tax.getPaymentDate().format(formatter)));
                 List<PaymentDescription> list = tax.getPaymentDescriptionList();
                 if (!list.isEmpty()) txtPaymentDescription.setText(tax.getPaymentDescriptionList().get(0).getDescription());
