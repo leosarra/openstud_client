@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    card_view:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        android:paddingStart="8dp">
+
+        <TextView
+            android:id="@+id/nameExam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:padding="1dp"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nameTeacher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/dateExam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/reservationInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/reservationNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/ssdExam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1dp" />
+
+        <TextView
+            android:id="@+id/cfuExam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="1dp" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button4"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="99dp"
+                android:layout_height="43dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_delete_small"
+                android:drawableTint="@color/redSapienza"
+                android:text="Delete"
+                android:textSize="14sp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/button5"
+                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="112dp"
+                android:layout_height="42dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="4dp"
+                android:layout_toStartOf="@+id/button4"
+                android:layout_weight="0.5"
+                android:drawableLeft="@drawable/ic_get_small"
+                android:drawableTint="@color/redSapienza"
+                android:text="Ricevuta"
+                android:textSize="14sp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toStartOf="@+id/button4"
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:layout_constraintVertical_bias="1.0" />
+        </android.support.constraint.ConstraintLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
