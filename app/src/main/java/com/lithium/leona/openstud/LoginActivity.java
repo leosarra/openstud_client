@@ -42,13 +42,13 @@ public class LoginActivity extends AppCompatActivity {
         if (!focused) ClientHelper.hideKeyboard(v, getApplication());
     }
     @OnClick(R.id.button) void onClick(View v){
-        btn.setEnabled(false);
-        rememberFlag.setEnabled(false);
         //requestInternetPermission();
         if (!ClientHelper.isNetworkAvailable(getApplication())) {
             ClientHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
             btn.setEnabled(true);
             rememberFlag.setEnabled(true);
+            username.setEnabled(true);
+            password.setEnabled(true);
             return;
         }
         login();
@@ -87,6 +87,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
                     activity.btn.setEnabled(true);
                     activity.rememberFlag.setEnabled(true);
+                    activity.username.setEnabled(true);
+                    activity.password.setEnabled(true);
                 }
             }
         }
@@ -105,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         btn.setEnabled(false);
         rememberFlag.setEnabled(false);
+        username.setEnabled(false);
+        password.setEnabled(false);
         String username = this.username.getText().toString();
         String password = this.password.getText().toString();
         if (username.isEmpty()) {
