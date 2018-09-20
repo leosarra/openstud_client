@@ -108,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(getApplication(),os);
         isee = InfoManager.getIseeCached(getApplication(),os);
-        if (os == null || student == null || isee == null) {
+        if (os == null || student == null) {
             InfoManager.clearSharedPreferences(getApplication());
             Intent i = new Intent(ProfileActivity.this, LauncherActivity.class);
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
