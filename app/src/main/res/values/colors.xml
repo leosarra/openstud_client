@@ -7,4 +7,6 @@
     <color name="redSapienzaDark">#5c0916</color>
     <color name="accent">#eeff41</color>
     <color name="accentLight">#F4FF81</color>
+    <color name="green">#328b4a</color>
+    <color name="redLight">#9e0f24</color>
 </resources>

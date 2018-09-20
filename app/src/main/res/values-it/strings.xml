@@ -27,6 +27,11 @@
     <string name="exams_completed">Sostenuti</string>
     <string name="reservations">Prenotazioni</string>
     <string name="search">Ricerca</string>
+    <string name="number_reservation">Numero prenotazione: %1$s</string>
+    <string name="teacher_reservation">Docente: %1$s</string>
+    <string name="date_exam">Data esame: %1$s</string>
+    <string name="description_reservation">Informazioni aggiuntive: %1$s</string>
+
 
     <string name="isee_not_avaiable">Non dichiarato</string>
     <string name="blank_username_error">"L'username non è può essere lasciato vuoto!</string>

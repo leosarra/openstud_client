@@ -41,6 +41,12 @@
     <string name="payment_date">Payment date: %1$s</string>
     <string name="payment_description">Description: %1$s</string>
     <string name="payment_amount">%1$s €</string>
+    <string name="cfu_exams">CFU: %1$s</string>
+    <string name="ssd_exams">SSD: %1$s</string>
+    <string name="number_reservation">Reservation number: %1$s</string>
+    <string name="teacher_reservation">Teacher: %1$s</string>
+    <string name="description_reservation">Additional information: %1$s</string>
+    <string name="date_exam">Date exam: %1$s</string>
     <string name="exams_completed">Completed</string>
     <string name="reservations">Reservations</string>
     <string name="search">Search</string>
