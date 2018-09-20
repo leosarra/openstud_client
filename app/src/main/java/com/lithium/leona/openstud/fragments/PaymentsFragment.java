@@ -1,5 +1,6 @@
 package com.lithium.leona.openstud.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -154,6 +155,8 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     }
 
     private void  refresh(){
+        final Activity activity = getActivity();
+        if (activity == null) return;
         setRefreshing(true);
         new Thread(new Runnable() {
             @Override
@@ -162,9 +165,9 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
                 boolean isChanged = false;
                 try {
                     if (mode == TaxAdapter.Mode.PAID.getValue())
-                        update = InfoManager.getPaidTaxes(getActivity().getApplication(), os);
+                        update = InfoManager.getPaidTaxes(activity.getApplication(), os);
                     else if (mode == TaxAdapter.Mode.UNPAID.getValue())
-                        update = InfoManager.getUnpaidTaxes(getActivity().getApplication(), os);
+                        update = InfoManager.getUnpaidTaxes(activity.getApplication(), os);
 
                     if (update == null)
                         h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
@@ -199,7 +202,9 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
             taxes.addAll(update);
         }
         final boolean finalFlag = flag;
-        getActivity().runOnUiThread(new Runnable() {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (finalFlag) {
@@ -220,10 +225,12 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
 
 
     private void setRefreshing(final boolean bool){
-        getActivity().runOnUiThread(new Runnable() {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                setRefreshing(bool);
+                swipeRefreshLayout.setRefreshing(bool);
             }
         });
     }
