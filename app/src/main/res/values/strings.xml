@@ -50,7 +50,7 @@
     <string name="exams_completed">Completed</string>
     <string name="reservations">Reservations</string>
     <string name="search">Search</string>
-
+    <string name="reload">Reload</string>
     <string name="title_activity_drawer">DrawerActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
