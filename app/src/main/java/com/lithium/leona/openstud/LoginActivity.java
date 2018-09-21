@@ -181,14 +181,5 @@ public class LoginActivity extends AppCompatActivity {
         ClientHelper.createTextSnackBar(layout,string_id,length);
     }
 
-    private void requestInternetPermission(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat
-                    .requestPermissions(LoginActivity.this, new String[]{Manifest.permission.INTERNET}, 123);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat
-                    .requestPermissions(LoginActivity.this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 123);
-        }
-    }
+
 }
