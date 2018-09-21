@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,24 +33,26 @@ public class ExamsActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     private NavigationView nv;
     private DelayedDrawerListener ddl;
-    private ExamsDoneFragment examsCompleted;
-    private int itemId = -1;
+    private Fragment active;
+    private ExamsDoneFragment fragDone;
+    private ReservationsFragment fragRes;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentManager fm = getSupportFragmentManager();
             switch (item.getItemId()) {
                 case R.id.navigation_completed:
-                    itemId = R.id.navigation_completed;
                     switchToExamsCompletedFragment();
+                    active = fm.findFragmentByTag("completed");
                     return true;
                 case R.id.navigation_reservations:
-                    itemId = R.id.navigation_reservations;
                     switchToExamsReservationsFragment();
+                    active = fm.findFragmentByTag("reservations");
                     return true;
                 case R.id.navigation_search:
-                    itemId = R.id.navigation_search;
                     switchToExamsSearchFragment();
                     return true;
             }
@@ -81,9 +84,29 @@ public class ExamsActivity extends AppCompatActivity {
         TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
         subTitle.setText(String.valueOf(student.getStudentID()));
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         setupListeners();
+        FragmentManager fm = getSupportFragmentManager();
+
+        if (savedInstanceState != null) {
+            fragDone = (ExamsDoneFragment) fm.getFragment(savedInstanceState, "completed");
+            fragRes = (ReservationsFragment) fm.getFragment(savedInstanceState, "reservations");
+            active = fm.getFragment(savedInstanceState, "active");
+            if (active != null) fm.beginTransaction().show(active).commit();
+            else {
+                fm.beginTransaction().show(fragDone).commit();
+                active = fragDone;
+            }
+        } else {
+            fragRes = new ReservationsFragment();
+            fragDone = new ExamsDoneFragment();
+            fm.beginTransaction().add(R.id.content_frame,fragRes,"reservations").hide(fragRes).commit();
+            fm.beginTransaction().add(R.id.content_frame,fragDone,"completed").commit();
+            active= fragDone;
+        }
+
+        /**
         int tabSelected = -1;
         if (savedInstanceState != null) {
             tabSelected = savedInstanceState.getInt("tabSelected", -1);
@@ -91,9 +114,13 @@ public class ExamsActivity extends AppCompatActivity {
         }
         if (tabSelected == -1 || tabSelected == R.id.navigation_completed) {
             switchToExamsCompletedFragment();
+            active = fragDone;
         }
-        else if (tabSelected == R.id.navigation_reservations) switchToExamsReservationsFragment();
-        else switchToExamsReservationsFragment();
+        else if (tabSelected == R.id.navigation_reservations) {
+            switchToExamsReservationsFragment();
+            active = fragRes;
+        }
+         **/
     }
 
 
@@ -159,44 +186,23 @@ public class ExamsActivity extends AppCompatActivity {
 
     private void switchToExamsCompletedFragment(){
         FragmentManager manager = getSupportFragmentManager();
-        if (manager.findFragmentByTag("completed") != null) {
-            manager.beginTransaction().show(manager.findFragmentByTag("completed")).commit();
-        }
-        else manager.beginTransaction().replace(R.id.content_frame, new ExamsDoneFragment(),"completed").commit();
-        if (manager.findFragmentByTag("reservations") !=null ){
-            manager.beginTransaction().hide(manager.findFragmentByTag("reservations"));
-        }
-        if (manager.findFragmentByTag("search") !=null ){
-            manager.beginTransaction().hide(manager.findFragmentByTag("search"));
+        if (fragDone != null && fragDone!= active) {
+            if (active != null) manager.beginTransaction().show(fragDone).hide(active).commit();
+            else  manager.beginTransaction().show(fragDone).commit();
         }
     }
 
     private void switchToExamsReservationsFragment(){
         FragmentManager manager = getSupportFragmentManager();
-        if (manager.findFragmentByTag("reservations") != null) {
-            manager.beginTransaction().show(manager.findFragmentByTag("reservations")).commit();
-        }
-        else manager.beginTransaction().replace(R.id.content_frame, new ReservationsFragment(),"reservations").commit();
-        if (manager.findFragmentByTag("completed") !=null ){
-            manager.beginTransaction().hide(manager.findFragmentByTag("completed"));
-        }
-        if (manager.findFragmentByTag("search") !=null ){
-            manager.beginTransaction().hide(manager.findFragmentByTag("search"));
+        if (fragRes != null && fragRes != active) {
+            if (active != null) manager.beginTransaction().show(fragRes).hide(active).commit();
+            else manager.beginTransaction().show(fragRes).commit();
         }
     }
 
     private void switchToExamsSearchFragment(){
-        FragmentManager manager = getSupportFragmentManager();
-        if (manager.findFragmentByTag("search") != null) {
-            manager.beginTransaction().show(manager.findFragmentByTag("search")).commit();
-        }
-        else manager.beginTransaction().replace(R.id.content_frame, new ExamsDoneFragment(),"search").commit();
-        if (manager.findFragmentByTag("completed") !=null ){
-            manager.beginTransaction().hide(manager.findFragmentByTag("completed"));
-        }
-        if (manager.findFragmentByTag("reservations") !=null ){
-            manager.beginTransaction().hide(manager.findFragmentByTag("reservations"));
-        }
+
+        return;
     }
 
 
@@ -214,6 +220,9 @@ public class ExamsActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("tabSelected", itemId);
+        //outState.putInt("tabSelected", itemId);
+        getSupportFragmentManager().putFragment(outState,"completed",fragDone);
+        getSupportFragmentManager().putFragment(outState,"reservations",fragRes);
+        if (active != null) getSupportFragmentManager().putFragment(outState,"active", active);
     }
 }
