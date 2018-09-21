@@ -24,15 +24,16 @@ import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lithium.openstud.driver.core.Openstud;
+import lithium.openstud.driver.core.Student;
 
 public class ExamsActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    private TextView mTextMessage;
     private NavigationView nv;
     private DelayedDrawerListener ddl;
-    private View headerLayout;
     private ExamsDoneFragment examsCompleted;
+    private int itemId = -1;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -40,12 +41,15 @@ public class ExamsActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_completed:
+                    itemId = R.id.navigation_completed;
                     switchToExamsCompletedFragment();
                     return true;
                 case R.id.navigation_reservations:
+                    itemId = R.id.navigation_reservations;
                     switchToExamsReservationsFragment();
                     return true;
                 case R.id.navigation_search:
+                    itemId = R.id.navigation_search;
                     switchToExamsSearchFragment();
                     return true;
             }
@@ -58,15 +62,38 @@ public class ExamsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exams);
         ButterKnife.bind(this);
+        Openstud os = InfoManager.getOpenStud(getApplication());
+        Student student = InfoManager.getInfoStudentCached(getApplication(), os);
+        if (os == null || student == null) {
+            InfoManager.clearSharedPreferences(getApplication());
+            Intent i = new Intent(ExamsActivity.this, LauncherActivity.class);
+            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
+            return;
+        }
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
         getSupportActionBar().setTitle(R.string.exams);
-        headerLayout = nv.getHeaderView(0);
-        mTextMessage = (TextView) findViewById(R.id.message);
+        View headerLayout = nv.getHeaderView(0);
+
+        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
+        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
+        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
+        subTitle.setText(String.valueOf(student.getStudentID()));
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         setupListeners();
-        switchToExamsCompletedFragment();
+        int tabSelected = -1;
+        if (savedInstanceState != null) {
+            tabSelected = savedInstanceState.getInt("tabSelected", -1);
+            itemId = tabSelected;
+        }
+        if (tabSelected == -1 || tabSelected == R.id.navigation_completed) {
+            switchToExamsCompletedFragment();
+        }
+        else if (tabSelected == R.id.navigation_reservations) switchToExamsReservationsFragment();
+        else switchToExamsReservationsFragment();
     }
 
 
@@ -182,5 +209,11 @@ public class ExamsActivity extends AppCompatActivity {
         Snackbar snackbar = Snackbar
                 .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);
         snackbar.show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("tabSelected", itemId);
     }
 }
