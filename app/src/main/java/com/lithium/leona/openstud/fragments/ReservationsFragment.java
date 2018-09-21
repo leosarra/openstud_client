@@ -1,18 +1,25 @@
 package com.lithium.leona.openstud.fragments;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lithium.leona.openstud.ExamsActivity;
 import com.lithium.leona.openstud.LauncherActivity;
@@ -25,12 +32,18 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import lithium.openstud.driver.core.Exam;
 import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Openstud;
@@ -43,7 +56,11 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView) RecyclerView rv;
     @BindView(R.id.empty_layout) LinearLayout emptyView;
-
+    @BindView(R.id.empty_button_reload) Button emptyButton;
+    @BindView(R.id.empty_text) TextView emptyText;
+    @OnClick(R.id.empty_button_reload) public void OnClick(View v){
+        refreshReservations();
+    }
 
     private List<ExamReservation> reservations;
     private Openstud os;
@@ -92,6 +109,18 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     activity.finish();
                 }
+                else if(msg.what == (ClientHelper.Status.FAILED_DELETE).getValue()){
+                    activity.createTextSnackBar(R.string.failed_delete, Snackbar.LENGTH_LONG);
+                }
+                else if(msg.what == (ClientHelper.Status.OK_DELETE).getValue()){
+                    activity.createTextSnackBar(R.string.ok_delete, Snackbar.LENGTH_LONG);
+                }
+                else if(msg.what == ClientHelper.Status.FAILED_GET_IO.getValue()){
+                    activity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
+                }
+                else if(msg.what == ClientHelper.Status.FAILED_GET.getValue()){
+                    activity.createTextSnackBar(R.string.failed_get_network, Snackbar.LENGTH_LONG);
+                }
             }
         }
     }
@@ -110,7 +139,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             return v;
         }
-
+        emptyText.setText(getResources().getString(R.string.no_reservations_found));
         List<ExamReservation> reservations_cached  = InfoManager.getActiveReservationsCached(getActivity().getApplication(),os);
         if (reservations_cached != null && !reservations_cached.isEmpty())  {
             reservations.addAll(reservations_cached);
@@ -119,7 +148,31 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        adapter = new ActiveReservationsAdapter(getActivity(), reservations);
+        adapter = new ActiveReservationsAdapter(getActivity(), reservations, new ActiveReservationsAdapter.ReservationAdapterListener() {
+            @Override
+            public void deleteReservationOnClick(final ExamReservation res) {
+                Activity activity = getActivity();
+                if (activity == null) return;
+                createConfirmDeleteDialog(activity, res);
+            }
+
+            @Override
+            public void downloadReservationOnClick(final ExamReservation res) {
+                final Activity activity = getActivity();
+                if (activity == null) return;
+                if (!ClientHelper.isExternalStorageAvailable() && ClientHelper.isExternalStorageReadOnly()) return;
+                boolean result = ClientHelper.requestReadWritePermissions(activity);
+                if (!result) {
+                    return;
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getFile(activity,res);
+                    }
+                }).start();
+            }
+        });
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -130,6 +183,48 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         });
         if (firstStart) refreshReservations();
         return v;
+    }
+
+
+    private void getFile(Activity activity, ExamReservation res){
+        boolean check = false;
+        String namFile = Environment.getExternalStorageDirectory() + "/OpenStud/" + res.getSessionID()+"_"+res.getExamSubject()+"_"+res.getReservationNumber();
+        File pdfFile = new File(namFile);
+        try {
+            if (pdfFile.exists()) {
+                openActionViewPDF(activity,pdfFile);
+                h.sendEmptyMessage(ClientHelper.Status.FAILED_GET_IO.getValue());
+                return;
+            }
+            pdfFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(pdfFile);
+            byte[] content = os.getPdf(res);
+            fos.write(content);
+            fos.close();
+            check = true;
+        } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
+            h.sendEmptyMessage(ClientHelper.Status.FAILED_GET.getValue());
+            e.printStackTrace();
+        } catch (OpenstudInvalidCredentialsException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            e.printStackTrace();
+        } catch (IOException e) {
+            h.sendEmptyMessage(ClientHelper.Status.FAILED_GET_IO.getValue());
+            e.printStackTrace();
+        }
+        if (!check) {
+            pdfFile.delete();
+            return;
+        }
+        openActionViewPDF(activity,pdfFile);
+    }
+
+    private void openActionViewPDF(Activity activity, File pdfFile){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = FileProvider.getUriForFile(activity,"com.lithium.leona.openstud.provider",pdfFile);
+        intent.setDataAndType(uri,"application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
     }
 
     public void onResume() {
@@ -145,6 +240,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         final Activity activity = getActivity();
         if (activity == null) return;
         setRefreshing(true);
+        setButtonReloadStatus(false);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -166,11 +262,13 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                     else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                     e.printStackTrace();
                 }
-                updateTimer();
-                if (update==null || reservations.equals(update)) {
+
+                if (update==null) {
                     setRefreshing(false);
+                    setButtonReloadStatus(true);
                     return;
                 }
+                updateTimer();
                 refreshDataSet(update);
             }
         }).start();
@@ -189,18 +287,10 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (finalFlag) {
-                    adapter.notifyDataSetChanged();
-                    if (reservations.isEmpty()) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        rv.setVisibility(View.GONE);
-                    }
-                    else {
-                        emptyView.setVisibility(View.GONE);
-                        rv.setVisibility(View.VISIBLE);
-                    }
-                }
+                if (finalFlag) adapter.notifyDataSetChanged();
+                swapViews(reservations);
                 swipeRefreshLayout.setRefreshing(false);
+                emptyButton.setEnabled(true);
             }
         });
     }
@@ -218,11 +308,79 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     }
 
 
+    private void setButtonReloadStatus(final boolean bool){
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                emptyButton.setEnabled(bool);
+            }
+        });
+    }
+
+    private void swapViews(final List<ExamReservation> reservations) {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (reservations.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.GONE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                    rv.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
     private synchronized void updateTimer(){
         lastUpdate = LocalDateTime.now();
     }
 
     private synchronized LocalDateTime getTimer(){
         return lastUpdate;
+    }
+
+    private void createConfirmDeleteDialog(Activity activity, final ExamReservation res){
+        new AlertDialog.Builder(activity)
+                .setTitle(getResources().getString(R.string.delete_res_dialog_title))
+                .setMessage(getResources().getString(R.string.delete_res_dialog_description, res.getExamSubject()))
+                .setPositiveButton(getResources().getString(R.string.delete_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                deleteReservation(res);
+                            }
+                        }).start();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.delete_abort), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .show();
+    }
+
+    private void deleteReservation(ExamReservation res){
+        try {
+            int ret = os.deleteReservation(res);
+            if (ret!=-1) {
+                synchronized (this) {
+                    reservations.remove(res);
+                    adapter.notifyDataSetChanged();
+                }
+                h.sendEmptyMessage(ClientHelper.Status.OK_DELETE.getValue());
+            } else h.sendEmptyMessage(ClientHelper.Status.FAILED_DELETE.getValue());
+        } catch (OpenstudInvalidResponseException | OpenstudConnectionException e) {
+            h.sendEmptyMessage(ClientHelper.Status.FAILED_DELETE.getValue());
+        } catch (OpenstudInvalidCredentialsException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+        }
     }
 }

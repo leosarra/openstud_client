@@ -32,6 +32,20 @@
     <string name="date_exam">Data esame: %1$s</string>
     <string name="description_reservation">Informazioni aggiuntive: %1$s</string>
     <string name="reload">Ricarica</string>
+    <string name="no_reservations_found">No reservation was found</string>
+    <string name="no_exams_done_found">No exam was found</string>
+    <string name="no_paid_tax_found">No paid tax was found</string>
+    <string name="no_unpaid_tax_found">No unpaid tax was found</string>
+    <string name="ok_delete">Reservation successfully deleted</string>
+    <string name="failed_delete">Can\'t delete reservation! Try again later.</string>
+    <string name="failed_get_io">Reservation\'s file can't be saved.</string>
+    <string name="failed_get_network">Infostud is not working properly. File cannot be downloaded!</string>
+    <string name="delete_res_dialog_title">Delete reservation?</string>
+    <string name="delete_res_dialog_description">Reservation for %1$s will be deleted. Are you sure?</string>
+    <string name="delete_ok">Delete</string>
+    <string name="delete_abort">Abort</string>
+    <string name="receipt">Receipt</string>
+    <string name="delete">Delete</string>
 
     <string name="isee_not_avaiable">Non dichiarato</string>
     <string name="blank_username_error">"L'username non è può essere lasciato vuoto!</string>
