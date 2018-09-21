@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -49,7 +50,8 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private ExamsDoneHandler h = new ExamsDoneHandler(this);
-
+    private LinearLayoutManager llm;
+    private Parcelable listState;
     private static class ExamsDoneHandler extends Handler {
         private final WeakReference<ExamsDoneFragment> frag;
 
@@ -94,14 +96,17 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment,null);
         ButterKnife.bind(this, v);
         Bundle bundle=getArguments();
+        Activity activity = getActivity();
+        if (activity == null) return v;
         exams = new LinkedList<>();
-        os = InfoManager.getOpenStud(getActivity().getApplication());
+        os = InfoManager.getOpenStud(activity.getApplication());
         if (os == null) {
             InfoManager.clearSharedPreferences(getActivity().getApplication());
             Intent i = new Intent(getActivity(), LauncherActivity.class);
@@ -114,10 +119,14 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             exams.addAll(exams_cached);
         }
         rv.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
         adapter = new ExamDoneAdapter(getActivity(), exams, 0);
         rv.setAdapter(adapter);
+        System.out.println(listState);
+        if (listState != null) {
+            llm.onRestoreInstanceState(listState);
+        }
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -139,6 +148,8 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     }
 
     private void  refreshExamsDone(){
+        final Activity activity = getActivity();
+        if (activity == null) return;
         setRefreshing(true);
         new Thread(new Runnable() {
             @Override
@@ -146,7 +157,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
                 List<ExamPassed> update = null;
                 boolean isChanged = false;
                 try {
-                    update = InfoManager.getExamsDone(getActivity().getApplication(),os);
+                    update = InfoManager.getExamsDone(activity.getApplication(),os);
                     if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                     else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
@@ -220,4 +231,22 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     private synchronized LocalDateTime getTimer(){
         return lastUpdate;
     }
+
+    /**
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        // Save list state
+        Parcelable mListState = llm.onSaveInstanceState();
+        state.putParcelable("list_state", mListState);
+    }
+
+    public void onActivityCreated(Bundle state) {
+        super.onActivityCreated(state);
+        // Retrieve list state and list/item positions
+        if(state != null) {
+            listState = state.getParcelable("list_state");
+        }
+    }
+     **/
 }
