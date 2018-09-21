@@ -1,12 +1,14 @@
 package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.ExamReservation;
 
@@ -25,10 +28,12 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
 
     private List<ExamReservation> reservations;
     private Context context;
+    private ReservationAdapterListener ral;
 
-    public ActiveReservationsAdapter(Context context, List<ExamReservation> reservations) {
+    public ActiveReservationsAdapter(Context context, List<ExamReservation> reservations, ReservationAdapterListener ral) {
         this.reservations = reservations;
         this.context = context;
+        this.ral = ral;
     }
 
     @NonNull
@@ -51,7 +56,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         return reservations.size();
     }
 
-    public static class ActiveReservationsHolder extends RecyclerView.ViewHolder  {
+    public class ActiveReservationsHolder extends RecyclerView.ViewHolder  {
         @BindView(R.id.nameExam) TextView txtName;
         @BindView(R.id.nameTeacher) TextView txtTeacher;
         @BindView(R.id.dateExam) TextView txtDate;
@@ -59,6 +64,8 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         @BindView(R.id.ssdExam) TextView txtSSD;
         @BindView(R.id.cfuExam) TextView txtCFU;
         @BindView(R.id.reservationInfo) TextView txtInfo;
+        @BindView(R.id.delete_reservation) Button deleteButton;
+        @BindView(R.id.get_reservation) Button getButton;
         private Context context;
 
         private void setContext(Context context){
@@ -70,7 +77,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             ButterKnife.bind(this,itemView);
         }
 
-        public void setDetails(ExamReservation res) {
+        public void setDetails(final ExamReservation res) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
             String infos = context.getResources().getString(R.string.description_reservation, res.getNote());
             if (!infos.endsWith(".")) infos = infos + ".";
@@ -81,6 +88,25 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, res.getSsd()));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(res.getCfu())));
             txtInfo.setText(infos);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ral.deleteReservationOnClick(res);
+                }
+            });
+            getButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ral.downloadReservationOnClick(res);
+                }
+            });
+
         }
+    }
+
+    public interface ReservationAdapterListener {
+        void deleteReservationOnClick(ExamReservation res);
+
+        void downloadReservationOnClick(ExamReservation res);
     }
 }
