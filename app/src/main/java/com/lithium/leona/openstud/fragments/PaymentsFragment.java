@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 
 
 import android.support.annotation.Nullable;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lithium.leona.openstud.LauncherActivity;
 import com.lithium.leona.openstud.PaymentsActivity;
@@ -27,6 +29,7 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
+import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
@@ -34,6 +37,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
@@ -89,6 +94,11 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView) RecyclerView rv;
     @BindView(R.id.empty_layout) LinearLayout emptyView;
+    @BindView(R.id.empty_button_reload) Button emptyButton;
+    @BindView(R.id.empty_text) TextView emptyText;
+    @OnClick(R.id.empty_button_reload) public void OnClick(View v){
+        refresh();
+    }
     private List<Tax> taxes;
     private TaxAdapter adapter;
     private int mode;
@@ -124,8 +134,14 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         }
         taxes = new LinkedList<>();
         List<Tax> taxes_cached = null;
-        if (mode == TaxAdapter.Mode.PAID.getValue()) taxes_cached = InfoManager.getPaidTaxesCached(getActivity().getApplication(),os);
-        else if (mode == TaxAdapter.Mode.UNPAID.getValue()) taxes_cached = InfoManager.getUnpaidTaxesCached(getActivity().getApplication(),os);
+        if (mode == TaxAdapter.Mode.PAID.getValue()) {
+            emptyText.setText(getResources().getString(R.string.no_paid_tax_found));
+            taxes_cached = InfoManager.getPaidTaxesCached(getActivity().getApplication(),os);
+        }
+        else if (mode == TaxAdapter.Mode.UNPAID.getValue()) {
+            emptyText.setText(getResources().getString(R.string.no_unpaid_tax_found));
+            taxes_cached = InfoManager.getUnpaidTaxesCached(getActivity().getApplication(),os);
+        }
         if (taxes_cached != null && !taxes_cached.isEmpty())  taxes.addAll(taxes_cached);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -158,6 +174,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         final Activity activity = getActivity();
         if (activity == null) return;
         setRefreshing(true);
+        setButtonReloadStatus(false);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -184,11 +201,13 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
                     else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                     e.printStackTrace();
                 }
-                updateTimer();
-                if (update==null || taxes.equals(update)) {
+
+                if (update==null) {
                     setRefreshing(false);
+                    setButtonReloadStatus(true);
                     return;
                 }
+                updateTimer();
                 refreshDataSet(update);
             }
         }).start();
@@ -207,18 +226,10 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (finalFlag) {
-                    adapter.notifyDataSetChanged();
-                    if (taxes.isEmpty()) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        rv.setVisibility(View.GONE);
-                    }
-                    else {
-                        emptyView.setVisibility(View.GONE);
-                        rv.setVisibility(View.VISIBLE);
-                    }
-                }
+                if (finalFlag) adapter.notifyDataSetChanged();
+                swapViews(taxes);
                 swipeRefreshLayout.setRefreshing(false);
+                emptyButton.setEnabled(true);
             }
         });
     }
@@ -242,6 +253,34 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
 
     private synchronized LocalDateTime getTimer(){
         return lastUpdate;
+    }
+
+    private void setButtonReloadStatus(final boolean bool){
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                emptyButton.setEnabled(bool);
+            }
+        });
+    }
+
+    private void swapViews(final List<Tax> taxes) {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (taxes.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.GONE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                    rv.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
 }
