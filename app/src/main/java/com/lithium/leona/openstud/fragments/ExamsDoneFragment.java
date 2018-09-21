@@ -13,7 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lithium.leona.openstud.ExamsActivity;
 import com.lithium.leona.openstud.LauncherActivity;
@@ -31,7 +33,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lithium.openstud.driver.core.ExamPassed;
+import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
@@ -42,7 +46,12 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView) RecyclerView rv;
     @BindView(R.id.empty_layout) LinearLayout emptyView;
-
+    @BindView(R.id.empty_button_reload) Button emptyButton;
+    @BindView(R.id.empty_text)
+    TextView emptyText;
+    @OnClick(R.id.empty_button_reload) public void OnClick(View v){
+        refreshExamsDone();
+    }
 
     private List<ExamPassed> exams;
     private Openstud os;
@@ -51,7 +60,6 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     private boolean firstStart = true;
     private ExamsDoneHandler h = new ExamsDoneHandler(this);
     private LinearLayoutManager llm;
-    private Parcelable listState;
     private static class ExamsDoneHandler extends Handler {
         private final WeakReference<ExamsDoneFragment> frag;
 
@@ -113,7 +121,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             return v;
         }
-
+        emptyText.setText(getResources().getString(R.string.no_exams_done_found));
         List<ExamPassed> exams_cached  = InfoManager.getExamsDoneCached(getActivity().getApplication(),os);
         if (exams_cached != null && !exams_cached.isEmpty())  {
             exams.addAll(exams_cached);
@@ -123,10 +131,6 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         rv.setLayoutManager(llm);
         adapter = new ExamDoneAdapter(getActivity(), exams, 0);
         rv.setAdapter(adapter);
-        System.out.println(listState);
-        if (listState != null) {
-            llm.onRestoreInstanceState(listState);
-        }
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -151,6 +155,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         final Activity activity = getActivity();
         if (activity == null) return;
         setRefreshing(true);
+        setButtonReloadStatus(false);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -172,11 +177,13 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
                     else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                     e.printStackTrace();
                 }
-                updateTimer();
-                if (update==null || exams.equals(update)) {
+
+                if (update==null) {
                     setRefreshing(false);
+                    setButtonReloadStatus(true);
                     return;
                 }
+                updateTimer();
                 refreshDataSet(update);
             }
         }).start();
@@ -195,18 +202,10 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (finalFlag) {
-                    adapter.notifyDataSetChanged();
-                    if (exams.isEmpty()) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        rv.setVisibility(View.GONE);
-                    }
-                    else {
-                        emptyView.setVisibility(View.GONE);
-                        rv.setVisibility(View.VISIBLE);
-                    }
-                }
+                if (finalFlag) adapter.notifyDataSetChanged();
+                swapViews(exams);
                 swipeRefreshLayout.setRefreshing(false);
+                emptyButton.setEnabled(true);
             }
         });
     }
@@ -249,4 +248,33 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         }
     }
      **/
+
+    private void setButtonReloadStatus(final boolean bool){
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                emptyButton.setEnabled(bool);
+            }
+        });
+    }
+
+    private void swapViews(final List<ExamPassed> exams) {
+        Activity activity = getActivity();
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (exams.isEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.GONE);
+                } else {
+                    emptyView.setVisibility(View.GONE);
+                    rv.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
 }
