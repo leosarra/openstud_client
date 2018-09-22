@@ -4,8 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/NoActionBarAppTheme"></activity>
+            android:theme="@style/NoActionBarAppTheme" />
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/NoActionBarAppTheme" />
@@ -36,7 +36,12 @@
         <activity
             android:name=".activities.ExamsActivity"
             android:label="@string/title_activity_exams"
-            android:theme="@style/NoActionBarAppTheme"></activity>
+            android:theme="@style/NoActionBarAppTheme" />
+        <activity
+            android:name=".activities.SearchResultActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/NoActionBarAppTheme" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.lithium.leona.openstud.provider"
@@ -44,8 +49,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_provider_path"/>
+                android:resource="@xml/file_provider_path" />
         </provider>
+
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>
