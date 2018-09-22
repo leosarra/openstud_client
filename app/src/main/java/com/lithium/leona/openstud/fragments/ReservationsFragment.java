@@ -94,7 +94,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                             reservationsFrag.refreshReservations();
                         }
                     };
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
+                    activity.createRetrySnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
@@ -158,6 +158,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                 if (activity == null) return;
                 if (!ClientHelper.isExternalStorageAvailable() && ClientHelper.isExternalStorageReadOnly()) return;
                 boolean result = ClientHelper.requestReadWritePermissions(activity);
+                System.out.println(result);
                 if (!result) {
                     return;
                 }
@@ -184,12 +185,13 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
 
     private void getFile(Activity activity, ExamReservation res){
         boolean check = false;
-        String namFile = Environment.getExternalStorageDirectory() + "/OpenStud/" + res.getSessionID()+"_"+res.getExamSubject()+"_"+res.getReservationNumber();
-        File pdfFile = new File(namFile);
+        String directory = Environment.getExternalStorageDirectory() + "/OpenStud/pdf/";
+        File dirs = new File(directory);
+        dirs.mkdirs();
+        File pdfFile = new File(directory+ res.getSessionID()+"_"+res.getExamSubject()+"_"+res.getReservationNumber()+".pdf");
         try {
             if (pdfFile.exists()) {
                 openActionViewPDF(activity,pdfFile);
-                h.sendEmptyMessage(ClientHelper.Status.FAILED_GET_IO.getValue());
                 return;
             }
             pdfFile.createNewFile();
@@ -226,10 +228,16 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
+        Activity activity = getActivity();
         if (firstStart) {
             firstStart = false;
         }
         else if (getActivity()!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshReservations();
+        else if (activity != null && InfoManager.getReservationUpdateFlag(activity)) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+            refreshReservations();
+            InfoManager.setReservationUpdateFlag(activity,false);
+        }
     }
 
     private void  refreshReservations(){
@@ -368,8 +376,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
             int ret = os.deleteReservation(res);
             if (ret!=-1) {
                 synchronized (this) {
-                    reservations.remove(res);
-                    adapter.notifyDataSetChanged();
+                    refreshReservations();
                 }
                 h.sendEmptyMessage(ClientHelper.Status.OK_DELETE.getValue());
             } else h.sendEmptyMessage(ClientHelper.Status.FAILED_DELETE.getValue());
