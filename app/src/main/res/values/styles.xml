@@ -38,4 +38,9 @@
         <item name="color">@android:color/white</item>
     </style>
 
+    <style name="ButtonReservations" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorButtonNormal">@android:color/darker_gray</item>
+        <item name="android:colorAccent">@color/redSapienza</item>
+    </style>
+
 </resources>
