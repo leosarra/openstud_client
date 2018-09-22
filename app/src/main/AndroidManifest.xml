@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LauncherActivity"
+            android:name=".activities.LauncherActivity"
             android:noHistory="true"
             android:theme="@style/NoActionBarAppTheme">
             <intent-filter>
@@ -25,16 +25,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:theme="@style/NoActionBarAppTheme"></activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".activities.ProfileActivity"
             android:theme="@style/NoActionBarAppTheme" />
         <activity
-            android:name=".PaymentsActivity"
+            android:name=".activities.PaymentsActivity"
             android:theme="@style/NoActionBarAppTheme" />
         <activity
-            android:name=".ExamsActivity"
+            android:name=".activities.ExamsActivity"
             android:label="@string/title_activity_exams"
             android:theme="@style/NoActionBarAppTheme"></activity>
         <provider

@@ -1,9 +1,10 @@
-package com.lithium.leona.openstud;
+package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 
 public class LauncherActivity extends AppCompatActivity {

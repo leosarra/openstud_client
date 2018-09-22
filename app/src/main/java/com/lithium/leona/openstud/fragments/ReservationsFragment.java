@@ -21,11 +21,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lithium.leona.openstud.ExamsActivity;
-import com.lithium.leona.openstud.LauncherActivity;
+import com.lithium.leona.openstud.activities.ExamsActivity;
+import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
-import com.lithium.leona.openstud.adapters.ExamDoneAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
@@ -33,7 +32,6 @@ import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -43,8 +41,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Exam;
-import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;

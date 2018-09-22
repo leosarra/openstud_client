@@ -13,8 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.lithium.leona.openstud.LoginActivity;
-
 public class ClientHelper {
 
     public enum Status {

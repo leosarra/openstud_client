@@ -1,9 +1,7 @@
 package com.lithium.leona.openstud.fragments;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lithium.leona.openstud.PaymentsActivity;
+import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
 

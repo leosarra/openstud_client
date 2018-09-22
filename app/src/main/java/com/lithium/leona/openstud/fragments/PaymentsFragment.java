@@ -19,17 +19,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lithium.leona.openstud.LauncherActivity;
-import com.lithium.leona.openstud.PaymentsActivity;
+import com.lithium.leona.openstud.activities.LauncherActivity;
+import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
 import org.threeten.bp.Duration;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
-import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
@@ -38,7 +36,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;

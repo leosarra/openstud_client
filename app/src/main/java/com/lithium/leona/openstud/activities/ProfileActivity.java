@@ -1,4 +1,4 @@
-package com.lithium.leona.openstud;
+package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;

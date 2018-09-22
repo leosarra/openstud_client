@@ -1,4 +1,4 @@
-package com.lithium.leona.openstud;
+package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.ExamsDoneFragment;
 import com.lithium.leona.openstud.fragments.ReservationsFragment;
