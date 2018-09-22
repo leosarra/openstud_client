@@ -26,7 +26,6 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:noHistory="true"
             android:theme="@style/NoActionBarAppTheme"></activity>
         <activity
             android:name=".ProfileActivity"
