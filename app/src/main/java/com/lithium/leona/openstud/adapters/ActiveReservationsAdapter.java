@@ -1,9 +1,12 @@
 package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,10 @@ import android.widget.TextView;
 import com.lithium.leona.openstud.R;
 
 import org.apache.commons.lang3.StringUtils;
+import org.threeten.bp.Duration;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.Period;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
@@ -100,7 +107,17 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
                     ral.downloadReservationOnClick(res);
                 }
             });
-
+            int tintColor;
+            if (Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>1) {
+                tintColor = ContextCompat.getColor(context, android.R.color.darker_gray);
+                deleteButton.setEnabled(false);
+            }
+            else tintColor = ContextCompat.getColor(context, R.color.redSapienza);
+            deleteButton.setTextColor(tintColor);
+            Drawable drawable = ContextCompat.getDrawable(context,R.drawable.ic_delete_small);
+            drawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(drawable.mutate(),tintColor);
+            deleteButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         }
     }
 
