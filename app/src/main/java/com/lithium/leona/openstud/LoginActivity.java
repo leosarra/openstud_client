@@ -53,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         }
         login();
     }
+    private Openstud os;
+    private LoginEventHandler h = new LoginEventHandler(this);
 
     private static class LoginEventHandler extends Handler {
         private final WeakReference<LoginActivity> mActivity;
@@ -67,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
                     Intent intent = new Intent(activity,ExamsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
                 }
                 else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
@@ -94,8 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private Openstud os;
-    private LoginEventHandler h = new LoginEventHandler(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
         username.setEnabled(false);
         password.setEnabled(false);
         String username = this.username.getText().toString();
-        String password = this.password.getText().toString();
+        final String password = this.password.getText().toString();
         if (username.isEmpty()) {
             if (password.isEmpty())
                 ClientHelper.createTextSnackBar(layout, R.string.blank_username_password_error, Snackbar.LENGTH_LONG);
@@ -122,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             ClientHelper.createTextSnackBar(layout, R.string.blank_password_error, Snackbar.LENGTH_LONG);
             return;
         }
-        int id;
+        final int id;
         try {
             id = Integer.parseInt(username);
         } catch (NumberFormatException e) {
@@ -130,22 +132,23 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
             return;
         }
-        os = InfoManager.getOpenStud(getApplication(), id, password, rememberFlag.isChecked());
+        os = InfoManager.getOpenStud(getApplication(), id, password);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                _login(os);
+                _login(os, id, password, rememberFlag.isChecked());
             }
         }).start();
     }
 
-    private synchronized void _login(Openstud os){
+    private synchronized void _login(Openstud os, int id, String password, boolean rememberFlag){
         if (os == null) {
             h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
             return;
         }
         try {
             os.login();
+            InfoManager.saveOpenStud(this,os,id,password,rememberFlag);
             InfoManager.getInfoStudent(this, os);
             InfoManager.getIsee(this,os);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
