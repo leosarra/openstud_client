@@ -40,7 +40,7 @@
     <string name="show_exam_sessions">Show exam session</string>
     <string name="ok_delete">Reservation successfully deleted</string>
     <string name="failed_delete">Can\'t delete reservation! Try again later.</string>
-    <string name="failed_get_io">Reservation\'s file can't be saved.</string>
+    <string name="failed_get_io">Receipt can\'t be saved.</string>
     <string name="failed_get_network">Infostud is not working properly. File cannot be downloaded!</string>
     <string name="delete_res_dialog_title">Delete reservation?</string>
     <string name="delete_res_dialog_description">Reservation for %1$s will be deleted. Are you sure?</string>
@@ -60,4 +60,13 @@
     <string name="user_not_enabled_error">Utente non abilitato alla gestione su Infostud</string>
     <string name="invalid_password_error">La credenziali inseriti sono errate</string>
     <string name="device_no_internet">Il tuo dispositivo non risulta connesso a internet</string>
+    <string name="search_sessions">Sessions</string>
+    <string name="info_extra_reservation">Info</string>
+    <string name="start_date_reservation">Start reservations: %1$s</string>
+    <string name="end_date_reservation">End reservations: %1$s</string>
+    <string name="channel_reservation">Canale: %1$s</string>
+    <string name="place_reservation">Place reservation</string>
+    <string name="reservation_error">Can\'t place the reservation. Try again later</string>
+    <string name="reservation_ok">Reservation placed successfully</string>
+    <string name="already_placed_reservation">You already placed a reservation for this session!</string>
 </resources>

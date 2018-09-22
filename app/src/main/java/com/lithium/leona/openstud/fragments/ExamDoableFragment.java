@@ -16,9 +16,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
+import com.lithium.leona.openstud.activities.SearchResultActivity;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.adapters.ExamDoableAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -99,18 +101,6 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     activity.finish();
                 }
-                else if(msg.what == (ClientHelper.Status.FAILED_DELETE).getValue()){
-                    activity.createTextSnackBar(R.string.failed_delete, Snackbar.LENGTH_LONG);
-                }
-                else if(msg.what == (ClientHelper.Status.OK_DELETE).getValue()){
-                    activity.createTextSnackBar(R.string.ok_delete, Snackbar.LENGTH_LONG);
-                }
-                else if(msg.what == ClientHelper.Status.FAILED_GET_IO.getValue()){
-                    activity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
-                }
-                else if(msg.what == ClientHelper.Status.FAILED_GET.getValue()){
-                    activity.createTextSnackBar(R.string.failed_get_network, Snackbar.LENGTH_LONG);
-                }
             }
         }
     }
@@ -141,7 +131,11 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
         adapter = new ExamDoableAdapter(getActivity(), examsDoable, new ExamDoableAdapter.ExamDoableAdapterListener() {
             @Override
             public void showSessionsOnClick(ExamDoable exam) {
-
+                Activity activity = getActivity();
+                if (activity == null) return;
+                Intent intent = new Intent(activity,SearchResultActivity.class);
+                intent.putExtra("exam", new Gson().toJson(exam));
+                activity.startActivity(intent);
             }
         });
         rv.setAdapter(adapter);

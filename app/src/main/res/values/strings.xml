@@ -58,7 +58,7 @@
     <string name="no_unpaid_tax_found">No unpaid tax was found</string>
     <string name="ok_delete">Reservation successfully deleted</string>
     <string name="failed_delete">Can\'t delete reservation! Try again later.</string>
-    <string name="failed_get_io">Reservation\'s file can't be saved.</string>
+    <string name="failed_get_io">Receipt can\'t be saved.</string>
     <string name="failed_get_network">Infostud is not working properly. File cannot be downloaded!</string>
     <string name="delete_res_dialog_title">Delete reservation?</string>
     <string name="delete_res_dialog_description">Reservation for %1$s will be deleted. Are you sure?</string>
@@ -83,7 +83,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_exams">ExamsActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="search_sessions">Sessions</string>
+    <string name="start_date_reservation">Start reservations: %1$s</string>
+    <string name="end_date_reservation">End reservations: %1$s</string>
+    <string name="channel_reservation">Channel: %1$s</string>
+    <string name="place_reservation">Place reservation</string>
+    <string name="reservation_error">Can\'t place the reservation. Try again later</string>
+    <string name="reservation_ok">Reservation placed successfully</string>
+    <string name="already_placed_reservation">You already placed a reservation for this session!</string>
 </resources>
