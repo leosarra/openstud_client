@@ -108,7 +108,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
                 }
             });
             int tintColor;
-            if (Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>1) {
+            if (Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>=1) {
                 tintColor = ContextCompat.getColor(context, android.R.color.darker_gray);
                 deleteButton.setEnabled(false);
             }
