@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.ExamDoableFragment;
@@ -174,6 +175,12 @@ public class ExamsActivity extends AppCompatActivity {
                         InfoManager.clearSharedPreferences(getApplication());
                         Intent i = new Intent(ExamsActivity.this, LauncherActivity.class);
                         startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        break;
+                    }
+
+                    case R.id.about_menu: {
+                        Intent intent = new Intent(ExamsActivity.this, AboutActivity.class);
+                        startActivity(intent);
                         break;
                     }
                 }
