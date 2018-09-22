@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
+import lithium.openstud.driver.core.ExamDoable;
 import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Isee;
@@ -33,6 +34,7 @@ public class InfoManager {
     private static List<Tax> paidTaxes;
     private static List<Tax> unpaidTaxes;
     private static List<ExamPassed> examsDone;
+    private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
     private static void setupSharedPreferences(Context context){
         if (pref!=null) return;
@@ -162,6 +164,36 @@ public class InfoManager {
         }
         return newExamsDone;
     }
+
+    public static List<ExamDoable> getExamsDoableCached(Context context, Openstud os) {
+        if (os==null) return null;
+        if (!hasLogin(context)) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (examsDoable!=null) return examsDoable;
+            oldObj =  pref.getString("examsDoable", "null");
+        }
+        Type listType = new TypeToken<List<ExamDoable>>(){}.getType();
+        return gson.fromJson(oldObj,listType);
+    }
+
+    public static List<ExamDoable> getExamsDoable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        if (os==null) return null;
+        if (!hasLogin(context)) return null;
+        Gson gson = new Gson();
+        List<ExamDoable> newExamsDoable = os.getExamsDoable();
+        synchronized (InfoManager.class){
+            examsDoable = newExamsDoable;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            Type listType = new TypeToken<List<ExamDoable>>(){}.getType();
+            String json = gson.toJson(examsDoable,listType);
+            prefsEditor.putString("examsDoable", json);
+            prefsEditor.commit();
+        }
+        return newExamsDoable;
+    }
+
 
     public static List<ExamReservation> getActiveReservationsCached(Context context, Openstud os) {
         if (os==null) return null;
