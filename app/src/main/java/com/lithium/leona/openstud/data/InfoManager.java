@@ -310,6 +310,17 @@ public class InfoManager {
         editor.apply();
     }
 
+    public static synchronized void setReservationUpdateFlag(Context context, boolean updateFlag){
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("updateReservations", updateFlag);
+        editor.apply();
+    }
+
+    public static synchronized boolean getReservationUpdateFlag(Context context) {
+        setupSharedPreferences(context);
+        return pref.getBoolean("updateReservations",false);
+    }
+
     public static synchronized boolean getSaveFlag(Context context) {
         setupSharedPreferences(context);
         return pref.getBoolean("remember",false);
