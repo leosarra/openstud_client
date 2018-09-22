@@ -2,6 +2,7 @@ package com.lithium.leona.openstud.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.icu.text.IDNA;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -40,20 +41,29 @@ public class InfoManager {
 
     public static Openstud getOpenStud(Context context){
         setupSharedPreferences(context);
-        if (os!=null) return os;
         if (getStudentId(context)== -1 || getPassword(context)==null) return null;
-        os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(2).build();
-        return os;
+        Gson gson = new Gson();
+        String oldObj;
+        synchronized (InfoManager.class) {
+            if (os!=null) return os;
+            os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(2).forceReadyState().build();
+            return os;
+        }
     }
 
 
-    public static Openstud getOpenStud(Context context, int studentId, String password, boolean save) {
+    public static Openstud getOpenStud(Context context, int studentId, String password) {
         if (studentId == -1 || password== null || password.isEmpty()) return null;
+        return new OpenstudBuilder().setStudentID(studentId).setPassword(password).build();
+    }
+
+    public static void saveOpenStud(Context context, Openstud openstud, int studentId, String password, boolean save){
         setupSharedPreferences(context);
         setNamePassword(context, studentId, password);
         setSaveFlag(context, save);
-        os = new OpenstudBuilder().setStudentID(studentId).setPassword(password).build();
-        return os;
+        synchronized (InfoManager.class) {
+            os = openstud;
+        }
     }
 
     public static Student getInfoStudentCached(Context context, Openstud os) {
