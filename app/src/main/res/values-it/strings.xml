@@ -34,8 +34,10 @@
     <string name="reload">Ricarica</string>
     <string name="no_reservations_found">No reservation was found</string>
     <string name="no_exams_done_found">No exam was found</string>
+    <string name="no_exams_doable_found">No exam was found</string>
     <string name="no_paid_tax_found">No paid tax was found</string>
     <string name="no_unpaid_tax_found">No unpaid tax was found</string>
+    <string name="show_exam_sessions">Show exam session</string>
     <string name="ok_delete">Reservation successfully deleted</string>
     <string name="failed_delete">Can\'t delete reservation! Try again later.</string>
     <string name="failed_get_io">Reservation\'s file can't be saved.</string>
