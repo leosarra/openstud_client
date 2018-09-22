@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.fragments.ExamDoableFragment;
 import com.lithium.leona.openstud.fragments.ExamsDoneFragment;
 import com.lithium.leona.openstud.fragments.ReservationsFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -26,6 +27,7 @@ import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lithium.openstud.driver.core.ExamDoable;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
 
@@ -36,6 +38,7 @@ public class ExamsActivity extends AppCompatActivity {
     private DelayedDrawerListener ddl;
     private Fragment active;
     private ExamsDoneFragment fragDone;
+    private ExamDoableFragment fragDoable;
     private ReservationsFragment fragRes;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -55,6 +58,7 @@ public class ExamsActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_search:
                     switchToExamsSearchFragment();
+                    active = fm.findFragmentByTag("doable");
                     return true;
             }
             return false;
@@ -93,6 +97,7 @@ public class ExamsActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             fragDone = (ExamsDoneFragment) fm.getFragment(savedInstanceState, "completed");
             fragRes = (ReservationsFragment) fm.getFragment(savedInstanceState, "reservations");
+            fragDoable = (ExamDoableFragment) fm.getFragment(savedInstanceState, "doable");
             active = fm.getFragment(savedInstanceState, "active");
             if (active != null) fm.beginTransaction().show(active).commit();
             else {
@@ -102,7 +107,9 @@ public class ExamsActivity extends AppCompatActivity {
         } else {
             fragRes = new ReservationsFragment();
             fragDone = new ExamsDoneFragment();
+            fragDoable = new ExamDoableFragment();
             fm.beginTransaction().add(R.id.content_frame,fragRes,"reservations").hide(fragRes).commit();
+            fm.beginTransaction().add(R.id.content_frame,fragDoable,"doable").hide(fragDoable).commit();
             fm.beginTransaction().add(R.id.content_frame,fragDone,"completed").commit();
             active= fragDone;
         }
@@ -202,8 +209,11 @@ public class ExamsActivity extends AppCompatActivity {
     }
 
     private void switchToExamsSearchFragment(){
-
-        return;
+        FragmentManager manager = getSupportFragmentManager();
+        if (fragDoable != null && fragDoable != active) {
+            if (active != null) manager.beginTransaction().show(fragDoable).hide(active).commit();
+            else manager.beginTransaction().show(fragDoable).commit();
+        }
     }
 
 
@@ -224,6 +234,7 @@ public class ExamsActivity extends AppCompatActivity {
         //outState.putInt("tabSelected", itemId);
         getSupportFragmentManager().putFragment(outState,"completed",fragDone);
         getSupportFragmentManager().putFragment(outState,"reservations",fragRes);
+        getSupportFragmentManager().putFragment(outState,"doable",fragRes);
         if (active != null) getSupportFragmentManager().putFragment(outState,"active", active);
     }
 }
