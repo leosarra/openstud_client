@@ -8,7 +8,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -29,6 +29,10 @@ android {
         exclude 'project.properties'
         exclude 'META-INF/DEPENDENCIES'
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 
@@ -43,9 +47,9 @@ dependencies {
     implementation 'saschpe.android:customtabs:1.1.2'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation "com.mikepenz:aboutlibraries:6.1.1"
     implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
-    implementation 'com.ncapdevi:frag-nav:2.4.0'
     implementation 'com.github.daniel-stoneuk:material-about-library:2.3.0'
 
     // https://mvnrepository.com/artifact/org.threeten/threetenbp
