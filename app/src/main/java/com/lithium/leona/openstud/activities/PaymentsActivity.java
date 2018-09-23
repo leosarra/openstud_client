@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -101,6 +102,11 @@ public class PaymentsActivity extends AppCompatActivity {
                     }
                     case R.id.exams_menu: {
                         Intent intent = new Intent(PaymentsActivity.this, ExamsActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.about_menu: {
+                        Intent intent = new Intent(PaymentsActivity.this, AboutActivity.class);
                         startActivity(intent);
                         break;
                     }
