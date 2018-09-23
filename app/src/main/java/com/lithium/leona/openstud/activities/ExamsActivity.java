@@ -115,21 +115,6 @@ public class ExamsActivity extends AppCompatActivity {
             active= fragDone;
         }
 
-        /**
-        int tabSelected = -1;
-        if (savedInstanceState != null) {
-            tabSelected = savedInstanceState.getInt("tabSelected", -1);
-            itemId = tabSelected;
-        }
-        if (tabSelected == -1 || tabSelected == R.id.navigation_completed) {
-            switchToExamsCompletedFragment();
-            active = fragDone;
-        }
-        else if (tabSelected == R.id.navigation_reservations) {
-            switchToExamsReservationsFragment();
-            active = fragRes;
-        }
-         **/
     }
 
 
