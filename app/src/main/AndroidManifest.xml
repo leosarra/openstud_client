@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/NoActionBarAppTheme" />
+            android:theme="@style/LoginTheme" />
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/NoActionBarAppTheme" />
