@@ -24,12 +24,14 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
+import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,6 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         applyInfos(student,isee);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
@@ -219,7 +222,14 @@ public class ProfileActivity extends AppCompatActivity {
         else isee_field.setText(String.valueOf(isee.getValue()));
         departmentDescription.setText(st.getDepartmentName());
         courseDescription.setText(st.getCourseName());
-        courseYear.setText(st.getCourseYear());
+        System.out.println(Locale.getDefault().getLanguage());
+        if (Locale.getDefault().getLanguage().equals("it")) courseYear.setText(getResources().getString(R.string.year_corse_profile,st.getCourseYear()+"°"));
+        else {
+            String year = st.getCourseYear();
+            if (StringUtils.isNumeric(st.getCourseYear()) && Integer.parseInt(year)<=3) year = year +"rd";
+            else year = year + "th";
+            courseYear.setText(getResources().getString(R.string.year_corse_profile,year));
+        }
         studentStatus.setText(st.getStudentStatus());
         cfu.setText(String.valueOf(st.getCfu()));
     }
