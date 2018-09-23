@@ -76,4 +76,6 @@
     <string name="email_address">leonardosarra@outlook.com</string>
     <string name="question_concerning_openstud">Hai qualche domanda?</string>
     <string name="open_source_libs">Librerie open source</string>
+    <string name="no_sessions_found">Nessun appello trovato</string>
+    <string name="send_email">Invia una email</string>
 </resources>

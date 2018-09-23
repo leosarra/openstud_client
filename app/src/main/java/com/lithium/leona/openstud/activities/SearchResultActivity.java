@@ -153,7 +153,7 @@ public class SearchResultActivity extends AppCompatActivity {
             }
         });
         reservations = new LinkedList<>();
-        emptyText.setText(getResources().getString(R.string.no_exams_doable_found));
+        emptyText.setText(getResources().getString(R.string.no_sessions_found));
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);

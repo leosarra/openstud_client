@@ -103,4 +103,5 @@
     <string name="send_email">Send an email</string>
     <string name="question_concerning_openstud">Any question?</string>
     <string name="open_source_libs">Open source libraries</string>
+    <string name="no_sessions_found">No sessions found</string>
 </resources>
