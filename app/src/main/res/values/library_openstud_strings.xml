@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-	<string name="define_openstud_driver"></string>
+	<string name="define_int_openstud_driver"></string>
 	<!-- Author section -->
 	<string name="library_openstud_driver_author">Leonardo Sarra</string>
 	<string name="library_openstud_driver_authorWebsite">https://github.com/lithiumsr</string>
