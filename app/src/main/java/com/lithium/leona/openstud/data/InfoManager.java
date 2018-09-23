@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import lithium.openstud.driver.core.ExamDoable;
-import lithium.openstud.driver.core.ExamPassed;
+import lithium.openstud.driver.core.ExamDone;
+import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Isee;
 import lithium.openstud.driver.core.Openstud;
@@ -35,7 +36,7 @@ public class InfoManager {
     private static Isee isee;
     private static List<Tax> paidTaxes;
     private static List<Tax> unpaidTaxes;
-    private static List<ExamPassed> examsDone;
+    private static List<ExamDone> examsDone;
     private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
     private static void setupSharedPreferences(Context context){
@@ -138,7 +139,7 @@ public class InfoManager {
         return gson.fromJson(oldObj,listType);
     }
 
-    public static List<ExamPassed> getExamsDoneCached(Context context, Openstud os) {
+    public static List<ExamDone> getExamsDoneCached(Context context, Openstud os) {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -147,19 +148,19 @@ public class InfoManager {
             if (examsDone!=null) return examsDone;
             oldObj =  pref.getString("examsDone", "null");
         }
-        Type listType = new TypeToken<List<ExamPassed>>(){}.getType();
+        Type listType = new TypeToken<List<ExamDone>>(){}.getType();
         return gson.fromJson(oldObj,listType);
     }
 
-    public static List<ExamPassed> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+    public static List<ExamDone> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
-        List<ExamPassed> newExamsDone = os.getExamsPassed();
+        List<ExamDone> newExamsDone = os.getExamsDone();
         synchronized (InfoManager.class){
             examsDone = newExamsDone;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<ExamPassed>>(){}.getType();
+            Type listType = new TypeToken<List<ExamDone>>(){}.getType();
             String json = gson.toJson(examsDone,listType);
             prefsEditor.putString("examsDone", json);
             prefsEditor.commit();

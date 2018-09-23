@@ -19,7 +19,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDoable;
-import lithium.openstud.driver.core.ExamPassed;
 import lithium.openstud.driver.core.ExamReservation;
 
 public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.ExamDoableHolder> {

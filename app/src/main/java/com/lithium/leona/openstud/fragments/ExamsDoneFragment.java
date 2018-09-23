@@ -33,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.ExamPassed;
+import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
@@ -51,7 +51,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         refreshExamsDone();
     }
 
-    private List<ExamPassed> exams;
+    private List<ExamDone> exams;
     private Openstud os;
     private ExamDoneAdapter adapter;
     private LocalDateTime lastUpdate;
@@ -120,7 +120,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             return v;
         }
         emptyText.setText(getResources().getString(R.string.no_exams_done_found));
-        List<ExamPassed> exams_cached  = InfoManager.getExamsDoneCached(getActivity().getApplication(),os);
+        List<ExamDone> exams_cached  = InfoManager.getExamsDoneCached(getActivity().getApplication(),os);
         if (exams_cached != null && !exams_cached.isEmpty())  {
             exams.addAll(exams_cached);
         }
@@ -158,7 +158,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<ExamPassed> update = null;
+                List<ExamDone> update = null;
                 boolean isChanged = false;
                 try {
                     update = InfoManager.getExamsDone(activity.getApplication(),os);
@@ -188,7 +188,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         }).start();
     }
 
-    public synchronized void refreshDataSet(List<ExamPassed> update){
+    public synchronized void refreshDataSet(List<ExamDone> update){
         boolean flag = false;
         if (update != null && !exams.equals(update)) {
             flag = true;
@@ -259,7 +259,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    private void swapViews(final List<ExamPassed> exams) {
+    private void swapViews(final List<ExamDone> exams) {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(new Runnable() {

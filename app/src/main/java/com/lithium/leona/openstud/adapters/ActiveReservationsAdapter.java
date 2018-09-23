@@ -28,7 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.ExamPassed;
+import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.ExamReservation;
 
 public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReservationsAdapter.ActiveReservationsHolder> {

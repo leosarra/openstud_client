@@ -21,17 +21,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Exam;
-import lithium.openstud.driver.core.ExamPassed;
+import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.PaymentDescription;
 import lithium.openstud.driver.core.Tax;
 
 public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDoneHolder> {
 
-    private List<ExamPassed> exams;
+    private List<ExamDone> exams;
     private Context context;
     private int mode;
 
-    public ExamDoneAdapter(Context context, List<ExamPassed> exams, int mode) {
+    public ExamDoneAdapter(Context context, List<ExamDone> exams, int mode) {
         this.exams = exams;
         this.context = context;
         this.mode = mode;
@@ -48,7 +48,7 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
 
     @Override
     public void onBindViewHolder(@NonNull ExamDoneHolder holder, int position) {
-        ExamPassed exam = exams.get(position);
+        ExamDone exam = exams.get(position);
         holder.setDetails(exam);
     }
 
@@ -78,7 +78,7 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             ButterKnife.bind(this,itemView);
         }
 
-        public void setDetails(ExamPassed exam) {
+        public void setDetails(ExamDone exam) {
             txtName.setText(exam.getDescription());
             String result = exam.getNominalResult();
             if(result.equals("30 e lode"))txtResult.setText("30L / 30");
