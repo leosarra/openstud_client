@@ -12,6 +12,7 @@
     <string name="year_course">Course year</string>
     <string name="birthDate">Birth date</string>
     <string name="birthPlace">Birth place</string>
+    <string name="year_corse_profile">%1$s year</string>
     <string name="cfu">CFU</string>
     <string name="isee">ISEE</string>
     <string name="profile">Profile</string>
