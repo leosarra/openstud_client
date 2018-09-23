@@ -112,7 +112,10 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
         ButterKnife.bind(this, v);
         Bundle bundle=getArguments();
         examsDoable = new LinkedList<>();
+        final Activity activity = getActivity();
+        if (activity == null) return v;
         os = InfoManager.getOpenStud(getActivity().getApplication());
+
         if (os == null) {
             InfoManager.clearSharedPreferences(getActivity().getApplication());
             Intent i = new Intent(getActivity(), LauncherActivity.class);
@@ -126,13 +129,11 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
         }
 
         rv.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
-        adapter = new ExamDoableAdapter(getActivity(), examsDoable, new ExamDoableAdapter.ExamDoableAdapterListener() {
+        adapter = new ExamDoableAdapter(activity, examsDoable, new ExamDoableAdapter.ExamDoableAdapterListener() {
             @Override
             public void showSessionsOnClick(ExamDoable exam) {
-                Activity activity = getActivity();
-                if (activity == null) return;
                 Intent intent = new Intent(activity,SearchResultActivity.class);
                 intent.putExtra("exam", new Gson().toJson(exam));
                 activity.startActivity(intent);
@@ -161,7 +162,7 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
 
     private void  refreshExamsDoable(){
         final Activity activity = getActivity();
-        if (activity == null) return;
+        if (activity == null || os == null) return;
         setRefreshing(true);
         setButtonReloadStatus(false);
         new Thread(new Runnable() {

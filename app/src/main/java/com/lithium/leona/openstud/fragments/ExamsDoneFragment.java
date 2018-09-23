@@ -125,9 +125,9 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             exams.addAll(exams_cached);
         }
         rv.setHasFixedSize(true);
-        llm = new LinearLayoutManager(getActivity());
+        llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
-        adapter = new ExamDoneAdapter(getActivity(), exams, 0);
+        adapter = new ExamDoneAdapter(activity, exams, 0);
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -151,7 +151,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
 
     private void  refreshExamsDone(){
         final Activity activity = getActivity();
-        if (activity == null) return;
+        if (activity == null || os == null) return;
         setRefreshing(true);
         setButtonReloadStatus(false);
         new Thread(new Runnable() {
