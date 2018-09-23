@@ -69,4 +69,10 @@
     <string name="reservation_error">Can\'t place the reservation. Try again later</string>
     <string name="reservation_ok">Reservation placed successfully</string>
     <string name="already_placed_reservation">You already placed a reservation for this session!</string>
+    <string name="fork_github">Fork on GitHub</string>
+    <string name="author">Author</string>
+    <string name="version">Version</string>
+    <string name="email_address">leonardosarra@outlook.com</string>
+    <string name="question_concerning_openstud">Any question?</string>
+    <string name="open_source_libs">Open source libraries</string>
 </resources>
