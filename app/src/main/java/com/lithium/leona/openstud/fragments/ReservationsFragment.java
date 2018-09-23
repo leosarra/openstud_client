@@ -129,6 +129,8 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         Bundle bundle=getArguments();
         reservations = new LinkedList<>();
         os = InfoManager.getOpenStud(getActivity().getApplication());
+        final Activity activity = getActivity();
+        if (activity == null) return v;
         if (os == null) {
             InfoManager.clearSharedPreferences(getActivity().getApplication());
             Intent i = new Intent(getActivity(), LauncherActivity.class);
@@ -142,23 +144,18 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         }
 
         rv.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
-        adapter = new ActiveReservationsAdapter(getActivity(), reservations, new ActiveReservationsAdapter.ReservationAdapterListener() {
+        adapter = new ActiveReservationsAdapter(activity, reservations, new ActiveReservationsAdapter.ReservationAdapterListener() {
             @Override
             public void deleteReservationOnClick(final ExamReservation res) {
-                Activity activity = getActivity();
-                if (activity == null) return;
                 createConfirmDeleteDialog(activity, res);
             }
 
             @Override
             public void downloadReservationOnClick(final ExamReservation res) {
-                final Activity activity = getActivity();
-                if (activity == null) return;
                 if (!ClientHelper.isExternalStorageAvailable() && ClientHelper.isExternalStorageReadOnly()) return;
                 boolean result = ClientHelper.requestReadWritePermissions(activity);
-                System.out.println(result);
                 if (!result) {
                     return;
                 }
@@ -242,7 +239,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
 
     private void  refreshReservations(){
         final Activity activity = getActivity();
-        if (activity == null) return;
+        if (activity == null || os == null) return;
         setRefreshing(true);
         setButtonReloadStatus(false);
         new Thread(new Runnable() {
