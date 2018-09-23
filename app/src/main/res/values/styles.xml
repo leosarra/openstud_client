@@ -43,4 +43,11 @@
         <item name="android:colorAccent">@color/redSapienza</item>
     </style>
 
+    <style name="AppTheme.MaterialAboutActivity" parent="Theme.Mal.Light.DarkActionBar">
+        <item name="colorPrimary">#6e0918</item>
+        <item name="colorPrimaryDark">@color/redSapienzaDark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+    </style>
+
+
 </resources>
