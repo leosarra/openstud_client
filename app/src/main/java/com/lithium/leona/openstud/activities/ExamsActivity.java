@@ -241,7 +241,7 @@ public class ExamsActivity extends AppCompatActivity {
         //outState.putInt("tabSelected", itemId);
         getSupportFragmentManager().putFragment(outState,"completed",fragDone);
         getSupportFragmentManager().putFragment(outState,"reservations",fragRes);
-        getSupportFragmentManager().putFragment(outState,"doable",fragRes);
+        getSupportFragmentManager().putFragment(outState,"doable",fragDoable);
         if (active != null) getSupportFragmentManager().putFragment(outState,"active", active);
     }
 }
