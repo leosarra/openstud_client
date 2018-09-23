@@ -146,6 +146,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         adapter = new TaxAdapter(getActivity(), taxes, mode);
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

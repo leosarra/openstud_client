@@ -3,6 +3,7 @@ package com.lithium.leona.openstud.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.icu.text.IDNA;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -13,6 +14,7 @@ import org.threeten.bp.LocalDateTime;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import lithium.openstud.driver.core.ExamDoable;
 import lithium.openstud.driver.core.ExamPassed;
@@ -48,7 +50,7 @@ public class InfoManager {
         String oldObj;
         synchronized (InfoManager.class) {
             if (os!=null) return os;
-            os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(2).forceReadyState().build();
+            os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(3).forceReadyState().setLogger(Logger.getLogger("OpenStud_client")).build();
             return os;
         }
     }
@@ -56,7 +58,7 @@ public class InfoManager {
 
     public static Openstud getOpenStud(Context context, int studentId, String password) {
         if (studentId == -1 || password== null || password.isEmpty()) return null;
-        return new OpenstudBuilder().setStudentID(studentId).setPassword(password).build();
+        return new OpenstudBuilder().setStudentID(studentId).setPassword(password).setRetryCounter(3).setLogger(Logger.getLogger("OpenStud_client")).build();
     }
 
     public static void saveOpenStud(Context context, Openstud openstud, int studentId, String password, boolean save){

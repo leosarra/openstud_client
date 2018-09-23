@@ -65,14 +65,10 @@ import saschpe.android.customtabs.WebViewFallback;
 
 public class SearchResultActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.recyclerView)
-    RecyclerView rv;
-    @BindView(R.id.empty_layout)
-    LinearLayout emptyView;
-    @BindView(R.id.empty_button_reload)
-    Button emptyButton;
+    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recyclerView) RecyclerView rv;
+    @BindView(R.id.empty_layout) LinearLayout emptyView;
+    @BindView(R.id.empty_button_reload) Button emptyButton;
     @BindView(R.id.empty_text) TextView emptyText;
     @BindView(R.id.searchLayout) ConstraintLayout layout;
     @OnClick(R.id.empty_button_reload) public void OnClick(View v){
@@ -173,6 +169,7 @@ public class SearchResultActivity extends AppCompatActivity {
             }
         });
         rv.setAdapter(adapter);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
