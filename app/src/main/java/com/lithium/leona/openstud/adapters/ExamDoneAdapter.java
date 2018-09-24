@@ -83,7 +83,10 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             String result = exam.getNominalResult();
             if(result.equals("30 e lode"))txtResult.setText("30L / 30");
             else txtResult.setText(StringUtils.capitalize(result));
-            if(exam.getResult()>=18 || result.equals("idoneo")) txtResult.setTextColor(ContextCompat.getColor(context, R.color.green));
+            if(exam.getResult()>=18 || result.equals("idoneo") || exam.isPassed()) {
+                if (exam.isCertified()) txtResult.setTextColor(ContextCompat.getColor(context, R.color.green));
+                else txtResult.setTextColor(ContextCompat.getColor(context, R.color.yellowLight));
+            }
             else txtResult.setTextColor(ContextCompat.getColor(context,R.color.redLight));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams,String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams,exam.getSsd()));
