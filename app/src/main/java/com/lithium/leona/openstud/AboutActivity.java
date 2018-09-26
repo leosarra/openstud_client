@@ -71,7 +71,7 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(ContextCompat.getDrawable(context, R.drawable.ic_github_circle))
                 .setOnClickAction(() -> new LibsBuilder()
                         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                        .withActivityTheme(R.style.NoActionBarAppTheme)
+                        .withActivityTheme(R.style.NoActionBarAppDarkTheme)
                         .withAutoDetect(true)
                         .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
                         .withAboutIconShown(true)

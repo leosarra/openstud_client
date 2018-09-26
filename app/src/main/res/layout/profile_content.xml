@@ -15,14 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:padding="@dimen/activity_horizontal_margin">
+            android:padding="@dimen/activity_horizontal_margin"
+            android:focusable="true">
 
             <ImageView
                 android:id="@+id/ivContactItem1"
@@ -32,7 +34,8 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:src="@drawable/ic_baseline_account_circle"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:tint="?attr/primaryTextColor"/>
 
             <TextView
                 android:id="@+id/studentId"
@@ -44,7 +47,7 @@
                 android:layout_toRightOf="@id/ivContactItem1"
                 android:text="Student Id"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,7 +60,7 @@
                 android:layout_toRightOf="@id/ivContactItem1"
                 android:text="@string/studentId"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
 
         </RelativeLayout>
 
@@ -88,7 +91,7 @@
                 android:layout_toRightOf="@id/ivContactItem2"
                 android:text="@string/birthDate"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,7 +104,7 @@
                 android:layout_toRightOf="@id/ivContactItem2"
                 android:text="@string/birthDate"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
 
         </RelativeLayout>
 
@@ -132,7 +135,7 @@
                 android:layout_toRightOf="@id/ivContactItem3"
                 android:text="@string/birthPlace"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -145,7 +148,7 @@
                 android:layout_toRightOf="@id/ivContactItem3"
                 android:text="@string/birthPlace"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
         </RelativeLayout>
 
 
@@ -176,7 +179,7 @@
                 android:layout_toRightOf="@id/ivContactItem10"
                 android:text="@string/isee"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -189,7 +192,7 @@
                 android:layout_toRightOf="@id/ivContactItem10"
                 android:text="@string/isee"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
         </RelativeLayout>
 
         <include layout="@layout/item_divider" />
@@ -209,6 +212,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:src="@drawable/ic_baseline_school"
+                android:tint="?attr/primaryTextColor"
                 android:visibility="visible" />
 
             <TextView
@@ -223,7 +227,7 @@
                 android:maxLines="3"
                 android:text="@string/department"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -236,7 +240,7 @@
                 android:layout_toRightOf="@id/ivContactItem4"
                 android:text="@string/course"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
 
         </RelativeLayout>
 
@@ -269,7 +273,7 @@
                 android:maxLines="3"
                 android:text="@string/course"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121"
+                android:textColor="?attr/primaryTextColor"
                 tools:text="@string/course" />
 
             <TextView
@@ -283,7 +287,7 @@
                 android:layout_toRightOf="@id/ivContactItem6"
                 android:text="@string/course"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
 
         </RelativeLayout>
 
@@ -316,7 +320,7 @@
                 android:maxLines="1"
                 android:text="@string/status"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121"
+                android:textColor="?attr/primaryTextColor"
                 tools:text="@string/status" />
 
             <TextView
@@ -330,7 +334,7 @@
                 android:layout_toRightOf="@id/ivContactItem7"
                 android:text="@string/status"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
 
         </RelativeLayout>
 
@@ -363,7 +367,7 @@
                 android:maxLines="1"
                 android:text="@string/year_course"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121"
+                android:textColor="?attr/primaryTextColor"
                 tools:text="@string/year_course" />
 
             <TextView
@@ -377,7 +381,7 @@
                 android:layout_toRightOf="@id/ivContactItem8"
                 android:text="@string/year_course"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
 
         </RelativeLayout>
 
@@ -408,7 +412,7 @@
                 android:layout_toRightOf="@id/ivContactItem9"
                 android:text="@string/cfu"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#212121" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -421,7 +425,7 @@
                 android:layout_toRightOf="@id/ivContactItem9"
                 android:text="@string/cfu"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
+                android:textColor="?attr/secondaryTextColor" />
         </RelativeLayout>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
