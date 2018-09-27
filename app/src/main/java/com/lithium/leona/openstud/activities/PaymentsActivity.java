@@ -44,6 +44,7 @@ public class PaymentsActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.NoActionBarAppDarkTheme);
         setContentView(R.layout.activity_payments);
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(this);

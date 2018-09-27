@@ -1,27 +1,60 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppThemeLight" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#6e0918</item>
+    <style name="BaseTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
+    </style>
+
+    <style name="AppThemeLight" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/redSapienza</item>
+        <item name="colorPrimaryDark">@color/redSapienzaDark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="colorSecondary">@color/redSapienza</item>
+        <item name="colorButtonNav">@color/redSapienza</item>
         <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
         <item name="primaryTextColor">#33343B</item>
-        <item name="secondaryTextColor">#8033343B</item>
+        <item name="secondaryTextColor">#FFFFFF</item>
         <item name="dividerColor">#B6B6B6</item>
+        <item name="backgroundColor">@android:color/background_light</item>
+        <item name="backgroundCardColor">#FFFFFF</item>
+        <item name="bottomNavColor">#FFFFFF</item>
+        <item name="defaultTextNav">#737373</item>
+        <item name="certifiedExamColor">@color/green</item>
+        <item name="nonPassedExamColor">@color/red</item>
+        <item name="nonCertifiedExamColor">@color/yellow</item>
+        <item name="colorNavText">#353535</item>
+        <item name="colorHeader">@color/redSapienzaDark</item>
     </style>
 
     <style name="AppThemeDark" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#6e0918</item>
+        <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="colorSecondary">#c91515</item>
+        <item name="colorButtonNav">#e14242</item>
         <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
         <item name="primaryTextColor">#F4F4F6</item>
         <item name="secondaryTextColor">#96F4F4F6</item>
-        <item name="backgroundCardColor">#28292e</item>
+        <item name="backgroundCardColor">#424242</item>
         <item name="dividerColor">#96F4F4F6</item>
+        <item name="backgroundColor">#212121</item>
+        <item name="android:navigationBarColor">#212121</item>
+        <item name="defaultTextNav">@android:color/white</item>
+        <item name="colorNavText">@android:color/white</item>
+        <item name="bottomNavColor">#303030</item>
+        <item name="certifiedExamColor">@color/greenLight</item>
+        <item name="nonPassedExamColor">@color/redLight</item>
+        <item name="nonCertifiedExamColor">@color/yellowLight</item>
+        <item name="colorHeader">@color/redSapienzaDark</item>
     </style>
 
+    <style name="ExamDarkTheme" parent="NoActionBarAppDarkTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:navigationBarColor">#303030</item>
+    </style>
 
     <style name="NoActionBarAppLightTheme" parent="AppThemeLight">
         <item name="windowActionBar">false</item>
@@ -33,21 +66,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AboutLibrariesTheme" parent="BaseTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
     <style name="LoginTheme" parent="NoActionBarAppLightTheme">
         <item name="android:navigationBarColor">@color/redSapienza</item>
-    </style>
-
-    <style name="ProfileLightTheme" parent="NoActionBarAppLightTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="backgroundColor">@android:color/background_light</item>
-    </style>
-
-    <style name="ProfileDarkTheme" parent="NoActionBarAppDarkTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="backgroundColor">#303030</item>
-        <item name="android:navigationBarColor">#303030</item>
     </style>
 
     <style name="MyEditTextTheme">
@@ -75,10 +101,19 @@
         <item name="android:colorAccent">@color/redSapienza</item>
     </style>
 
-    <style name="AppTheme.MaterialAboutActivity" parent="Theme.Mal.Light.DarkActionBar">
-        <item name="colorPrimary">#6e0918</item>
+    <style name="AppTheme.MaterialAboutActivityDark" parent="Theme.Mal.Dark">
+        <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="android:navigationBarColor">#303030</item>
+        <item name="primaryTextColor">#FFFFFF</item>
+    </style>
+    <style name="AppTheme.MaterialAboutActivityLight" parent="Theme.Mal.Light.DarkActionBar">
+        <item name="colorPrimary">@color/redSapienza</item>
+        <item name="colorPrimaryDark">@color/redSapienzaDark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="android:navigationBarColor">#303030</item>
+        <item name="primaryTextColor">@android:color/black</item>
     </style>
 
 
