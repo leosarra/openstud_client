@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
+    card_view:cardBackgroundColor="?attr/backgroundCardColor"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -28,7 +29,7 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:padding="1dp"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
@@ -37,14 +38,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
-                android:textColor="@android:color/black" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:id="@+id/cfuExam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
-                android:textColor="@android:color/black" />
+                android:textColor="?attr/primaryTextColor" />
         </LinearLayout>
 
     <LinearLayout
@@ -60,7 +61,7 @@
             android:layout_height="match_parent"
             android:gravity="center|end"
             android:layout_marginEnd="10dp"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="20sp"
             android:textStyle="normal|bold" />
 

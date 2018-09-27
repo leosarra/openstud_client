@@ -209,7 +209,6 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         });
     }
 
-
     private void setRefreshing(final boolean bool){
         Activity activity = getActivity();
         if (activity == null) return;
@@ -221,7 +220,6 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         });
     }
 
-
     private synchronized void updateTimer(){
         lastUpdate = LocalDateTime.now();
     }
@@ -229,24 +227,6 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     private synchronized LocalDateTime getTimer(){
         return lastUpdate;
     }
-
-    /**
-    public void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-
-        // Save list state
-        Parcelable mListState = llm.onSaveInstanceState();
-        state.putParcelable("list_state", mListState);
-    }
-
-    public void onActivityCreated(Bundle state) {
-        super.onActivityCreated(state);
-        // Retrieve list state and list/item positions
-        if(state != null) {
-            listState = state.getParcelable("list_state");
-        }
-    }
-     **/
 
     private void setButtonReloadStatus(final boolean bool){
         Activity activity = getActivity();

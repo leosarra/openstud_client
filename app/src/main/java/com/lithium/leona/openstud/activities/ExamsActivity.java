@@ -69,6 +69,7 @@ public class ExamsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.ExamDarkTheme);
         setContentView(R.layout.activity_exams);
         ButterKnife.bind(this);
         Openstud os = InfoManager.getOpenStud(getApplication());

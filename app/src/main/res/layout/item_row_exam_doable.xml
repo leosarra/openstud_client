@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
+    card_view:cardBackgroundColor="?attr/backgroundCardColor"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -21,7 +22,7 @@
             android:id="@+id/examName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="16sp"
             android:text="TextView"
             android:textStyle="bold"
@@ -31,19 +32,19 @@
             android:id="@+id/ssdExam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/primaryTextColor"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/cfuExam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/primaryTextColor"
             android:text="TextView" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/primaryTextColor"
             android:layout_height="wrap_content">
 
             <Button
@@ -56,14 +57,14 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_toStartOf="@+id/delete_reservation"
                 android:layout_weight="0.5"
                 android:drawablePadding="3dp"
                 android:drawableStart="@drawable/ic_format_list_small"
-                android:drawableTint="@color/redSapienza"
+                android:drawableTint="?attr/colorButtonNav"
                 android:text="@string/show_exam_sessions"
                 android:textSize="14sp"
                 android:theme="@style/ButtonReservations"
+                android:textColor="?attr/colorButtonNav"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintHorizontal_bias="1.0"

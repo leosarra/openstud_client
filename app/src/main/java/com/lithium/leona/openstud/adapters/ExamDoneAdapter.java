@@ -1,6 +1,7 @@
 package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -84,10 +85,34 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             if(result.equals("30 e lode"))txtResult.setText("30L / 30");
             else txtResult.setText(StringUtils.capitalize(result));
             if(exam.getResult()>=18 || result.equals("idoneo") || exam.isPassed()) {
-                if (exam.isCertified()) txtResult.setTextColor(ContextCompat.getColor(context, R.color.green));
-                else txtResult.setTextColor(ContextCompat.getColor(context, R.color.yellowLight));
+                if (exam.isCertified()) {
+                    int tintColor;
+                    TypedValue tV = new TypedValue();
+                    Resources.Theme theme = context.getTheme();
+                    boolean success = theme.resolveAttribute(R.attr.certifiedExamColor, tV, true);
+                    if (success) tintColor = tV.data;
+                    else tintColor = ContextCompat.getColor(context, R.color.green);
+                    txtResult.setTextColor(tintColor);
+                }
+                else {
+                    int tintColor;
+                    TypedValue tV = new TypedValue();
+                    Resources.Theme theme = context.getTheme();
+                    boolean success = theme.resolveAttribute(R.attr.nonCertifiedExamColor, tV, true);
+                    if (success) tintColor = tV.data;
+                    else tintColor = ContextCompat.getColor(context, R.color.yellow);
+                    txtResult.setTextColor(tintColor);
+                }
             }
-            else txtResult.setTextColor(ContextCompat.getColor(context,R.color.redLight));
+            else {
+                int tintColor;
+                TypedValue tV = new TypedValue();
+                Resources.Theme theme = context.getTheme();
+                boolean success = theme.resolveAttribute(R.attr.nonPassedExamColor, tV, true);
+                if (success) tintColor = tV.data;
+                else tintColor = ContextCompat.getColor(context, R.color.red);
+                txtResult.setTextColor(tintColor);
+            }
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams,String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams,exam.getSsd()));
         }

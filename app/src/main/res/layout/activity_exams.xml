@@ -13,6 +13,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context=".activities.ExamsActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +25,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:theme="@style/ToolBarStyle"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="10dp"/>
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
@@ -32,6 +34,8 @@
             android:layout_marginBottom="?attr/actionBarSize">
         </FrameLayout>
     </LinearLayout>
+
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"
@@ -42,7 +46,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:backgroundTint="?attr/bottomNavColor"
+        app:itemTextColor="@drawable/bottom_nav_selector"
+        app:itemIconTint="@drawable/bottom_nav_selector"
+        android:elevation="25dp"
         app:menu="@menu/navigation" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>
@@ -53,6 +63,9 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header"/>
+        app:headerLayout="@layout/nav_header"
+        android:background="?attr/backgroundColor"
+        app:itemTextColor="@drawable/drawer_nav_text_selector"
+        app:itemIconTint="@drawable/drawer_nav_icon_selector"/>
 
 </android.support.v4.widget.DrawerLayout>

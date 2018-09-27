@@ -28,7 +28,7 @@
             android:theme="@style/LoginTheme" />
         <activity
             android:name=".activities.ProfileActivity"
-            android:theme="@style/ProfileLightTheme" />
+            android:theme="@style/NoActionBarAppLightTheme" />
         <activity
             android:name=".activities.PaymentsActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
@@ -52,7 +52,7 @@
         </provider>
 
         <activity android:name=".AboutActivity"
-            android:theme="@style/AppTheme.MaterialAboutActivity"/>
+            android:theme="@style/AppTheme.MaterialAboutActivityLight"/>
     </application>
 
 </manifest>
