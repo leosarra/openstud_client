@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
+    card_view:cardBackgroundColor="?attr/backgroundCardColor"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -23,7 +24,7 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:padding="1dp"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -31,36 +32,42 @@
             android:id="@+id/nameTeacher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/channelReservation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
             android:padding="1dp" />
 
         <TextView
             android:id="@+id/dateExam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/endDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/infosExtra"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
             android:padding="1dp" />
 
         <android.support.constraint.ConstraintLayout
@@ -81,7 +88,7 @@
                 android:layout_weight="0.5"
                 android:drawablePadding="6dp"
                 android:drawableStart="@drawable/ic_library_add_small"
-                android:drawableTint="@color/redSapienza"
+                android:drawableTint="?attr/colorButtonNav"
                 android:text="@string/place_reservation"
                 android:textSize="14sp"
                 android:theme="@style/ButtonReservations"

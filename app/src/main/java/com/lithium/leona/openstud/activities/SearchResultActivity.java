@@ -127,6 +127,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.NoActionBarAppDarkTheme);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(this);
