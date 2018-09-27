@@ -1,6 +1,8 @@
 package com.lithium.leona.openstud.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -8,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +87,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             ButterKnife.bind(this,itemView);
         }
 
+        @SuppressLint("ResourceType")
         public void setDetails(final ExamReservation res) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
             String infos = context.getResources().getString(R.string.description_reservation, res.getNote());
@@ -112,7 +116,14 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
                 tintColor = ContextCompat.getColor(context, android.R.color.darker_gray);
                 deleteButton.setEnabled(false);
             }
-            else tintColor = ContextCompat.getColor(context, R.color.redSapienza);
+            else {
+                TypedValue tV = new TypedValue();
+                Resources.Theme theme = context.getTheme();
+                boolean success = theme.resolveAttribute(R.attr.colorButtonNav, tV, true);
+                if (success) tintColor = tV.data;
+                else tintColor = ContextCompat.getColor(context, R.color.redSapienza);
+            }
+
             deleteButton.setTextColor(tintColor);
             Drawable drawable = ContextCompat.getDrawable(context,R.drawable.ic_delete_small);
             drawable = DrawableCompat.wrap(drawable);
