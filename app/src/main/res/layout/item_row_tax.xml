@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    card_view:cardBackgroundColor="?attr/backgroundCardColor"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -29,35 +29,35 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="1dp"
-                android:textColor="@android:color/black" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:id="@+id/codeTax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
-                android:textColor="@android:color/black" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:id="@+id/paymentDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
-                android:textColor="@android:color/black" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:id="@+id/codeCourse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
-                android:textColor="@android:color/black" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:id="@+id/academicYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
-                android:textColor="@android:color/black" />
+                android:textColor="?attr/primaryTextColor" />
         </LinearLayout>
 
     <LinearLayout
@@ -73,7 +73,7 @@
             android:layout_height="match_parent"
             android:gravity="center|end"
             android:layout_marginEnd="10dp"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="20sp"
             android:textStyle="normal|bold" />
     </LinearLayout>
