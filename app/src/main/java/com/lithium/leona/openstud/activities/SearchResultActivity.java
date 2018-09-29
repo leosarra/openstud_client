@@ -39,6 +39,7 @@ import com.lithium.leona.openstud.fragments.ExamDoableFragment;
 import com.lithium.leona.openstud.fragments.TabFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -127,7 +128,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.NoActionBarAppDarkTheme);
+        ThemeEngine.applySearchTheme(this);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(this);

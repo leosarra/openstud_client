@@ -12,7 +12,7 @@ public class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launcher);
+        //setContentView(R.layout.activity_launcher);
         if (!InfoManager.getSaveFlag(getApplication())) InfoManager.clearSharedPreferences(getApplication());
         if (InfoManager.hasLogin(getApplication())) {
             Intent intent = new Intent(LauncherActivity.this, ExamsActivity.class);

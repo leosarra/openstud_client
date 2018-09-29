@@ -22,6 +22,7 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import org.apache.commons.lang3.StringUtils;
@@ -103,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.NoActionBarAppDarkTheme);
+        ThemeEngine.applyProfileTheme(this);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);

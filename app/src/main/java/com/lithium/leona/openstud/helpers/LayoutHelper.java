@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 
 
 public class LayoutHelper {
