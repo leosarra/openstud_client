@@ -154,4 +154,11 @@
     <string name="key_default_laude">key_default_laude</string>
     <string name="default_laude_ext">Set value for \"30L\" to be used in stats</string>
     <string name="sort_by">Sort by</string>
+    <string name="key_delete">key_delete</string>
+    <string name="success_delete_pdf">Files deleted successfully!</string>
+    <string name="failed_delete_pdf">Can\'t delete cached files. Try again later</string>
+    <string name="restart_required">Restart required</string>
+    <string name="restart_required_description">In order to apply the new theme OpenStud must be restarted. Restart now?</string>
+    <string name="restart_ok">Restart</string>
+    <string name="restart_cancel">Later</string>
 </resources>

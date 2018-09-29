@@ -6,7 +6,7 @@
             android:defaultValue="@string/default_laude"
             android:key="@string/key_default_laude"
             android:summary="@string/default_laude_ext" />
-        <Preference android:title="@string/delete_pdf">
+        <Preference android:title="@string/delete_pdf" android:key="@string/key_delete">
         </Preference>
     </PreferenceCategory>
 
