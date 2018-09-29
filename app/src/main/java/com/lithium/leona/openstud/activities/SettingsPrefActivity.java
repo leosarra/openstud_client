@@ -56,21 +56,24 @@ public class SettingsPrefActivity extends AppCompatActivity {
     }
 
     public static class MainPreferenceFragment extends PreferenceFragment {
-        private int oldTheme;
+        private int alertDialogTheme;
+        ThemeEngine.Theme oldTheme;
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             SettingsPrefActivity activity = (SettingsPrefActivity) getActivity();
             addPreferencesFromResource(R.xml.pref_main);
-            oldTheme = ThemeEngine.getAlertDialogTheme(activity);
+            alertDialogTheme = ThemeEngine.getAlertDialogTheme(activity);
+            oldTheme = ThemeEngine.getTheme(activity);
             Preference theme = findPreference(getString(R.string.key_theme));
             theme.setOnPreferenceChangeListener((preference, o) -> {
                 String newTheme = o.toString();
                 Context context = getContext();
                 if (context == null) return false;
-                if (newTheme.equals("0")) ThemeEngine.setTheme(context,ThemeEngine.Theme.LIGHT);
-                else if (newTheme.equals("1")) ThemeEngine.setTheme(context,ThemeEngine.Theme.DARK);
-                activity.createRestartDialog(oldTheme);
+                int id = Integer.parseInt(newTheme);
+                if (ThemeEngine.Theme.getTheme(id) == oldTheme) return false;
+                ThemeEngine.setTheme(context,ThemeEngine.Theme.getTheme(id));
+                activity.createRestartDialog(alertDialogTheme);
                 return true;
             });
             Preference delete = findPreference(getString(R.string.key_delete));
