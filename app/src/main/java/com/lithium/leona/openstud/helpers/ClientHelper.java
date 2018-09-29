@@ -36,9 +36,13 @@ public class ClientHelper {
         Sort(int value) {
             this.value = value;
         }
-
         public int getValue() {
             return value;
+        }
+        public static Sort getSort(int type) {
+            if (type == 0) return Date;
+            else if (type == 1) return Mark;
+            return null;
         }
 
     }
