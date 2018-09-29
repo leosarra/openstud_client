@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
@@ -349,7 +351,8 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     }
 
     private void createConfirmDeleteDialog(Activity activity, final ExamReservation res){
-        new AlertDialog.Builder(activity)
+        int themeId = ThemeEngine.getAlertDialogTheme(activity);
+        new AlertDialog.Builder(new ContextThemeWrapper(activity,themeId))
                 .setTitle(getResources().getString(R.string.delete_res_dialog_title))
                 .setMessage(getResources().getString(R.string.delete_res_dialog_description, res.getExamSubject()))
                 .setPositiveButton(getResources().getString(R.string.delete_ok), new DialogInterface.OnClickListener() {
