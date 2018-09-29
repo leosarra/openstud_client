@@ -301,6 +301,7 @@ public class InfoManager {
     }
 
     private static synchronized void setNamePassword(Context context, int id, String password){
+        setupSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt("studentId", id);
         editor.putString("password", password);
@@ -308,12 +309,27 @@ public class InfoManager {
     }
 
     private static synchronized void setSaveFlag(Context context, boolean saveFlag){
+        setupSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("remember", saveFlag);
         editor.apply();
     }
 
+    public static synchronized void setSortType(Context context, int type){
+        setupSharedPreferences(context);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("sort", type);
+        editor.apply();
+    }
+
+    public static synchronized int getSortType(Context context){
+        setupSharedPreferences(context);
+        return pref.getInt("sort",0);
+    }
+
+
     public static synchronized void setReservationUpdateFlag(Context context, boolean updateFlag){
+        setupSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean("updateReservations", updateFlag);
         editor.apply();

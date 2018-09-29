@@ -1,6 +1,9 @@
 package com.lithium.leona.openstud.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,14 +11,20 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.common.util.Strings;
 import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -119,12 +128,25 @@ public class ExamsActivity extends AppCompatActivity {
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        Drawable drawable = menu.findItem(R.id.sort).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
+        menu.findItem(R.id.sort).setIcon(drawable);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.sort:
+                showSortDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -137,6 +159,23 @@ public class ExamsActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    private void showSortDialog(){
+        Context context = this;
+        int themeId = ThemeEngine.getAlertDialogTheme(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, themeId));
+        builder.setTitle(getResources().getString(R.string.sort_by));
+        builder.setSingleChoiceItems(R.array.sort, InfoManager.getSortType(context), (dialogInterface, i) -> {
+            if (i == ClientHelper.Sort.Date.getValue()) {
+                InfoManager.setSortType(context, i);
+                dialogInterface.dismiss();
+            } else if (i == ClientHelper.Sort.Mark.getValue()) {
+                InfoManager.setSortType(context, i);
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
     }
 
     private void setupListeners(){

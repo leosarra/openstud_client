@@ -29,6 +29,20 @@ public class ClientHelper {
         }
 
     }
+
+    public enum Sort {
+        Date(0), Mark(1);
+        private int value;
+        Sort(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+    }
+
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

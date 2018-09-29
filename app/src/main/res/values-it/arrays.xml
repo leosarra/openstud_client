@@ -9,7 +9,7 @@
         <item>1</item>
     </string-array>
     <string-array name="sort">
-        <item>Date</item>
-        <item>Mark</item>
+        <item>Data</item>
+        <item>Voto</item>
     </string-array>
 </resources>

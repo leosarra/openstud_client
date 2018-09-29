@@ -131,5 +131,6 @@
     <string name="title_theme">Theme</string>
     <string name="default_laude">Value \"30L\"</string>
     <string name="default_laude_ext">Set value for \"30L\" to be used in stats</string>
+    <string name="sort_by">Sort by</string>
 
 </resources>

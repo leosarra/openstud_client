@@ -153,4 +153,5 @@
     <string name="default_laute_value">Value \"30L\"</string>
     <string name="key_default_laude">key_default_laude</string>
     <string name="default_laude_ext">Set value for \"30L\" to be used in stats</string>
+    <string name="sort_by">Sort by</string>
 </resources>

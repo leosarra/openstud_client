@@ -55,8 +55,6 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="ExamDarkTheme" parent="NoActionBarAppDarkTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
         <item name="android:navigationBarColor">#303030</item>
     </style>
 
@@ -169,6 +167,7 @@
         <item name="android:textColor">?attr/primaryTextColor</item>
         <item name="android:textColorAlertDialogListItem">?attr/primaryTextColor</item>
         <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
+        <item name="textColorAlertDialogListItem">?attr/primaryTextColor</item>
     </style>
 
     <style name="AboutLibrariesThemeDark" parent="Theme.AppCompat.NoActionBar">
