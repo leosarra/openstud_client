@@ -24,6 +24,7 @@ import com.lithium.leona.openstud.fragments.ExamsDoneFragment;
 import com.lithium.leona.openstud.fragments.ReservationsFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import butterknife.BindView;
@@ -69,7 +70,7 @@ public class ExamsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.ExamDarkTheme);
+        ThemeEngine.applyExamTheme(this);
         setContentView(R.layout.activity_exams);
         ButterKnife.bind(this);
         Openstud os = InfoManager.getOpenStud(getApplication());
@@ -166,6 +167,11 @@ public class ExamsActivity extends AppCompatActivity {
 
                     case R.id.about_menu: {
                         Intent intent = new Intent(ExamsActivity.this, AboutActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.settings_menu: {
+                        Intent intent = new Intent(ExamsActivity.this, SettingsPrefActivity.class);
                         startActivity(intent);
                         break;
                     }
