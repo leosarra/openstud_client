@@ -96,6 +96,15 @@ public class ThemeEngine {
         }
     }
 
+    public static int getAlertDialogTheme(Activity activity) {
+        int themeId = ThemeEngine.getThemeValue(activity);
+        switch (themeId) {
+            case 0: return R.style.ThemeLightDialog;
+            case 1: return R.style.ThemeDarkDialog;
+            default: return R.style.ThemeLightDialog;
+        }
+    }
+
     public static void applySettingsTheme(Activity activity) {
         int themeId = ThemeEngine.getThemeValue(activity);
         switch (themeId) {
