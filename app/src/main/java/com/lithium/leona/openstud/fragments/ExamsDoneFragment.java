@@ -10,6 +10,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.Openstud;
+import lithium.openstud.driver.core.OpenstudHelper;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
@@ -45,8 +48,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     @BindView(R.id.recyclerView) RecyclerView rv;
     @BindView(R.id.empty_layout) LinearLayout emptyView;
     @BindView(R.id.empty_button_reload) Button emptyButton;
-    @BindView(R.id.empty_text)
-    TextView emptyText;
+    @BindView(R.id.empty_text) TextView emptyText;
     @OnClick(R.id.empty_button_reload) public void OnClick(View v){
         refreshExamsDone();
     }
@@ -121,14 +123,15 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         }
         emptyText.setText(getResources().getString(R.string.no_exams_done_found));
         List<ExamDone> exams_cached  = InfoManager.getExamsDoneCached(getActivity().getApplication(),os);
-        if (exams_cached != null && !exams_cached.isEmpty())  {
-            exams.addAll(exams_cached);
-        }
         rv.setHasFixedSize(true);
         llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
         adapter = new ExamDoneAdapter(activity, exams, 0);
         rv.setAdapter(adapter);
+        if (exams_cached != null && !exams_cached.isEmpty())  {
+            exams.addAll(exams_cached);
+            sortList(ClientHelper.Sort.getSort(InfoManager.getSortType(activity)));
+        }
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -144,10 +147,23 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
+        Activity activity = getActivity();
         if (firstStart) {
             firstStart = false;
         }
-        else if (getActivity()!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshExamsDone();
+        else if (activity!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshExamsDone();
+    }
+
+    public synchronized void sortList(ClientHelper.Sort sort) {
+        if (adapter==null || sort == null) return;
+        if (sort == ClientHelper.Sort.Date){
+            OpenstudHelper.sortByDate(exams,false);
+            adapter.notifyDataSetChanged();
+        }
+        else if (sort == ClientHelper.Sort.Mark){
+            OpenstudHelper.sortByGrade(exams,false);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void  refreshExamsDone(){
@@ -201,7 +217,13 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (finalFlag) adapter.notifyDataSetChanged();
+                if (finalFlag) {
+                    int sort = InfoManager.getSortType(activity);
+                    if (sort != ClientHelper.Sort.Date.getValue()) {
+                        if (sort == ClientHelper.Sort.Mark.getValue()) sortList(ClientHelper.Sort.Mark);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
                 swapViews(exams);
                 swipeRefreshLayout.setRefreshing(false);
                 emptyButton.setEnabled(true);

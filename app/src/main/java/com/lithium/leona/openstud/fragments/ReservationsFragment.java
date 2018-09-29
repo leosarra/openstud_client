@@ -15,6 +15,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -230,7 +232,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         if (firstStart) {
             firstStart = false;
         }
-        else if (getActivity()!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshReservations();
+        else if (activity!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshReservations();
         else if (activity != null && InfoManager.getReservationUpdateFlag(activity)) {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             refreshReservations();

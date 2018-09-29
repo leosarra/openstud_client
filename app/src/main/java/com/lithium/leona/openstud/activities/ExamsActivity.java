@@ -129,7 +129,6 @@ public class ExamsActivity extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_bar, menu);
         Drawable drawable = menu.findItem(R.id.sort).getIcon();
         drawable = DrawableCompat.wrap(drawable);
@@ -137,6 +136,20 @@ public class ExamsActivity extends AppCompatActivity {
         menu.findItem(R.id.sort).setIcon(drawable);
         return true;
     }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (active == null) return true;
+        if (active!=fragDone) {
+            MenuItem item = menu.findItem(R.id.sort);
+            item.setVisible(false);
+        }
+        else {
+            MenuItem item = menu.findItem(R.id.sort);
+            item.setVisible(true);
+        }
+        return true;
+    }
+
 
 
     @Override
@@ -167,13 +180,9 @@ public class ExamsActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, themeId));
         builder.setTitle(getResources().getString(R.string.sort_by));
         builder.setSingleChoiceItems(R.array.sort, InfoManager.getSortType(context), (dialogInterface, i) -> {
-            if (i == ClientHelper.Sort.Date.getValue()) {
-                InfoManager.setSortType(context, i);
-                dialogInterface.dismiss();
-            } else if (i == ClientHelper.Sort.Mark.getValue()) {
-                InfoManager.setSortType(context, i);
-                dialogInterface.dismiss();
-            }
+            InfoManager.setSortType(context, i);
+            fragDone.sortList(ClientHelper.Sort.getSort(i));
+            dialogInterface.dismiss();
         });
         builder.show();
     }
@@ -236,6 +245,7 @@ public class ExamsActivity extends AppCompatActivity {
             if (active != null) manager.beginTransaction().show(fragDone).hide(active).commit();
             else  manager.beginTransaction().show(fragDone).commit();
         }
+        invalidateOptionsMenu();
     }
 
     private void switchToExamsReservationsFragment(){
@@ -244,6 +254,7 @@ public class ExamsActivity extends AppCompatActivity {
             if (active != null) manager.beginTransaction().show(fragRes).hide(active).commit();
             else manager.beginTransaction().show(fragRes).commit();
         }
+        invalidateOptionsMenu();
     }
 
     private void switchToExamsSearchFragment(){
@@ -252,6 +263,7 @@ public class ExamsActivity extends AppCompatActivity {
             if (active != null) manager.beginTransaction().show(fragDoable).hide(active).commit();
             else manager.beginTransaction().show(fragDoable).commit();
         }
+        invalidateOptionsMenu();
     }
 
 

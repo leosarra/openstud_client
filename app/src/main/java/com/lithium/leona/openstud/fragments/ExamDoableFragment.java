@@ -10,6 +10,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -21,7 +23,6 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.activities.SearchResultActivity;
-import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.adapters.ExamDoableAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -37,7 +38,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lithium.openstud.driver.core.ExamDoable;
-import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
@@ -155,10 +155,11 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
+        Activity activity = getActivity();
         if (firstStart) {
             firstStart = false;
         }
-        else if (getActivity()!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshExamsDoable();
+        else if (activity!=null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshExamsDoable();
     }
 
     private void  refreshExamsDoable(){
