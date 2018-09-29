@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.github.LithiumSR:openstud_driver:0.14'
+    implementation 'com.github.LithiumSR:openstud_driver:0.15'
     implementation 'saschpe.android:customtabs:1.1.2'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.google.code.gson:gson:2.8.5'
