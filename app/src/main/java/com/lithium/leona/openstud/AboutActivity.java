@@ -18,6 +18,7 @@ import com.danielstone.materialaboutlibrary.MaterialAboutActivity;
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -45,7 +46,7 @@ public class AboutActivity extends MaterialAboutActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_MaterialAboutActivityDark);
+        ThemeEngine.applyAboutTheme(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -92,11 +93,23 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_github)
                 .color(tintColor)
                 .sizeDp(24);
-        miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
+        if (ThemeEngine.isLightTheme(this)) miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
                 .text(R.string.open_source_libs)
                 .icon(github)
                 .setOnClickAction(() -> new LibsBuilder()
-                        .withActivityStyle(Libs.ActivityStyle.DARK)
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withActivityTheme(R.style.NoActionBarAppLightTheme)
+                        .withAutoDetect(true)
+                        .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
+                        .withAboutIconShown(true)
+                        .withAboutVersionShown(true)
+                        .start(this))
+                .build());
+        else miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
+                .text(R.string.open_source_libs)
+                .icon(github)
+                .setOnClickAction(() -> new LibsBuilder()
+                        .withActivityTheme(R.style.AboutLibrariesThemeDark)
                         .withAutoDetect(true)
                         .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
                         .withAboutIconShown(true)
