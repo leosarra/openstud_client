@@ -20,6 +20,12 @@ public class ThemeEngine {
         private int getValue() {
             return value;
         }
+
+        public static Theme getTheme(int theme){
+            if (theme == 0) return LIGHT;
+            else if (theme == 1) return DARK;
+            else return LIGHT;
+        }
     }
 
     private static void setupSharedPreferences(Context context) {
@@ -32,107 +38,107 @@ public class ThemeEngine {
         pref.edit().putInt("Theme", theme.getValue()).commit();
     }
 
-    private static int getThemeValue(Context context) {
+    public static Theme getTheme(Context context) {
         setupSharedPreferences(context);
-        return pref.getInt("Theme", 0);
+        return ThemeEngine.Theme.getTheme(pref.getInt("Theme", 0));
     }
 
     public static void applyExamTheme(Activity activity) {
-        int themeId = getThemeValue(activity);
-        switch (themeId) {
-            case 0:
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
-            case 1:
+            case DARK:
                 activity.setTheme(R.style.ExamDarkTheme);
         }
     }
 
     public static void applyProfileTheme(Activity activity) {
-        int themeId = getThemeValue(activity);
-        switch (themeId) {
-            case 0:
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
-            case 1:
+            case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
         }
     }
 
     public static void applyPaymentsTheme(Activity activity) {
-        int themeId = ThemeEngine.getThemeValue(activity);
-        switch (themeId) {
-            case 0:
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
-            case 1:
+            case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
         }
     }
 
     public static void applySearchTheme(Activity activity) {
-        int themeId = ThemeEngine.getThemeValue(activity);
-        switch (themeId) {
-            case 0:
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
-            case 1:
+            case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
         }
     }
 
     public static void applyAboutTheme(Activity activity) {
-        int themeId = ThemeEngine.getThemeValue(activity);
-        switch (themeId) {
-            case 0:
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
                 activity.setTheme(R.style.AppTheme_MaterialAboutActivityLight);
                 break;
-            case 1:
+            case DARK:
                 activity.setTheme(R.style.AppTheme_MaterialAboutActivityDark);
                 break;
         }
     }
 
     public static int getDialogTheme(Activity activity) {
-        int themeId = ThemeEngine.getThemeValue(activity);
-        switch (themeId) {
-            case 0: return R.style.ThemeLightDialog;
-            case 1: return R.style.ThemeDarkDialog;
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT: return R.style.ThemeLightDialog;
+            case DARK: return R.style.ThemeDarkDialog;
             default: return R.style.ThemeLightDialog;
         }
     }
 
     public static int getAlertDialogTheme(Activity activity) {
-        int themeId = ThemeEngine.getThemeValue(activity);
-        switch (themeId) {
-            case 0: return R.style.ThemeLightAlertDialog;
-            case 1: return R.style.ThemeDarkDialog;
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT: return R.style.ThemeLightAlertDialog;
+            case DARK: return R.style.ThemeDarkDialog;
             default: return R.style.ThemeLightAlertDialog;
         }
     }
 
 
     public static void applySettingsTheme(Activity activity) {
-        int themeId = ThemeEngine.getThemeValue(activity);
-        switch (themeId) {
-            case 0:
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
                 activity.setTheme(R.style.PreferencesLight);
                 break;
-            case 1:
+            case DARK:
                 activity.setTheme(R.style.PreferencesDark);
                 break;
         }
     }
 
     public static boolean isLightTheme(Activity activity) {
-        int themeId = ThemeEngine.getThemeValue(activity);
-        switch (themeId) {
-            case 0:
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
                 return true;
-            case 1:
+            case DARK:
                 return false;
         }
         return false;
