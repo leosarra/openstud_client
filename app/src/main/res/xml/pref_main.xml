@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="General">
+        <EditTextPreference
+            android:title="@string/default_laute_value"
+            android:defaultValue="@string/default_laude"
+            android:key="@string/key_default_laude"
+            android:summary="@string/default_laude_ext" />
+        <Preference android:title="@string/delete_pdf">
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_themes">
+        <ListPreference
+            android:defaultValue="0"
+            android:dialogTitle="@string/title_theme"
+            android:entries="@array/pref_theme"
+            android:entryValues="@array/pref_theme_values"
+            android:key="@string/key_theme"
+            android:summary="@string/summary_theme"
+            android:title="@string/title_theme" />
+    </PreferenceCategory>
+</PreferenceScreen>

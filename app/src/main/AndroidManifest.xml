@@ -51,8 +51,11 @@
                 android:resource="@xml/file_provider_path" />
         </provider>
 
-        <activity android:name=".AboutActivity"
-            android:theme="@style/AppTheme.MaterialAboutActivityLight"/>
+        <activity
+            android:name=".AboutActivity"
+            android:theme="@style/AppTheme.MaterialAboutActivityLight" />
+        <activity android:name=".activities.SettingsPrefActivity"
+            android:theme="@style/NoActionBarAppLightTheme"></activity>
     </application>
 
 </manifest>
