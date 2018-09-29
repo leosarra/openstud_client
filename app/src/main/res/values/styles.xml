@@ -64,8 +64,6 @@
     </style>
 
 
-
-
     <style name="LoginTheme" parent="NoActionBarAppLightTheme">
         <item name="android:navigationBarColor">@color/redSapienza</item>
     </style>
@@ -154,10 +152,27 @@
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="android:colorAccent">?attr/colorAccent</item>
     </style>
 
 
-    <style name="ThemeDarkDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+    <style name="ThemeDarkDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/redSapienza</item>
+        <item name="colorPrimaryDark">@color/redSapienzaDark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="android:background">#212121</item>
+        <item name="primaryTextColor">#F4F4F6</item>
+        <item name="secondaryTextColor">#96F4F4F6</item>
+        <item name="android:textColorPrimary">?attr/primaryTextColor</item>
+        <item name="android:colorAccent">?attr/colorAccent</item>
+        <item name="android:colorPrimary">@android:color/white</item>
+        <item name="android:colorPrimaryDark">?attr/colorPrimaryDark</item>
+        <item name="android:textColorAlertDialogListItem">?attr/primaryTextColor</item>
+        <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
+        <item name="textColorAlertDialogListItem">?attr/primaryTextColor</item>
+    </style>
+
+    <style name="ThemeDarkAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
@@ -168,6 +183,12 @@
         <item name="android:textColorAlertDialogListItem">?attr/primaryTextColor</item>
         <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
         <item name="textColorAlertDialogListItem">?attr/primaryTextColor</item>
+    </style>
+
+    <style name="ThemeLightAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/redSapienza</item>
+        <item name="colorPrimaryDark">@color/redSapienzaDark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
     </style>
 
     <style name="AboutLibrariesThemeDark" parent="Theme.AppCompat.NoActionBar">
