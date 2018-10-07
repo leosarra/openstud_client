@@ -85,22 +85,22 @@
 
 
 
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="pref_title_themes">Appearance</string>
-    <string name="pref_header_other">Other</string>
-    <string name="delete_pdf">Delete cached PDF</string>
-    <string name="pref_title_stats">Stats</string>
-    <string name="summary_theme">Choose OpenStud theme</string>
-    <string name="title_theme">Theme</string>
-    <string name="default_laude">Value \"30L\"</string>
-    <string name="default_laude_ext">Set value for \"30L\" to be used in stats</string>
-    <string name="sort_by">Sort by</string>
-    <string name="success_delete_pdf">Files deleted successfully!</string>
-    <string name="failed_delete_pdf">Can\'t delete cached files. Try again later</string>
-    <string name="restart_required">Restart required</string>
-    <string name="restart_required_description">In order to apply the new theme OpenStud must be restarted. Restart now?</string>
-    <string name="restart_ok">Restart</string>
-    <string name="restart_cancel">Later</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="pref_title_themes">Aspetto</string>
+    <string name="pref_header_other">Altro</string>
+    <string name="delete_pdf">Cancella le ricevute salvate</string>
+    <string name="pref_title_stats">Statistiche</string>
+    <string name="summary_theme">Scegli un tema per OpenStud</string>
+    <string name="title_theme">Tema</string>
+    <string name="default_laude">Valore lode</string>
+    <string name="default_laude_ext">Scegli un valore per la lode da usare per generare le statistiche</string>
+    <string name="sort_by">Ordina per</string>
+    <string name="success_delete_pdf">File cancellati con successo!</string>
+    <string name="failed_delete_pdf">Impossibile cancellare i file. Riprova più tardi</string>
+    <string name="restart_required">Riavvio richiesto</string>
+    <string name="restart_required_description">Al fine di applicare il tema correttamente OpenStud deve essere riavviato. Riavviare ora?</string>
+    <string name="restart_ok">Riavvia</string>
+    <string name="restart_cancel">Dopo</string>
 
 </resources>

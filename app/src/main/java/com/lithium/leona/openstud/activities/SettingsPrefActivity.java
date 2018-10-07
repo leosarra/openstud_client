@@ -73,6 +73,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 int id = Integer.parseInt(newTheme);
                 if (ThemeEngine.Theme.getTheme(id) == oldTheme) return false;
                 ThemeEngine.setTheme(context,ThemeEngine.Theme.getTheme(id));
+                oldTheme = ThemeEngine.Theme.getTheme(id);
                 activity.createRestartDialog(alertDialogTheme);
                 return true;
             });

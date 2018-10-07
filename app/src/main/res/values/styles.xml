@@ -13,7 +13,6 @@
         <item name="colorAccent">@android:color/holo_red_light</item>
         <item name="colorSecondary">@color/redSapienza</item>
         <item name="colorButtonNav">@color/redSapienza</item>
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
         <item name="primaryTextColor">#33343B</item>
         <item name="secondaryTextColor">@android:color/darker_gray</item>
         <item name="dividerColor">#B6B6B6</item>
@@ -34,7 +33,6 @@
         <item name="colorAccent">@android:color/holo_red_light</item>
         <item name="colorSecondary">#c91515</item>
         <item name="colorButtonNav">#e14242</item>
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
         <item name="primaryTextColor">#F4F4F6</item>
         <item name="secondaryTextColor">#96F4F4F6</item>
         <item name="backgroundCardColor">#424242</item>
@@ -118,7 +116,6 @@
         <item name="colorAccent">@android:color/holo_red_light</item>
         <item name="colorSecondary">#c91515</item>
         <item name="colorButtonNav">#e14242</item>
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
         <item name="primaryTextColor">#F4F4F6</item>
         <item name="secondaryTextColor">#96F4F4F6</item>
         <item name="backgroundCardColor">#424242</item>
@@ -129,7 +126,7 @@
         <item name="colorNavText">@android:color/white</item>
         <item name="android:textColor">?attr/primaryTextColor</item>
         <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
-        <item name="android:alertDialogTheme">@style/ThemeDarkDialog</item>
+        <item name="android:alertDialogTheme">@style/ThemeDarkAlertDialog</item>
     </style>
 
     <style name="PreferencesLight" parent="@style/PreferenceThemeOverlay.v14.Material">
@@ -138,14 +135,11 @@
         <item name="colorAccent">@android:color/holo_red_light</item>
         <item name="colorSecondary">@color/redSapienza</item>
         <item name="colorButtonNav">@color/redSapienza</item>
-        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
         <item name="primaryTextColor">#33343B</item>
         <item name="secondaryTextColor">@android:color/darker_gray</item>
         <item name="dividerColor">#B6B6B6</item>
         <item name="backgroundColor">@android:color/background_light</item>
-        <item name="android:textColor">?attr/primaryTextColor</item>
-        <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
-        <item name="android:alertDialogTheme">@style/ThemeLightDialog</item>
+        <item name="android:alertDialogTheme">@style/ThemeLightAlertDialog</item>
     </style>
 
     <style name="ThemeLightDialog" parent="@style/Theme.AppCompat.Light.Dialog">
@@ -176,10 +170,10 @@
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="android:colorAccent">@android:color/holo_red_light</item>
         <item name="android:background">#212121</item>
         <item name="primaryTextColor">#F4F4F6</item>
         <item name="secondaryTextColor">#96F4F4F6</item>
-        <item name="android:textColor">?attr/primaryTextColor</item>
         <item name="android:textColorAlertDialogListItem">?attr/primaryTextColor</item>
         <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
         <item name="textColorAlertDialogListItem">?attr/primaryTextColor</item>

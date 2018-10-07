@@ -112,6 +112,12 @@ public class PaymentsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.settings_menu: {
+                        Intent intent = new Intent(PaymentsActivity.this, SettingsPrefActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                 }
             }
 

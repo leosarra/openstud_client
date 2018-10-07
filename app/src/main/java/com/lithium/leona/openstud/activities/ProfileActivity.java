@@ -273,6 +273,12 @@ public class ProfileActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.settings_menu: {
+                        Intent intent = new Intent(ProfileActivity.this, SettingsPrefActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                 }
             }
 
