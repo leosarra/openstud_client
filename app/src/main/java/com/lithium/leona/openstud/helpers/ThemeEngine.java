@@ -115,7 +115,7 @@ public class ThemeEngine {
         Theme theme = getTheme(activity);
         switch (theme) {
             case LIGHT: return R.style.ThemeLightAlertDialog;
-            case DARK: return R.style.ThemeDarkDialog;
+            case DARK: return R.style.ThemeDarkAlertDialog;
             default: return R.style.ThemeLightAlertDialog;
         }
     }
