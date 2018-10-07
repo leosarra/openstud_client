@@ -117,6 +117,11 @@ public class PaymentsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.stats_menu: {
+                        Intent intent = new Intent(PaymentsActivity.this, StatsActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
 
                 }
             }
@@ -124,23 +129,15 @@ public class PaymentsActivity extends AppCompatActivity {
         };
         mDrawerLayout.addDrawerListener(ddl);
         nv.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        mDrawerLayout.closeDrawers();
-                        ddl.setItemPressed(item.getItemId());
-                        return true;
-                    }
+                item -> {
+                    mDrawerLayout.closeDrawers();
+                    ddl.setItemPressed(item.getItemId());
+                    return true;
                 });
         View headerLayout = nv.getHeaderView(0);
 
         TextView studentId = headerLayout.findViewById(R.id.nav_subtitle);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     public synchronized void createTextSnackBar(int string_id, int length) {

@@ -54,7 +54,10 @@
         <activity
             android:name=".AboutActivity"
             android:theme="@style/AppTheme.MaterialAboutActivityLight" />
-        <activity android:name=".activities.SettingsPrefActivity"
+        <activity
+            android:name=".activities.SettingsPrefActivity"
+            android:theme="@style/NoActionBarAppLightTheme" />
+        <activity android:name=".activities.StatsActivity"
             android:theme="@style/NoActionBarAppLightTheme"></activity>
     </application>
 

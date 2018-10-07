@@ -223,6 +223,11 @@ public class ExamsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.stats_menu: {
+                        Intent intent = new Intent(ExamsActivity.this, StatsActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                 }
             }
 

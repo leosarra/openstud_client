@@ -110,6 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         setupListeners();
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         headerLayout = nv.getHeaderView(0);
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(getApplication(),os);
@@ -205,12 +206,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void applyInfos(Student st, Isee isee){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         collapsingToolbarLayout.setTitle(st.getFirstName()+" "+st.getLastName());
@@ -278,7 +273,11 @@ public class ProfileActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
-
+                    case R.id.stats_menu: {
+                        Intent intent = new Intent(ProfileActivity.this, StatsActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                 }
             }
 
