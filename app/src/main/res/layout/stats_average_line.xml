@@ -3,7 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_view"
+    android:id="@+id/graph_card"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,7 +18,8 @@
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="160dp"
+            android:layout_marginBottom="10dp"/>
 
         <TextView
             android:id="@+id/title"
@@ -27,10 +28,11 @@
             android:layout_below="@+id/graph"
             android:layout_marginTop="8dp"
             android:maxLines="3"
-            android:text="Weight average over time"
+            android:text="@string/average_over_time"
             android:textColor="#222"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="@string/average_over_time" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -71,7 +71,7 @@ public class ClientHelper {
 
     }
 
-    public static LineGraphSeries<DataPoint> generateMarksPoints(List<ExamDone> exams, int laude){
+    public static LineGraphSeries<DataPoint> generateMarksPoints(List<ExamDone> exams){
         int index = 0;
         LinkedList<ExamDone> temp = new LinkedList<>(exams);
         Collections.reverse(temp);
@@ -79,7 +79,7 @@ public class ClientHelper {
         for (ExamDone exam : temp){
             int result = exam.getResult();
             if (!(result>=18 && exam.isPassed())) continue;
-            if (result==31) result=laude;
+            if (result>30) result=31;
             ZoneId zoneId = ZoneId.systemDefault();
             Timestamp timestamp = new Timestamp(exam.getDate().atStartOfDay(zoneId).toEpochSecond());
 
@@ -89,30 +89,52 @@ public class ClientHelper {
         return ret;
     }
 
-    public static LineGraphSeries<DataPoint> generateWeightPoints(List<ExamDone> exams, int laude){
+    public static LineGraphSeries<DataPoint> generateWeightPoints(List<ExamDone> exams, int laude) {
         LinkedList<ExamDone> temp = new LinkedList<>(exams);
         Collections.reverse(temp);
         List<ExamDone> placeholder = new LinkedList<>();
         LineGraphSeries<DataPoint> ret = new LineGraphSeries<>();
-        for (ExamDone exam : temp){
-            if (!(exam.getResult()>=18 && exam.isPassed())) continue;
+        for (ExamDone exam : temp) {
+            if (!(exam.getResult() >= 18 && exam.isPassed())) continue;
             placeholder.add(exam);
-            Double average = OpenstudHelper.computeWeightedAverage(placeholder,laude);
+            Double average = OpenstudHelper.computeWeightedAverage(placeholder, laude);
             ZoneId zoneId = ZoneId.systemDefault();
             Timestamp timestamp = new Timestamp(exam.getDate().atStartOfDay(zoneId).toEpochSecond());
-            System.out.println(new Date(timestamp.getTime()));
-            ret.appendData(new DataPoint(new Date(timestamp.getTime()*1000L), average), true, 15);
+            ret.appendData(new DataPoint(new Date(timestamp.getTime() * 1000L), average), true, 15);
         }
         ret.setColor(Color.RED);
         return ret;
     }
+
+    /**
+    public static BarGraphSeries generateMarksBar2(List<ExamDone> exams, int laude){
+        Map<Integer,Integer> map = new HashMap<>();
+        BarGraphSeries<DataPoint> serie = new BarGraphSeries<>();
+        for (ExamDone exam : exams) {
+            if (!(exam.getResult()>=18 && exam.isPassed())) continue;
+            int result = exam.getResult();
+            if (result == 31) result = laude;
+            if (map.containsKey(result)) {
+                map.put(result,map.get(result)+1);
+            }
+            else map.put(result,0);
+        }
+
+        SortedSet<Integer> sortedSet = new TreeSet<>(map.keySet());
+
+        for (Integer key : sortedSet){
+            serie.appendData(new DataPoint(key, map.get(key)), true, 18);
+        }
+        return serie;
+    }
+     **/
 
     public static void generateMarksBar(List<ExamDone> exams, int laude, ArrayList<BarEntry> entries, ArrayList<String> labels){
         Map<Integer,Integer> map = new HashMap<>();
         for (ExamDone exam : exams) {
             if (!(exam.getResult()>=18 && exam.isPassed())) continue;
             int result = exam.getResult();
-            if (result == 31) result = laude;
+            if (result > 30) result = 31;
             if (map.containsKey(result)) {
                 map.put(result,map.get(result)+1);
             }

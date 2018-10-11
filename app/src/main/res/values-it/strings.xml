@@ -78,8 +78,8 @@
     <string name="open_source_libs">Librerie open source</string>
     <string name="no_sessions_found">Nessun appello trovato</string>
     <string name="send_email">Invia una email</string>
-    <string name="pref_header_stats">Stats</string>
-    <string name="pref_header_themes">Themes</string>
+    <string name="pref_header_stats">Statistiche</string>
+    <string name="pref_header_themes">Temi</string>
 
 
 
@@ -102,5 +102,10 @@
     <string name="restart_required_description">Al fine di applicare il tema correttamente OpenStud deve essere riavviato. Riavviare ora?</string>
     <string name="restart_ok">Riavvia</string>
     <string name="restart_cancel">Dopo</string>
+    <string name="my_gpa">La mia media</string>
+    <string name="arithmetic">Aritmetica</string>
+    <string name="weighted">Pesata</string>
+    <string name="average_over_time">Media nel tempo</string>
+    <string name="marks_graph">Distribuzione voti</string>
 
 </resources>

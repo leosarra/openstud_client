@@ -1,28 +1,29 @@
 package com.lithium.leona.openstud.activities;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.Preference;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
@@ -30,7 +31,6 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
-import com.lithium.leona.openstud.fragments.ExamsDoneFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -50,7 +50,6 @@ import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
-import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
@@ -65,6 +64,8 @@ public class StatsActivity extends AppCompatActivity {
     @BindView(R.id.totalCFU) TextView totalCFU;
     @BindView(R.id.graph) GraphView graph;
     @BindView(R.id.graph2) BarChart graph2;
+    @BindView(R.id.graph_card) CardView graphCard;
+    @BindView(R.id.graph2_card) CardView graphCard2;
     private DelayedDrawerListener ddl;
     private NavigationView nv;
     private Openstud os;
@@ -72,6 +73,7 @@ public class StatsActivity extends AppCompatActivity {
     private List<ExamDone> exams = new LinkedList<>();
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
+    private int laude;
 
     private static class StatsHandler extends Handler {
         private final WeakReference<StatsActivity> activity;
@@ -129,6 +131,10 @@ public class StatsActivity extends AppCompatActivity {
             exams.addAll(exams_cached);
             updateStats();
         }
+        else {
+            graphCard.setVisibility(View.GONE);
+            graphCard.setVisibility(View.GONE);
+        }
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(() -> refreshExamsDone());
         if (firstStart) refreshExamsDone();
@@ -143,7 +149,7 @@ public class StatsActivity extends AppCompatActivity {
         if (firstStart) {
             firstStart = false;
         }
-        else if (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30) refreshExamsDone();
+        else if (getLaude() != laude || time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30) refreshExamsDone();
     }
 
     private void updateStats(){
@@ -152,16 +158,29 @@ public class StatsActivity extends AppCompatActivity {
                 totalCFU.setText("--");
                 arithmeticValue.setText("--");
                 weightedValue.setText("--");
+                graphCard.setVisibility(View.GONE);
+                graphCard2.setVisibility(View.GONE);
                 return;
             }
+            laude = getLaude();
+            updateGraphs();
+        });
+    }
+
+
+    private void updateGraphs(){
+        runOnUiThread(() -> {
+            graphCard.setVisibility(View.VISIBLE);
+            graphCard2.setVisibility(View.VISIBLE);
             NumberFormat numFormat = NumberFormat.getInstance();
             numFormat.setMaximumFractionDigits(2);
             numFormat.setMinimumFractionDigits(1);
             totalCFU.setText(String.valueOf(OpenstudHelper.getSumCFU(exams)));
-            arithmeticValue.setText(numFormat.format(OpenstudHelper.computeArithmeticAverage(exams, 31)));
-            weightedValue.setText(numFormat.format(OpenstudHelper.computeWeightedAverage(exams,31)));
-            LineGraphSeries<DataPoint> serie1 = ClientHelper.generateMarksPoints(exams,31);
-            LineGraphSeries<DataPoint> serie2 = ClientHelper.generateWeightPoints(exams,31);
+            arithmeticValue.setText(numFormat.format(OpenstudHelper.computeArithmeticAverage(exams, laude)));
+            weightedValue.setText(numFormat.format(OpenstudHelper.computeWeightedAverage(exams, laude)));
+            LineGraphSeries<DataPoint> serie1 = ClientHelper.generateMarksPoints(exams);
+            LineGraphSeries<DataPoint> serie2 = ClientHelper.generateWeightPoints(exams, laude);
+            graph.removeAllSeries();
             graph.addSeries(serie1);
             graph.addSeries(serie2);
             graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
@@ -169,18 +188,19 @@ public class StatsActivity extends AppCompatActivity {
             graph.getViewport().setMaxX(serie1.getHighestValueX());
             graph.getViewport().setMinX(serie1.getLowestValueX());
             graph.getViewport().setXAxisBoundsManual(true);
-            graph.getViewport().setMaxY(31);
+            graph.getViewport().setMaxY(laude);
             graph.getViewport().setScalable(true);
             graph.getGridLabelRenderer().setNumHorizontalLabels(4);
             graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
 
             ArrayList<BarEntry> entriesGraph2 = new ArrayList<>();
             ArrayList<String> entriesLabelGraph2 = new ArrayList<>();
-            ClientHelper.generateMarksBar(exams,31,entriesGraph2,entriesLabelGraph2);
-            BarDataSet dataset2 = new BarDataSet(entriesGraph2,"Marks");
+            ClientHelper.generateMarksBar(exams, laude, entriesGraph2, entriesLabelGraph2);
+            BarDataSet dataset2 = new BarDataSet(entriesGraph2, "Marks");
             BarData data2 = new BarData(dataset2);
             data2.setHighlightEnabled(false);
             data2.setDrawValues(false);
+            dataset2.setColor(Color.parseColor("#0077CC"));
             graph2.setData(data2);
             graph2.getAxisRight().setEnabled(false);
             graph2.setScaleEnabled(false);
@@ -188,18 +208,18 @@ public class StatsActivity extends AppCompatActivity {
             graph2.getLegend().setEnabled(false);
             graph2.getAxisLeft().setTextSize(12);
             graph2.getAxisLeft().setGranularity(1);
+            graph2.getAxisLeft().setMinWidth(0);
             graph2.getXAxis().setTextSize(12);
             graph2.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
             graph2.getXAxis().setValueFormatter((value, axis) -> {
-                if(value <= 30){
-                    return String.valueOf((int)value);
-                }else{
-                    return "30L"; // return empty for other values where you don't want to print anything on the X Axis
+                if (value <= 30) {
+                    return String.valueOf((int) value);
+                } else {
+                    return "30L";
                 }
             });
         });
     }
-
     private void  refreshExamsDone(){
         if (os == null) return;
         setRefreshing(true);
@@ -222,7 +242,7 @@ public class StatsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            if (update==null) {
+            if (update==null || update.equals(exams)) {
                 setRefreshing(false);
                 return;
             }
@@ -300,5 +320,12 @@ public class StatsActivity extends AppCompatActivity {
                     ddl.setItemPressed(item.getItemId());
                     return true;
                 });
+    }
+
+    private synchronized int getLaude(){
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int laudeValue = Integer.parseInt(appPreferences.getString(getResources().getString(R.string.key_default_laude), null));
+        if (laudeValue<30) laudeValue = 30;
+        return laudeValue;
     }
 }
