@@ -97,29 +97,6 @@ public class ClientHelper {
         return ret;
     }
 
-    /**
-    public static BarGraphSeries generateMarksBar2(List<ExamDone> exams, int laude){
-        Map<Integer,Integer> map = new HashMap<>();
-        BarGraphSeries<DataPoint> serie = new BarGraphSeries<>();
-        for (ExamDone exam : exams) {
-            if (!(exam.getResult()>=18 && exam.isPassed())) continue;
-            int result = exam.getResult();
-            if (result == 31) result = laude;
-            if (map.containsKey(result)) {
-                map.put(result,map.get(result)+1);
-            }
-            else map.put(result,0);
-        }
-
-        SortedSet<Integer> sortedSet = new TreeSet<>(map.keySet());
-
-        for (Integer key : sortedSet){
-            serie.appendData(new DataPoint(key, map.get(key)), true, 18);
-        }
-        return serie;
-    }
-     **/
-
     public static ArrayList<BarEntry> generateMarksBar(List<ExamDone> exams){
         Map<Integer,Integer> map = new HashMap<>();
         for (ExamDone exam : exams) {
