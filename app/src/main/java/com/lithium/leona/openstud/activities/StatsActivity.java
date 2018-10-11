@@ -16,7 +16,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.lithium.leona.openstud.AboutActivity;
@@ -33,6 +41,7 @@ import org.threeten.bp.LocalDateTime;
 
 import java.lang.ref.WeakReference;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,7 +64,7 @@ public class StatsActivity extends AppCompatActivity {
     @BindView(R.id.weightedValue) TextView weightedValue;
     @BindView(R.id.totalCFU) TextView totalCFU;
     @BindView(R.id.graph) GraphView graph;
-    @BindView(R.id.graph2) GraphView graph2;
+    @BindView(R.id.graph2) BarChart graph2;
     private DelayedDrawerListener ddl;
     private NavigationView nv;
     private Openstud os;
@@ -151,16 +160,43 @@ public class StatsActivity extends AppCompatActivity {
             totalCFU.setText(String.valueOf(OpenstudHelper.getSumCFU(exams)));
             arithmeticValue.setText(numFormat.format(OpenstudHelper.computeArithmeticAverage(exams, 31)));
             weightedValue.setText(numFormat.format(OpenstudHelper.computeWeightedAverage(exams,31)));
+            LineGraphSeries<DataPoint> serie1 = ClientHelper.generateMarksPoints(exams,31);
+            LineGraphSeries<DataPoint> serie2 = ClientHelper.generateWeightPoints(exams,31);
+            graph.addSeries(serie1);
+            graph.addSeries(serie2);
+            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
+            graph.getGridLabelRenderer().setHumanRounding(true);
+            graph.getViewport().setMaxX(serie1.getHighestValueX());
+            graph.getViewport().setMinX(serie1.getLowestValueX());
+            graph.getViewport().setXAxisBoundsManual(true);
+            graph.getViewport().setMaxY(31);
+            graph.getViewport().setScalable(true);
+            graph.getGridLabelRenderer().setNumHorizontalLabels(4);
+            graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
 
-
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                    new DataPoint(0, 1),
-                    new DataPoint(1, 5),
-                    new DataPoint(2, 3)
+            ArrayList<BarEntry> entriesGraph2 = new ArrayList<>();
+            ArrayList<String> entriesLabelGraph2 = new ArrayList<>();
+            ClientHelper.generateMarksBar(exams,31,entriesGraph2,entriesLabelGraph2);
+            BarDataSet dataset2 = new BarDataSet(entriesGraph2,"Marks");
+            BarData data2 = new BarData(dataset2);
+            data2.setHighlightEnabled(false);
+            data2.setDrawValues(false);
+            graph2.setData(data2);
+            graph2.getAxisRight().setEnabled(false);
+            graph2.setScaleEnabled(false);
+            graph2.getDescription().setEnabled(false);
+            graph2.getLegend().setEnabled(false);
+            graph2.getAxisLeft().setTextSize(12);
+            graph2.getAxisLeft().setGranularity(1);
+            graph2.getXAxis().setTextSize(12);
+            graph2.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+            graph2.getXAxis().setValueFormatter((value, axis) -> {
+                if(value <= 30){
+                    return String.valueOf((int)value);
+                }else{
+                    return "30L"; // return empty for other values where you don't want to print anything on the X Axis
+                }
             });
-            graph.addSeries(series);
-            graph2.addSeries(series);
-
         });
     }
 

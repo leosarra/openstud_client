@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
@@ -12,6 +13,29 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.github.mikephil.charting.data.BarEntry;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.temporal.TemporalField;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import lithium.openstud.driver.core.ExamDone;
+import lithium.openstud.driver.core.OpenstudHelper;
 
 public class ClientHelper {
 
@@ -46,6 +70,65 @@ public class ClientHelper {
         }
 
     }
+
+    public static LineGraphSeries<DataPoint> generateMarksPoints(List<ExamDone> exams, int laude){
+        int index = 0;
+        LinkedList<ExamDone> temp = new LinkedList<>(exams);
+        Collections.reverse(temp);
+        LineGraphSeries<DataPoint> ret = new LineGraphSeries<>();
+        for (ExamDone exam : temp){
+            int result = exam.getResult();
+            if (!(result>=18 && exam.isPassed())) continue;
+            if (result==31) result=laude;
+            ZoneId zoneId = ZoneId.systemDefault();
+            Timestamp timestamp = new Timestamp(exam.getDate().atStartOfDay(zoneId).toEpochSecond());
+
+            ret.appendData(new DataPoint(new Date(timestamp.getTime()*1000L), result), true, 15);
+            index++;
+        }
+        return ret;
+    }
+
+    public static LineGraphSeries<DataPoint> generateWeightPoints(List<ExamDone> exams, int laude){
+        LinkedList<ExamDone> temp = new LinkedList<>(exams);
+        Collections.reverse(temp);
+        List<ExamDone> placeholder = new LinkedList<>();
+        LineGraphSeries<DataPoint> ret = new LineGraphSeries<>();
+        for (ExamDone exam : temp){
+            if (!(exam.getResult()>=18 && exam.isPassed())) continue;
+            placeholder.add(exam);
+            Double average = OpenstudHelper.computeWeightedAverage(placeholder,laude);
+            ZoneId zoneId = ZoneId.systemDefault();
+            Timestamp timestamp = new Timestamp(exam.getDate().atStartOfDay(zoneId).toEpochSecond());
+            System.out.println(new Date(timestamp.getTime()));
+            ret.appendData(new DataPoint(new Date(timestamp.getTime()*1000L), average), true, 15);
+        }
+        ret.setColor(Color.RED);
+        return ret;
+    }
+
+    public static void generateMarksBar(List<ExamDone> exams, int laude, ArrayList<BarEntry> entries, ArrayList<String> labels){
+        Map<Integer,Integer> map = new HashMap<>();
+        for (ExamDone exam : exams) {
+            if (!(exam.getResult()>=18 && exam.isPassed())) continue;
+            int result = exam.getResult();
+            if (result == 31) result = laude;
+            if (map.containsKey(result)) {
+                map.put(result,map.get(result)+1);
+            }
+            else map.put(result,0);
+        }
+
+        SortedSet<Integer> sortedSet = new TreeSet<>(map.keySet());
+
+        for (Integer key : sortedSet){
+            entries.add(new BarEntry(key,map.get(key)));
+            String label = String.valueOf(key);
+            if (key > 30) label = "30L";
+            labels.add(label);
+        }
+    }
+
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
