@@ -110,6 +110,7 @@ public class StatsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeEngine.applyStatsTheme(this);
         setContentView(R.layout.activity_stats);
         ThemeEngine.applyPaymentsTheme(this);
         ButterKnife.bind(this);
@@ -184,7 +185,6 @@ public class StatsActivity extends AppCompatActivity {
             graph.addSeries(serie1);
             graph.addSeries(serie2);
             graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-            graph.getGridLabelRenderer().setHumanRounding(true);
             graph.getViewport().setMaxX(serie1.getHighestValueX());
             graph.getViewport().setMinX(serie1.getLowestValueX());
             graph.getViewport().setXAxisBoundsManual(true);
@@ -192,6 +192,7 @@ public class StatsActivity extends AppCompatActivity {
             graph.getViewport().setScalable(true);
             graph.getGridLabelRenderer().setNumHorizontalLabels(4);
             graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+            graph.getGridLabelRenderer().setGridColor(ThemeEngine.getSecondaryTextColor(this));
 
             ArrayList<BarEntry> entriesGraph2 = new ArrayList<>();
             ArrayList<String> entriesLabelGraph2 = new ArrayList<>();
@@ -211,6 +212,10 @@ public class StatsActivity extends AppCompatActivity {
             graph2.getAxisLeft().setMinWidth(0);
             graph2.getXAxis().setTextSize(12);
             graph2.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+            graph2.getAxisLeft().setTextColor(ThemeEngine.getPrimaryTextColor(this)); // left y-axis
+            graph2.getAxisLeft().setGridColor(ThemeEngine.getSecondaryTextColor(this));
+            graph2.getXAxis().setTextColor(ThemeEngine.getPrimaryTextColor(this));
+            graph2.getXAxis().setGridColor(ThemeEngine.getSecondaryTextColor(this));
             graph2.getXAxis().setValueFormatter((value, axis) -> {
                 if (value <= 30) {
                     return String.valueOf((int) value);

@@ -14,7 +14,7 @@
         <item name="colorSecondary">@color/redSapienza</item>
         <item name="colorButtonNav">@color/redSapienza</item>
         <item name="primaryTextColor">#33343B</item>
-        <item name="secondaryTextColor">@android:color/darker_gray</item>
+        <item name="secondaryTextColor">#d3696969</item>
         <item name="dividerColor">#B6B6B6</item>
         <item name="backgroundColor">@android:color/background_light</item>
         <item name="backgroundCardColor">#FFFFFF</item>

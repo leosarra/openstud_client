@@ -6,8 +6,7 @@
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
-
+    android:layout_margin="8dp"
     card_view:cardBackgroundColor="?attr/backgroundCardColor"
     card_view:cardCornerRadius="4dp">
     <RelativeLayout
@@ -31,7 +30,7 @@
             android:layout_below="@+id/graph2"
             android:maxLines="3"
             android:text="@string/marks_graph"
-            android:textColor="#222"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold" />
 
