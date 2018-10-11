@@ -13,13 +13,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        >
 
-        <com.jjoe64.graphview.GraphView
+        <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/graph"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="150dp" />
 
         <TextView
             android:id="@+id/title"

@@ -134,4 +134,6 @@
     <string name="marks_graph">Grade distribution</string>
     <string name="pref_header_stats">Stats</string>
     <string name="pref_header_themes">Themes</string>
+    <string name="grades">Grades</string>
+    <string name="weighted_average">Weighted average</string>
 </resources>

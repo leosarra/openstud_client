@@ -107,5 +107,7 @@
     <string name="weighted">Pesata</string>
     <string name="average_over_time">Media nel tempo</string>
     <string name="marks_graph">Distribuzione voti</string>
+    <string name="grades">Voti</string>
+    <string name="weighted_average">Media pesata</string>
 
 </resources>
