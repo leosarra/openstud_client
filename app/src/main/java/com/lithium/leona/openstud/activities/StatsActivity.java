@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.Preference;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -20,14 +19,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.Utils;
 import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -62,7 +62,7 @@ public class StatsActivity extends AppCompatActivity {
     @BindView(R.id.arithmeticValue) TextView arithmeticValue;
     @BindView(R.id.weightedValue) TextView weightedValue;
     @BindView(R.id.totalCFU) TextView totalCFU;
-    @BindView(R.id.graph) GraphView graph;
+    @BindView(R.id.graph) LineChart graph;
     @BindView(R.id.graph2) BarChart graph2;
     @BindView(R.id.graph_card) CardView graphCard;
     @BindView(R.id.graph2_card) CardView graphCard2;
@@ -179,52 +179,77 @@ public class StatsActivity extends AppCompatActivity {
             totalCFU.setText(String.valueOf(OpenstudHelper.getSumCFU(exams)));
             arithmeticValue.setText(numFormat.format(OpenstudHelper.computeArithmeticAverage(exams, laude)));
             weightedValue.setText(numFormat.format(OpenstudHelper.computeWeightedAverage(exams, laude)));
-            LineGraphSeries<DataPoint> serie1 = ClientHelper.generateMarksPoints(exams);
-            LineGraphSeries<DataPoint> serie2 = ClientHelper.generateWeightPoints(exams, laude);
-            graph.removeAllSeries();
-            graph.addSeries(serie1);
-            graph.addSeries(serie2);
-            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this));
-            graph.getViewport().setMaxX(serie1.getHighestValueX());
-            graph.getViewport().setMinX(serie1.getLowestValueX());
-            graph.getViewport().setXAxisBoundsManual(true);
-            graph.getViewport().setMaxY(laude);
-            graph.getViewport().setScalable(true);
-            graph.getGridLabelRenderer().setNumHorizontalLabels(4);
-            graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
-            graph.getGridLabelRenderer().setGridColor(ThemeEngine.getSecondaryTextColor(this));
-
-            ArrayList<BarEntry> entriesGraph2 = new ArrayList<>();
-            ArrayList<String> entriesLabelGraph2 = new ArrayList<>();
-            ClientHelper.generateMarksBar(exams, laude, entriesGraph2, entriesLabelGraph2);
-            BarDataSet dataset2 = new BarDataSet(entriesGraph2, "Marks");
-            BarData data2 = new BarData(dataset2);
-            data2.setHighlightEnabled(false);
-            data2.setDrawValues(false);
-            dataset2.setColor(Color.parseColor("#0077CC"));
-            graph2.setData(data2);
-            graph2.getAxisRight().setEnabled(false);
-            graph2.setScaleEnabled(false);
-            graph2.getDescription().setEnabled(false);
-            graph2.getLegend().setEnabled(false);
-            graph2.getAxisLeft().setTextSize(12);
-            graph2.getAxisLeft().setGranularity(1);
-            graph2.getAxisLeft().setMinWidth(0);
-            graph2.getXAxis().setTextSize(12);
-            graph2.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            graph2.getAxisLeft().setTextColor(ThemeEngine.getPrimaryTextColor(this)); // left y-axis
-            graph2.getAxisLeft().setGridColor(ThemeEngine.getSecondaryTextColor(this));
-            graph2.getXAxis().setTextColor(ThemeEngine.getPrimaryTextColor(this));
-            graph2.getXAxis().setGridColor(ThemeEngine.getSecondaryTextColor(this));
-            graph2.getXAxis().setValueFormatter((value, axis) -> {
-                if (value <= 30) {
-                    return String.valueOf((int) value);
-                } else {
-                    return "30L";
-                }
-            });
+            makeAverageGraph();
+            makeGradeBarGraph();
         });
     }
+
+    private void makeAverageGraph(){
+        graph.clear();
+        List<Entry> serie1 = ClientHelper.generateMarksPoints(exams, laude);
+        List<Entry> serie2 = ClientHelper.generateWeightPoints(exams, laude);
+        LineDataSet datasetLine1 = new LineDataSet(serie1, getResources().getString(R.string.grades));
+        LineDataSet datasetLineGraph2 = new LineDataSet(serie2, getResources().getString(R.string.weighted_average));
+        datasetLineGraph2.setDrawCircles(false);
+        datasetLine1.setColor(Color.parseColor("#0077CC"));
+        datasetLine1.setCircleColor(Color.parseColor("#004a80"));
+        datasetLineGraph2.setColor(Color.parseColor("#b40a23"));
+        datasetLine1.setLineWidth(2);
+        datasetLineGraph2.setLineWidth(2);
+        LineData dataLine = new LineData();
+        dataLine.addDataSet(datasetLine1);
+        dataLine.addDataSet(datasetLineGraph2);
+        dataLine.setDrawValues(false);
+        dataLine.setHighlightEnabled(false);
+        graph.getLegend().setTextColor(ThemeEngine.getPrimaryTextColor(this));
+        graph.getLegend().setTextSize(Utils.convertDpToPixel(5));
+        graph.getLegend().setXEntrySpace(20);
+        graph.setData(dataLine);
+        graph.invalidate();
+        graph.getAxisRight().setEnabled(false);
+        graph.setScaleEnabled(false);
+        graph.getDescription().setEnabled(false);
+        graph.getAxisLeft().setTextSize(Utils.convertDpToPixel(5));
+        graph.getXAxis().setEnabled(false);
+        graph.getAxisLeft().setTextColor(ThemeEngine.getPrimaryTextColor(this)); // left y-axis
+        graph.getAxisLeft().setGridColor(ThemeEngine.getSecondaryTextColor(this));
+        graph.getXAxis().setTextColor(ThemeEngine.getPrimaryTextColor(this));
+        graph.getXAxis().setGridColor(ThemeEngine.getSecondaryTextColor(this));
+        graph.getAxisLeft().setGranularity(2);
+        graph.setScaleEnabled(false);
+    }
+
+    private void makeGradeBarGraph(){
+        graph2.clear();
+        ArrayList<BarEntry> entriesGraph2 = ClientHelper.generateMarksBar(exams);
+        BarDataSet datasetBar = new BarDataSet(entriesGraph2, "Marks");
+        BarData dataBar = new BarData(datasetBar);
+        dataBar.setHighlightEnabled(false);
+        dataBar.setDrawValues(false);
+        datasetBar.setColor(Color.parseColor("#0077CC"));
+        graph2.setData(dataBar);
+        graph2.getAxisRight().setEnabled(false);
+        graph2.setScaleEnabled(false);
+        graph2.getDescription().setEnabled(false);
+        graph2.getLegend().setEnabled(false);
+        graph2.getAxisLeft().setTextSize(Utils.convertDpToPixel(5));
+        graph2.getAxisLeft().setGranularity(1);
+        graph2.getAxisLeft().setMinWidth(0);
+        graph2.getXAxis().setTextSize(Utils.convertDpToPixel(4));
+        graph2.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        graph2.getAxisLeft().setTextColor(ThemeEngine.getPrimaryTextColor(this)); // left y-axis
+        graph2.getAxisLeft().setGridColor(ThemeEngine.getSecondaryTextColor(this));
+        graph2.getXAxis().setTextColor(ThemeEngine.getPrimaryTextColor(this));
+        graph2.getXAxis().setGridColor(ThemeEngine.getSecondaryTextColor(this));
+        graph2.getXAxis().setValueFormatter((value, axis) -> {
+            if (value <= 30) {
+                return String.valueOf((int) value);
+            } else {
+                return "30L";
+            }
+        });
+    }
+
     private void  refreshExamsDone(){
         if (os == null) return;
         setRefreshing(true);
