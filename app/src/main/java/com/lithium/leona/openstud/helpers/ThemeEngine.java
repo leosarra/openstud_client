@@ -3,6 +3,10 @@ package com.lithium.leona.openstud.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 
 import com.lithium.leona.openstud.R;
 
@@ -88,6 +92,38 @@ public class ThemeEngine {
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
         }
+    }
+
+    public static void applyStatsTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                activity.setTheme(R.style.NoActionBarAppLightTheme);
+                break;
+            case DARK:
+                activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+        }
+    }
+
+    public static int getPrimaryTextColor(Activity activity){
+        int tintColor;
+        TypedValue tV = new TypedValue();
+        Resources.Theme theme = activity.getTheme();
+        boolean success = theme.resolveAttribute(R.attr.primaryTextColor, tV, true);
+        if (success) tintColor = tV.data;
+        else tintColor = ContextCompat.getColor(activity, android.R.color.white);
+        return tintColor;
+    }
+
+    public static int getSecondaryTextColor(Activity activity){
+        int tintColor;
+        TypedValue tV = new TypedValue();
+        Resources.Theme theme = activity.getTheme();
+        boolean success = theme.resolveAttribute(R.attr.secondaryTextColor, tV, true);
+        if (success) tintColor = tV.data;
+        else tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
+        return tintColor;
     }
 
     public static void applyAboutTheme(Activity activity) {
