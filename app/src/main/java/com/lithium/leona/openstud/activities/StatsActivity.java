@@ -155,7 +155,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void updateStats(){
         runOnUiThread(() -> {
-            if (exams == null || exams.isEmpty()) {
+            if (exams == null || exams.isEmpty() || !ClientHelper.hasPassedExams(exams)) {
                 totalCFU.setText("--");
                 arithmeticValue.setText("--");
                 weightedValue.setText("--");
@@ -334,8 +334,8 @@ public class StatsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
-                    case R.id.stats_menu: {
-                        Intent intent = new Intent(StatsActivity.this, StatsActivity.class);
+                    case R.id.profile_menu: {
+                        Intent intent = new Intent(StatsActivity.this, ProfileActivity.class);
                         startActivity(intent);
                         break;
                     }
