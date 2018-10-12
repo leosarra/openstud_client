@@ -13,8 +13,8 @@
     <string name="birthDate">Birth date</string>
     <string name="birthPlace">Birth place</string>
     <string name="year_corse_profile">%1$s year</string>
-    <string name="cfu">CFU</string>
-    <string name="isee">ISEE</string>
+    <string name="cfu" translatable="false">CFU</string>
+    <string name="isee" translatable="false">ISEE</string>
     <string name="profile">Profile</string>
     <string name="about">About</string>
     <string name="settings">Settings</string>
@@ -41,9 +41,9 @@
     <string name="accademic_year_pay">Academic year: %1$s</string>
     <string name="payment_date">Payment date: %1$s</string>
     <string name="payment_description">Description: %1$s</string>
-    <string name="payment_amount">%1$s €</string>
-    <string name="cfu_exams">CFU: %1$s</string>
-    <string name="ssd_exams">SSD: %1$s</string>
+    <string name="payment_amount" translatable="false">%1$s €</string>
+    <string name="cfu_exams" translatable="false">CFU: %1$s</string>
+    <string name="ssd_exams" translatable="false">SSD: %1$s</string>
     <string name="number_reservation">Reservation number: %1$s</string>
     <string name="teacher_reservation">Teacher: %1$s</string>
     <string name="description_reservation">Additional information: %1$s</string>
@@ -67,26 +67,10 @@
     <string name="delete_ok">Delete</string>
     <string name="delete_abort">Abort</string>
     <string name="receipt">Receipt</string>
-    <string name="delete">Delete</string>
-    <string name="title_activity_drawer">DrawerActivity</string>
-
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
+    <string name="delete_reservation">Delete reservation</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_exams">ExamsActivity</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="search_sessions">Sessions</string>
     <string name="start_date_reservation">Start reservations: %1$s</string>
     <string name="end_date_reservation">End reservations: %1$s</string>
@@ -136,4 +120,8 @@
     <string name="pref_header_themes">Themes</string>
     <string name="grades">Grades</string>
     <string name="weighted_average">Weighted average</string>
+    <string name="description_reservation_options">Reservation options</string>
+    <string name="add_calendar">Add to calendar</string>
+    <string name="closed_reservation">You can\'t delete the reservation after the deadline!</string>
+    <string name="info_extra_reservation">Info</string>
 </resources>

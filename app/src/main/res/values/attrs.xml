@@ -16,5 +16,8 @@
         <attr name="certifiedExamColor" format="color" />
         <attr name="nonPassedExamColor" format="color" />
         <attr name="nonCertifiedExamColor" format="color" />
+        <!--<attr name="popupOverlayStyle" format="reference"/> -->
+        <attr name="popupTextColor" format="color"/>
+        <attr name="popupBackgroundColor" format="color"/>
     </declare-styleable>
 </resources>

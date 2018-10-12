@@ -25,6 +25,9 @@
         <item name="nonCertifiedExamColor">@color/yellow</item>
         <item name="colorNavText">#353535</item>
         <item name="colorHeader">@color/redSapienzaDark</item>
+        <item name="popupBackgroundColor">@android:color/white</item>
+        <item name="popupTextColor">@android:color/black</item>
+
     </style>
 
     <style name="AppThemeDark" parent="Base.Theme.AppCompat.Light.DarkActionBar">
@@ -46,6 +49,13 @@
         <item name="nonPassedExamColor">@color/redLight</item>
         <item name="nonCertifiedExamColor">@color/yellowLight</item>
         <item name="colorHeader">@color/redSapienzaDark</item>
+        <item name="popupTextColor">@android:color/white</item>
+        <item name="popupBackgroundColor">#262626</item>
+    </style>
+
+    <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">?attr/popupTextColor</item>
+        <item name="android:itemBackground">?attr/popupBackgroundColor</item>
     </style>
 
     <style name="NoActionBarAppDarkTheme" parent="AppThemeDark">

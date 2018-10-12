@@ -9,12 +9,16 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
@@ -74,8 +78,8 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         @BindView(R.id.ssdExam) TextView txtSSD;
         @BindView(R.id.cfuExam) TextView txtCFU;
         @BindView(R.id.reservationInfo) TextView txtInfo;
-        @BindView(R.id.delete_reservation) Button deleteButton;
         @BindView(R.id.get_reservation) Button getButton;
+        @BindView(R.id.reservation_options) ImageView options;
         private Context context;
 
         private void setContext(Context context){
@@ -99,36 +103,30 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, res.getSsd()));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(res.getCfu())));
             txtInfo.setText(infos);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ral.deleteReservationOnClick(res);
-                }
-            });
-            getButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ral.downloadReservationOnClick(res);
-                }
-            });
-            int tintColor;
-            if (Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>=1) {
-                tintColor = ContextCompat.getColor(context, android.R.color.darker_gray);
-                deleteButton.setEnabled(false);
-            }
-            else {
-                TypedValue tV = new TypedValue();
-                Resources.Theme theme = context.getTheme();
-                boolean success = theme.resolveAttribute(R.attr.colorButtonNav, tV, true);
-                if (success) tintColor = tV.data;
-                else tintColor = ContextCompat.getColor(context, R.color.redSapienza);
-            }
 
-            deleteButton.setTextColor(tintColor);
-            Drawable drawable = ContextCompat.getDrawable(context,R.drawable.ic_delete_small);
-            drawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(drawable.mutate(),tintColor);
-            deleteButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            Context wrapper = new ContextThemeWrapper(context, R.style.popupMenuStyle);
+            PopupMenu popup = new PopupMenu(wrapper, options);
+            popup.inflate(R.menu.reservation_menu);
+
+            options.setOnClickListener(v -> {
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.delete_menu:
+                                ral.deleteReservationOnClick(res);
+                                break;
+                            case R.id.calendar_menu:
+                                ral.addCalendarOnClick(res);
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                //displaying the popup
+                popup.show();
+            });
+            getButton.setOnClickListener(v -> ral.downloadReservationOnClick(res));
         }
     }
 
@@ -136,5 +134,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         void deleteReservationOnClick(ExamReservation res);
 
         void downloadReservationOnClick(ExamReservation res);
+
+        void addCalendarOnClick(ExamReservation res);
     }
 }

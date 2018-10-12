@@ -10,17 +10,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
-import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.ExamDoneAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -110,7 +108,6 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment,null);
         ButterKnife.bind(this, v);
-        Bundle bundle=getArguments();
         Activity activity = getActivity();
         if (activity == null) return v;
         exams = new LinkedList<>();
@@ -134,12 +131,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         }
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshExamsDone();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> refreshExamsDone());
         if (firstStart) refreshExamsDone();
         return v;
     }
@@ -175,7 +167,6 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             @Override
             public void run() {
                 List<ExamDone> update = null;
-                boolean isChanged = false;
                 try {
                     update = InfoManager.getExamsDone(activity.getApplication(),os);
                     if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());

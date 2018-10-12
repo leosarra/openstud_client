@@ -19,7 +19,7 @@
             android:theme="@style/NoActionBarAppLightTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,11 +34,9 @@
             android:theme="@style/NoActionBarAppLightTheme" />
         <activity
             android:name=".activities.ExamsActivity"
-            android:label="@string/title_activity_exams"
             android:theme="@style/NoActionBarAppLightTheme" />
         <activity
             android:name=".activities.SearchResultActivity"
-            android:label="@string/title_activity_search"
             android:theme="@style/NoActionBarAppLightTheme" />
 
         <provider

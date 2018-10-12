@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.CalendarContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -33,14 +34,19 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import org.threeten.bp.Duration;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.Period;
+import org.threeten.bp.ZoneId;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,21 +89,11 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
             ExamsActivity activity = (ExamsActivity) reservationsFrag.getActivity();
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    View.OnClickListener ocl = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            reservationsFrag.refreshReservations();
-                        }
-                    };
+                    View.OnClickListener ocl = v -> reservationsFrag.refreshReservations();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    View.OnClickListener ocl = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            reservationsFrag.refreshReservations();
-                        }
-                    };
+                    View.OnClickListener ocl = v -> reservationsFrag.refreshReservations();
                     activity.createRetrySnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
@@ -120,6 +116,9 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                 }
                 else if(msg.what == ClientHelper.Status.FAILED_GET.getValue()){
                     activity.createTextSnackBar(R.string.failed_get_network, Snackbar.LENGTH_LONG);
+                }
+                else if(msg.what == ClientHelper.Status.CLOSED_RESERVATION.getValue()){
+                    activity.createTextSnackBar(R.string.closed_reservation, Snackbar.LENGTH_LONG);
                 }
             }
         }
@@ -163,6 +162,11 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                     return;
                 }
                 new Thread(() -> getFile(activity,res)).start();
+            }
+
+            @Override
+            public void addCalendarOnClick(ExamReservation res) {
+                addToCalendar(activity,res);
             }
         });
         rv.setAdapter(adapter);
@@ -331,7 +335,28 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         return lastUpdate;
     }
 
+    private void addToCalendar(Activity activity, final ExamReservation res){
+        ZoneId zoneId = ZoneId.systemDefault();
+        Timestamp timestamp = new Timestamp(res.getExamDate().atStartOfDay(zoneId).toEpochSecond());
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        String title = null;
+        if (Locale.getDefault().getLanguage().equals("it")) title = "Esame: "+res.getExamSubject();
+        else title = "Exam: "+res.getExamSubject();
+        intent.putExtra(CalendarContract.Events.TITLE, title);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                timestamp.getTime()*1000L);
+        intent.putExtra(CalendarContract.Events.ALL_DAY, true);
+        startActivity(intent);
+
+
+    }
     private void createConfirmDeleteDialog(Activity activity, final ExamReservation res){
+        //Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>=1
+        if (true) {
+            h.sendEmptyMessage(ClientHelper.Status.CLOSED_RESERVATION.getValue());
+            return;
+        }
         int themeId = ThemeEngine.getAlertDialogTheme(activity);
         new AlertDialog.Builder(new ContextThemeWrapper(activity,themeId))
                 .setTitle(getResources().getString(R.string.delete_res_dialog_title))
