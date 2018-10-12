@@ -1,6 +1,7 @@
 package com.lithium.leona.openstud.helpers;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -70,6 +71,7 @@ public class ClientHelper {
         Collections.reverse(temp);
         ArrayList<Entry> ret = new ArrayList<>();
         for (ExamDone exam : temp){
+            if (exam.getDate() == null) continue;
             int result = exam.getResult();
             if (!(result>=18 && exam.isPassed())) continue;
             if (result>30) result=laude;
@@ -87,6 +89,7 @@ public class ClientHelper {
         List<ExamDone> placeholder = new LinkedList<>();
         ArrayList<Entry> ret = new ArrayList<>();
         for (ExamDone exam : temp) {
+            if (exam.getDate() == null) continue;
             if (!(exam.getResult() >= 18 && exam.isPassed())) continue;
             placeholder.add(exam);
             float average = (float) OpenstudHelper.computeWeightedAverage(placeholder, laude);
@@ -98,7 +101,7 @@ public class ClientHelper {
     }
 
     public static ArrayList<BarEntry> generateMarksBar(List<ExamDone> exams){
-        Map<Integer,Integer> map = new HashMap<>();
+        @SuppressLint("UseSparseArrays") Map<Integer,Integer> map = new HashMap<>();
         for (ExamDone exam : exams) {
             if (!(exam.getResult()>=18 && exam.isPassed())) continue;
             int result = exam.getResult();
@@ -106,17 +109,22 @@ public class ClientHelper {
             if (map.containsKey(result)) {
                 map.put(result,map.get(result)+1);
             }
-            else map.put(result,0);
+            else map.put(result,1);
         }
         ArrayList<BarEntry> entries = new ArrayList<>();
-        SortedSet<Integer> sortedSet = new TreeSet<>(map.keySet());
-
-        for (Integer key : sortedSet){
+        for (Integer key : map.keySet()){
             entries.add(new BarEntry(key,map.get(key)));
         }
         return entries;
     }
 
+
+    public static boolean hasPassedExams(List<ExamDone> exams) {
+        for (ExamDone exam : exams){
+            if(exam.getResult()>=18 && exam.isPassed()) return true;
+        }
+        return false;
+    }
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
