@@ -130,7 +130,6 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment,null);
         ButterKnife.bind(this, v);
-        Bundle bundle=getArguments();
         reservations = new LinkedList<>();
         os = InfoManager.getOpenStud(getActivity().getApplication());
         final Activity activity = getActivity();
@@ -163,12 +162,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                 if (!result) {
                     return;
                 }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getFile(activity,res);
-                    }
-                }).start();
+                new Thread(() -> getFile(activity,res)).start();
             }
         });
         rv.setAdapter(adapter);
@@ -247,36 +241,33 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         if (activity == null || os == null) return;
         setRefreshing(true);
         setButtonReloadStatus(false);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<ExamReservation> update = null;
-                boolean isChanged = false;
-                try {
-                    update = InfoManager.getActiveReservations(activity.getApplication(),os);
-                    if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
+        new Thread(() -> {
+            List<ExamReservation> update = null;
+            boolean isChanged = false;
+            try {
+                update = InfoManager.getActiveReservations(activity.getApplication(),os);
+                if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
-                } catch (OpenstudConnectionException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidResponseException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidCredentialsException e) {
-                    if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
-                    e.printStackTrace();
-                }
-
-                if (update==null) {
-                    setRefreshing(false);
-                    setButtonReloadStatus(true);
-                    return;
-                }
-                updateTimer();
-                refreshDataSet(update);
+            } catch (OpenstudConnectionException e) {
+                h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidResponseException e) {
+                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidCredentialsException e) {
+                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                e.printStackTrace();
             }
+
+            if (update==null) {
+                setRefreshing(false);
+                setButtonReloadStatus(true);
+                return;
+            }
+            updateTimer();
+            refreshDataSet(update);
         }).start();
     }
 
@@ -305,24 +296,14 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     private void setRefreshing(final boolean bool){
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(bool);
-            }
-        });
+        activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
 
     private void setButtonReloadStatus(final boolean bool){
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                emptyButton.setEnabled(bool);
-            }
-        });
+        activity.runOnUiThread(() -> emptyButton.setEnabled(bool));
     }
 
     private void swapViews(final List<ExamReservation> reservations) {
@@ -355,21 +336,8 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         new AlertDialog.Builder(new ContextThemeWrapper(activity,themeId))
                 .setTitle(getResources().getString(R.string.delete_res_dialog_title))
                 .setMessage(getResources().getString(R.string.delete_res_dialog_description, res.getExamSubject()))
-                .setPositiveButton(getResources().getString(R.string.delete_ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                deleteReservation(res);
-                            }
-                        }).start();
-                    }
-                })
-                .setNegativeButton(getResources().getString(R.string.delete_abort), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
+                .setPositiveButton(getResources().getString(R.string.delete_ok), (dialog, which) -> new Thread(() -> deleteReservation(res)).start())
+                .setNegativeButton(getResources().getString(R.string.delete_abort), (dialog, which) -> {
                 })
                 .show();
     }
