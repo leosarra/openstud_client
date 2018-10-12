@@ -171,8 +171,12 @@ public class SearchResultActivity extends AppCompatActivity {
         try {
             Pair<Integer,String> pair = os.insertReservation(res);
             InfoManager.setReservationUpdateFlag(this,true);
-            if (pair == null) {
+            if (pair.getRight() == null && pair.getLeft() == -1) {
                 h.sendEmptyMessage(ClientHelper.Status.ALREADY_PLACED.getValue());
+                return;
+            }
+            else if (pair == null) {
+                h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 return;
             }
             if (pair.getRight() != null) {
