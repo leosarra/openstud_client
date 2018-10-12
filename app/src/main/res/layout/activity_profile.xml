@@ -75,6 +75,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="?attr/backgroundColor"
         app:menu="@menu/drawer_view"
         app:headerLayout="@layout/nav_header"
         app:itemTextColor="@drawable/drawer_nav_text_selector"
