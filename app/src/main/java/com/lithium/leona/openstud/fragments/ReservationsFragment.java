@@ -237,7 +237,6 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         }
         else if (activity!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshReservations();
         else if (activity != null && InfoManager.getReservationUpdateFlag(activity)) {
-            h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             refreshReservations();
             InfoManager.setReservationUpdateFlag(activity,false);
         }
@@ -250,7 +249,6 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         setButtonReloadStatus(false);
         new Thread(() -> {
             List<ExamReservation> update = null;
-            boolean isChanged = false;
             try {
                 update = InfoManager.getActiveReservations(activity.getApplication(),os);
                 if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
