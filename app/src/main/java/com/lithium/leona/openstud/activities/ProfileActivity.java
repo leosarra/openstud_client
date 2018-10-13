@@ -219,7 +219,6 @@ public class ProfileActivity extends AppCompatActivity {
         else isee_field.setText(String.valueOf(isee.getValue()));
         departmentDescription.setText(st.getDepartmentName());
         courseDescription.setText(st.getCourseName());
-        System.out.println(Locale.getDefault().getLanguage());
         if (Locale.getDefault().getLanguage().equals("it")) courseYear.setText(getResources().getString(R.string.year_corse_profile,st.getCourseYear()+"°"));
         else {
             String year = st.getCourseYear();
