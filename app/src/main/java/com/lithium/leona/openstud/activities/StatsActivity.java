@@ -103,6 +103,9 @@ public class StatsActivity extends AppCompatActivity {
                 activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 activity.finish();
             }
+            else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                ClientHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+            }
         }
     }
 

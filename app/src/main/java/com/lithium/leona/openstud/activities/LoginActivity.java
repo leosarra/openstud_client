@@ -84,6 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                 else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
                     activity.createTextSnackBar(R.string.expired_password_error, Snackbar.LENGTH_LONG);
                 }
+                else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
                     activity.btn.setEnabled(true);
                     activity.rememberFlag.setEnabled(true);

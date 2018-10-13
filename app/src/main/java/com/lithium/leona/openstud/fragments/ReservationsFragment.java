@@ -120,6 +120,9 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
                 else if(msg.what == ClientHelper.Status.CLOSED_RESERVATION.getValue()){
                     activity.createTextSnackBar(R.string.closed_reservation, Snackbar.LENGTH_LONG);
                 }
+                else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                }
             }
         }
     }
@@ -352,8 +355,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
 
     }
     private void createConfirmDeleteDialog(Activity activity, final ExamReservation res){
-        //Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>=1
-        if (true) {
+        if (Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>=1) {
             h.sendEmptyMessage(ClientHelper.Status.CLOSED_RESERVATION.getValue());
             return;
         }

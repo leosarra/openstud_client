@@ -107,6 +107,9 @@ public class SearchResultActivity extends AppCompatActivity {
                 else if (msg.what == ClientHelper.Status.ALREADY_PLACED.getValue()) {
                     activity.createTextSnackBar(R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
                 }
+                else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                }
             }
         }
     }
@@ -171,12 +174,12 @@ public class SearchResultActivity extends AppCompatActivity {
         try {
             Pair<Integer,String> pair = os.insertReservation(res);
             InfoManager.setReservationUpdateFlag(this,true);
-            if (pair.getRight() == null && pair.getLeft() == -1) {
-                h.sendEmptyMessage(ClientHelper.Status.ALREADY_PLACED.getValue());
+            if (pair == null) {
+                h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 return;
             }
-            else if (pair == null) {
-                h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+            else if (pair.getRight() == null && pair.getLeft() == -1) {
+                h.sendEmptyMessage(ClientHelper.Status.ALREADY_PLACED.getValue());
                 return;
             }
             if (pair.getRight() != null) {
