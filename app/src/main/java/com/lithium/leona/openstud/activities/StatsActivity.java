@@ -50,6 +50,7 @@ import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
+import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
@@ -74,6 +75,7 @@ public class StatsActivity extends AppCompatActivity {
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private int laude;
+    private Student student;
 
     private static class StatsHandler extends Handler {
         private final WeakReference<StatsActivity> activity;
@@ -123,6 +125,21 @@ public class StatsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.stats);
         setupListeners();
         os = InfoManager.getOpenStud(getApplication());
+        student = InfoManager.getInfoStudentCached(this,os);
+        if (os == null || student == null) {
+            InfoManager.clearSharedPreferences(getApplication());
+            Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
+            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
+            return;
+        }
+        View headerLayout = nv.getHeaderView(0);
+        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
+        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
+        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
+        subTitle.setText(String.valueOf(student.getStudentID()));
+
+
         if (os == null) {
             InfoManager.clearSharedPreferences(getApplication());
             Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
