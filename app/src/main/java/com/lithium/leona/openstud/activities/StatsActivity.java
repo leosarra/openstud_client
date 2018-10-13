@@ -28,7 +28,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
-import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;

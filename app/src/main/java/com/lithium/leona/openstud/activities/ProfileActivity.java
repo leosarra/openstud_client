@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -190,17 +189,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void createRetrySnackBar(int string_id, int length) {
         Snackbar snackbar = Snackbar
                 .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        refresh(os);
-                                    }
-                                });
-                            }
-                        });
+                        view -> new Thread(() -> refresh(os)));
         snackbar.show();
     }
 

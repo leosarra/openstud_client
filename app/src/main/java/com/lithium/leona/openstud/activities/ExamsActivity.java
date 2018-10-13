@@ -1,7 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,8 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.common.util.Strings;
-import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.ExamDoableFragment;
@@ -38,7 +35,6 @@ import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.ExamDoable;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
 

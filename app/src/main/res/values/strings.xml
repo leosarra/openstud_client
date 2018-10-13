@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">OpenStud</string>
     <string name="studentId">Student ID</string>
-    <string name="password">Password</string>
-    <string name="fullname">%1$s %2$s</string>
+    <string name="password" translatable="false">Password</string>
+    <string name="fullname" translatable="false">%1$s %2$s</string>
     <string name="login">Login</string>
     <string name="saveLogin">Remember me</string>
-    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_profile" translatable="false">ProfileActivity</string>
     <string name="course">Course</string>
     <string name="department">Department</string>
     <string name="status">Student status</string>
@@ -69,8 +69,6 @@
     <string name="receipt">Receipt</string>
     <string name="delete_reservation">Delete reservation</string>
 
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="search_sessions">Sessions</string>
     <string name="start_date_reservation">Start reservations: %1$s</string>
     <string name="end_date_reservation">End reservations: %1$s</string>
@@ -124,4 +122,7 @@
     <string name="add_calendar">Add to calendar</string>
     <string name="closed_reservation">You can\'t delete the reservation after the deadline!</string>
     <string name="info_extra_reservation">Info</string>
+    <string name="logo_designer" translatable="false">Logo and icon</string>
+    <string name="twitter" translatable="false">Twitter</string>
+    <string name="website" translatable="false">Website</string>
 </resources>

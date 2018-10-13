@@ -11,11 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lithium.leona.openstud.AboutActivity;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;

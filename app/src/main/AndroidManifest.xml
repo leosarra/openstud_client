@@ -50,7 +50,7 @@
         </provider>
 
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.AboutActivity"
             android:theme="@style/AppTheme.MaterialAboutActivityLight" />
         <activity
             android:name=".activities.SettingsPrefActivity"
