@@ -5,9 +5,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.lithium.leona.openstud.R;
 
 import org.threeten.bp.ZoneId;
 
@@ -116,6 +121,15 @@ public class ClientHelper {
             entries.add(new BarEntry(key,map.get(key)));
         }
         return entries;
+    }
+
+    public static void createCustomTab(Context context, String url) {
+        Bitmap closeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_baseline_arrow_back);
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(context, R.color.redSapienza));
+        builder.setCloseButtonIcon(closeIcon);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(context,Uri.parse(url));
     }
 
 
