@@ -167,14 +167,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 h.sendEmptyMessage(ClientHelper.Status.ALREADY_PLACED.getValue());
                 return true;
             }
-            if (pair.getRight() != null) {
-                Bitmap closeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_baseline_arrow_back);
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                builder.setToolbarColor(ContextCompat.getColor(this, R.color.redSapienza));
-                builder.setCloseButtonIcon(closeIcon);
-                CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(this,Uri.parse(pair.getRight()));
-            }
+            if (pair.getRight() != null) ClientHelper.createCustomTab(this, pair.getRight());
             else {
                 refreshAvaiableReservations();
                 h.sendEmptyMessage(ClientHelper.Status.PLACE_RESERVATION_OK.getValue());
