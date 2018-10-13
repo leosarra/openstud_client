@@ -1,4 +1,4 @@
-package com.lithium.leona.openstud;
+package com.lithium.leona.openstud.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,9 @@ import com.danielstone.materialaboutlibrary.MaterialAboutActivity;
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
+import com.lithium.leona.openstud.BuildConfig;
+import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -35,7 +38,9 @@ public class AboutActivity extends MaterialAboutActivity {
         buildAuthor(context, authorCardBuilder);
         MaterialAboutCard.Builder miscCardBuilder = new MaterialAboutCard.Builder();
         buildMisc(context, miscCardBuilder);
-        return new MaterialAboutList(appCardBuilder.build(),authorCardBuilder.build(),miscCardBuilder.build());
+        MaterialAboutCard.Builder logoBuilder = new MaterialAboutCard.Builder();
+        buildLogo(context, logoBuilder);
+        return new MaterialAboutList(appCardBuilder.build(),miscCardBuilder.build(), authorCardBuilder.build(), logoBuilder.build());
     }
 
     @Nullable
@@ -81,10 +86,41 @@ public class AboutActivity extends MaterialAboutActivity {
                 .addItem(new MaterialAboutActionItem.Builder()
                         .text(R.string.fork_github)
                         .icon(github)
-                        .setOnClickAction( ()-> startActivity(createBrowserLink("https://www.github.com/lithiumSR/openstud_client")))
+                        .setOnClickAction( ()-> ClientHelper.createCustomTab(this, "https://www.github.com/lithiumSR/openstud_client"))
                         .build())
                 .addItem(ConvenienceBuilder.createEmailItem(context, email,
                         getString(R.string.send_email), true, getString(R.string.email_address), getString(R.string.question_concerning_openstud)));
+    }
+
+    private void buildLogo(Context context, MaterialAboutCard.Builder newLogoAuthor) {
+        int tintColor = getPrimaryTextColor(this);
+        Drawable twitter = new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_twitter)
+                .color(tintColor)
+                .sizeDp(24);
+        Drawable globe = new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_globe_americas)
+                .color(tintColor)
+                .sizeDp(24);
+        Drawable person = ContextCompat.getDrawable(context, R.drawable.ic_person_outline_black);
+        person.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        newLogoAuthor.title(getString(R.string.logo_designer));
+        newLogoAuthor.addItem(new MaterialAboutActionItem.Builder()
+                    .text("Leonardo Razovic")
+                    .subText("lrazovic")
+                    .icon(person)
+                    .build())
+                .addItem(new MaterialAboutActionItem.Builder()
+                        .text(R.string.twitter)
+                        .icon(twitter)
+                        .setOnClickAction(() -> ClientHelper.createCustomTab(this, "https://twitter.com/lrazovic"))
+                        .build());
+                /**.addItem(new MaterialAboutActionItem.Builder()
+                        .text(R.string.website)
+                        .icon(globe)
+                        .setOnClickAction(() -> ClientHelper.createCustomTab(this, "https://cookicons.co/"))
+                        .build());
+                 **/
     }
 
     private void buildMisc(Context context, MaterialAboutCard.Builder miscCardBuilder) {
