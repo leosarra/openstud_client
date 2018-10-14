@@ -153,7 +153,7 @@ public class StatsActivity extends AppCompatActivity {
         }
         else {
             graphCard.setVisibility(View.GONE);
-            graphCard.setVisibility(View.GONE);
+            graphCard2.setVisibility(View.GONE);
         }
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(() -> refreshExamsDone());
@@ -290,10 +290,9 @@ public class StatsActivity extends AppCompatActivity {
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 e.printStackTrace();
             }
-
-            if (update==null || update.equals(exams)) {
-                setRefreshing(false);
-                return;
+            if (update != null && !update.isEmpty()) {
+                exams.clear();
+                exams.addAll(update);
             }
             updateTimer();
             updateStats();
