@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
@@ -206,17 +207,24 @@ public class ProfileActivity extends AppCompatActivity {
         birthPlace.setText(st.getBirthPlace());
         if(isee == null) isee_field.setText(getResources().getString(R.string.isee_not_avaiable));
         else isee_field.setText(String.valueOf(isee.getValue()));
-        departmentDescription.setText(st.getDepartmentName());
-        courseDescription.setText(st.getCourseName());
-        if (Locale.getDefault().getLanguage().equals("it")) courseYear.setText(getResources().getString(R.string.year_corse_profile,st.getCourseYear()+"°"));
-        else {
-            String year = st.getCourseYear();
-            if (StringUtils.isNumeric(st.getCourseYear()) && Integer.parseInt(year)<=3) year = year +"rd";
-            else year = year + "th";
-            courseYear.setText(getResources().getString(R.string.year_corse_profile,year));
+        if (st.getCourseName() != null && st.getCourseName().equals("")) {
+            departmentDescription.setText(st.getDepartmentName());
+            courseDescription.setText(st.getCourseName());
+            if (Locale.getDefault().getLanguage().equals("it")) courseYear.setText(getResources().getString(R.string.year_corse_profile,st.getCourseYear()+"°"));
+            else {
+                String year = st.getCourseYear();
+                if (StringUtils.isNumeric(st.getCourseYear()) && Integer.parseInt(year)<=3) year = year +"rd";
+                else year = year + "th";
+                courseYear.setText(getResources().getString(R.string.year_corse_profile,year));
+            }
+            studentStatus.setText(st.getStudentStatus());
+            cfu.setText(String.valueOf(st.getCfu()));
         }
-        studentStatus.setText(st.getStudentStatus());
-        cfu.setText(String.valueOf(st.getCfu()));
+        else {
+            courseDescription.setText(getResources().getString(R.string.not_enrolled));
+            LinearLayout linearLayout = findViewById(R.id.course_extra_info);
+            linearLayout.setVisibility(View.GONE);
+        }
     }
 
 
