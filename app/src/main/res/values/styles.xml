@@ -7,7 +7,12 @@
         <item name="colorAccent">@android:color/holo_red_light</item>
     </style>
 
-    <style name="LauncherTheme" parent = "NoActionBarAppLightTheme">
+    <style name="LauncherTheme" parent = "AppThemeLight">
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
