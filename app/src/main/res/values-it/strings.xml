@@ -112,6 +112,6 @@
     <string name="description_reservation_options">Reservation options</string>
     <string name="add_calendar">Aggiungi al calendario</string>
     <string name="closed_reservation">Non puoi cancellare una prenotazione dopo la scadenza</string>
-    <string name="not_enrolled">Not enrolled</string>
+    <string name="not_enrolled">Non iscritto</string>
 
 </resources>
