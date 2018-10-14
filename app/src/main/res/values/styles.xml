@@ -7,6 +7,10 @@
         <item name="colorAccent">@android:color/holo_red_light</item>
     </style>
 
+    <style name="LauncherTheme" parent = "NoActionBarAppLightTheme">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
     <style name="AppThemeLight" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>

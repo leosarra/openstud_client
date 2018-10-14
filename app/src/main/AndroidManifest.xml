@@ -17,7 +17,7 @@
         <activity
             android:name=".activities.LauncherActivity"
             android:noHistory="true"
-            android:theme="@style/NoActionBarAppLightTheme">
+            android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

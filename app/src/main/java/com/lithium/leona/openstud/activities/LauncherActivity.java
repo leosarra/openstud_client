@@ -1,5 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,18 +14,20 @@ public class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_launcher);
-        if (!InfoManager.getSaveFlag(getApplication())) InfoManager.clearSharedPreferences(getApplication());
-        if (InfoManager.hasLogin(getApplication())) {
-            Intent intent = new Intent(LauncherActivity.this, ExamsActivity.class);
-            startActivity(intent);
-        }
-        else {
-            PreferenceManager.setDefaultValues(this, R.xml.pref_main, false);
-            Intent intent = new Intent(LauncherActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
-
+        setContentView(R.layout.activity_launcher);
+        Activity activity = this;
+        new Thread(() -> {
+            if (!InfoManager.getSaveFlag(getApplication())) InfoManager.clearSharedPreferences(getApplication());
+            if (InfoManager.hasLogin(getApplication())) {
+                Intent intent = new Intent(LauncherActivity.this, ExamsActivity.class);
+                startActivity(intent);
+            }
+            else {
+                PreferenceManager.setDefaultValues(activity, R.xml.pref_main, false);
+                Intent intent = new Intent(LauncherActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }).start();
     }
 
     protected void onDestroy() {
