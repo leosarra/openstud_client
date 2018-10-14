@@ -168,7 +168,6 @@
         <item name="android:colorAccent">?attr/colorAccent</item>
     </style>
 
-
     <style name="ThemeDarkDialog" parent="Base.Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
@@ -211,8 +210,7 @@
         <!-- AboutLibraries specific values -->
         <item name="about_libraries_window_background">#212121</item>
         <item name="about_libraries_card">#424242</item>
-        <item name="about_libraries_title_openSource">#F4F4F6
-        </item>
+        <item name="about_libraries_title_openSource">#F4F4F6</item>
         <item name="about_libraries_text_openSource">#B6B6B6</item>
         <item name="about_libraries_special_button_openSource">#B6B6B6</item>
         <item name="about_libraries_dividerDark_openSource">#B6B6B6</item>
