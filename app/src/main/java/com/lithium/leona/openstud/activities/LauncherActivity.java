@@ -23,7 +23,6 @@ public class LauncherActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else {
-                PreferenceManager.setDefaultValues(activity, R.xml.pref_main, false);
                 Intent intent = new Intent(LauncherActivity.this, LoginActivity.class);
                 startActivity(intent);
             }

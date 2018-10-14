@@ -372,7 +372,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private synchronized int getLaude(){
         SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int laudeValue = Integer.parseInt(appPreferences.getString(getResources().getString(R.string.key_default_laude), null));
+        int laudeValue = Integer.parseInt(appPreferences.getString(getResources().getString(R.string.key_default_laude), "31"));
         if (laudeValue<30) laudeValue = 30;
         return laudeValue;
     }
