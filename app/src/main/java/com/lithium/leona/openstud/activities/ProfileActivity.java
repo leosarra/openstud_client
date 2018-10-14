@@ -130,43 +130,25 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onRefresh()
             {
-                Thread t1 = new Thread(new Runnable() {
-                    public void run() {
-                        refresh(os);
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+                Thread t1 = new Thread(() -> refresh(os));
                 t1.start();
             }
         });
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-                refresh(os);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        }).start();
+        new Thread(() -> refresh(os)).start();
     }
 
     protected void onRestart() {
         super.onRestart();
         LocalDateTime time = getTimer();
         if (time == null || Duration.between(time,LocalDateTime.now()).toMinutes()>60) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                    refresh(os);
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }).start();
+            new Thread(() -> refresh(os)).start();
         }
     }
 
 
 
     private void refresh(Openstud os) {
+        setRefreshing(true);
         try {
             student = InfoManager.getInfoStudent(getApplication(), os);
             isee = InfoManager.getIsee(getApplication(), os);
@@ -182,6 +164,7 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         updateTimer();
+        setRefreshing(false);
     }
 
     private void createTextSnackBar(int string_id, int length){
@@ -207,7 +190,7 @@ public class ProfileActivity extends AppCompatActivity {
         birthPlace.setText(st.getBirthPlace());
         if(isee == null) isee_field.setText(getResources().getString(R.string.isee_not_avaiable));
         else isee_field.setText(String.valueOf(isee.getValue()));
-        if (st.getCourseName() != null && st.getCourseName().equals("")) {
+        if (st.getCourseName() != null && !st.getCourseName().equals("")) {
             departmentDescription.setText(st.getDepartmentName());
             courseDescription.setText(st.getCourseName());
             if (Locale.getDefault().getLanguage().equals("it")) courseYear.setText(getResources().getString(R.string.year_corse_profile,st.getCourseYear()+"°"));
@@ -280,13 +263,10 @@ public class ProfileActivity extends AppCompatActivity {
         };
         mDrawerLayout.addDrawerListener(ddl);
         nv.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        mDrawerLayout.closeDrawers();
-                        ddl.setItemPressed(item.getItemId());
-                        return true;
-                    }
+                item -> {
+                    mDrawerLayout.closeDrawers();
+                    ddl.setItemPressed(item.getItemId());
+                    return true;
                 });
     }
 
@@ -298,4 +278,7 @@ public class ProfileActivity extends AppCompatActivity {
         return lastUpdate;
     }
 
+    private void setRefreshing(boolean enabled) {
+        runOnUiThread(() -> swipeRefreshLayout.setEnabled(enabled));
+    }
 }
