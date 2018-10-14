@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="General">
         <EditTextPreference
-            android:title="@string/default_laute_value"
+            android:title="@string/default_laude"
             android:defaultValue="31"
             android:key="@string/key_default_laude"
             android:inputType="numberDecimal" />
