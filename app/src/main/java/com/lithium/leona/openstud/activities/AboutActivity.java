@@ -80,7 +80,6 @@ public class AboutActivity extends MaterialAboutActivity {
         authorCardBuilder.title(R.string.author);
         authorCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text("Leonardo Sarra")
-                .subText("LithiumSR")
                 .icon(person)
                 .build())
                 .addItem(new MaterialAboutActionItem.Builder()
@@ -107,7 +106,6 @@ public class AboutActivity extends MaterialAboutActivity {
         newLogoAuthor.title(getString(R.string.logo_designer));
         newLogoAuthor.addItem(new MaterialAboutActionItem.Builder()
                     .text("Leonardo Razovic")
-                    .subText("lrazovic")
                     .icon(person)
                     .build())
                 .addItem(new MaterialAboutActionItem.Builder()
