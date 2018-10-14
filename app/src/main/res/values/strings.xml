@@ -122,7 +122,7 @@
     <string name="add_calendar">Add to calendar</string>
     <string name="closed_reservation">You can\'t delete the reservation after the deadline!</string>
     <string name="info_extra_reservation">Info</string>
-    <string name="logo_designer" translatable="false">Logo and icon</string>
+    <string name="logo_designer">Logo and icon</string>
     <string name="twitter" translatable="false">Twitter</string>
     <string name="website" translatable="false">Website</string>
     <string name="not_enrolled">Not enrolled</string>
