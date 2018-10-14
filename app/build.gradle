@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.lithium.leona.openstud"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 8
         versionName "1.2.9"
