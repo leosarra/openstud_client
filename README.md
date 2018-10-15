@@ -1,4 +1,4 @@
-![banner](https://user-images.githubusercontent.com/8293810/46977659-0674ef80-d0cd-11e8-8d34-35ff9e03c6c7.png)
+![banner](https://user-images.githubusercontent.com/8293810/46977822-72575800-d0cd-11e8-90d9-6132083a0c33.png)
 ![GitHub tag](https://img.shields.io/github/tag/expressjs/express.svg)
 [![API](https://img.shields.io/badge/API-28%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=8)
 
