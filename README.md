@@ -1,5 +1,6 @@
 ![banner](https://user-images.githubusercontent.com/8293810/46977822-72575800-d0cd-11e8-90d9-6132083a0c33.png)
-![GitHub tag](https://img.shields.io/github/tag/expressjs/express.svg)
+
+![GitHub tag](https://img.shields.io/github/tag/lithiumsr/openstud_client.svg)
 [![API](https://img.shields.io/badge/API-28%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=8)
 
 Openstud_client is an unofficial client for Sapienza's Infostud.
