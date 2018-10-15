@@ -1,6 +1,7 @@
-# openstud_client
+![banner](https://user-images.githubusercontent.com/8293810/46977659-0674ef80-d0cd-11e8-8d34-35ff9e03c6c7.png)
 ![GitHub tag](https://img.shields.io/github/tag/expressjs/express.svg)
 [![API](https://img.shields.io/badge/API-28%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=8)
+
 Openstud_client is an unofficial client for Sapienza's Infostud.
 It was written with Java 8 in mind and it supports Android 6.0+ (API Level 23+).
 At the time of writing it targets Android Pie (API Level 28).
