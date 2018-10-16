@@ -372,7 +372,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void showLaudeNotification() {
         if (com.lithium.leona.openstud.data.PreferenceManager.getStatsNotificationEnabled(this)) {
-            LayoutHelper.createActionSnackBar(mDrawerLayout, R.string.no_value_laude, R.string.settings, 4000, v -> {
+            LayoutHelper.createActionSnackBar(mDrawerLayout, R.string.no_value_laude, R.string.edit, 4000, v -> {
                 InfoManager.clearSharedPreferences(getApplication());
                 Intent i = new Intent(StatsActivity.this, SettingsPrefActivity.class);
                 startActivity(i);

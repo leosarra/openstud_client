@@ -114,6 +114,7 @@
     <string name="logo_designer">Logo e icona</string>
     <string name="closed_reservation">Non puoi cancellare una prenotazione dopo la scadenza</string>
     <string name="not_enrolled">Non iscritto</string>
-    <string name="no_value_laude">La lode di default non ha valore. Puoi impostare un valore nelle impostazioni</string>
+    <string name="no_value_laude">Il valore della lode può essere cambiato dalle impostazioni</string>
+    <string name="edit">Modifica</string>
 
 </resources>
