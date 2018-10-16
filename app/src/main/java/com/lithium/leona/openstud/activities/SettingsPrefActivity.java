@@ -1,32 +1,19 @@
 package com.lithium.leona.openstud.activities;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -35,11 +22,9 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.prefs.Preferences;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.ExamReservation;
 
 public class SettingsPrefActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) android.support.v7.widget.Toolbar toolbar;
@@ -91,6 +76,11 @@ public class SettingsPrefActivity extends AppCompatActivity {
                     e.printStackTrace();
                     ClientHelper.createTextSnackBar(getView(),R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
                 }
+                return true;
+            });
+            Preference laude = findPreference(getString(R.string.key_default_laude));
+            laude.setOnPreferenceChangeListener((preference, newValue) -> {
+                PreferenceManager.setStatsNotificationEnabled(getContext(),false);
                 return true;
             });
         }

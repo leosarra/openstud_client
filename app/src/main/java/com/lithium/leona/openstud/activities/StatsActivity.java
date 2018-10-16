@@ -1,7 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -30,6 +28,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -89,11 +88,11 @@ public class StatsActivity extends AppCompatActivity {
             if (activity== null) return;
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                 View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
+                activity.createRetrySnackBar(R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
             }
             else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                 View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
+                activity.createRetrySnackBar(R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
             }
             else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                 ClientHelper.createTextSnackBar(activity.getWindow().getDecorView(),R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
@@ -169,7 +168,7 @@ public class StatsActivity extends AppCompatActivity {
         if (firstStart) {
             firstStart = false;
         }
-        else if (getLaude() != laude || time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30) refreshExamsDone();
+        else if (PreferenceManager.getLaudeValue(this) != laude || time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30) refreshExamsDone();
     }
 
     private void updateStats(){
@@ -182,7 +181,8 @@ public class StatsActivity extends AppCompatActivity {
                 graphCard2.setVisibility(View.GONE);
                 return;
             }
-            laude = getLaude();
+            showLaudeNotification();
+            laude = PreferenceManager.getLaudeValue(this);
             updateGraphs();
         });
     }
@@ -313,9 +313,9 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
-    public synchronized  void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
+    public synchronized  void createRetrySnackBar(final int string_id, final int action_id, int length, View.OnClickListener listener) {
         Snackbar snackbar = Snackbar
-                .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);
+                .make(mDrawerLayout, getResources().getString(string_id), length).setAction(action_id, listener);
         snackbar.show();
     }
 
@@ -370,10 +370,14 @@ public class StatsActivity extends AppCompatActivity {
                 });
     }
 
-    private synchronized int getLaude(){
-        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int laudeValue = Integer.parseInt(appPreferences.getString(getResources().getString(R.string.key_default_laude), "31"));
-        if (laudeValue<30) laudeValue = 30;
-        return laudeValue;
+    private void showLaudeNotification(){
+        if (com.lithium.leona.openstud.data.PreferenceManager.getStatsNotificationEnabled(this)) {
+            createRetrySnackBar(R.string.no_value_laude, R.string.settings, 4000, v -> {
+                InfoManager.clearSharedPreferences(getApplication());
+                Intent i = new Intent(StatsActivity.this, SettingsPrefActivity.class);
+                startActivity(i);
+            });
+            com.lithium.leona.openstud.data.PreferenceManager.setStatsNotificationEnabled(this, false);
+        }
     }
 }

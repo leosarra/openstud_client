@@ -127,4 +127,5 @@
     <string name="website" translatable="false">Website</string>
     <string name="not_enrolled">Not enrolled</string>
     <string name="openstud_logo_content" translatable="false">OpenStud logo</string>
+    <string name="no_value_laude">Default laude value is 30. It can be changed in the settings</string>
 </resources>
