@@ -1,6 +1,7 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -11,9 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,17 +58,13 @@ public class ProfileActivity extends AppCompatActivity {
                 View.OnClickListener listener = v -> new Thread(() -> activity.refresh(activity.os));
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
                     activity.applyInfos(activity.student, activity.isee);
-                }
-                else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout,R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -80,19 +75,32 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.collapsingToolbar) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.studentId) TextView studentId;
-    @BindView(R.id.birthDate) TextView birthDate;
-    @BindView(R.id.birthPlace) TextView birthPlace;
-    @BindView(R.id.isee) TextView isee_field;
-    @BindView(R.id.departmentDescription) TextView departmentDescription;
-    @BindView(R.id.courseDescription) TextView courseDescription;
-    @BindView(R.id.courseYear) TextView courseYear;
-    @BindView(R.id.studentStatus) TextView studentStatus;
-    @BindView(R.id.cfu) TextView cfu;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.collapsingToolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.studentId)
+    TextView studentId;
+    @BindView(R.id.birthDate)
+    TextView birthDate;
+    @BindView(R.id.birthPlace)
+    TextView birthPlace;
+    @BindView(R.id.isee)
+    TextView isee_field;
+    @BindView(R.id.departmentDescription)
+    TextView departmentDescription;
+    @BindView(R.id.courseDescription)
+    TextView courseDescription;
+    @BindView(R.id.courseYear)
+    TextView courseYear;
+    @BindView(R.id.studentStatus)
+    TextView studentStatus;
+    @BindView(R.id.cfu)
+    TextView cfu;
     private DelayedDrawerListener ddl;
     private View headerLayout;
     private NavigationView nv;
@@ -109,13 +117,13 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
-        setupListeners();
+        setupDrawerListener();
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         headerLayout = nv.getHeaderView(0);
         os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(getApplication(),os);
-        isee = InfoManager.getIseeCached(getApplication(),os);
+        student = InfoManager.getInfoStudentCached(getApplication(), os);
+        isee = InfoManager.getIseeCached(getApplication(), os);
         if (os == null || student == null) {
             InfoManager.clearSharedPreferences(getApplication());
             Intent i = new Intent(ProfileActivity.this, LauncherActivity.class);
@@ -124,8 +132,8 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        applyInfos(student,isee);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
+        applyInfos(student, isee);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Thread t1 = new Thread(() -> refresh(os));
             t1.start();
@@ -136,11 +144,10 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         LocalDateTime time = getTimer();
-        if (time == null || Duration.between(time,LocalDateTime.now()).toMinutes()>60) {
+        if (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 60) {
             new Thread(() -> refresh(os)).start();
         }
     }
-
 
 
     private void refresh(Openstud os) {
@@ -155,7 +162,8 @@ public class ProfileActivity extends AppCompatActivity {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
-            if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            if (e.isPasswordExpired())
+                h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
             else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
             e.printStackTrace();
         }
@@ -163,33 +171,34 @@ public class ProfileActivity extends AppCompatActivity {
         setRefreshing(false);
     }
 
-    private void applyInfos(Student st, Isee isee){
+    private void applyInfos(Student st, Isee isee) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        collapsingToolbarLayout.setTitle(st.getFirstName()+" "+st.getLastName());
+        collapsingToolbarLayout.setTitle(st.getFirstName() + " " + st.getLastName());
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
         navSubtitle.setText(String.valueOf(st.getStudentID()));
         studentId.setText(String.valueOf(st.getStudentID()));
         LocalDate date = st.getBirthDate();
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());
-        if(isee == null) isee_field.setText(getResources().getString(R.string.isee_not_avaiable));
+        if (isee == null) isee_field.setText(getResources().getString(R.string.isee_not_avaiable));
         else isee_field.setText(String.valueOf(isee.getValue()));
         if (st.getCourseName() != null && !st.getCourseName().equals("")) {
             departmentDescription.setText(st.getDepartmentName());
             courseDescription.setText(st.getCourseName());
-            if (Locale.getDefault().getLanguage().equals("it")) courseYear.setText(getResources().getString(R.string.year_corse_profile,st.getCourseYear()+"°"));
+            if (Locale.getDefault().getLanguage().equals("it"))
+                courseYear.setText(getResources().getString(R.string.year_corse_profile, st.getCourseYear() + "°"));
             else {
                 String year = st.getCourseYear();
-                if (StringUtils.isNumeric(st.getCourseYear()) && Integer.parseInt(year)<=3) year = year +"rd";
+                if (StringUtils.isNumeric(st.getCourseYear()) && Integer.parseInt(year) <= 3)
+                    year = year + "rd";
                 else year = year + "th";
-                courseYear.setText(getResources().getString(R.string.year_corse_profile,year));
+                courseYear.setText(getResources().getString(R.string.year_corse_profile, year));
             }
             studentStatus.setText(st.getStudentStatus());
             cfu.setText(String.valueOf(st.getCfu()));
-        }
-        else {
+        } else {
             courseDescription.setText(getResources().getString(R.string.not_enrolled));
             LinearLayout linearLayout = findViewById(R.id.course_extra_info);
             linearLayout.setVisibility(View.GONE);
@@ -205,8 +214,9 @@ public class ProfileActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-    private void setupListeners(){
-        ddl = new DelayedDrawerListener(){
+
+    private void setupDrawerListener() {
+        ddl = new DelayedDrawerListener() {
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
@@ -256,11 +266,11 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private synchronized void updateTimer(){
+    private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }
 
-    private synchronized LocalDateTime getTimer(){
+    private synchronized LocalDateTime getTimer() {
         return lastUpdate;
     }
 

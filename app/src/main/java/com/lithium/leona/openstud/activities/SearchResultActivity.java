@@ -48,14 +48,23 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 
 public class SearchResultActivity extends AppCompatActivity {
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.recyclerView) RecyclerView rv;
-    @BindView(R.id.empty_layout) LinearLayout emptyView;
-    @BindView(R.id.empty_button_reload) Button emptyButton;
-    @BindView(R.id.empty_text) TextView emptyText;
-    @BindView(R.id.searchLayout) ConstraintLayout layout;
-    @OnClick(R.id.empty_button_reload) public void OnClick(View v){
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView rv;
+    @BindView(R.id.empty_layout)
+    LinearLayout emptyView;
+    @BindView(R.id.empty_button_reload)
+    Button emptyButton;
+    @BindView(R.id.empty_text)
+    TextView emptyText;
+    @BindView(R.id.searchLayout)
+    ConstraintLayout layout;
+
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
         refreshAvaiableReservations();
     }
 
@@ -83,30 +92,23 @@ public class SearchResultActivity extends AppCompatActivity {
                 OnClickListener listener = v -> new Thread(activity::refreshAvaiableReservations);
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout,R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout,R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     activity.finish();
-                }
-                else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout,R.string.reservation_ok, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout,R.string.reservation_error, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.ALREADY_PLACED.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout,R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout,R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.reservation_ok, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.reservation_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.ALREADY_PLACED.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }
             }
         }
@@ -122,7 +124,7 @@ public class SearchResultActivity extends AppCompatActivity {
         String jsonObject;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            jsonObject = extras.getString("exam",null);
+            jsonObject = extras.getString("exam", null);
             exam = new Gson().fromJson(jsonObject, ExamDoable.class);
         }
         if (os == null || student == null || exam == null) {
@@ -133,11 +135,11 @@ public class SearchResultActivity extends AppCompatActivity {
             return;
         }
         activeReservations = new LinkedList<>();
-        List<ExamReservation> cache = InfoManager.getActiveReservationsCached(this,os);
+        List<ExamReservation> cache = InfoManager.getActiveReservationsCached(this, os);
         if (cache != null) {
             activeReservations.addAll(cache);
         }
-        LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.search_sessions);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         reservations = new LinkedList<>();
@@ -147,21 +149,20 @@ public class SearchResultActivity extends AppCompatActivity {
         rv.setLayoutManager(llm);
         adapter = new AvaiableReservationsAdapter(this, reservations, activeReservations, this::confirmReservation);
         rv.setAdapter(adapter);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
         refreshAvaiableReservations();
     }
 
 
-    private boolean confirmReservation(ExamReservation res){
+    private boolean confirmReservation(ExamReservation res) {
         try {
-            Pair<Integer,String> pair = os.insertReservation(res);
-            InfoManager.setReservationUpdateFlag(this,true);
+            Pair<Integer, String> pair = os.insertReservation(res);
+            InfoManager.setReservationUpdateFlag(this, true);
             if (pair == null) {
                 h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 return false;
-            }
-            else if (pair.getRight() == null && pair.getLeft() == -1) {
+            } else if (pair.getRight() == null && pair.getLeft() == -1) {
                 h.sendEmptyMessage(ClientHelper.Status.ALREADY_PLACED.getValue());
                 return true;
             }
@@ -188,10 +189,11 @@ public class SearchResultActivity extends AppCompatActivity {
         super.onResume();
         LocalDateTime time = getTimer();
         if (firstStart) firstStart = false;
-        else if (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30) refreshAvaiableReservations();
+        else if (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30)
+            refreshAvaiableReservations();
     }
 
-    private void  refreshAvaiableReservations(){
+    private void refreshAvaiableReservations() {
         setRefreshing(true);
         setButtonReloadStatus(false);
         Activity activity = this;
@@ -199,9 +201,10 @@ public class SearchResultActivity extends AppCompatActivity {
             List<ExamReservation> update = null;
             List<ExamReservation> updateActiveReservations = null;
             try {
-                update = os.getAvailableReservations(exam,student);
-                updateActiveReservations = InfoManager.getActiveReservations(activity,os);
-                if (update == null || updateActiveReservations == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+                update = os.getAvailableReservations(exam, student);
+                updateActiveReservations = InfoManager.getActiveReservations(activity, os);
+                if (update == null || updateActiveReservations == null)
+                    h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
             } catch (OpenstudConnectionException e) {
@@ -211,12 +214,13 @@ public class SearchResultActivity extends AppCompatActivity {
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
-                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                if (e.isPasswordExpired())
+                    h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 e.printStackTrace();
             }
 
-            if (update==null || updateActiveReservations==null) {
+            if (update == null || updateActiveReservations == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
                 return;
@@ -226,7 +230,7 @@ public class SearchResultActivity extends AppCompatActivity {
         }).start();
     }
 
-    public synchronized void refreshDataSet(List<ExamReservation> update, List<ExamReservation> updateActiveReservations){
+    public synchronized void refreshDataSet(List<ExamReservation> update, List<ExamReservation> updateActiveReservations) {
         boolean flag = false;
         if (update != null && !reservations.equals(update)) {
             flag = true;
@@ -248,12 +252,12 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
 
-    private void setRefreshing(final boolean bool){
+    private void setRefreshing(final boolean bool) {
         runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
 
-    private void setButtonReloadStatus(final boolean bool){
+    private void setButtonReloadStatus(final boolean bool) {
         runOnUiThread(() -> emptyButton.setEnabled(bool));
     }
 
@@ -269,11 +273,11 @@ public class SearchResultActivity extends AppCompatActivity {
         });
     }
 
-    private synchronized void updateTimer(){
+    private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }
 
-    private synchronized LocalDateTime getTimer(){
+    private synchronized LocalDateTime getTimer() {
         return lastUpdate;
     }
 

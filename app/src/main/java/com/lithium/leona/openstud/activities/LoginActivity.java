@@ -1,12 +1,12 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,7 +16,6 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
-
 
 import java.lang.ref.WeakReference;
 
@@ -31,15 +30,24 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 import lithium.openstud.driver.exceptions.OpenstudUserNotEnabledException;
 
 public class LoginActivity extends AppCompatActivity {
-    @BindView(R.id.studentIdLogin) EditText username;
-    @BindView(R.id.passwordLogin) EditText password;
-    @BindView(R.id.coordinatorLayout) CoordinatorLayout layout;
-    @BindView(R.id.button) Button btn;
-    @BindView(R.id.rememberFlag) CheckBox rememberFlag;
-    @OnFocusChange({R.id.studentIdLogin,R.id.passwordLogin}) void onFocusChanged(View v, boolean focused) {
+    @BindView(R.id.studentIdLogin)
+    EditText username;
+    @BindView(R.id.passwordLogin)
+    EditText password;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout layout;
+    @BindView(R.id.button)
+    Button btn;
+    @BindView(R.id.rememberFlag)
+    CheckBox rememberFlag;
+
+    @OnFocusChange({R.id.studentIdLogin, R.id.passwordLogin})
+    void onFocusChanged(View v, boolean focused) {
         if (!focused) ClientHelper.hideKeyboard(v, getApplication());
     }
-    @OnClick(R.id.button) void onClick(View v){
+
+    @OnClick(R.id.button)
+    void onClick(View v) {
         //requestInternetPermission();
         if (!ClientHelper.isNetworkAvailable(getApplication())) {
             LayoutHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
@@ -51,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         login();
     }
+
     private Openstud os;
     private LoginEventHandler h = new LoginEventHandler(this);
 
@@ -67,26 +76,20 @@ public class LoginActivity extends AppCompatActivity {
             if (activity != null) {
                 View.OnClickListener listener = v -> new Thread(activity::login);
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
-                    Intent intent = new Intent(activity,ExamsActivity.class);
+                    Intent intent = new Intent(activity, ExamsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
-                }
-                else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout,R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout,R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout,R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout,R.string.expired_password_error, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
@@ -98,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     @Override
@@ -138,19 +140,20 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(() -> _login(os, id, password, rememberFlag.isChecked())).start();
     }
 
-    private synchronized void _login(Openstud os, int id, String password, boolean rememberFlag){
+    private synchronized void _login(Openstud os, int id, String password, boolean rememberFlag) {
         if (os == null) {
             h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
             return;
         }
         try {
             os.login();
-            InfoManager.saveOpenStud(this,os,id,password,rememberFlag);
+            InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             InfoManager.getInfoStudent(this, os);
-            InfoManager.getIsee(this,os);
+            InfoManager.getIsee(this, os);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
-            if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            if (e.isPasswordExpired())
+                h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
             else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
             e.printStackTrace();
         } catch (OpenstudUserNotEnabledException e) {
@@ -173,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void createTextSnackBar(int string_id, int length) {
-        LayoutHelper.createTextSnackBar(layout,string_id,length);
+        LayoutHelper.createTextSnackBar(layout, string_id, length);
     }
 
 

@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +11,11 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDoable;
-import lithium.openstud.driver.core.ExamReservation;
 
 public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.ExamDoableHolder> {
 
@@ -53,26 +49,30 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
         return exams.size();
     }
 
-    class ExamDoableHolder extends RecyclerView.ViewHolder  {
-        @BindView(R.id.examName) TextView txtName;
-        @BindView(R.id.ssdExam) TextView txtSSD;
-        @BindView(R.id.cfuExam) TextView txtCFU;
-        @BindView(R.id.show_sessions) Button showSessions;
+    class ExamDoableHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.examName)
+        TextView txtName;
+        @BindView(R.id.ssdExam)
+        TextView txtSSD;
+        @BindView(R.id.cfuExam)
+        TextView txtCFU;
+        @BindView(R.id.show_sessions)
+        Button showSessions;
         private Context context;
 
-        private void setContext(Context context){
+        private void setContext(Context context) {
             this.context = context;
         }
 
         ExamDoableHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         void setDetails(final ExamDoable exam) {
             txtName.setText(exam.getDescription());
-            txtCFU.setText(context.getResources().getString(R.string.cfu_exams,String.valueOf(exam.getCfu())));
-            txtSSD.setText(context.getResources().getString(R.string.ssd_exams,exam.getSsd()));
+            txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
+            txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
             showSessions.setOnClickListener(v -> edal.showSessionsOnClick(exam));
 
         }

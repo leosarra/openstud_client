@@ -1,16 +1,13 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.TypedValue;
 
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder;
@@ -42,7 +39,7 @@ public class AboutActivity extends MaterialAboutActivity {
         buildMisc(context, miscCardBuilder);
         MaterialAboutCard.Builder logoBuilder = new MaterialAboutCard.Builder();
         buildLogo(context, logoBuilder);
-        return new MaterialAboutList(appCardBuilder.build(),miscCardBuilder.build(), authorCardBuilder.build(), logoBuilder.build());
+        return new MaterialAboutList(appCardBuilder.build(), miscCardBuilder.build(), authorCardBuilder.build(), logoBuilder.build());
     }
 
     @Nullable
@@ -87,7 +84,7 @@ public class AboutActivity extends MaterialAboutActivity {
                 .addItem(new MaterialAboutActionItem.Builder()
                         .text(R.string.fork_github)
                         .icon(github)
-                        .setOnClickAction( ()-> ClientHelper.createCustomTab(this, "https://www.github.com/lithiumSR/openstud_client"))
+                        .setOnClickAction(() -> ClientHelper.createCustomTab(this, "https://www.github.com/lithiumSR/openstud_client"))
                         .build())
                 .addItem(ConvenienceBuilder.createEmailItem(context, email,
                         getString(R.string.send_email), true, getString(R.string.email_address), getString(R.string.question_concerning_openstud)));
@@ -107,9 +104,9 @@ public class AboutActivity extends MaterialAboutActivity {
         Objects.requireNonNull(person).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         newLogoAuthor.title(getString(R.string.logo_designer));
         newLogoAuthor.addItem(new MaterialAboutActionItem.Builder()
-                    .text("Leonardo Razovic")
-                    .icon(person)
-                    .build())
+                .text("Leonardo Razovic")
+                .icon(person)
+                .build())
                 .addItem(new MaterialAboutActionItem.Builder()
                         .text(R.string.twitter)
                         .icon(twitter)
@@ -130,18 +127,19 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_github)
                 .color(tintColor)
                 .sizeDp(24);
-        if (ThemeEngine.isLightTheme(this)) miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
-                .text(R.string.open_source_libs)
-                .icon(github)
-                .setOnClickAction(() -> new LibsBuilder()
-                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                        .withActivityTheme(R.style.NoActionBarAppLightTheme)
-                        .withAutoDetect(true)
-                        .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .start(this))
-                .build());
+        if (ThemeEngine.isLightTheme(this))
+            miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
+                    .text(R.string.open_source_libs)
+                    .icon(github)
+                    .setOnClickAction(() -> new LibsBuilder()
+                            .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                            .withActivityTheme(R.style.NoActionBarAppLightTheme)
+                            .withAutoDetect(true)
+                            .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
+                            .withAboutIconShown(true)
+                            .withAboutVersionShown(true)
+                            .start(this))
+                    .build());
         else miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
                 .text(R.string.open_source_libs)
                 .icon(github)
@@ -155,7 +153,7 @@ public class AboutActivity extends MaterialAboutActivity {
                 .build());
     }
 
-    private int getPrimaryTextColor(Context context){
+    private int getPrimaryTextColor(Context context) {
         int tintColor;
         TypedValue tV = new TypedValue();
         Resources.Theme theme = context.getTheme();

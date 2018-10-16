@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -41,8 +40,10 @@ import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
 
 public class ExamsActivity extends AppCompatActivity {
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private NavigationView nv;
     private DelayedDrawerListener ddl;
     private Fragment active;
@@ -101,7 +102,7 @@ public class ExamsActivity extends AppCompatActivity {
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        setupListeners();
+        setupDrawerListener();
         FragmentManager fm = getSupportFragmentManager();
 
         if (savedInstanceState != null) {
@@ -118,10 +119,10 @@ public class ExamsActivity extends AppCompatActivity {
             fragRes = new ReservationsFragment();
             fragDone = new ExamsDoneFragment();
             fragDoable = new ExamDoableFragment();
-            fm.beginTransaction().add(R.id.content_frame,fragRes,"reservations").hide(fragRes).commit();
-            fm.beginTransaction().add(R.id.content_frame,fragDoable,"doable").hide(fragDoable).commit();
-            fm.beginTransaction().add(R.id.content_frame,fragDone,"completed").commit();
-            active= fragDone;
+            fm.beginTransaction().add(R.id.content_frame, fragRes, "reservations").hide(fragRes).commit();
+            fm.beginTransaction().add(R.id.content_frame, fragDoable, "doable").hide(fragDoable).commit();
+            fm.beginTransaction().add(R.id.content_frame, fragDone, "completed").commit();
+            active = fragDone;
         }
 
     }
@@ -137,17 +138,15 @@ public class ExamsActivity extends AppCompatActivity {
 
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (active == null) return true;
-        if (active!=fragDone) {
+        if (active != fragDone) {
             MenuItem item = menu.findItem(R.id.sort);
             item.setVisible(false);
-        }
-        else {
+        } else {
             MenuItem item = menu.findItem(R.id.sort);
             item.setVisible(true);
         }
         return true;
     }
-
 
 
     @Override
@@ -172,7 +171,7 @@ public class ExamsActivity extends AppCompatActivity {
         }
     }
 
-    private void showSortDialog(){
+    private void showSortDialog() {
         Context context = this;
         int themeId = ThemeEngine.getAlertDialogTheme(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, themeId));
@@ -185,8 +184,8 @@ public class ExamsActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void setupListeners(){
-        ddl = new DelayedDrawerListener(){
+    private void setupDrawerListener() {
+        ddl = new DelayedDrawerListener() {
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
@@ -239,16 +238,16 @@ public class ExamsActivity extends AppCompatActivity {
                 });
     }
 
-    private void switchToExamsCompletedFragment(){
+    private void switchToExamsCompletedFragment() {
         FragmentManager manager = getSupportFragmentManager();
-        if (fragDone != null && fragDone!= active) {
+        if (fragDone != null && fragDone != active) {
             if (active != null) manager.beginTransaction().show(fragDone).hide(active).commit();
-            else  manager.beginTransaction().show(fragDone).commit();
+            else manager.beginTransaction().show(fragDone).commit();
         }
         invalidateOptionsMenu();
     }
 
-    private void switchToExamsReservationsFragment(){
+    private void switchToExamsReservationsFragment() {
         FragmentManager manager = getSupportFragmentManager();
         if (fragRes != null && fragRes != active) {
             if (active != null) manager.beginTransaction().show(fragRes).hide(active).commit();
@@ -257,7 +256,7 @@ public class ExamsActivity extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
-    private void switchToExamsSearchFragment(){
+    private void switchToExamsSearchFragment() {
         FragmentManager manager = getSupportFragmentManager();
         if (fragDoable != null && fragDoable != active) {
             if (active != null) manager.beginTransaction().show(fragDoable).hide(active).commit();
@@ -268,7 +267,7 @@ public class ExamsActivity extends AppCompatActivity {
 
 
     public void createTextSnackBar(int string_id, int length) {
-        LayoutHelper.createTextSnackBar(mDrawerLayout, string_id,length);
+        LayoutHelper.createTextSnackBar(mDrawerLayout, string_id, length);
     }
 
     public void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
@@ -279,9 +278,9 @@ public class ExamsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //outState.putInt("tabSelected", itemId);
-        getSupportFragmentManager().putFragment(outState,"completed",fragDone);
-        getSupportFragmentManager().putFragment(outState,"reservations",fragRes);
-        getSupportFragmentManager().putFragment(outState,"doable",fragDoable);
-        if (active != null) getSupportFragmentManager().putFragment(outState,"active", active);
+        getSupportFragmentManager().putFragment(outState, "completed", fragDone);
+        getSupportFragmentManager().putFragment(outState, "reservations", fragRes);
+        getSupportFragmentManager().putFragment(outState, "doable", fragDoable);
+        if (active != null) getSupportFragmentManager().putFragment(outState, "active", active);
     }
 }

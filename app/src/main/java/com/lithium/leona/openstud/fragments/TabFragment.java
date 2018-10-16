@@ -1,9 +1,9 @@
 package com.lithium.leona.openstud.fragments;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
 
 public class TabFragment extends Fragment {
@@ -40,7 +40,7 @@ public class TabFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //this inflates out tab layout file.
-        View x =  inflater.inflate(R.layout.tab_fragment_payment_layout,null);
+        View x = inflater.inflate(R.layout.tab_fragment_payment_layout, null);
         // set up stuff.
         tabLayout = x.findViewById(R.id.tabs);
         viewPager = x.findViewById(R.id.viewpager);
@@ -76,7 +76,7 @@ public class TabFragment extends Fragment {
         return x;
     }
 
-    class MyAdapter extends FragmentPagerAdapter{
+    class MyAdapter extends FragmentPagerAdapter {
 
         MyAdapter(FragmentManager fm) {
             super(fm);
@@ -84,12 +84,11 @@ public class TabFragment extends Fragment {
 
         //return the fragment with respect to page position.
         @Override
-        public Fragment getItem(int position)
-        {
-            switch (position){
-                case 0 :
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
                     return PaymentsFragment.newInstance(TaxAdapter.Mode.UNPAID.getValue());
-                case 1 :
+                case 1:
                     return PaymentsFragment.newInstance(TaxAdapter.Mode.PAID.getValue());
             }
             return null;
@@ -104,17 +103,17 @@ public class TabFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
 
-            switch (position){
-                case 0 :
+            switch (position) {
+                case 0:
                     return getResources().getString(R.string.unpaid);
-                case 1 :
+                case 1:
                     return getResources().getString(R.string.paid);
             }
             return null;
         }
     }
 
-    private void notifyItemChanged(int item){
+    private void notifyItemChanged(int item) {
         PaymentsActivity act = (PaymentsActivity) getActivity();
         if (act != null) {
             act.updateSelectTab(item);

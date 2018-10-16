@@ -43,12 +43,19 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class ExamsDoneFragment extends android.support.v4.app.Fragment {
 
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.recyclerView) RecyclerView rv;
-    @BindView(R.id.empty_layout) LinearLayout emptyView;
-    @BindView(R.id.empty_button_reload) Button emptyButton;
-    @BindView(R.id.empty_text) TextView emptyText;
-    @OnClick(R.id.empty_button_reload) public void OnClick(View v){
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView rv;
+    @BindView(R.id.empty_layout)
+    LinearLayout emptyView;
+    @BindView(R.id.empty_button_reload)
+    Button emptyButton;
+    @BindView(R.id.empty_text)
+    TextView emptyText;
+
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
         refreshExamsDone();
     }
 
@@ -59,6 +66,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     private boolean firstStart = true;
     private ExamsDoneHandler h = new ExamsDoneHandler(this);
     private LinearLayoutManager llm;
+
     private static class ExamsDoneHandler extends Handler {
         private final WeakReference<ExamsDoneFragment> frag;
 
@@ -69,27 +77,23 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         @Override
         public void handleMessage(Message msg) {
             final ExamsDoneFragment examsDoneFrag = frag.get();
-            if (examsDoneFrag== null) return;
+            if (examsDoneFrag == null) return;
             ExamsActivity activity = (ExamsActivity) examsDoneFrag.getActivity();
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
-                }
-                else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
-                }
-                else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     activity.finish();
-                }
-                else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }
             }
@@ -100,7 +104,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.base_swipe_fragment,null);
+        View v = inflater.inflate(R.layout.base_swipe_fragment, null);
         ButterKnife.bind(this, v);
         Activity activity = getActivity();
         if (activity == null) return v;
@@ -113,20 +117,20 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             return v;
         }
         emptyText.setText(getResources().getString(R.string.no_exams_done_found));
-        List<ExamDone> exams_cached  = InfoManager.getExamsDoneCached(getActivity().getApplication(),os);
+        List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(getActivity().getApplication(), os);
         rv.setHasFixedSize(true);
         llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
         adapter = new ExamDoneAdapter(activity, exams, 0);
         rv.setAdapter(adapter);
-        if (exams_cached != null && !exams_cached.isEmpty())  {
+        if (exams_cached != null && !exams_cached.isEmpty()) {
             exams.addAll(exams_cached);
             sortList(ClientHelper.Sort.getSort(InfoManager.getSortType(activity)));
         }
         adapter.notifyDataSetChanged();
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
-        if (firstStart) refreshExamsDone();
+        refreshExamsDone();
         return v;
     }
 
@@ -134,25 +138,23 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         super.onResume();
         LocalDateTime time = getTimer();
         Activity activity = getActivity();
-        if (firstStart) {
-            firstStart = false;
-        }
-        else if (activity!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refreshExamsDone();
+        if (firstStart) firstStart = false;
+        else if (activity != null && (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30))
+            refreshExamsDone();
     }
 
     public synchronized void sortList(ClientHelper.Sort sort) {
-        if (adapter==null || sort == null) return;
-        if (sort == ClientHelper.Sort.Date){
-            OpenstudHelper.sortByDate(exams,false);
+        if (adapter == null || sort == null) return;
+        if (sort == ClientHelper.Sort.Date) {
+            OpenstudHelper.sortByDate(exams, false);
             adapter.notifyDataSetChanged();
-        }
-        else if (sort == ClientHelper.Sort.Mark){
-            OpenstudHelper.sortByGrade(exams,false);
+        } else if (sort == ClientHelper.Sort.Mark) {
+            OpenstudHelper.sortByGrade(exams, false);
             adapter.notifyDataSetChanged();
         }
     }
 
-    private void  refreshExamsDone(){
+    private void refreshExamsDone() {
         final Activity activity = getActivity();
         if (activity == null || os == null) return;
         setRefreshing(true);
@@ -160,8 +162,9 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         new Thread(() -> {
             List<ExamDone> update = null;
             try {
-                update = InfoManager.getExamsDone(activity.getApplication(),os);
-                if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+                update = InfoManager.getExamsDone(activity.getApplication(), os);
+                if (update == null)
+                    h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
             } catch (OpenstudConnectionException e) {
@@ -171,12 +174,13 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
-                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                if (e.isPasswordExpired())
+                    h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 e.printStackTrace();
             }
 
-            if (update==null) {
+            if (update == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
                 return;
@@ -186,7 +190,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         }).start();
     }
 
-    public synchronized void refreshDataSet(List<ExamDone> update){
+    public synchronized void refreshDataSet(List<ExamDone> update) {
         boolean flag = false;
         if (update != null && !exams.equals(update)) {
             flag = true;
@@ -210,21 +214,21 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         });
     }
 
-    private void setRefreshing(final boolean bool){
+    private void setRefreshing(final boolean bool) {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
-    private synchronized void updateTimer(){
+    private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }
 
-    private synchronized LocalDateTime getTimer(){
+    private synchronized LocalDateTime getTimer() {
         return lastUpdate;
     }
 
-    private void setButtonReloadStatus(final boolean bool){
+    private void setButtonReloadStatus(final boolean bool) {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> emptyButton.setEnabled(bool));

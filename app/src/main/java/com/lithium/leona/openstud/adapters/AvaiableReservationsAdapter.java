@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -43,9 +42,9 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
         this.activeReservations = activeReservations;
     }
 
-    private boolean existActiveReservations(ExamReservation res){
+    private boolean existActiveReservations(ExamReservation res) {
         if (activeReservations == null) return true;
-        for (ExamReservation active : activeReservations){
+        for (ExamReservation active : activeReservations) {
             if (res.getExamSubject().equals(active.getExamSubject()) && res.getChannel().equals(active.getChannel())
                     && res.getCourseCode() == active.getCourseCode() && res.getReportID() == active.getReportID()
                     && res.getSessionID() == active.getSessionID()) return true;
@@ -73,28 +72,36 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
         return reservations.size();
     }
 
-    public class ActiveReservationsHolder extends RecyclerView.ViewHolder  {
-        @BindView(R.id.nameExam) TextView txtName;
-        @BindView(R.id.nameTeacher) TextView txtTeacher;
-        @BindView(R.id.dateExam) TextView txtDate;
-        @BindView(R.id.channelReservation) TextView txtChannel;
-        @BindView(R.id.infosExtra) TextView txtInfo;
-        @BindView(R.id.startDate) TextView txtStartDate;
-        @BindView(R.id.endDate) TextView txtEndDate;
-        @BindView(R.id.place_reservation) Button placeButton;
+    class ActiveReservationsHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.nameExam)
+        TextView txtName;
+        @BindView(R.id.nameTeacher)
+        TextView txtTeacher;
+        @BindView(R.id.dateExam)
+        TextView txtDate;
+        @BindView(R.id.channelReservation)
+        TextView txtChannel;
+        @BindView(R.id.infosExtra)
+        TextView txtInfo;
+        @BindView(R.id.startDate)
+        TextView txtStartDate;
+        @BindView(R.id.endDate)
+        TextView txtEndDate;
+        @BindView(R.id.place_reservation)
+        Button placeButton;
         private Activity activity;
 
-        private void setActivity(Activity activity){
+        private void setActivity(Activity activity) {
             this.activity = activity;
         }
 
-        public ActiveReservationsHolder(View itemView) {
+        ActiveReservationsHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
 
-        private void setPlaceButtonEnabled(boolean enabled){
+        private void setPlaceButtonEnabled(boolean enabled) {
             int tintColor;
             if (!enabled)
                 tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
@@ -108,33 +115,36 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             placeButton.setEnabled(enabled);
             placeButton.setTextColor(tintColor);
 
-            Drawable drawable = ContextCompat.getDrawable(activity,R.drawable.ic_library_add_small);
-            drawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(drawable.mutate(),tintColor);
-            placeButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            Drawable drawable = ContextCompat.getDrawable(activity, R.drawable.ic_library_add_small);
+            if (drawable != null) {
+                drawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(drawable.mutate(), tintColor);
+                placeButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            }
         }
 
         @SuppressLint("ResourceType")
-        public void setDetails(final ExamReservation res) {
+        void setDetails(final ExamReservation res) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
             String infos = activity.getResources().getString(R.string.description_reservation, res.getNote());
             if (!infos.endsWith(".")) infos = infos + ".";
             txtName.setText(res.getExamSubject());
             txtTeacher.setText(activity.getResources().getString(R.string.teacher_reservation, res.getTeacher()));
-            txtDate.setText(activity.getResources().getString(R.string.date_exam,res.getExamDate().format(formatter)));
-            txtStartDate.setText(activity.getResources().getString(R.string.start_date_reservation,res.getStartDate().format(formatter)));
-            txtEndDate.setText(activity.getResources().getString(R.string.end_date_reservation,res.getEndDate().format(formatter)));
-            txtDate.setText(activity.getResources().getString(R.string.date_exam,res.getExamDate().format(formatter)));
+            txtDate.setText(activity.getResources().getString(R.string.date_exam, res.getExamDate().format(formatter)));
+            txtStartDate.setText(activity.getResources().getString(R.string.start_date_reservation, res.getStartDate().format(formatter)));
+            txtEndDate.setText(activity.getResources().getString(R.string.end_date_reservation, res.getEndDate().format(formatter)));
+            txtDate.setText(activity.getResources().getString(R.string.date_exam, res.getExamDate().format(formatter)));
             txtChannel.setText(activity.getResources().getString(R.string.channel_reservation, res.getChannel()));
             if (res.getNote() == null || res.getNote().isEmpty()) txtInfo.setVisibility(View.GONE);
             else {
-                txtInfo.setText(activity.getResources().getString(R.string.description_reservation,res.getNote()));
+                txtInfo.setText(infos);
             }
-            if (existActiveReservations(res) || !(Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays()>=0) || Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays()>=1)
+            if (existActiveReservations(res) || !(Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 0) || Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1)
                 setPlaceButtonEnabled(false);
             else setPlaceButtonEnabled(true);
             placeButton.setOnClickListener(v -> new Thread(() -> {
-                if (ral.placeReservation(res)) activity.runOnUiThread(() -> setPlaceButtonEnabled(false));
+                if (ral.placeReservation(res))
+                    activity.runOnUiThread(() -> setPlaceButtonEnabled(false));
                 else activity.runOnUiThread(() -> setPlaceButtonEnabled(true));
             }).start());
         }

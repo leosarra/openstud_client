@@ -56,16 +56,26 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class StatsActivity extends AppCompatActivity {
 
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.arithmeticValue) TextView arithmeticValue;
-    @BindView(R.id.weightedValue) TextView weightedValue;
-    @BindView(R.id.totalCFU) TextView totalCFU;
-    @BindView(R.id.graph) LineChart graph;
-    @BindView(R.id.graph2) BarChart graph2;
-    @BindView(R.id.graph_card) CardView graphCard;
-    @BindView(R.id.graph2_card) CardView graphCard2;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.arithmeticValue)
+    TextView arithmeticValue;
+    @BindView(R.id.weightedValue)
+    TextView weightedValue;
+    @BindView(R.id.totalCFU)
+    TextView totalCFU;
+    @BindView(R.id.graph)
+    LineChart graph;
+    @BindView(R.id.graph2)
+    BarChart graph2;
+    @BindView(R.id.graph_card)
+    CardView graphCard;
+    @BindView(R.id.graph2_card)
+    CardView graphCard2;
     private DelayedDrawerListener ddl;
     private NavigationView nv;
     private Openstud os;
@@ -86,25 +96,21 @@ public class StatsActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             final StatsActivity activity = this.activity.get();
-            if (activity== null) return;
+            if (activity == null) return;
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                 View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
-            }
-            else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                 View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
-            }
-            else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-            }
-            else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+            } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                 InfoManager.clearSharedPreferences(activity.getApplication());
                 Intent i = new Intent(activity, LauncherActivity.class);
                 activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 activity.finish();
-            }
-            else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+            } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             }
         }
@@ -118,13 +124,13 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
         ThemeEngine.applyPaymentsTheme(this);
         ButterKnife.bind(this);
-        LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.stats);
-        setupListeners();
+        setupDrawerListener();
         os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(this,os);
+        student = InfoManager.getInfoStudentCached(this, os);
         if (os == null || student == null) {
             InfoManager.clearSharedPreferences(getApplication());
             Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
@@ -146,33 +152,30 @@ public class StatsActivity extends AppCompatActivity {
             finish();
             return;
         }
-        List<ExamDone> exams_cached  = InfoManager.getExamsDoneCached(this,os);
-        if (exams_cached != null && !exams_cached.isEmpty())  {
+        List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(this, os);
+        if (exams_cached != null && !exams_cached.isEmpty()) {
             exams.addAll(exams_cached);
             updateStats();
-        }
-        else {
+        } else {
             graphCard.setVisibility(View.GONE);
             graphCard2.setVisibility(View.GONE);
         }
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
-        if (firstStart) refreshExamsDone();
+        refreshExamsDone();
 
     }
-
 
 
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
-        if (firstStart) {
-            firstStart = false;
-        }
-        else if (PreferenceManager.getLaudeValue(this) != laude || time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30) refreshExamsDone();
+        if (firstStart) firstStart = false;
+        else if (PreferenceManager.getLaudeValue(this) != laude || time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30)
+            refreshExamsDone();
     }
 
-    private void updateStats(){
+    private void updateStats() {
         runOnUiThread(() -> {
             if (exams == null || exams.isEmpty() || !ClientHelper.hasPassedExams(exams)) {
                 totalCFU.setText("--");
@@ -189,7 +192,7 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
-    private void updateGraphs(){
+    private void updateGraphs() {
         runOnUiThread(() -> {
             graphCard.setVisibility(View.VISIBLE);
             graphCard2.setVisibility(View.VISIBLE);
@@ -204,7 +207,7 @@ public class StatsActivity extends AppCompatActivity {
         });
     }
 
-    private void makeAverageGraph(){
+    private void makeAverageGraph() {
         graph.clear();
         List<Entry> serie1 = ClientHelper.generateMarksPoints(exams, laude);
         List<Entry> serie2 = ClientHelper.generateWeightPoints(exams, laude);
@@ -239,7 +242,7 @@ public class StatsActivity extends AppCompatActivity {
         graph.setScaleEnabled(false);
     }
 
-    private void makeGradeBarGraph(){
+    private void makeGradeBarGraph() {
         graph2.clear();
         ArrayList<BarEntry> entriesGraph2 = ClientHelper.generateMarksBar(exams);
         BarDataSet datasetBar = new BarDataSet(entriesGraph2, "Marks");
@@ -270,14 +273,15 @@ public class StatsActivity extends AppCompatActivity {
         });
     }
 
-    private void  refreshExamsDone(){
+    private void refreshExamsDone() {
         if (os == null) return;
         setRefreshing(true);
         new Thread(() -> {
             List<ExamDone> update = null;
             try {
-                update = InfoManager.getExamsDone(this,os);
-                if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+                update = InfoManager.getExamsDone(this, os);
+                if (update == null)
+                    h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
             } catch (OpenstudConnectionException e) {
@@ -287,7 +291,8 @@ public class StatsActivity extends AppCompatActivity {
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
-                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                if (e.isPasswordExpired())
+                    h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 e.printStackTrace();
             }
@@ -301,21 +306,21 @@ public class StatsActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void setRefreshing(final boolean bool){
+    private void setRefreshing(final boolean bool) {
         this.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
-    private synchronized void updateTimer(){
+    private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }
 
-    private synchronized LocalDateTime getTimer(){
+    private synchronized LocalDateTime getTimer() {
         return lastUpdate;
     }
 
 
-    private void setupListeners(){
-        ddl = new DelayedDrawerListener(){
+    private void setupDrawerListener() {
+        ddl = new DelayedDrawerListener() {
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
@@ -365,9 +370,9 @@ public class StatsActivity extends AppCompatActivity {
                 });
     }
 
-    private void showLaudeNotification(){
+    private void showLaudeNotification() {
         if (com.lithium.leona.openstud.data.PreferenceManager.getStatsNotificationEnabled(this)) {
-            LayoutHelper.createActionSnackBar(mDrawerLayout,R.string.no_value_laude, R.string.settings, 4000, v -> {
+            LayoutHelper.createActionSnackBar(mDrawerLayout, R.string.no_value_laude, R.string.settings, 4000, v -> {
                 InfoManager.clearSharedPreferences(getApplication());
                 Intent i = new Intent(StatsActivity.this, SettingsPrefActivity.class);
                 startActivity(i);

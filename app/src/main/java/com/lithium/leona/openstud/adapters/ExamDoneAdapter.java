@@ -14,17 +14,12 @@ import android.widget.TextView;
 import com.lithium.leona.openstud.R;
 
 import org.apache.commons.lang3.StringUtils;
-import org.threeten.bp.format.DateTimeFormatter;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.Exam;
 import lithium.openstud.driver.core.ExamDone;
-import lithium.openstud.driver.core.PaymentDescription;
-import lithium.openstud.driver.core.Tax;
 
 public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDoneHolder> {
 
@@ -58,33 +53,37 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
         return exams.size();
     }
 
-    public static class ExamDoneHolder extends RecyclerView.ViewHolder  {
-        @BindView(R.id.examName) TextView txtName;
-        @BindView(R.id.ssdExam) TextView txtSSD;
-        @BindView(R.id.cfuExam) TextView txtCFU;
-        @BindView(R.id.resultExam) TextView txtResult;
+    static class ExamDoneHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.examName)
+        TextView txtName;
+        @BindView(R.id.ssdExam)
+        TextView txtSSD;
+        @BindView(R.id.cfuExam)
+        TextView txtCFU;
+        @BindView(R.id.resultExam)
+        TextView txtResult;
         private int mode;
         private Context context;
 
-        private void setMode(int mode){
+        private void setMode(int mode) {
             this.mode = mode;
         }
 
-        private void setContext(Context context){
+        private void setContext(Context context) {
             this.context = context;
         }
 
-        public ExamDoneHolder(View itemView) {
+        ExamDoneHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void setDetails(ExamDone exam) {
+        void setDetails(ExamDone exam) {
             txtName.setText(exam.getDescription());
             String result = exam.getNominalResult();
-            if(result.equals("30 e lode"))txtResult.setText("30L / 30");
+            if (result.equals("30 e lode")) txtResult.setText("30L / 30");
             else txtResult.setText(StringUtils.capitalize(result));
-            if(exam.getResult()>=18 || result.equals("idoneo") || exam.isPassed()) {
+            if (exam.getResult() >= 18 || result.equals("idoneo") || exam.isPassed()) {
                 if (exam.isCertified()) {
                     int tintColor;
                     TypedValue tV = new TypedValue();
@@ -93,8 +92,7 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
                     if (success) tintColor = tV.data;
                     else tintColor = ContextCompat.getColor(context, R.color.green);
                     txtResult.setTextColor(tintColor);
-                }
-                else {
+                } else {
                     int tintColor;
                     TypedValue tV = new TypedValue();
                     Resources.Theme theme = context.getTheme();
@@ -103,8 +101,7 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
                     else tintColor = ContextCompat.getColor(context, R.color.yellow);
                     txtResult.setTextColor(tintColor);
                 }
-            }
-            else {
+            } else {
                 int tintColor;
                 TypedValue tV = new TypedValue();
                 Resources.Theme theme = context.getTheme();
@@ -113,8 +110,8 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
                 else tintColor = ContextCompat.getColor(context, R.color.red);
                 txtResult.setTextColor(tintColor);
             }
-            txtCFU.setText(context.getResources().getString(R.string.cfu_exams,String.valueOf(exam.getCfu())));
-            txtSSD.setText(context.getResources().getString(R.string.ssd_exams,exam.getSsd()));
+            txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
+            txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
         }
     }
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
@@ -25,7 +24,7 @@ public class ThemeEngine {
             return value;
         }
 
-        public static Theme getTheme(int theme){
+        public static Theme getTheme(int theme) {
             if (theme == 0) return LIGHT;
             else if (theme == 1) return DARK;
             else return LIGHT;
@@ -106,7 +105,7 @@ public class ThemeEngine {
         }
     }
 
-    public static int getPrimaryTextColor(Activity activity){
+    public static int getPrimaryTextColor(Activity activity) {
         int tintColor;
         TypedValue tV = new TypedValue();
         Resources.Theme theme = activity.getTheme();
@@ -116,7 +115,7 @@ public class ThemeEngine {
         return tintColor;
     }
 
-    public static int getSecondaryTextColor(Activity activity){
+    public static int getSecondaryTextColor(Activity activity) {
         int tintColor;
         TypedValue tV = new TypedValue();
         Resources.Theme theme = activity.getTheme();
@@ -141,18 +140,24 @@ public class ThemeEngine {
     public static int getDialogTheme(Activity activity) {
         Theme theme = getTheme(activity);
         switch (theme) {
-            case LIGHT: return R.style.ThemeLightDialog;
-            case DARK: return R.style.ThemeDarkDialog;
-            default: return R.style.ThemeLightDialog;
+            case LIGHT:
+                return R.style.ThemeLightDialog;
+            case DARK:
+                return R.style.ThemeDarkDialog;
+            default:
+                return R.style.ThemeLightDialog;
         }
     }
 
     public static int getAlertDialogTheme(Activity activity) {
         Theme theme = getTheme(activity);
         switch (theme) {
-            case LIGHT: return R.style.ThemeLightAlertDialog;
-            case DARK: return R.style.ThemeDarkAlertDialog;
-            default: return R.style.ThemeLightAlertDialog;
+            case LIGHT:
+                return R.style.ThemeLightAlertDialog;
+            case DARK:
+                return R.style.ThemeDarkAlertDialog;
+            default:
+                return R.style.ThemeLightAlertDialog;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -8,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 import android.view.View;
@@ -16,12 +16,10 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
-import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.fragments.TabFragment;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
-
-import com.lithium.leona.openstud.fragments.TabFragment;
 
 import java.util.Objects;
 
@@ -32,8 +30,10 @@ import lithium.openstud.driver.core.Student;
 
 
 public class PaymentsActivity extends AppCompatActivity {
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private DelayedDrawerListener ddl;
     private NavigationView nv;
     private Openstud os;
@@ -41,6 +41,7 @@ public class PaymentsActivity extends AppCompatActivity {
     private SparseArray<Snackbar> snackBarMap = new SparseArray<>();
     private int selectedItem = -1;
     private TabFragment tabFrag;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +59,9 @@ public class PaymentsActivity extends AppCompatActivity {
             return;
         }
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
-        LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.payments);
-        setupListeners();
+        setupDrawerListener();
         View headerLayout = nv.getHeaderView(0);
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
@@ -84,8 +85,8 @@ public class PaymentsActivity extends AppCompatActivity {
         }
     }
 
-    private void setupListeners(){
-        ddl = new DelayedDrawerListener(){
+    private void setupDrawerListener() {
+        ddl = new DelayedDrawerListener() {
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
@@ -138,17 +139,17 @@ public class PaymentsActivity extends AppCompatActivity {
     }
 
     public synchronized void createTextSnackBar(int string_id, int length) {
-        if (snackBarMap.get(string_id,null)!=null) return;
-        Snackbar snackbar = LayoutHelper.createTextSnackBar(mDrawerLayout,string_id,length);
-        snackBarMap.put(string_id,snackbar);
+        if (snackBarMap.get(string_id, null) != null) return;
+        Snackbar snackbar = LayoutHelper.createTextSnackBar(mDrawerLayout, string_id, length);
+        snackBarMap.put(string_id, snackbar);
     }
 
-    public synchronized  void createActionSnackBar(final int string_id, int length, View.OnClickListener listener) {
-        if (snackBarMap.get(string_id,null)!=null) return;
+    public synchronized void createActionSnackBar(final int string_id, int length, View.OnClickListener listener) {
+        if (snackBarMap.get(string_id, null) != null) return;
         Snackbar snackbar = Snackbar
                 .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);
-        snackBarMap.put(string_id,snackbar);
-        snackbar.addCallback(new Snackbar.Callback(){
+        snackBarMap.put(string_id, snackbar);
+        snackbar.addCallback(new Snackbar.Callback() {
             public void onDismissed(Snackbar snackbar, int event) {
                 removeKeyFromMap(string_id);
             }
@@ -156,7 +157,7 @@ public class PaymentsActivity extends AppCompatActivity {
         snackbar.show();
     }
 
-    private synchronized void removeKeyFromMap(int id){
+    private synchronized void removeKeyFromMap(int id) {
         snackBarMap.remove(id);
     }
 

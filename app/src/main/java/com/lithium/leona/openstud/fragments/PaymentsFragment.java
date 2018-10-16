@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,16 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-
-import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.activities.PaymentsActivity;
-import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -55,41 +53,45 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         @Override
         public void handleMessage(Message msg) {
             final PaymentsFragment paymentFrag = frag.get();
-            if (paymentFrag== null) return;
+            if (paymentFrag == null) return;
             PaymentsActivity activity = (PaymentsActivity) paymentFrag.getActivity();
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     View.OnClickListener ocl = v -> paymentFrag.refresh();
-                    activity.createActionSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
-                }
-                else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    activity.createActionSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     View.OnClickListener ocl = v -> paymentFrag.refresh();
-                    activity.createActionSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
-                }
-                else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                    activity.createActionSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     activity.finish();
-                }
-                else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }
             }
         }
     }
 
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.recyclerView) RecyclerView rv;
-    @BindView(R.id.empty_layout) LinearLayout emptyView;
-    @BindView(R.id.empty_button_reload) Button emptyButton;
-    @BindView(R.id.empty_text) TextView emptyText;
-    @OnClick(R.id.empty_button_reload) public void OnClick(View v){
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recyclerView)
+    RecyclerView rv;
+    @BindView(R.id.empty_layout)
+    LinearLayout emptyView;
+    @BindView(R.id.empty_button_reload)
+    Button emptyButton;
+    @BindView(R.id.empty_text)
+    TextView emptyText;
+
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
         refresh();
     }
+
     private List<Tax> taxes;
     private TaxAdapter adapter;
     private int mode;
@@ -111,9 +113,9 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.base_swipe_fragment,null);
+        View v = inflater.inflate(R.layout.base_swipe_fragment, null);
         ButterKnife.bind(this, v);
-        Bundle bundle=getArguments();
+        Bundle bundle = getArguments();
         mode = bundle.getInt("mode");
         emptyView.setVisibility(View.GONE);
         os = InfoManager.getOpenStud(getActivity());
@@ -127,20 +129,19 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         List<Tax> taxes_cached = null;
         if (mode == TaxAdapter.Mode.PAID.getValue()) {
             emptyText.setText(getResources().getString(R.string.no_paid_tax_found));
-            taxes_cached = InfoManager.getPaidTaxesCached(getActivity(),os);
-        }
-        else if (mode == TaxAdapter.Mode.UNPAID.getValue()) {
+            taxes_cached = InfoManager.getPaidTaxesCached(getActivity(), os);
+        } else if (mode == TaxAdapter.Mode.UNPAID.getValue()) {
             emptyText.setText(getResources().getString(R.string.no_unpaid_tax_found));
-            taxes_cached = InfoManager.getUnpaidTaxesCached(getActivity(),os);
+            taxes_cached = InfoManager.getUnpaidTaxesCached(getActivity(), os);
         }
-        if (taxes_cached != null && !taxes_cached.isEmpty())  taxes.addAll(taxes_cached);
+        if (taxes_cached != null && !taxes_cached.isEmpty()) taxes.addAll(taxes_cached);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
         adapter = new TaxAdapter(getActivity(), taxes, mode);
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         refresh();
@@ -151,13 +152,12 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
-        if (firstStart) {
-            firstStart = false;
-        }
-        else if (getActivity()!= null && (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30)) refresh();
+        if (firstStart) firstStart = false;
+        else if (getActivity() != null && (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30))
+            refresh();
     }
 
-    private void  refresh(){
+    private void refresh() {
         final Activity activity = getActivity();
         if (activity == null) return;
         setRefreshing(true);
@@ -181,12 +181,13 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
-                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                if (e.isPasswordExpired())
+                    h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 e.printStackTrace();
             }
 
-            if (update==null) {
+            if (update == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
                 return;
@@ -196,7 +197,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         }).start();
     }
 
-    public synchronized void refreshDataSet(List<Tax> update){
+    public synchronized void refreshDataSet(List<Tax> update) {
         boolean flag = false;
         if (update != null && !taxes.equals(update)) {
             flag = true;
@@ -215,22 +216,22 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     }
 
 
-    private void setRefreshing(final boolean bool){
+    private void setRefreshing(final boolean bool) {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
 
-    private synchronized void updateTimer(){
+    private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }
 
-    private synchronized LocalDateTime getTimer(){
+    private synchronized LocalDateTime getTimer() {
         return lastUpdate;
     }
 
-    private void setButtonReloadStatus(final boolean bool){
+    private void setButtonReloadStatus(final boolean bool) {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> emptyButton.setEnabled(bool));

@@ -28,14 +28,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SettingsPrefActivity extends AppCompatActivity {
-    @BindView(R.id.toolbar) android.support.v7.widget.Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    android.support.v7.widget.Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeEngine.applySettingsTheme(this);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
-        LayoutHelper.setupToolbar(this,toolbar,R.drawable.ic_baseline_arrow_back);
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.settings);
         // load settings fragment
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new MainPreferenceFragment()).commit();
@@ -44,6 +46,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
     public static class MainPreferenceFragment extends PreferenceFragment {
         private int alertDialogTheme;
         ThemeEngine.Theme oldTheme;
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -58,7 +61,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 if (context == null) return false;
                 int id = Integer.parseInt(newTheme);
                 if (ThemeEngine.Theme.getTheme(id) == oldTheme) return false;
-                ThemeEngine.setTheme(context,ThemeEngine.Theme.getTheme(id));
+                ThemeEngine.setTheme(context, ThemeEngine.Theme.getTheme(id));
                 oldTheme = ThemeEngine.Theme.getTheme(id);
                 activity.createRestartDialog(alertDialogTheme);
                 return true;
@@ -72,16 +75,16 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 File dirs = new File(directory);
                 try {
                     FileUtils.deleteDirectory(dirs);
-                    LayoutHelper.createTextSnackBar(getView(),R.string.success_delete_pdf, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(getView(), R.string.success_delete_pdf, Snackbar.LENGTH_LONG);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    LayoutHelper.createTextSnackBar(getView(),R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(getView(), R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
                 }
                 return true;
             });
             Preference laude = findPreference(getString(R.string.key_default_laude));
             laude.setOnPreferenceChangeListener((preference, newValue) -> {
-                PreferenceManager.setStatsNotificationEnabled(getContext(),false);
+                PreferenceManager.setStatsNotificationEnabled(getContext(), false);
                 return true;
             });
         }
@@ -95,7 +98,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createRestartDialog(int styleId){
+    private void createRestartDialog(int styleId) {
         new AlertDialog.Builder(new ContextThemeWrapper(this, styleId))
                 .setTitle(getResources().getString(R.string.restart_required))
                 .setMessage(getResources().getString(R.string.restart_required_description))

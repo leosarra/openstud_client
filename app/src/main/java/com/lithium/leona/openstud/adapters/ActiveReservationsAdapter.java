@@ -2,19 +2,11 @@ package com.lithium.leona.openstud.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,19 +15,12 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 
-import org.apache.commons.lang3.StringUtils;
-import org.threeten.bp.Duration;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.Period;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.ExamReservation;
 
 public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReservationsAdapter.ActiveReservationsHolder> {
@@ -70,25 +55,34 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         return reservations.size();
     }
 
-    class ActiveReservationsHolder extends RecyclerView.ViewHolder  {
-        @BindView(R.id.nameExam) TextView txtName;
-        @BindView(R.id.nameTeacher) TextView txtTeacher;
-        @BindView(R.id.dateExam) TextView txtDate;
-        @BindView(R.id.reservationNumber) TextView txtNumber;
-        @BindView(R.id.ssdExam) TextView txtSSD;
-        @BindView(R.id.cfuExam) TextView txtCFU;
-        @BindView(R.id.reservationInfo) TextView txtInfo;
-        @BindView(R.id.get_reservation) Button getButton;
-        @BindView(R.id.reservation_options) ImageView options;
+    class ActiveReservationsHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.nameExam)
+        TextView txtName;
+        @BindView(R.id.nameTeacher)
+        TextView txtTeacher;
+        @BindView(R.id.dateExam)
+        TextView txtDate;
+        @BindView(R.id.reservationNumber)
+        TextView txtNumber;
+        @BindView(R.id.ssdExam)
+        TextView txtSSD;
+        @BindView(R.id.cfuExam)
+        TextView txtCFU;
+        @BindView(R.id.reservationInfo)
+        TextView txtInfo;
+        @BindView(R.id.get_reservation)
+        Button getButton;
+        @BindView(R.id.reservation_options)
+        ImageView options;
         private Context context;
 
-        private void setContext(Context context){
+        private void setContext(Context context) {
             this.context = context;
         }
 
         ActiveReservationsHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         @SuppressLint("ResourceType")
@@ -98,7 +92,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             if (!infos.endsWith(".")) infos = infos + ".";
             txtName.setText(res.getExamSubject());
             txtTeacher.setText(context.getResources().getString(R.string.teacher_reservation, res.getTeacher()));
-            txtDate.setText(context.getResources().getString(R.string.date_exam,res.getExamDate().format(formatter)));
+            txtDate.setText(context.getResources().getString(R.string.date_exam, res.getExamDate().format(formatter)));
             txtNumber.setText(context.getResources().getString(R.string.number_reservation, String.valueOf(res.getReservationNumber())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, res.getSsd()));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(res.getCfu())));
@@ -110,7 +104,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
 
             options.setOnClickListener(v -> {
                 popup.setOnMenuItemClickListener(menuItem -> {
-                    switch (menuItem.getItemId()){
+                    switch (menuItem.getItemId()) {
                         case R.id.delete_menu:
                             ral.deleteReservationOnClick(res);
                             break;

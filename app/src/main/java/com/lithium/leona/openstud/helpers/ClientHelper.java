@@ -12,7 +12,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -32,8 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.OpenstudHelper;
@@ -45,6 +42,7 @@ public class ClientHelper {
         EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
         PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15);
         private final int value;
+
         Status(int value) {
             this.value = value;
         }
@@ -58,12 +56,15 @@ public class ClientHelper {
     public enum Sort {
         Date(0), Mark(1);
         private int value;
+
         Sort(int value) {
             this.value = value;
         }
+
         public int getValue() {
             return value;
         }
+
         public static Sort getSort(int type) {
             if (type == 0) return Date;
             else if (type == 1) return Mark;
@@ -72,18 +73,18 @@ public class ClientHelper {
 
     }
 
-    public static  ArrayList<Entry> generateMarksPoints(List<ExamDone> exams, int laude){
+    public static ArrayList<Entry> generateMarksPoints(List<ExamDone> exams, int laude) {
         LinkedList<ExamDone> temp = new LinkedList<>(exams);
         Collections.reverse(temp);
         ArrayList<Entry> ret = new ArrayList<>();
-        for (ExamDone exam : temp){
+        for (ExamDone exam : temp) {
             if (exam.getDate() == null) continue;
             int result = exam.getResult();
-            if (!(result>=18 && exam.isPassed())) continue;
-            if (result>30) result=laude;
+            if (!(result >= 18 && exam.isPassed())) continue;
+            if (result > 30) result = laude;
             ZoneId zoneId = ZoneId.systemDefault();
             Timestamp timestamp = new Timestamp(exam.getDate().atStartOfDay(zoneId).toEpochSecond());
-            ret.add(new Entry(timestamp.getTime()*1000L, result));
+            ret.add(new Entry(timestamp.getTime() * 1000L, result));
         }
         return ret;
     }
@@ -101,25 +102,24 @@ public class ClientHelper {
             float average = (float) OpenstudHelper.computeWeightedAverage(placeholder, laude);
             ZoneId zoneId = ZoneId.systemDefault();
             Timestamp timestamp = new Timestamp(exam.getDate().atStartOfDay(zoneId).toEpochSecond());
-            ret.add(new Entry(timestamp.getTime()*1000L, average));
+            ret.add(new Entry(timestamp.getTime() * 1000L, average));
         }
         return ret;
     }
 
-    public static ArrayList<BarEntry> generateMarksBar(List<ExamDone> exams){
-        @SuppressLint("UseSparseArrays") Map<Integer,Integer> map = new HashMap<>();
+    public static ArrayList<BarEntry> generateMarksBar(List<ExamDone> exams) {
+        @SuppressLint("UseSparseArrays") Map<Integer, Integer> map = new HashMap<>();
         for (ExamDone exam : exams) {
-            if (!(exam.getResult()>=18 && exam.isPassed())) continue;
+            if (!(exam.getResult() >= 18 && exam.isPassed())) continue;
             int result = exam.getResult();
             if (result > 30) result = 31;
             if (map.containsKey(result)) {
-                map.put(result,map.get(result)+1);
-            }
-            else map.put(result,1);
+                map.put(result, map.get(result) + 1);
+            } else map.put(result, 1);
         }
         ArrayList<BarEntry> entries = new ArrayList<>();
-        for (Integer key : map.keySet()){
-            entries.add(new BarEntry(key,map.get(key)));
+        for (Integer key : map.keySet()) {
+            entries.add(new BarEntry(key, map.get(key)));
         }
         return entries;
     }
@@ -130,13 +130,13 @@ public class ClientHelper {
         builder.setToolbarColor(ContextCompat.getColor(context, R.color.redSapienza));
         builder.setCloseButtonIcon(closeIcon);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(context,Uri.parse(url));
+        customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
 
     public static boolean hasPassedExams(List<ExamDone> exams) {
-        for (ExamDone exam : exams){
-            if(exam.getResult()>=18 && exam.isPassed()) return true;
+        for (ExamDone exam : exams) {
+            if (exam.getResult() >= 18 && exam.isPassed()) return true;
         }
         return false;
     }
@@ -149,7 +149,7 @@ public class ClientHelper {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static void hideKeyboard(View v, Context context){
+    public static void hideKeyboard(View v, Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         Objects.requireNonNull(inputMethodManager).hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
@@ -166,19 +166,19 @@ public class ClientHelper {
     }
 
 
-    public void requestInternetPermissions(Activity activity){
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED ) {
+    public void requestInternetPermissions(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat
                     .requestPermissions(activity, new String[]{Manifest.permission.INTERNET}, 123);
         }
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED ) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat
                     .requestPermissions(activity, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 123);
         }
     }
 
-    public static boolean requestReadWritePermissions(Activity activity){
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+    public static boolean requestReadWritePermissions(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat
                     .requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
         }

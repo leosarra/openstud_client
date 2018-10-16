@@ -6,6 +6,7 @@ import android.view.View;
 
 public class DelayedDrawerListener implements DrawerLayout.DrawerListener {
     private int item_pressed = -1;
+
     @Override
     public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
 
@@ -26,13 +27,13 @@ public class DelayedDrawerListener implements DrawerLayout.DrawerListener {
 
     }
 
-    public synchronized int getItemPressedAndReset(){
+    public synchronized int getItemPressedAndReset() {
         int ret = item_pressed;
         item_pressed = -1;
         return ret;
     }
 
-    public synchronized void setItemPressed(int item){
+    public synchronized void setItemPressed(int item) {
         item_pressed = item;
     }
 }
