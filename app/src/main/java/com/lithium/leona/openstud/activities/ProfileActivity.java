@@ -56,17 +56,18 @@ public class ProfileActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             ProfileActivity activity = mActivity.get();
             if (activity != null) {
+                View.OnClickListener listener = v -> new Thread(() -> activity.refresh(activity.os));
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
                     activity.applyInfos(activity.student, activity.isee);
                 }
                 else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createRetrySnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout,R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
@@ -160,16 +161,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
         updateTimer();
         setRefreshing(false);
-    }
-
-    private void createTextSnackBar(int string_id, int length){
-        ClientHelper.createTextSnackBar(mDrawerLayout,string_id,length);
-    }
-    private void createRetrySnackBar(int string_id, int length) {
-        Snackbar snackbar = Snackbar
-                .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry,
-                        view -> new Thread(() -> refresh(os)));
-        snackbar.show();
     }
 
     private void applyInfos(Student st, Isee isee){

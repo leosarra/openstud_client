@@ -42,6 +42,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,14 +89,14 @@ public class StatsActivity extends AppCompatActivity {
             if (activity== null) return;
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                 View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                activity.createRetrySnackBar(R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
             }
             else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                 View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                activity.createRetrySnackBar(R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error,R.string.retry, Snackbar.LENGTH_LONG,ocl);
             }
             else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                ClientHelper.createTextSnackBar(activity.getWindow().getDecorView(),R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
             }
             else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                 InfoManager.clearSharedPreferences(activity.getApplication());
@@ -104,7 +105,7 @@ public class StatsActivity extends AppCompatActivity {
                 activity.finish();
             }
             else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                ClientHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             }
         }
     }
@@ -120,7 +121,7 @@ public class StatsActivity extends AppCompatActivity {
         LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
-        getSupportActionBar().setTitle(R.string.stats);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.stats);
         setupListeners();
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this,os);
@@ -155,7 +156,7 @@ public class StatsActivity extends AppCompatActivity {
             graphCard2.setVisibility(View.GONE);
         }
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(() -> refreshExamsDone());
+        swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
         if (firstStart) refreshExamsDone();
 
     }
@@ -313,12 +314,6 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
-    public synchronized  void createRetrySnackBar(final int string_id, final int action_id, int length, View.OnClickListener listener) {
-        Snackbar snackbar = Snackbar
-                .make(mDrawerLayout, getResources().getString(string_id), length).setAction(action_id, listener);
-        snackbar.show();
-    }
-
     private void setupListeners(){
         ddl = new DelayedDrawerListener(){
             @Override
@@ -372,7 +367,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void showLaudeNotification(){
         if (com.lithium.leona.openstud.data.PreferenceManager.getStatsNotificationEnabled(this)) {
-            createRetrySnackBar(R.string.no_value_laude, R.string.settings, 4000, v -> {
+            LayoutHelper.createActionSnackBar(mDrawerLayout,R.string.no_value_laude, R.string.settings, 4000, v -> {
                 InfoManager.clearSharedPreferences(getApplication());
                 Intent i = new Intent(StatsActivity.this, SettingsPrefActivity.class);
                 startActivity(i);

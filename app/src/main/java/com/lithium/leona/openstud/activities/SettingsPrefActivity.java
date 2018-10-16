@@ -22,6 +22,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this,toolbar,R.drawable.ic_baseline_arrow_back);
-        getSupportActionBar().setTitle(R.string.settings);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.settings);
         // load settings fragment
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new MainPreferenceFragment()).commit();
     }
@@ -71,10 +72,10 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 File dirs = new File(directory);
                 try {
                     FileUtils.deleteDirectory(dirs);
-                    ClientHelper.createTextSnackBar(getView(),R.string.success_delete_pdf, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(getView(),R.string.success_delete_pdf, Snackbar.LENGTH_LONG);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    ClientHelper.createTextSnackBar(getView(),R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(getView(),R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
                 }
                 return true;
             });

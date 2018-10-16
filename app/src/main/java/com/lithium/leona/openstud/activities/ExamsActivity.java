@@ -267,15 +267,12 @@ public class ExamsActivity extends AppCompatActivity {
     }
 
 
-    public synchronized void createTextSnackBar(int string_id, int length) {
-        Snackbar snackbar = ClientHelper.createTextSnackBar(mDrawerLayout,string_id,length);
-        snackbar.show();
+    public void createTextSnackBar(int string_id, int length) {
+        LayoutHelper.createTextSnackBar(mDrawerLayout, string_id,length);
     }
 
-    public synchronized  void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
-        Snackbar snackbar = Snackbar
-                .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);
-        snackbar.show();
+    public void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
+        LayoutHelper.createActionSnackBar(mDrawerLayout, string_id, R.string.retry, length, listener);
     }
 
     @Override

@@ -2,23 +2,18 @@ package com.lithium.leona.openstud.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +22,6 @@ import com.google.gson.Gson;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.AvaiableReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
-import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -86,14 +80,15 @@ public class SearchResultActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             SearchResultActivity activity = mActivity.get();
             if (activity != null) {
+                OnClickListener listener = v -> new Thread(activity::refreshAvaiableReservations);
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createRetrySnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.layout,R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.layout,R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
@@ -102,16 +97,16 @@ public class SearchResultActivity extends AppCompatActivity {
                     activity.finish();
                 }
                 else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
-                    activity.createTextSnackBar(R.string.reservation_ok, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.layout,R.string.reservation_ok, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {
-                    activity.createTextSnackBar(R.string.reservation_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.layout,R.string.reservation_error, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == ClientHelper.Status.ALREADY_PLACED.getValue()) {
-                    activity.createTextSnackBar(R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.layout,R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.layout,R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }
             }
         }
@@ -282,15 +277,5 @@ public class SearchResultActivity extends AppCompatActivity {
         return lastUpdate;
     }
 
-
-    private void createTextSnackBar(int string_id, int length){
-        ClientHelper.createTextSnackBar(layout,string_id,length);
-    }
-    private void createRetrySnackBar(int string_id, int length) {
-        Snackbar snackbar = Snackbar
-                .make(layout, getResources().getString(string_id), length).setAction(R.string.retry,
-                        view -> new Thread(this::refreshAvaiableReservations));
-        snackbar.show();
-    }
 
 }

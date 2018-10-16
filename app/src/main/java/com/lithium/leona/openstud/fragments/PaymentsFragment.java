@@ -60,11 +60,11 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     View.OnClickListener ocl = v -> paymentFrag.refresh();
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
+                    activity.createActionSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     View.OnClickListener ocl = v -> paymentFrag.refresh();
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
+                    activity.createActionSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);

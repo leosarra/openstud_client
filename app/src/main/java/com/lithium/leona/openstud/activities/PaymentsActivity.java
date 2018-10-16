@@ -139,11 +139,11 @@ public class PaymentsActivity extends AppCompatActivity {
 
     public synchronized void createTextSnackBar(int string_id, int length) {
         if (snackBarMap.get(string_id,null)!=null) return;
-        Snackbar snackbar = ClientHelper.createTextSnackBar(mDrawerLayout,string_id,length);
+        Snackbar snackbar = LayoutHelper.createTextSnackBar(mDrawerLayout,string_id,length);
         snackBarMap.put(string_id,snackbar);
     }
 
-    public synchronized  void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
+    public synchronized  void createActionSnackBar(final int string_id, int length, View.OnClickListener listener) {
         if (snackBarMap.get(string_id,null)!=null) return;
         Snackbar snackbar = Snackbar
                 .make(mDrawerLayout, getResources().getString(string_id), length).setAction(R.string.retry, listener);

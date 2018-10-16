@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 
 import java.lang.ref.WeakReference;
@@ -41,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     @OnClick(R.id.button) void onClick(View v){
         //requestInternetPermission();
         if (!ClientHelper.isNetworkAvailable(getApplication())) {
-            ClientHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
+            LayoutHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
             btn.setEnabled(true);
             rememberFlag.setEnabled(true);
             username.setEnabled(true);
@@ -64,28 +65,29 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             LoginActivity activity = mActivity.get();
             if (activity != null) {
+                View.OnClickListener listener = v -> new Thread(activity::login);
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
                     Intent intent = new Intent(activity,ExamsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
                 }
                 else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    activity.createLoginSnackBar(R.string.connection_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createLoginSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.layout,R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.layout,R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createActionSnackBar(activity.layout,R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 }
                 else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
-                    activity.createTextSnackBar(R.string.expired_password_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.layout,R.string.expired_password_error, Snackbar.LENGTH_LONG);
                 }
                 else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
                     activity.btn.setEnabled(true);
@@ -115,20 +117,20 @@ public class LoginActivity extends AppCompatActivity {
         final String password = this.password.getText().toString();
         if (username.isEmpty()) {
             if (password.isEmpty())
-                ClientHelper.createTextSnackBar(layout, R.string.blank_username_password_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(layout, R.string.blank_username_password_error, Snackbar.LENGTH_LONG);
             else
-                ClientHelper.createTextSnackBar(layout, R.string.blank_username_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(layout, R.string.blank_username_error, Snackbar.LENGTH_LONG);
             return;
         }
         if (password.isEmpty()) {
-            ClientHelper.createTextSnackBar(layout, R.string.blank_password_error, Snackbar.LENGTH_LONG);
+            LayoutHelper.createTextSnackBar(layout, R.string.blank_password_error, Snackbar.LENGTH_LONG);
             return;
         }
         final int id;
         try {
             id = Integer.parseInt(username);
         } catch (NumberFormatException e) {
-            ClientHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+            LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
             e.printStackTrace();
             return;
         }
@@ -171,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void createTextSnackBar(int string_id, int length) {
-        ClientHelper.createTextSnackBar(layout,string_id,length);
+        LayoutHelper.createTextSnackBar(layout,string_id,length);
     }
 
 
