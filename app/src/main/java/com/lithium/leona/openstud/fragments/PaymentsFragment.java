@@ -180,7 +180,6 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
             @Override
             public void run() {
                 List<Tax> update = null;
-                boolean isChanged = false;
                 try {
                     if (mode == TaxAdapter.Mode.PAID.getValue())
                         update = InfoManager.getPaidTaxes(activity.getApplication(), os);

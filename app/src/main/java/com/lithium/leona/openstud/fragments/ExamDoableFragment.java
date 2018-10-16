@@ -174,7 +174,6 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
             @Override
             public void run() {
                 List<ExamDoable> update = null;
-                boolean isChanged = false;
                 try {
                     update = InfoManager.getExamsDoable(activity.getApplication(),os);
                     if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
