@@ -40,7 +40,7 @@ public class InfoManager {
     private static List<ExamDone> examsDone;
     private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
-    private static void setupSharedPreferences(Context context){
+    private static synchronized void setupSharedPreferences(Context context){
         if (pref!=null) return;
         pref = context.getSharedPreferences("OpenStudPref", 0); // 0 - for private mode
     }
@@ -48,8 +48,6 @@ public class InfoManager {
     public static Openstud getOpenStud(Context context){
         setupSharedPreferences(context);
         if (getStudentId(context)== -1 || getPassword(context)==null) return null;
-        Gson gson = new Gson();
-        String oldObj;
         synchronized (InfoManager.class) {
             if (os!=null) return os;
             os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(3).forceReadyState().setLogger(Logger.getLogger("OpenStud_client")).build();
@@ -59,6 +57,7 @@ public class InfoManager {
 
 
     public static Openstud getOpenStud(Context context, int studentId, String password) {
+        setupSharedPreferences(context);
         if (studentId == -1 || password== null || password.isEmpty()) return null;
         return new OpenstudBuilder().setStudentID(studentId).setPassword(password).setRetryCounter(3).setLogger(Logger.getLogger("OpenStud_client")).build();
     }
@@ -73,6 +72,7 @@ public class InfoManager {
     }
 
     public static Student getInfoStudentCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -86,6 +86,7 @@ public class InfoManager {
 
 
     public static Student getInfoStudent(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -101,6 +102,7 @@ public class InfoManager {
     }
 
     public static Isee getIseeCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -113,6 +115,7 @@ public class InfoManager {
     }
 
     public static Isee getIsee(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -128,6 +131,7 @@ public class InfoManager {
     }
 
     public static List<Tax> getPaidTaxesCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -141,6 +145,7 @@ public class InfoManager {
     }
 
     public static List<ExamDone> getExamsDoneCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -154,6 +159,7 @@ public class InfoManager {
     }
 
     public static List<ExamDone> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -170,6 +176,7 @@ public class InfoManager {
     }
 
     public static List<ExamDoable> getExamsDoableCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -183,6 +190,7 @@ public class InfoManager {
     }
 
     public static List<ExamDoable> getExamsDoable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -200,6 +208,7 @@ public class InfoManager {
 
 
     public static List<ExamReservation> getActiveReservationsCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -213,6 +222,7 @@ public class InfoManager {
     }
 
     public static List<ExamReservation> getActiveReservations(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -229,6 +239,7 @@ public class InfoManager {
     }
 
     public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -245,6 +256,7 @@ public class InfoManager {
     }
 
     public static List<Tax> getUnpaidTaxesCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         String oldObj;
@@ -258,6 +270,7 @@ public class InfoManager {
     }
 
     public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
         if (os==null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
@@ -292,10 +305,12 @@ public class InfoManager {
     }
 
     private static synchronized int getStudentId(Context context){
+        setupSharedPreferences(context);
         return pref.getInt("studentId",-1);
     }
 
     private static synchronized String getPassword(Context context){
+        setupSharedPreferences(context);
         return pref.getString("password",null);
     }
 
