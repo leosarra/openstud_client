@@ -56,8 +56,8 @@ public class LoginActivity extends AppCompatActivity {
     private static class LoginEventHandler extends Handler {
         private final WeakReference<LoginActivity> mActivity;
 
-        public LoginEventHandler(LoginActivity activity) {
-            mActivity = new WeakReference<LoginActivity>(activity);
+        LoginEventHandler(LoginActivity activity) {
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override
@@ -133,12 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         os = InfoManager.getOpenStud(getApplication(), id, password);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                _login(os, id, password, rememberFlag.isChecked());
-            }
-        }).start();
+        new Thread(() -> _login(os, id, password, rememberFlag.isChecked())).start();
     }
 
     private synchronized void _login(Openstud os, int id, String password, boolean rememberFlag){
@@ -171,12 +166,7 @@ public class LoginActivity extends AppCompatActivity {
     private void createLoginSnackBar(int string_id, int length) {
         Snackbar snackbar = Snackbar
                 .make(layout, getResources().getString(string_id), length).setAction(R.string.retry,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                login();
-                            }
-                        });
+                        view -> login());
         snackbar.show();
     }
 

@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.CalendarContract;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -128,12 +129,12 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment,null);
         ButterKnife.bind(this, v);
         reservations = new LinkedList<>();
-        os = InfoManager.getOpenStud(getActivity().getApplication());
+        os = InfoManager.getOpenStud(getActivity());
         final Activity activity = getActivity();
         if (activity == null) return v;
         if (os == null) {
@@ -175,12 +176,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshReservations();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this::refreshReservations);
         if (firstStart) refreshReservations();
         return v;
     }
@@ -286,14 +282,11 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         final boolean finalFlag = flag;
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (finalFlag) adapter.notifyDataSetChanged();
-                swapViews(reservations);
-                swipeRefreshLayout.setRefreshing(false);
-                emptyButton.setEnabled(true);
-            }
+        activity.runOnUiThread(() -> {
+            if (finalFlag) adapter.notifyDataSetChanged();
+            swapViews(reservations);
+            swipeRefreshLayout.setRefreshing(false);
+            emptyButton.setEnabled(true);
         });
     }
 
@@ -314,16 +307,13 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
     private void swapViews(final List<ExamReservation> reservations) {
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (reservations.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.GONE);
-                } else {
-                    emptyView.setVisibility(View.GONE);
-                    rv.setVisibility(View.VISIBLE);
-                }
+        activity.runOnUiThread(() -> {
+            if (reservations.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -341,7 +331,7 @@ public class ReservationsFragment extends android.support.v4.app.Fragment {
         Timestamp timestamp = new Timestamp(res.getExamDate().atStartOfDay(zoneId).toEpochSecond());
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setType("vnd.android.cursor.item/event");
-        String title = null;
+        String title;
         if (Locale.getDefault().getLanguage().equals("it")) title = "Esame: "+res.getExamSubject();
         else title = "Exam: "+res.getExamSubject();
         intent.putExtra(CalendarContract.Events.TITLE, title);

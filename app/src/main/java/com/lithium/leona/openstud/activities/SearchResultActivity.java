@@ -27,16 +27,19 @@ import com.google.gson.Gson;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.AvaiableReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,17 +68,17 @@ public class SearchResultActivity extends AppCompatActivity {
     private Openstud os;
     private AvaiableReservationsAdapter adapter;
     private LocalDateTime lastUpdate;
-    private NavigationView nv;
     private Student student;
     private ExamDoable exam;
     private List<ExamReservation> reservations;
     private SearchEventHandler h = new SearchEventHandler(this);
     private List<ExamReservation> activeReservations;
+    private boolean firstStart = true;
 
     private static class SearchEventHandler extends Handler {
         private final WeakReference<SearchResultActivity> mActivity;
 
-        public SearchEventHandler(SearchResultActivity activity) {
+        SearchEventHandler(SearchResultActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
@@ -134,13 +137,13 @@ public class SearchResultActivity extends AppCompatActivity {
             finish();
             return;
         }
-        activeReservations = new LinkedList<ExamReservation>();
+        activeReservations = new LinkedList<>();
         List<ExamReservation> cache = InfoManager.getActiveReservationsCached(this,os);
         if (cache != null) {
             activeReservations.addAll(cache);
         }
         LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
-        getSupportActionBar().setTitle(R.string.search_sessions);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.search_sessions);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         reservations = new LinkedList<>();
         emptyText.setText(getResources().getString(R.string.no_sessions_found));
@@ -150,7 +153,7 @@ public class SearchResultActivity extends AppCompatActivity {
         adapter = new AvaiableReservationsAdapter(this, reservations, activeReservations, this::confirmReservation);
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(() -> refreshAvaiableReservations());
+        swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
         refreshAvaiableReservations();
     }
 
@@ -186,41 +189,45 @@ public class SearchResultActivity extends AppCompatActivity {
         return false;
     }
 
+    public void onResume() {
+        super.onResume();
+        LocalDateTime time = getTimer();
+        if (firstStart) firstStart = false;
+        else if (time==null || Duration.between(time,LocalDateTime.now()).toMinutes()>30) refreshAvaiableReservations();
+    }
+
     private void  refreshAvaiableReservations(){
         setRefreshing(true);
         setButtonReloadStatus(false);
         Activity activity = this;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<ExamReservation> update = null;
-                List<ExamReservation> updateActiveReservations = null;
-                try {
-                    update = os.getAvailableReservations(exam,student);
-                    updateActiveReservations = InfoManager.getActiveReservations(activity,os);
-                    if (update == null || updateActiveReservations == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
+        new Thread(() -> {
+            List<ExamReservation> update = null;
+            List<ExamReservation> updateActiveReservations = null;
+            try {
+                update = os.getAvailableReservations(exam,student);
+                updateActiveReservations = InfoManager.getActiveReservations(activity,os);
+                if (update == null || updateActiveReservations == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
-                } catch (OpenstudConnectionException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidResponseException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidCredentialsException e) {
-                    if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
-                    e.printStackTrace();
-                }
-
-                if (update==null || updateActiveReservations==null) {
-                    setRefreshing(false);
-                    setButtonReloadStatus(true);
-                    return;
-                }
-                updateTimer();
-                refreshDataSet(update, updateActiveReservations);
+            } catch (OpenstudConnectionException e) {
+                h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidResponseException e) {
+                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidCredentialsException e) {
+                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                e.printStackTrace();
             }
+
+            if (update==null || updateActiveReservations==null) {
+                setRefreshing(false);
+                setButtonReloadStatus(true);
+                return;
+            }
+            updateTimer();
+            refreshDataSet(update, updateActiveReservations);
         }).start();
     }
 
@@ -247,35 +254,22 @@ public class SearchResultActivity extends AppCompatActivity {
 
 
     private void setRefreshing(final boolean bool){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(bool);
-            }
-        });
+        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
 
     private void setButtonReloadStatus(final boolean bool){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                emptyButton.setEnabled(bool);
-            }
-        });
+        runOnUiThread(() -> emptyButton.setEnabled(bool));
     }
 
     private void swapViews(final List<ExamReservation> exams) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (exams.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.GONE);
-                } else {
-                    emptyView.setVisibility(View.GONE);
-                    rv.setVisibility(View.VISIBLE);
-                }
+        runOnUiThread(() -> {
+            if (exams.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -295,12 +289,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private void createRetrySnackBar(int string_id, int length) {
         Snackbar snackbar = Snackbar
                 .make(layout, getResources().getString(string_id), length).setAction(R.string.retry,
-                        view -> new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                refreshAvaiableReservations();
-                            }
-                        }));
+                        view -> new Thread(this::refreshAvaiableReservations));
         snackbar.show();
     }
 

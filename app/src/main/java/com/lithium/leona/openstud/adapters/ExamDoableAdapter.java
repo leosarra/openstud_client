@@ -53,7 +53,7 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
         return exams.size();
     }
 
-    public class ExamDoableHolder extends RecyclerView.ViewHolder  {
+    class ExamDoableHolder extends RecyclerView.ViewHolder  {
         @BindView(R.id.examName) TextView txtName;
         @BindView(R.id.ssdExam) TextView txtSSD;
         @BindView(R.id.cfuExam) TextView txtCFU;
@@ -64,21 +64,16 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
             this.context = context;
         }
 
-        public ExamDoableHolder(View itemView) {
+        ExamDoableHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
 
-        public void setDetails(final ExamDoable exam) {
+        void setDetails(final ExamDoable exam) {
             txtName.setText(exam.getDescription());
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams,String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams,exam.getSsd()));
-            showSessions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    edal.showSessionsOnClick(exam);
-                }
-            });
+            showSessions.setOnClickListener(v -> edal.showSessionsOnClick(exam));
 
         }
     }

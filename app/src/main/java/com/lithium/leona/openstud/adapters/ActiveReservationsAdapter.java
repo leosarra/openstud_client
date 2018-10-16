@@ -70,7 +70,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         return reservations.size();
     }
 
-    public class ActiveReservationsHolder extends RecyclerView.ViewHolder  {
+    class ActiveReservationsHolder extends RecyclerView.ViewHolder  {
         @BindView(R.id.nameExam) TextView txtName;
         @BindView(R.id.nameTeacher) TextView txtTeacher;
         @BindView(R.id.dateExam) TextView txtDate;
@@ -86,13 +86,13 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             this.context = context;
         }
 
-        public ActiveReservationsHolder(View itemView) {
+        ActiveReservationsHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
 
         @SuppressLint("ResourceType")
-        public void setDetails(final ExamReservation res) {
+        void setDetails(final ExamReservation res) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
             String infos = context.getResources().getString(R.string.description_reservation, res.getNote());
             if (!infos.endsWith(".")) infos = infos + ".";
@@ -109,19 +109,16 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             popup.inflate(R.menu.reservation_menu);
 
             options.setOnClickListener(v -> {
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
-                            case R.id.delete_menu:
-                                ral.deleteReservationOnClick(res);
-                                break;
-                            case R.id.calendar_menu:
-                                ral.addCalendarOnClick(res);
-                                break;
-                        }
-                        return false;
+                popup.setOnMenuItemClickListener(menuItem -> {
+                    switch (menuItem.getItemId()){
+                        case R.id.delete_menu:
+                            ral.deleteReservationOnClick(res);
+                            break;
+                        case R.id.calendar_menu:
+                            ral.addCalendarOnClick(res);
+                            break;
                     }
+                    return false;
                 });
                 //displaying the popup
                 popup.show();

@@ -33,6 +33,8 @@ import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Openstud;
@@ -89,7 +91,7 @@ public class ExamsActivity extends AppCompatActivity {
         }
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
-        getSupportActionBar().setTitle(R.string.exams);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.exams);
         View headerLayout = nv.getHeaderView(0);
 
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
@@ -230,13 +232,10 @@ public class ExamsActivity extends AppCompatActivity {
         };
         mDrawerLayout.addDrawerListener(ddl);
         nv.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        mDrawerLayout.closeDrawers();
-                        ddl.setItemPressed(item.getItemId());
-                        return true;
-                    }
+                item -> {
+                    mDrawerLayout.closeDrawers();
+                    ddl.setItemPressed(item.getItemId());
+                    return true;
                 });
     }
 

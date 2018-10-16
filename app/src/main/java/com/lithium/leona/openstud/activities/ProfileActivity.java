@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static class ProfileEventHandler extends Handler {
         private final WeakReference<ProfileActivity> mActivity;
 
-        public ProfileEventHandler(ProfileActivity activity) {
+        ProfileEventHandler(ProfileActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
@@ -125,14 +125,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         applyInfos(student,isee);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
-            @Override
-            public void onRefresh()
-            {
-                Thread t1 = new Thread(() -> refresh(os));
-                t1.start();
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            Thread t1 = new Thread(() -> refresh(os));
+            t1.start();
         });
         new Thread(() -> refresh(os)).start();
     }

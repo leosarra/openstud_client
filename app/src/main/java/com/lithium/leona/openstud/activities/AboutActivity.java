@@ -27,6 +27,8 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 
+import java.util.Objects;
+
 public class AboutActivity extends MaterialAboutActivity {
 
     @NonNull
@@ -58,7 +60,7 @@ public class AboutActivity extends MaterialAboutActivity {
     private void buildApp(Context context, MaterialAboutCard.Builder appCardBuilder) {
         int tintColor = getPrimaryTextColor(this);
         Drawable version = ContextCompat.getDrawable(context, R.drawable.ic_update_black);
-        version.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(version).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
 
         appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text(getResources().getString(R.string.version))
@@ -74,9 +76,9 @@ public class AboutActivity extends MaterialAboutActivity {
                 .color(tintColor)
                 .sizeDp(24);
         Drawable email = ContextCompat.getDrawable(context, R.drawable.ic_email_black);
-        github.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-        email.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-        person.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(github).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(email).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(person).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         authorCardBuilder.title(R.string.author);
         authorCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text("Leonardo Sarra")
@@ -102,7 +104,7 @@ public class AboutActivity extends MaterialAboutActivity {
                 .color(tintColor)
                 .sizeDp(24);
         Drawable person = ContextCompat.getDrawable(context, R.drawable.ic_person_outline_black);
-        person.setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        Objects.requireNonNull(person).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         newLogoAuthor.title(getString(R.string.logo_designer));
         newLogoAuthor.addItem(new MaterialAboutActionItem.Builder()
                     .text("Leonardo Razovic")
@@ -113,12 +115,13 @@ public class AboutActivity extends MaterialAboutActivity {
                         .icon(twitter)
                         .setOnClickAction(() -> ClientHelper.createCustomTab(this, "https://twitter.com/lrazovic"))
                         .build());
-                /**.addItem(new MaterialAboutActionItem.Builder()
+
+                /*.addItem(new MaterialAboutActionItem.Builder()
                         .text(R.string.website)
                         .icon(globe)
                         .setOnClickAction(() -> ClientHelper.createCustomTab(this, "https://cookicons.co/"))
                         .build());
-                 **/
+                 */
     }
 
     private void buildMisc(Context context, MaterialAboutCard.Builder miscCardBuilder) {
@@ -150,11 +153,6 @@ public class AboutActivity extends MaterialAboutActivity {
                         .withAboutVersionShown(true)
                         .start(this))
                 .build());
-    }
-    private Intent createBrowserLink(String url) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        return i;
     }
 
     private int getPrimaryTextColor(Context context){

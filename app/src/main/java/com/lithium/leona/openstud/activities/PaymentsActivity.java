@@ -23,6 +23,8 @@ import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import com.lithium.leona.openstud.fragments.TabFragment;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Openstud;
@@ -57,7 +59,7 @@ public class PaymentsActivity extends AppCompatActivity {
         }
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this,toolbar, R.drawable.ic_baseline_arrow_back);
-        getSupportActionBar().setTitle(R.string.payments);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.payments);
         setupListeners();
         View headerLayout = nv.getHeaderView(0);
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
@@ -132,9 +134,6 @@ public class PaymentsActivity extends AppCompatActivity {
                     ddl.setItemPressed(item.getItemId());
                     return true;
                 });
-        View headerLayout = nv.getHeaderView(0);
-
-        TextView studentId = headerLayout.findViewById(R.id.nav_subtitle);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 

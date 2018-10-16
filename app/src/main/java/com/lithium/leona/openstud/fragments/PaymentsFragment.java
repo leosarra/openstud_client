@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,7 +49,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         private final WeakReference<PaymentsFragment> frag;
 
         private PaymentsHandler(PaymentsFragment frag) {
-            this.frag = new WeakReference<PaymentsFragment>(frag);
+            this.frag = new WeakReference<>(frag);
         }
 
         @Override
@@ -58,21 +59,11 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
             PaymentsActivity activity = (PaymentsActivity) paymentFrag.getActivity();
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    View.OnClickListener ocl = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            paymentFrag.refresh();
-                        }
-                    };
+                    View.OnClickListener ocl = v -> paymentFrag.refresh();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    View.OnClickListener ocl = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            paymentFrag.refresh();
-                        }
-                    };
+                    View.OnClickListener ocl = v -> paymentFrag.refresh();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
@@ -119,15 +110,15 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment,null);
         ButterKnife.bind(this, v);
         Bundle bundle=getArguments();
         mode = bundle.getInt("mode");
         emptyView.setVisibility(View.GONE);
-        os = InfoManager.getOpenStud(getActivity().getApplication());
+        os = InfoManager.getOpenStud(getActivity());
         if (os == null) {
-            InfoManager.clearSharedPreferences(getActivity().getApplication());
+            InfoManager.clearSharedPreferences(getActivity());
             Intent i = new Intent(getActivity(), LauncherActivity.class);
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             return v;
@@ -136,11 +127,11 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         List<Tax> taxes_cached = null;
         if (mode == TaxAdapter.Mode.PAID.getValue()) {
             emptyText.setText(getResources().getString(R.string.no_paid_tax_found));
-            taxes_cached = InfoManager.getPaidTaxesCached(getActivity().getApplication(),os);
+            taxes_cached = InfoManager.getPaidTaxesCached(getActivity(),os);
         }
         else if (mode == TaxAdapter.Mode.UNPAID.getValue()) {
             emptyText.setText(getResources().getString(R.string.no_unpaid_tax_found));
-            taxes_cached = InfoManager.getUnpaidTaxesCached(getActivity().getApplication(),os);
+            taxes_cached = InfoManager.getUnpaidTaxesCached(getActivity(),os);
         }
         if (taxes_cached != null && !taxes_cached.isEmpty())  taxes.addAll(taxes_cached);
         rv.setHasFixedSize(true);
@@ -150,12 +141,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         refresh();
         return v;
@@ -176,40 +162,37 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         if (activity == null) return;
         setRefreshing(true);
         setButtonReloadStatus(false);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<Tax> update = null;
-                try {
-                    if (mode == TaxAdapter.Mode.PAID.getValue())
-                        update = InfoManager.getPaidTaxes(activity.getApplication(), os);
-                    else if (mode == TaxAdapter.Mode.UNPAID.getValue())
-                        update = InfoManager.getUnpaidTaxes(activity.getApplication(), os);
+        new Thread(() -> {
+            List<Tax> update = null;
+            try {
+                if (mode == TaxAdapter.Mode.PAID.getValue())
+                    update = InfoManager.getPaidTaxes(activity.getApplication(), os);
+                else if (mode == TaxAdapter.Mode.UNPAID.getValue())
+                    update = InfoManager.getUnpaidTaxes(activity.getApplication(), os);
 
-                    if (update == null)
-                        h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
+                if (update == null)
+                    h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
-                } catch (OpenstudConnectionException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidResponseException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidCredentialsException e) {
-                    if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
-                    e.printStackTrace();
-                }
-
-                if (update==null) {
-                    setRefreshing(false);
-                    setButtonReloadStatus(true);
-                    return;
-                }
-                updateTimer();
-                refreshDataSet(update);
+            } catch (OpenstudConnectionException e) {
+                h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidResponseException e) {
+                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidCredentialsException e) {
+                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                e.printStackTrace();
             }
+
+            if (update==null) {
+                setRefreshing(false);
+                setButtonReloadStatus(true);
+                return;
+            }
+            updateTimer();
+            refreshDataSet(update);
         }).start();
     }
 
@@ -223,14 +206,11 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
         final boolean finalFlag = flag;
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (finalFlag) adapter.notifyDataSetChanged();
-                swapViews(taxes);
-                swipeRefreshLayout.setRefreshing(false);
-                emptyButton.setEnabled(true);
-            }
+        activity.runOnUiThread(() -> {
+            if (finalFlag) adapter.notifyDataSetChanged();
+            swapViews(taxes);
+            swipeRefreshLayout.setRefreshing(false);
+            emptyButton.setEnabled(true);
         });
     }
 
@@ -238,12 +218,7 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     private void setRefreshing(final boolean bool){
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(bool);
-            }
-        });
+        activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
 
@@ -258,27 +233,19 @@ public class PaymentsFragment extends android.support.v4.app.Fragment {
     private void setButtonReloadStatus(final boolean bool){
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                emptyButton.setEnabled(bool);
-            }
-        });
+        activity.runOnUiThread(() -> emptyButton.setEnabled(bool));
     }
 
     private void swapViews(final List<Tax> taxes) {
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (taxes.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.GONE);
-                } else {
-                    emptyView.setVisibility(View.GONE);
-                    rv.setVisibility(View.VISIBLE);
-                }
+        activity.runOnUiThread(() -> {
+            if (taxes.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
             }
         });
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -75,21 +76,11 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
             ExamsActivity activity = (ExamsActivity) examsDoableFrag.getActivity();
             if (activity != null) {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    View.OnClickListener ocl = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            examsDoableFrag.refreshExamsDoable();
-                        }
-                    };
+                    View.OnClickListener ocl = v -> examsDoableFrag.refreshExamsDoable();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    View.OnClickListener ocl = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            examsDoableFrag.refreshExamsDoable();
-                        }
-                    };
+                    View.OnClickListener ocl = v -> examsDoableFrag.refreshExamsDoable();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG,ocl);
                 }
                 else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
@@ -109,11 +100,10 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment,null);
         ButterKnife.bind(this, v);
-        Bundle bundle=getArguments();
         examsDoable = new LinkedList<>();
         final Activity activity = getActivity();
         if (activity == null) return v;
@@ -134,23 +124,15 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
-        adapter = new ExamDoableAdapter(activity, examsDoable, new ExamDoableAdapter.ExamDoableAdapterListener() {
-            @Override
-            public void showSessionsOnClick(ExamDoable exam) {
-                Intent intent = new Intent(activity,SearchResultActivity.class);
-                intent.putExtra("exam", new Gson().toJson(exam));
-                activity.startActivity(intent);
-            }
+        adapter = new ExamDoableAdapter(activity, examsDoable, exam -> {
+            Intent intent = new Intent(activity,SearchResultActivity.class);
+            intent.putExtra("exam", new Gson().toJson(exam));
+            activity.startActivity(intent);
         });
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1,R.color.refresh2,R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshExamsDoable();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDoable);
         if (firstStart) refreshExamsDoable();
         return v;
     }
@@ -170,35 +152,32 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
         if (activity == null || os == null) return;
         setRefreshing(true);
         setButtonReloadStatus(false);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<ExamDoable> update = null;
-                try {
-                    update = InfoManager.getExamsDoable(activity.getApplication(),os);
-                    if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
+        new Thread(() -> {
+            List<ExamDoable> update = null;
+            try {
+                update = InfoManager.getExamsDoable(activity.getApplication(),os);
+                if (update == null) h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
 
-                } catch (OpenstudConnectionException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidResponseException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidCredentialsException e) {
-                    if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
-                    e.printStackTrace();
-                }
-
-                if (update==null) {
-                    setRefreshing(false);
-                    setButtonReloadStatus(true);
-                    return;
-                }
-                updateTimer();
-                refreshDataSet(update);
+            } catch (OpenstudConnectionException e) {
+                h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidResponseException e) {
+                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidCredentialsException e) {
+                if (e.isPasswordExpired()) h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                e.printStackTrace();
             }
+
+            if (update==null) {
+                setRefreshing(false);
+                setButtonReloadStatus(true);
+                return;
+            }
+            updateTimer();
+            refreshDataSet(update);
         }).start();
     }
 
@@ -212,14 +191,11 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
         final boolean finalFlag = flag;
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (finalFlag) adapter.notifyDataSetChanged();
-                swapViews(examsDoable);
-                swipeRefreshLayout.setRefreshing(false);
-                emptyButton.setEnabled(true);
-            }
+        activity.runOnUiThread(() -> {
+            if (finalFlag) adapter.notifyDataSetChanged();
+            swapViews(examsDoable);
+            swipeRefreshLayout.setRefreshing(false);
+            emptyButton.setEnabled(true);
         });
     }
 
@@ -227,39 +203,26 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
     private void setRefreshing(final boolean bool){
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(bool);
-            }
-        });
+        activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
 
 
     private void setButtonReloadStatus(final boolean bool){
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                emptyButton.setEnabled(bool);
-            }
-        });
+        activity.runOnUiThread(() -> emptyButton.setEnabled(bool));
     }
 
     private void swapViews(final List<ExamDoable> exams) {
         Activity activity = getActivity();
         if (activity == null) return;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (exams.isEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.GONE);
-                } else {
-                    emptyView.setVisibility(View.GONE);
-                    rv.setVisibility(View.VISIBLE);
-                }
+        activity.runOnUiThread(() -> {
+            if (exams.isEmpty()) {
+                emptyView.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.GONE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+                rv.setVisibility(View.VISIBLE);
             }
         });
     }

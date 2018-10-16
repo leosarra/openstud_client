@@ -1,5 +1,6 @@
 package com.lithium.leona.openstud.fragments;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -36,25 +37,22 @@ public class TabFragment extends Fragment {
         selectedTab = getArguments().getInt("tabSelected");
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //this inflates out tab layout file.
         View x =  inflater.inflate(R.layout.tab_fragment_payment_layout,null);
         // set up stuff.
-        tabLayout = (TabLayout) x.findViewById(R.id.tabs);
-        viewPager = (ViewPager) x.findViewById(R.id.viewpager);
+        tabLayout = x.findViewById(R.id.tabs);
+        viewPager = x.findViewById(R.id.viewpager);
         // create a new adapter for our pageViewer. This adapters returns child com.lithium.leona.openstud.fragments as per the positon of the page Viewer.
         viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
         if (selectedTab != -1) {
             viewPager.setCurrentItem(selectedTab);
             notifyItemChanged(selectedTab);
         }
-        tabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                //provide the viewPager to TabLayout.
-                tabLayout.setupWithViewPager(viewPager);
-            }
+        tabLayout.post(() -> {
+            //provide the viewPager to TabLayout.
+            tabLayout.setupWithViewPager(viewPager);
         });
         //to preload the adjacent tabs. This makes transition smooth.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -80,7 +78,7 @@ public class TabFragment extends Fragment {
 
     class MyAdapter extends FragmentPagerAdapter{
 
-        public MyAdapter(FragmentManager fm) {
+        MyAdapter(FragmentManager fm) {
             super(fm);
         }
 
