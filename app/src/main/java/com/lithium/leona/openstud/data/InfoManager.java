@@ -23,6 +23,7 @@ import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Isee;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudBuilder;
+import lithium.openstud.driver.core.OpenstudHelper;
 import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.core.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
@@ -163,7 +164,7 @@ public class InfoManager {
             Type listType = new TypeToken<List<ExamDone>>(){}.getType();
             String json = gson.toJson(examsDone,listType);
             prefsEditor.putString("examsDone", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newExamsDone;
     }
@@ -192,7 +193,7 @@ public class InfoManager {
             Type listType = new TypeToken<List<ExamDoable>>(){}.getType();
             String json = gson.toJson(examsDoable,listType);
             prefsEditor.putString("examsDoable", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newExamsDoable;
     }
@@ -222,7 +223,7 @@ public class InfoManager {
             Type listType = new TypeToken<List<ExamReservation>>(){}.getType();
             String json = gson.toJson(reservations,listType);
             prefsEditor.putString("reservations", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newExamsDone;
     }
@@ -238,7 +239,7 @@ public class InfoManager {
             Type listType = new TypeToken<List<Tax>>(){}.getType();
             String json = gson.toJson(paidTaxes, listType);
             prefsEditor.putString("paidTaxes", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newPaidTaxes;
     }
@@ -267,7 +268,7 @@ public class InfoManager {
             Type listType = new TypeToken<List<Tax>>(){}.getType();
             String json = gson.toJson(newUnpaidTaxes, listType);
             prefsEditor.putString("unpaidTaxes", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newUnpaidTaxes;
     }
@@ -275,9 +276,7 @@ public class InfoManager {
 
     public static boolean hasLogin(Context context){
         setupSharedPreferences(context);
-        if (getStudentId(context)!=-1 && getPassword(context)!=null)
-            return true;
-        return false;
+        return getStudentId(context) != -1 && getPassword(context) != null;
     }
 
     public static synchronized void clearSharedPreferences(Context context){
