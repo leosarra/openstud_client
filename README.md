@@ -3,7 +3,7 @@
 ![GitHub tag](https://img.shields.io/github/tag/lithiumsr/openstud_client.svg)
 [![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=28)
 
-Openstud_client is an unofficial client for Sapienza's Infostud.\
+OpenStud is an unofficial client for Sapienza's Infostud.\
 It was written with Java 8 in mind and it supports Android 6.0+ (API Level 23+), at the time of writing it targets Android Pie (API Level 28).
 
 ## Features
@@ -24,8 +24,8 @@ The features that are supported are:
 ## What's next?
 OpenStud is stable and it's perfectly working, but it's development is far from over.\
 A version with AndroidX (new support libraries for Android) it's in the works.\
-Stats can be improved by adding the option to add fake exams to simulate the changes in the GPA of the student.\
 Preferences activity requires some extra work to ensure that it will work in the new releases of Android.
 
 ## Special thanks
 Huge thanks to Leonardo Razovic for the icon and logo and to Valerio Silvestro that helped me testing the app when it was in its infancy.
+Last but not least, a special thanks also to Ugo Possenti who inspired me to do this app with his [Medium article](https://medium.com/@MEPoss/ora-infostud-non-fa-più-schifo-21720720e556).
