@@ -68,14 +68,14 @@
             card_view:layout_constraintTop_toBottomOf="@+id/examName">
 
             <TextView
-                android:id="@+id/cfuExam"
+                android:id="@+id/resultExam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
                 android:textColor="?attr/primaryTextColor" />
 
             <TextView
-                android:id="@+id/resultExam"
+                android:id="@+id/cfuExam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="1dp"
