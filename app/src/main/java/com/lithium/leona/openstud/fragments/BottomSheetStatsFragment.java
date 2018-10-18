@@ -17,11 +17,13 @@ import android.widget.EditText;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import lithium.openstud.driver.core.OpenstudHelper;
 
 public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
@@ -92,7 +94,13 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
 
             }
         });
-        examName.setOnKeyListener((v1, keyCode, event) -> event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER);
+        examName.setOnKeyListener((v1, keyCode, event) -> {
+            if( keyCode == KeyEvent.KEYCODE_ENTER) {
+                ClientHelper.hideKeyboard(v, getContext());
+                return true;
+            }
+            return false;
+        });
         return v;
     }
 
