@@ -96,11 +96,11 @@ public class InfoManager {
         return student;
     }
 
-    public static void saveTemporaryFakeExams(List<ExamDone> exams){
+    public static void saveTemporaryFakeExams(List<ExamDone> exams) {
         fakeExams = exams;
     }
 
-    public static List<ExamDone> getTemporaryFakeExams(){
+    public static List<ExamDone> getTemporaryFakeExams() {
         if (fakeExams == null) fakeExams = new LinkedList<>();
         return fakeExams;
     }

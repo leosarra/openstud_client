@@ -180,7 +180,7 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
-    public void addFakeExam(ExamDone exam){
+    public void addFakeExam(ExamDone exam) {
         examsFake.add(exam);
         updateStats();
         adapter.notifyDataSetChanged();
@@ -336,8 +336,7 @@ public class StatsActivity extends AppCompatActivity {
                 }
                 updateTimer();
                 setRefreshing(false);
-            }
-            else {
+            } else {
                 updateTimer();
                 updateStats();
                 setRefreshing(false);
@@ -441,8 +440,7 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
-
-    private void createRecyclerView(){
+    private void createRecyclerView() {
         examsFake = InfoManager.getTemporaryFakeExams();
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);

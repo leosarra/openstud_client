@@ -1,14 +1,8 @@
 package com.lithium.leona.openstud.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +12,6 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.helpers.ItemTouchHelperAdapter;
 import com.lithium.leona.openstud.helpers.ItemTouchHelperViewHolder;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -79,8 +71,8 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
             txtName.setText(exam.getDescription());
             String result = String.valueOf(exam.getResult());
             String cfu = String.valueOf(exam.getCfu());
-            txtResult.setText(context.getResources().getString(R.string.grade_stats,result));
-            txtCFU.setText(context.getResources().getString(R.string.cfu_exams,cfu));
+            txtResult.setText(context.getResources().getString(R.string.grade_stats, result));
+            txtCFU.setText(context.getResources().getString(R.string.cfu_exams, cfu));
         }
 
         @Override
@@ -98,7 +90,6 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
     public void onItemDismiss(int position) {
         activity.removeFakeExam(position);
     }
-
 
 
     @Override

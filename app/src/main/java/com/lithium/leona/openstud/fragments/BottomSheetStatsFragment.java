@@ -37,18 +37,21 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     IndicatorSeekBar grade;
     @BindView(R.id.add)
     Button add;
-    @OnClick (R.id.abort)
+
+    @OnClick(R.id.abort)
     public void hide() {
         dismiss();
     }
-    @OnClick (R.id.add)
+
+    @OnClick(R.id.add)
     public void createExam() {
         StatsActivity activity = (StatsActivity) getActivity();
         if (activity != null) {
-            activity.addFakeExam(OpenstudHelper.createFakeExamDone(examName.getText().toString().trim(),cfu.getProgress(), grade.getProgress()));
+            activity.addFakeExam(OpenstudHelper.createFakeExamDone(examName.getText().toString().trim(), cfu.getProgress(), grade.getProgress()));
             dismiss();
         }
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +81,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
                 if (text.trim().length() == 0) {
                     add.setEnabled(false);
                     add.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
-                }
-                else {
+                } else {
                     add.setEnabled(true);
                     add.setTextColor(tintColorEnabled);
                 }
