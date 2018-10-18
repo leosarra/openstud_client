@@ -2,17 +2,25 @@ package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,10 +35,13 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.adapters.FakeExamAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
+import com.lithium.leona.openstud.fragments.BottomSheetStatsFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.SimpleItemTouchHelperCallback;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
@@ -76,6 +87,8 @@ public class StatsActivity extends AppCompatActivity {
     CardView graphCard;
     @BindView(R.id.graph2_card)
     CardView graphCard2;
+    @BindView(R.id.recyclerView)
+    RecyclerView rv;
     private DelayedDrawerListener ddl;
     private NavigationView nv;
     private Openstud os;
@@ -85,6 +98,8 @@ public class StatsActivity extends AppCompatActivity {
     private boolean firstStart = true;
     private int laude;
     private Student student;
+    private List<ExamDone> examsFake;
+    private FakeExamAdapter adapter;
 
     private static class StatsHandler extends Handler {
         private final WeakReference<StatsActivity> activity;
@@ -153,6 +168,7 @@ public class StatsActivity extends AppCompatActivity {
             return;
         }
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(this, os);
+        createRecyclerView();
         if (exams_cached != null && !exams_cached.isEmpty()) {
             exams.addAll(exams_cached);
             updateStats();
@@ -160,16 +176,22 @@ public class StatsActivity extends AppCompatActivity {
             graphCard.setVisibility(View.GONE);
             graphCard2.setVisibility(View.GONE);
         }
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
-        refreshExamsDone();
 
     }
 
 
+    public void addFakeExam(ExamDone exam){
+        examsFake.add(exam);
+        updateStats();
+        adapter.notifyDataSetChanged();
+    }
+
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
+        if (!firstStart) {
+            if (examsFake != null) InfoManager.saveTemporaryFakeExams(examsFake);
+        }
         if (firstStart) firstStart = false;
         else if (PreferenceManager.getLaudeValue(this) != laude || time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30)
             refreshExamsDone();
@@ -187,6 +209,8 @@ public class StatsActivity extends AppCompatActivity {
             }
             showLaudeNotification();
             laude = PreferenceManager.getLaudeValue(this);
+            exams.removeAll(examsFake);
+            exams.addAll(examsFake);
             updateGraphs();
         });
     }
@@ -194,6 +218,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void updateGraphs() {
         runOnUiThread(() -> {
+            OpenstudHelper.sortByDate(exams, false);
             graphCard.setVisibility(View.VISIBLE);
             graphCard2.setVisibility(View.VISIBLE);
             NumberFormat numFormat = NumberFormat.getInstance();
@@ -297,12 +322,26 @@ public class StatsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             if (update != null && !update.isEmpty()) {
-                exams.clear();
-                exams.addAll(update);
+                synchronized (this) {
+                    exams.removeAll(examsFake);
+                    if (exams.equals(update)) {
+                        setRefreshing(false);
+                        exams.addAll(examsFake);
+                    } else {
+                        exams.clear();
+                        exams.addAll(update);
+                        updateStats();
+                        exams.addAll(examsFake);
+                    }
+                }
+                updateTimer();
+                setRefreshing(false);
             }
-            updateTimer();
-            updateStats();
-            setRefreshing(false);
+            else {
+                updateTimer();
+                updateStats();
+                setRefreshing(false);
+            }
         }).start();
     }
 
@@ -370,6 +409,15 @@ public class StatsActivity extends AppCompatActivity {
                 });
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_stats, menu);
+        Drawable drawable = menu.findItem(R.id.add_exam).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
+        menu.findItem(R.id.add_exam).setIcon(drawable);
+        return true;
+    }
+
     private void showLaudeNotification() {
         if (com.lithium.leona.openstud.data.PreferenceManager.getStatsNotificationEnabled(this)) {
             LayoutHelper.createActionSnackBar(mDrawerLayout, R.string.no_value_laude, R.string.edit, 4000, v -> {
@@ -380,4 +428,46 @@ public class StatsActivity extends AppCompatActivity {
             com.lithium.leona.openstud.data.PreferenceManager.setStatsNotificationEnabled(this, false);
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_exam:
+                BottomSheetStatsFragment bottomSheetStatsFragment = new BottomSheetStatsFragment();
+                bottomSheetStatsFragment.show(getSupportFragmentManager(), bottomSheetStatsFragment.getTag());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    private void createRecyclerView(){
+        examsFake = InfoManager.getTemporaryFakeExams();
+        rv.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        adapter = new FakeExamAdapter(this, examsFake);
+        rv.setAdapter(adapter);
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
+        refreshExamsDone();
+        adapter.notifyDataSetChanged();
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(rv);
+    }
+
+    public void removeFakeExam(int position) {
+        synchronized (this) {
+            exams.remove(examsFake.get(position));
+            examsFake.remove(position);
+            adapter.notifyItemRemoved(position);
+        }
+        adapter.notifyDataSetChanged();
+        updateStats();
+
+    }
+
 }

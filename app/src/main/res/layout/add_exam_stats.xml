@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    android:gravity="center_horizontal"
+    android:focusableInTouchMode="true"
+    android:background="?attr/backgroundColor">
+
+    <!-- NOTE: This list should be displayed in a list
+    instead of nested layouts -->
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:text="@string/add_exams"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="10dp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:hint="@string/add_exam_hint"
+        app:hintEnabled="true"
+        android:theme="@style/StatsThemeEditText">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/exam_name"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:textColor="?attr/secondaryTextColor"
+        android:text="@string/grade" />
+
+    <com.warkiz.widget.IndicatorSeekBar
+        android:id="@+id/grade"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        app:isb_indicator_color="?attr/redSlider"
+        app:isb_indicator_text_color="@android:color/white"
+        app:isb_tick_marks_color="?attr/redSlider"
+        app:isb_indicator_text_size="18sp"
+        app:isb_max="31"
+        app:isb_min="18"
+        app:isb_progress="25"
+        app:isb_show_tick_texts="true"
+        app:isb_seek_smoothly="true"
+        app:isb_show_indicator="circular_bubble"
+        app:isb_show_tick_marks_type="oval"
+        app:isb_ticks_count="2"
+        app:isb_thumb_color="?attr/redSlider"
+        app:isb_thumb_size="20dp"
+        app:isb_tick_texts_color="?attr/redSlider"
+        app:isb_track_background_color="?attr/secondaryTextColor"
+        app:isb_track_background_size="2dp"
+        app:isb_track_progress_color="@color/redLight"
+        app:isb_track_progress_size="4dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:textColor="?attr/secondaryTextColor"
+        android:text="@string/cfu" />
+
+    <com.warkiz.widget.IndicatorSeekBar
+        android:id="@+id/cfu"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        app:isb_tick_marks_color="?attr/redSlider"
+        app:isb_indicator_color="?attr/redSlider"
+        app:isb_indicator_text_color="@android:color/white"
+        app:isb_indicator_text_size="18sp"
+        app:isb_max="12"
+        app:isb_min="3"
+        app:isb_progress="6"
+        app:isb_ticks_count="2"
+        app:isb_seek_smoothly="true"
+        app:isb_show_tick_texts="true"
+        app:isb_show_indicator="circular_bubble"
+        app:isb_show_tick_marks_type="oval"
+        app:isb_thumb_color="?attr/redSlider"
+        app:isb_thumb_size="20dp"
+        app:isb_tick_texts_color="?attr/redSlider"
+        app:isb_track_background_color="?attr/secondaryTextColor"
+        app:isb_track_background_size="2dp"
+        app:isb_track_progress_color="@color/redLight"
+        app:isb_track_progress_size="4dp" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/abort"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="100dp"
+            android:layout_height="42dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0.5"
+            android:text="@string/delete_abort"
+            android:textColor="?attr/colorButtonNav"
+            android:textSize="14sp"
+            android:theme="@style/ButtonReservations"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/add"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/add"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="100dp"
+            android:layout_height="42dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0.5"
+            android:text="@string/add"
+            android:textColor="?attr/colorButtonNav"
+            android:textSize="14sp"
+            android:theme="@style/ButtonReservations"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.944"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>

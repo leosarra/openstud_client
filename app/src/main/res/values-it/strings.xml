@@ -70,7 +70,7 @@
     <string name="reservation_error">Impossibile creare la prenotazione. Riprova più tardi</string>
     <string name="reservation_ok">Prenotazione creata con successo</string>
     <string name="already_placed_reservation">Hai già fatto una prenotazione per questa sessione!</string>
-    <string name="fork_github">Fork on GitHub</string>
+    <string name="fork_github">Codice sorgente</string>
     <string name="author">Autore</string>
     <string name="version">Versione</string>
     <string name="email_address">leonardosarra@outlook.com</string>
@@ -116,5 +116,11 @@
     <string name="not_enrolled">Non iscritto</string>
     <string name="no_value_laude">Il valore della lode può essere cambiato dalle impostazioni</string>
     <string name="edit">Modifica</string>
+    <string name="add_exam">Aggiungi esame</string>
+    <string name="add_exam_hint">Insegnamento</string>
+    <string name="grade">Voto</string>
+    <string name="grade_stats">Voto: %1$s</string>
+    <string name="add">Aggiungi</string>
+    <string name="add_exams">Aggiungi esame</string>
 
 </resources>

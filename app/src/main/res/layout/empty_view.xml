@@ -28,7 +28,7 @@
                 android:id="@+id/empty_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="?attr/emptyViewColor"
                 android:textSize="18sp"
                 android:gravity="center|center_vertical"
                 />
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center|center_vertical"
                 android:text="¯\\_(ツ)_/¯"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="?attr/emptyViewColor"
                 android:textSize="18sp" />
 
             <android.support.constraint.ConstraintLayout

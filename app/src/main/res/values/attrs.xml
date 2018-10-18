@@ -19,5 +19,7 @@
         <!--<attr name="popupOverlayStyle" format="reference"/> -->
         <attr name="popupTextColor" format="color"/>
         <attr name="popupBackgroundColor" format="color"/>
+        <attr name="redSlider" format="color"/>
+        <attr name="emptyViewColor" format="color" />
     </declare-styleable>
 </resources>
