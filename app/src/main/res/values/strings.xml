@@ -46,7 +46,7 @@
     <string name="ssd_exams" translatable="false">SSD: %1$s</string>
     <string name="number_reservation">Reservation number: %1$s</string>
     <string name="teacher_reservation">Teacher: %1$s</string>
-    <string name="description_reservation">Additional information: %1$s</string>
+    <string name="description_reservation">Additional infos: %1$s</string>
     <string name="date_exam">Date exam: %1$s</string>
     <string name="exams_completed">Completed</string>
     <string name="reservations">Reservations</string>
