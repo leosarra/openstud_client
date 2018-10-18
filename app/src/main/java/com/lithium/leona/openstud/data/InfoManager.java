@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,6 +33,7 @@ public class InfoManager {
     private static List<ExamDone> examsDone;
     private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
+    private static List<ExamDone> fakeExams;
 
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
@@ -92,6 +94,15 @@ public class InfoManager {
             prefsEditor.commit();
         }
         return student;
+    }
+
+    public static void saveTemporaryFakeExams(List<ExamDone> exams){
+        fakeExams = exams;
+    }
+
+    public static List<ExamDone> getTemporaryFakeExams(){
+        if (fakeExams == null) fakeExams = new LinkedList<>();
+        return fakeExams;
     }
 
     public static Isee getIseeCached(Context context, Openstud os) {
