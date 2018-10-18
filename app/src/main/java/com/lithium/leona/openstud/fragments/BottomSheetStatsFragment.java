@@ -23,7 +23,6 @@ import com.warkiz.widget.IndicatorSeekBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnFocusChange;
 import lithium.openstud.driver.core.OpenstudHelper;
 
 public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
@@ -95,7 +94,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
             }
         });
         examName.setOnKeyListener((v1, keyCode, event) -> {
-            if( keyCode == KeyEvent.KEYCODE_ENTER) {
+            if( keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 ClientHelper.hideKeyboard(v, getContext());
                 return true;
             }
