@@ -123,14 +123,12 @@ public class AboutActivity extends MaterialAboutActivity {
 
     private void buildMisc(Context context, MaterialAboutCard.Builder miscCardBuilder) {
         int tintColor = getPrimaryTextColor(this);
-        Drawable github = new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_github)
-                .color(tintColor)
-                .sizeDp(24);
+        Drawable libraries = ContextCompat.getDrawable(context, R.drawable.ic_extension_black_24dp);
+        Objects.requireNonNull(libraries).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         if (ThemeEngine.isLightTheme(this))
             miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
                     .text(R.string.open_source_libs)
-                    .icon(github)
+                    .icon(libraries)
                     .setOnClickAction(() -> new LibsBuilder()
                             .withAutoDetect(true)
                             .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
@@ -142,7 +140,7 @@ public class AboutActivity extends MaterialAboutActivity {
                     .build());
         else miscCardBuilder.title(R.string.about).addItem(new MaterialAboutActionItem.Builder()
                 .text(R.string.open_source_libs)
-                .icon(github)
+                .icon(libraries)
                 .setOnClickAction(() -> new LibsBuilder()
                         .withAutoDetect(true)
                         .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
