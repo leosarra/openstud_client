@@ -11,6 +11,7 @@
         <item name="colorPrimary">@android:color/white</item>
         <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@android:color/white</item>
+        <item name="backgroundColor">#FFFFFF</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
@@ -25,7 +26,7 @@
         <item name="primaryTextColor">#33343B</item>
         <item name="secondaryTextColor">#d3696969</item>
         <item name="dividerColor">#B6B6B6</item>
-        <item name="backgroundColor">@android:color/background_light</item>
+        <item name="backgroundColor">#f4f4f4</item>
         <item name="backgroundCardColor">#FFFFFF</item>
         <item name="bottomNavColor">#FFFFFF</item>
         <item name="defaultTextNav">#737373</item>
@@ -36,6 +37,8 @@
         <item name="colorHeader">@color/redSapienzaDark</item>
         <item name="popupBackgroundColor">@android:color/white</item>
         <item name="popupTextColor">@android:color/black</item>
+        <item name="redSlider">@color/redSapienza</item>
+        <item name="emptyViewColor">?attr/secondaryTextColor</item>
 
     </style>
 
@@ -60,6 +63,8 @@
         <item name="colorHeader">@color/redSapienzaDark</item>
         <item name="popupTextColor">@android:color/white</item>
         <item name="popupBackgroundColor">#262626</item>
+        <item name="redSlider">#d93535</item>
+        <item name="emptyViewColor">@android:color/darker_gray</item>
     </style>
 
     <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -92,6 +97,15 @@
         <item name="colorControlActivated">@android:color/white</item>
         <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
     </style>
+
+    <style name="StatsThemeEditText">
+        <!-- Used for the bottom line when not selected / focused -->
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="android:textColorHint">?attr/secondaryTextColor</item>
+        <item name="colorControlActivated">?attr/secondaryTextColor</item>
+        <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
+    </style>
+
 
     <style name="ToolBarStyle" parent="AppThemeDark">
         <item name="android:textColorPrimary">@android:color/white</item>
@@ -217,4 +231,26 @@
         <item name="about_libraries_dividerLight_openSource">#B6B6B6</item>
         <item name="android:navigationBarColor">#2E2E2E</item>
     </style>
+
+    <style name="AboutLibrariesThemeLight" parent="Theme.AppCompat.NoActionBar">
+        <item name="primaryTextColor">#33343B</item>
+        <item name="secondaryTextColor">#d3696969</item>
+        <item name="colorPrimary">@color/redSapienza</item>
+        <item name="colorPrimaryDark">@color/redSapienzaDark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="backgroundColor">@android:color/holo_red_dark</item>
+        <item name="android:windowBackground">@color/about_libraries_window_background</item>
+        <item name="android:colorBackground">@color/about_libraries_window_background</item>
+        <!-- AboutLibraries specific values -->
+        <item name="about_libraries_window_background">@color/about_libraries_window_background</item>
+        <item name="about_libraries_card">@color/about_libraries_card</item>
+        <item name="about_libraries_title_openSource">@color/about_libraries_title_openSource</item>
+        <item name="about_libraries_text_openSource">@color/about_libraries_text_openSource</item>
+        <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
+        <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
+        <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>
