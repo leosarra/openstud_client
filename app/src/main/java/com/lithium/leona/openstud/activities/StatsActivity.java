@@ -100,6 +100,7 @@ public class StatsActivity extends AppCompatActivity {
     private Student student;
     private List<ExamDone> examsFake;
     private FakeExamAdapter adapter;
+    private boolean showIcon = false;
 
     private static class StatsHandler extends Handler {
         private final WeakReference<StatsActivity> activity;
@@ -200,6 +201,8 @@ public class StatsActivity extends AppCompatActivity {
     private void updateStats() {
         runOnUiThread(() -> {
             if (exams == null || exams.isEmpty() || !ClientHelper.hasPassedExams(exams)) {
+                if (exams == null) setIconVisibility(false);
+                else if (exams.isEmpty()) setIconVisibility(true);
                 totalCFU.setText("--");
                 arithmeticValue.setText("--");
                 weightedValue.setText("--");
@@ -207,6 +210,7 @@ public class StatsActivity extends AppCompatActivity {
                 graphCard2.setVisibility(View.GONE);
                 return;
             }
+            setIconVisibility(true);
             showLaudeNotification();
             laude = PreferenceManager.getLaudeValue(this);
             exams.removeAll(examsFake);
@@ -414,6 +418,11 @@ public class StatsActivity extends AppCompatActivity {
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
         menu.findItem(R.id.add_exam).setIcon(drawable);
+        if (!showIcon) {
+            menu.findItem(R.id.add_exam).setVisible(false);
+        } else {
+            menu.findItem(R.id.add_exam).setVisible(true);
+        }
         return true;
     }
 
@@ -439,6 +448,13 @@ public class StatsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private void setIconVisibility(boolean visible) {
+        if ((visible && !showIcon) || (!visible && showIcon)) {
+            showIcon = visible;
+            invalidateOptionsMenu();
+        }
+    }
 
     private void createRecyclerView() {
         examsFake = InfoManager.getTemporaryFakeExams();
