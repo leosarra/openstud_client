@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        analyzeExtras(getIntent().getExtras());
     }
 
     private void login() {
@@ -122,10 +123,12 @@ public class LoginActivity extends AppCompatActivity {
                 LayoutHelper.createTextSnackBar(layout, R.string.blank_username_password_error, Snackbar.LENGTH_LONG);
             else
                 LayoutHelper.createTextSnackBar(layout, R.string.blank_username_error, Snackbar.LENGTH_LONG);
+            h.sendEmptyMessage(ClientHelper.Status.FAIL_LOGIN.getValue());
             return;
         }
         if (password.isEmpty()) {
             LayoutHelper.createTextSnackBar(layout, R.string.blank_password_error, Snackbar.LENGTH_LONG);
+            h.sendEmptyMessage(ClientHelper.Status.FAIL_LOGIN.getValue());
             return;
         }
         final int id;
@@ -133,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
             id = Integer.parseInt(username);
         } catch (NumberFormatException e) {
             LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+            h.sendEmptyMessage(ClientHelper.Status.FAIL_LOGIN.getValue());
             e.printStackTrace();
             return;
         }
@@ -168,15 +172,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void createLoginSnackBar(int string_id, int length) {
-        Snackbar snackbar = Snackbar
-                .make(layout, getResources().getString(string_id), length).setAction(R.string.retry,
-                        view -> login());
-        snackbar.show();
-    }
-
-    private void createTextSnackBar(int string_id, int length) {
-        LayoutHelper.createTextSnackBar(layout, string_id, length);
+    private void analyzeExtras(Bundle bdl) {
+        if (bdl == null) return;
+        int error = bdl.getInt("error", -1);
+        if (error == -1) return;
+        else if (error == ClientHelper.Status.INVALID_CREDENTIALS.getValue())
+            LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+        else if (error == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue())
+            LayoutHelper.createTextSnackBar(layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
     }
 
 
