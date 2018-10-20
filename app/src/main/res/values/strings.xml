@@ -34,7 +34,7 @@
     <string name="user_not_enabled_error">User not enabled to manage InfoStud!</string>
     <string name="invalid_password_error">Invalid credentials!</string>
     <string name="device_no_internet">Your device is not connected to internet</string>
-    <string name="isee_not_avaiable">Not avaiable</string>
+    <string name="isee_not_available">Not available</string>
     <string name="payment_number">Payment n. %1$s</string>
     <string name="payment_number_ext">Payment number: %1$s</string>
     <string name="course_code_pay">Course code: %1$s</string>

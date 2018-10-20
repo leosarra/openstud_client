@@ -183,7 +183,7 @@ public class ProfileActivity extends AppCompatActivity {
         LocalDate date = st.getBirthDate();
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());
-        if (isee == null) isee_field.setText(getResources().getString(R.string.isee_not_avaiable));
+        if (isee == null) isee_field.setText(getResources().getString(R.string.isee_not_available));
         else isee_field.setText(String.valueOf(isee.getValue()));
         if (st.getCourseName() != null && !st.getCourseName().equals("")) {
             departmentDescription.setText(st.getDepartmentName());
