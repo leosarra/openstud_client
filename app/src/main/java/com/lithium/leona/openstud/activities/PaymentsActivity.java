@@ -66,7 +66,7 @@ public class PaymentsActivity extends AppCompatActivity {
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        navSubtitle.setText(String.valueOf(student.getStudentID()));
+        navSubtitle.setText(student.getStudentID());
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt("tabSelected", -1);

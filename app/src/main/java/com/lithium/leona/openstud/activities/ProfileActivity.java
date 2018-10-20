@@ -178,8 +178,8 @@ public class ProfileActivity extends AppCompatActivity {
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         collapsingToolbarLayout.setTitle(st.getFirstName() + " " + st.getLastName());
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
-        navSubtitle.setText(String.valueOf(st.getStudentID()));
-        studentId.setText(String.valueOf(st.getStudentID()));
+        navSubtitle.setText(st.getStudentID());
+        studentId.setText(st.getStudentID());
         LocalDate date = st.getBirthDate();
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());

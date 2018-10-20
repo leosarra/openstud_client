@@ -159,7 +159,7 @@ public class StatsActivity extends AppCompatActivity {
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
-        subTitle.setText(String.valueOf(student.getStudentID()));
+        subTitle.setText(student.getStudentID());
 
 
         if (os == null) {

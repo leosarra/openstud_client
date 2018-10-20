@@ -131,20 +131,11 @@ public class LoginActivity extends AppCompatActivity {
             h.sendEmptyMessage(ClientHelper.Status.FAIL_LOGIN.getValue());
             return;
         }
-        final int id;
-        try {
-            id = Integer.parseInt(username);
-        } catch (NumberFormatException e) {
-            LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
-            h.sendEmptyMessage(ClientHelper.Status.FAIL_LOGIN.getValue());
-            e.printStackTrace();
-            return;
-        }
-        os = InfoManager.getOpenStud(getApplication(), id, password);
-        new Thread(() -> _login(os, id, password, rememberFlag.isChecked())).start();
+        os = InfoManager.getOpenStud(getApplication(), username, password);
+        new Thread(() -> _login(os, username, password, rememberFlag.isChecked())).start();
     }
 
-    private synchronized void _login(Openstud os, int id, String password, boolean rememberFlag) {
+    private synchronized void _login(Openstud os, String id, String password, boolean rememberFlag) {
         if (os == null) {
             h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
             return;
