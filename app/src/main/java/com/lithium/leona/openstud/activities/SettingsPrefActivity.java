@@ -84,8 +84,16 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             Preference laude = findPreference(getString(R.string.key_default_laude));
             laude.setOnPreferenceChangeListener((preference, newValue) -> {
-                PreferenceManager.setStatsNotificationEnabled(getContext(), false);
-                return true;
+                String newLaude = (String) newValue;
+                boolean valid = true;
+                try {
+                    int value = Integer.parseInt(newLaude);
+                    if (value>34 || value <30) valid = false;
+                } catch (NumberFormatException e) {
+                    valid = false;
+                }
+                if (valid) PreferenceManager.setStatsNotificationEnabled(getContext(), false);
+                return valid;
             });
         }
     }
