@@ -320,11 +320,11 @@ public class InfoManager {
 
     private static synchronized String getStudentId(Context context) {
         setupSharedPreferences(context);
-        String id;
+        String id = null;
         try {
             id = pref.getString("studentId", null);
         } catch (ClassCastException e) {
-            e.printStackTrace()
+            e.printStackTrace();
         }
         return id;
     }
