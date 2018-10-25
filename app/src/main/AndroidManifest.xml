@@ -54,6 +54,9 @@
             android:name=".activities.AboutActivity"
             android:theme="@style/AppTheme.MaterialAboutActivityLight" />
         <activity
+            android:name=".activities.ContributorsActivity"
+            android:theme="@style/AppTheme.MaterialAboutActivityLight" />
+        <activity
             android:name=".activities.SettingsPrefActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
         <activity

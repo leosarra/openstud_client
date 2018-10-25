@@ -174,6 +174,28 @@ public class ThemeEngine {
         }
     }
 
+    public static int getAboutTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                return R.style.AboutLibrariesThemeLight;
+            case DARK:
+                return R.style.AboutLibrariesThemeDark;
+            default:
+                return R.style.AboutLibrariesThemeLight;
+        }
+    }
+
+    private static int getPrimaryTextColor(Context context) {
+        int tintColor;
+        TypedValue tV = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        boolean success = theme.resolveAttribute(R.attr.primaryTextColor, tV, true);
+        if (success) tintColor = tV.data;
+        else tintColor = ContextCompat.getColor(context, android.R.color.black);
+        return tintColor;
+    }
+
     public static boolean isLightTheme(Activity activity) {
         Theme theme = getTheme(activity);
         switch (theme) {

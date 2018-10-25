@@ -122,5 +122,7 @@
     <string name="grade_stats">Voto: %1$s</string>
     <string name="add">Aggiungi</string>
     <string name="add_exams">Aggiungi esame</string>
+    <string name="contributors">Ringraziamenti</string>
+    <string name="developer">Sviluppatore</string>
 
 </resources>
