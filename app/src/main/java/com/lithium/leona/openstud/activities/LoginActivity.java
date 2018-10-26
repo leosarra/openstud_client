@@ -3,10 +3,12 @@ package com.lithium.leona.openstud.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,6 +16,8 @@ import android.widget.EditText;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.fragments.BottomSheetRecoveryFragment;
+import com.lithium.leona.openstud.fragments.BottomSheetStatsFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 
@@ -25,6 +29,7 @@ import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
+import lithium.openstud.driver.exceptions.OpenstudInvalidAnswerException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 import lithium.openstud.driver.exceptions.OpenstudUserNotEnabledException;
@@ -38,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     CoordinatorLayout layout;
     @BindView(R.id.button)
     Button btn;
+    @BindView(R.id.recovery)
+    Button recovery;
     @BindView(R.id.rememberFlag)
     CheckBox rememberFlag;
 
@@ -46,12 +53,22 @@ public class LoginActivity extends AppCompatActivity {
         if (!focused) ClientHelper.hideKeyboard(v, getApplication());
     }
 
+    @OnClick(R.id.recovery)
+    void onClickRecovery(View v) {
+        if (!ClientHelper.isNetworkAvailable(getApplication())) {
+            LayoutHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
+            recovery.setEnabled(true);
+            return;
+        }
+        recovery();
+    }
+
     @OnClick(R.id.button)
-    void onClick(View v) {
-        //requestInternetPermission();
+    void onClickLogin(View v) {
         if (!ClientHelper.isNetworkAvailable(getApplication())) {
             LayoutHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
             btn.setEnabled(true);
+            recovery.setEnabled(true);
             rememberFlag.setEnabled(true);
             username.setEnabled(true);
             password.setEnabled(true);
@@ -91,9 +108,16 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.RECOVERY_OK.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.recovery_ok, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.INVALID_STUDENT_ID.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_student_id, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.INVALID_ANSWER.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_answer, Snackbar.LENGTH_LONG);
                 }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
                     activity.btn.setEnabled(true);
+                    activity.recovery.setEnabled(true);
                     activity.rememberFlag.setEnabled(true);
                     activity.username.setEnabled(true);
                     activity.password.setEnabled(true);
@@ -111,8 +135,77 @@ public class LoginActivity extends AppCompatActivity {
         analyzeExtras(getIntent().getExtras());
     }
 
+    public void sendRecoveryRequest(String answer, String studentID) {
+        runOnUiThread(() -> {
+            btn.setEnabled(false);
+            recovery.setEnabled(false);
+            rememberFlag.setEnabled(false);
+            username.setEnabled(false);
+            password.setEnabled(false);
+        });
+        Openstud os = InfoManager.getOpenStudRecovery(this, studentID);
+        if (os == null) return;
+        try {
+            os.recoverPassword(answer);
+            h.sendEmptyMessage(ClientHelper.Status.RECOVERY_OK.getValue());
+        } catch (OpenstudConnectionException e) {
+            h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+            e.printStackTrace();
+        } catch (OpenstudInvalidResponseException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+            e.printStackTrace();
+        } catch (OpenstudInvalidCredentialsException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_STUDENT_ID.getValue());
+            e.printStackTrace();
+        } catch (OpenstudInvalidAnswerException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_ANSWER.getValue());
+            e.printStackTrace();
+        }
+
+    }
+
+    private void recovery() {
+        btn.setEnabled(false);
+        recovery.setEnabled(false);
+        rememberFlag.setEnabled(false);
+        username.setEnabled(false);
+        password.setEnabled(false);
+        String username = this.username.getText().toString();
+        if (username.isEmpty()) {
+            LayoutHelper.createTextSnackBar(layout, R.string.blank_username_error, Snackbar.LENGTH_LONG);
+            h.sendEmptyMessage(ClientHelper.Status.FAIL_LOGIN.getValue());
+            return;
+        }
+        os = InfoManager.getOpenStudRecovery(getApplication(), username);
+        System.out.println(os);
+        new Thread(() -> _recovery(os, username)).start();
+    }
+
+    private void _recovery(Openstud os, String username) {
+        if (os == null) {
+            h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
+            return;
+        }
+        try {
+            String question = os.getSecurityQuestion();
+            BottomSheetRecoveryFragment recoveryFrag = BottomSheetRecoveryFragment.newInstance(username, question);
+            recoveryFrag.show(getSupportFragmentManager(), recoveryFrag.getTag());
+            new Handler(Looper.getMainLooper()).postDelayed(() -> h.sendEmptyMessage(ClientHelper.Status.ENABLE_BUTTONS.getValue()), 1000);
+        } catch (OpenstudConnectionException e) {
+            h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+            e.printStackTrace();
+        } catch (OpenstudInvalidResponseException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+            e.printStackTrace();
+        } catch (OpenstudInvalidCredentialsException e) {
+            h.sendEmptyMessage(ClientHelper.Status.INVALID_STUDENT_ID.getValue());
+            e.printStackTrace();
+        }
+    }
+
     private void login() {
         btn.setEnabled(false);
+        recovery.setEnabled(false);
         rememberFlag.setEnabled(false);
         username.setEnabled(false);
         password.setEnabled(false);

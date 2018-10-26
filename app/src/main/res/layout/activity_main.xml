@@ -23,10 +23,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:theme="@style/MyEditTextTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,12 +38,13 @@
                 android:id="@+id/studentIdLogin"
                 android:layout_width="267dp"
                 android:layout_height="52dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:ems="10"
                 android:hint="@string/studentId"
+                android:importantForAutofill="no"
                 android:inputType="numberDecimal"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
@@ -54,7 +55,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.398"
-                android:importantForAutofill="no"
                 tools:targetApi="o" />
         </android.support.design.widget.TextInputLayout>
 
@@ -75,29 +75,30 @@
             android:layout_width="wrap_content"
             android:layout_height="64dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:theme="@style/MyEditTextTheme"
-            app:passwordToggleEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.505"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/studentIdContainer"
-            app:layout_constraintVertical_bias="0.092">
+            app:layout_constraintVertical_bias="0.092"
+            app:passwordToggleEnabled="false">
 
             <EditText
                 android:id="@+id/passwordLogin"
                 android:layout_width="267dp"
                 android:layout_height="52dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:ems="10"
                 android:hint="@string/password"
+                android:importantForAutofill="no"
                 android:inputType="textPassword"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
@@ -108,7 +109,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.499"
-                android:importantForAutofill="no"
                 tools:targetApi="o" />
         </android.support.design.widget.TextInputLayout>
 
@@ -138,6 +138,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.65"
             app:srcCompat="@drawable/header" />
+
+        <Button
+            android:id="@+id/recovery"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/forgot_password"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toStartOf="@+id/studentIdContainer"
+            app:layout_constraintTop_toBottomOf="@+id/rememberFlag" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -137,4 +137,15 @@
     <string name="add_exams">Add exam</string>
     <string name="contributors">Contributors</string>
     <string name="developer">Developer</string>
+    <string name="secret_question">Secret question</string>
+    <string name="answer">Answer</string>
+    <string name="confirm">Confirm</string>
+    <string name="recovery_password">Recovery password</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="recovery_email">Recovery email</string>
+    <string name="invalid_answer">The answer is not correct!</string>
+    <string name="invalid_student_id">Student ID does not exist</string>
+    <string name="recovery_ok">Password has been sent to your email</string>
+    <string name="recover_password_details">Answer the security question to receive a new password on your recovery email address</string>
+    <string name="forgot_password">Forgot password</string>
 </resources>

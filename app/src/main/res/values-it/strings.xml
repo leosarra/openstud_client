@@ -124,5 +124,15 @@
     <string name="add_exams">Aggiungi esame</string>
     <string name="contributors">Ringraziamenti</string>
     <string name="developer">Sviluppatore</string>
+    <string name="secret_question">Domanda segreta</string>
+    <string name="answer">Risposta</string>
+    <string name="confirm">Conferma</string>
+    <string name="recovery_password">Recupero password</string>
+    <string name="recovery_email">Email di recupero</string>
+    <string name="invalid_answer">La risposta non è corretta!</string>
+    <string name="invalid_student_id">La matricola non esiste!</string>
+    <string name="recovery_ok">La password è stata inviata sulla tua email di recupero</string>
+    <string name="recover_password_details">Rispondi alla domanda segreta per ricevere sulla tua email di recupero una nuova password</string>
+    <string name="forgot_password">Hai dimenticato la password?</string>
 
 </resources>
