@@ -114,6 +114,8 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_student_id, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.INVALID_ANSWER.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_answer, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.NO_RECOVERY.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
                 }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
                     activity.btn.setEnabled(true);
@@ -188,6 +190,10 @@ public class LoginActivity extends AppCompatActivity {
         }
         try {
             String question = os.getSecurityQuestion();
+            if (question == null) {
+                h.sendEmptyMessage(ClientHelper.Status.NO_RECOVERY.getValue());
+                return;
+            }
             BottomSheetRecoveryFragment recoveryFrag = BottomSheetRecoveryFragment.newInstance(username, question);
             recoveryFrag.show(getSupportFragmentManager(), recoveryFrag.getTag());
             new Handler(Looper.getMainLooper()).postDelayed(() -> h.sendEmptyMessage(ClientHelper.Status.ENABLE_BUTTONS.getValue()), 1000);
