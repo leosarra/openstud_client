@@ -51,8 +51,8 @@
     <string name="delete_reservation">Cancella prenotazione</string>
 
     <string name="isee_not_available">Non dichiarato</string>
-    <string name="blank_username_error">"L'username non è può essere lasciato vuoto!</string>
-    <string name="blank_password_error">"La password non è può essere lasciata vuota!</string>
+    <string name="blank_username_error">"L'username non può essere lasciato vuoto!</string>
+    <string name="blank_password_error">"La password non può essere lasciata vuota!</string>
     <string name="blank_username_password_error">"Username e password non possono essere lasciati vuoti!</string>
     <string name="expired_password_error">La password è scaduta, è necessario cambiarla!</string>
     <string name="connection_error">Errore di connessione</string>
