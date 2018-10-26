@@ -51,6 +51,12 @@ public class InfoManager {
     }
 
 
+    public static Openstud getOpenStudRecovery(Context context, String studentId) {
+        setupSharedPreferences(context);
+        if (studentId == null) return null;
+        return new OpenstudBuilder().setStudentID(studentId).setRetryCounter(3).setLogger(Logger.getLogger("OpenStud_client")).build();
+    }
+
     public static Openstud getOpenStud(Context context, String studentId, String password) {
         setupSharedPreferences(context);
         if (studentId == null || password == null || password.isEmpty()) return null;
