@@ -91,13 +91,17 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             LoginActivity activity = mActivity.get();
             if (activity != null) {
-                View.OnClickListener listener = v -> new Thread(activity::login);
+                View.OnClickListener listener = v -> new Thread(activity::login).start();
+                View.OnClickListener listener2 = v -> new Thread(activity::recovery).start();
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
                     Intent intent = new Intent(activity, ExamsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
                 } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                }
+                else if (msg.what == ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener2);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
@@ -198,7 +202,7 @@ public class LoginActivity extends AppCompatActivity {
             recoveryFrag.show(getSupportFragmentManager(), recoveryFrag.getTag());
             new Handler(Looper.getMainLooper()).postDelayed(() -> h.sendEmptyMessage(ClientHelper.Status.ENABLE_BUTTONS.getValue()), 1000);
         } catch (OpenstudConnectionException e) {
-            h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+            h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidResponseException e) {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
