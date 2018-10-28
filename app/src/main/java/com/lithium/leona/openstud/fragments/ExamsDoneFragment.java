@@ -80,11 +80,10 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             if (examsDoneFrag == null) return;
             ExamsActivity activity = (ExamsActivity) examsDoneFrag.getActivity();
             if (activity != null) {
+                View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);

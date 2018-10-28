@@ -55,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             ProfileActivity activity = mActivity.get();
             if (activity != null) {
-                View.OnClickListener listener = v -> new Thread(() -> activity.refresh(activity.os));
+                View.OnClickListener listener = v -> new Thread(() -> activity.refresh(activity.os)).start();
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
                     activity.applyInfos(activity.student, activity.isee);
                 } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {

@@ -89,7 +89,7 @@ public class SearchResultActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             SearchResultActivity activity = mActivity.get();
             if (activity != null) {
-                OnClickListener listener = v -> new Thread(activity::refreshAvaiableReservations);
+                OnClickListener listener = v -> new Thread(activity::refreshAvaiableReservations).start();
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
