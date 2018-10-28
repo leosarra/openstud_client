@@ -9,14 +9,18 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import lithium.openstud.driver.core.Event;
 import lithium.openstud.driver.core.ExamDoable;
 import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Isee;
+import lithium.openstud.driver.core.Lesson;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudBuilder;
+import lithium.openstud.driver.core.OpenstudHelper;
 import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.core.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
@@ -34,6 +38,7 @@ public class InfoManager {
     private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
     private static List<ExamDone> fakeExams;
+    private static List<Event> events;
 
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
@@ -101,6 +106,81 @@ public class InfoManager {
         }
         return student;
     }
+
+/*
+    public static Map<String, List<Lesson>> getTimetableCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (timetable != null) return timetable;
+            oldObj = pref.getString("timetable", "null");
+        }
+        Type listType = new TypeToken<Map<String, List<Lesson>>>() {
+        }.getType();
+        return gson.fromJson(oldObj, listType);
+    }
+
+
+    public static Map<String, List<Lesson>> getTimetable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        Gson gson = new Gson();
+        List<ExamDoable> doable = os.getExamsDoable();
+        Map<String, List<Lesson>> newTimetable = os.getTimetable(doable);
+        synchronized (InfoManager.class) {
+            timetable = newTimetable;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            Type listType = new TypeToken<Map<String, List<Lesson>>>() {
+            }.getType();
+            String json = gson.toJson(timetable, listType);
+            prefsEditor.putString("timetable", json);
+            prefsEditor.apply();
+        }
+        return newTimetable;
+    }
+*/
+
+    public static List<Event> getEventsCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (events != null) return events;
+            oldObj = pref.getString("events", "null");
+        }
+        Type listType = new TypeToken<List<Event>>() {
+        }.getType();
+        return gson.fromJson(oldObj, listType);
+    }
+
+
+    public static List<Event> getEvents(Context context, Openstud os, Student student) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        Gson gson = new Gson();
+        Map<String, List<Lesson>> newTimetable = os.getTimetable(os.getExamsDoable());
+        List<lithium.openstud.driver.core.Event> newEvents = os.getCalendarEvents(student);
+        if (newEvents == null) return null;
+        if (newTimetable != null && !newTimetable.isEmpty()) newEvents.addAll(OpenstudHelper.generateEventsFromTimetable(newTimetable));
+        synchronized (InfoManager.class) {
+            events = newEvents;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            Type listType = new TypeToken<List<Event>>() {
+            }.getType();
+            String json = gson.toJson(events, listType);
+            prefsEditor.putString("events", json);
+            prefsEditor.apply();
+        }
+        return newEvents;
+    }
+
 
     public static void saveTemporaryFakeExams(List<ExamDone> exams) {
         fakeExams = exams;
