@@ -16,6 +16,10 @@
                 android:icon="@drawable/ic_baseline_assessment"
                 android:title="@string/stats" />
             <item
+                android:id="@+id/calendar_menu"
+                android:icon="@drawable/ic_baseline_payment"
+                android:title="@string/calendar" />
+            <item
                 android:id="@+id/payments_menu"
                 android:icon="@drawable/ic_baseline_payment"
                 android:title="@string/payments" />

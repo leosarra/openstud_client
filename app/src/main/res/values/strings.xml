@@ -149,4 +149,5 @@
     <string name="recover_password_details">Answer the security question to receive a new password on your recovery email address</string>
     <string name="forgot_password">Forgot password</string>
     <string name="no_recovery">Unable to recover your password. Contact the Student Office</string>
+    <string name="calendar">Calendar</string>
 </resources>

@@ -197,6 +197,12 @@ public class ExamsActivity extends AppCompatActivity {
                         break;
                     }
 
+                    case R.id.calendar_menu: {
+                        Intent intent = new Intent(ExamsActivity.this, CalendarActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                     case R.id.profile_menu: {
                         Intent intent = new Intent(ExamsActivity.this, ProfileActivity.class);
                         startActivity(intent);

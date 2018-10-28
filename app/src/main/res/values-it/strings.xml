@@ -135,5 +135,6 @@
     <string name="recover_password_details">Rispondi alla domanda segreta per ricevere sulla tua email di recupero una nuova password</string>
     <string name="forgot_password">Hai dimenticato la password?</string>
     <string name="no_recovery">Impossibile recuperare la password. Contatta la segreteria.</string>
+    <string name="calendar">Calendar</string>
 
 </resources>

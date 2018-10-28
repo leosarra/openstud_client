@@ -17,6 +17,29 @@
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
+    <style name="Toolbar" parent="Theme.AppCompat">
+        <item name="actionMenuTextColor">@android:color/white</item>
+    </style>
+
+    <style name="ToolbarTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ToolbarSubtitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ToolbarStyle">
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <!--<item name="android:background">@color/colorPrimary</item>-->
+        <item name="theme">@style/Toolbar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlHighlight">#3fff</item>
+        <item name="titleTextAppearance">@style/ToolbarTitleTextAppearance</item>
+        <item name="subtitleTextAppearance">@style/ToolbarSubtitleTextAppearance</item>
+    </style>
+
     <style name="AppThemeLight" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>

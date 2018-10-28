@@ -39,6 +39,9 @@
         <activity
             android:name=".activities.SearchResultActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
+        <activity
+            android:name=".activities.CalendarActivity"
+            android:theme="@style/NoActionBarAppLightTheme" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
