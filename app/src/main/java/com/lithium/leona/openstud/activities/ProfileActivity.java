@@ -134,6 +134,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         applyInfos(student, isee);
+        swipeRefreshLayout.setNestedScrollingEnabled(true);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Thread t1 = new Thread(() -> refresh(os));
@@ -275,7 +276,7 @@ public class ProfileActivity extends AppCompatActivity {
         return lastUpdate;
     }
 
-    private void setRefreshing(boolean enabled) {
-        runOnUiThread(() -> swipeRefreshLayout.setEnabled(enabled));
+    private void setRefreshing(boolean refreshing) {
+        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(refreshing));
     }
 }
