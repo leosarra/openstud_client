@@ -160,15 +160,6 @@ public class StatsActivity extends AppCompatActivity {
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
         subTitle.setText(student.getStudentID());
-
-
-        if (os == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(this, os);
         createRecyclerView();
         if (exams_cached != null && !exams_cached.isEmpty()) {
