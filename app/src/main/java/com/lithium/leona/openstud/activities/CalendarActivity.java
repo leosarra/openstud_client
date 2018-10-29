@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -118,7 +119,8 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
     TextView emptyText;
     @BindView(R.id.empty_container)
     LinearLayout emptyContainer;
-
+    @BindView(R.id.empty_button_reload)
+    Button emptyButton;
     @OnClick(R.id.empty_button_reload)
     void onEmptyButton() {
         if (swipeRefreshLayout.isRefreshing()) return;
@@ -226,7 +228,11 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
     }
 
     private void getEvents() {
-        runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
+
+        runOnUiThread(() -> {
+            swipeRefreshLayout.setRefreshing(true);
+            emptyButton.setEnabled(false);
+        });
         new Thread(() -> {
             try {
                 List<lithium.openstud.driver.core.Event> newEvents = InfoManager.getEvents(this, os, student);
@@ -244,7 +250,10 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 e.printStackTrace();
             } finally {
-                runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
+                runOnUiThread(() -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    emptyButton.setEnabled(true);
+                });
             }
         }).start();
     }
