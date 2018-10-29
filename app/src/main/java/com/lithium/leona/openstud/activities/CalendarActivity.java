@@ -63,7 +63,7 @@ import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class CalendarActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
+public class CalendarActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, DialogInterface.OnDismissListener {
 
 
     private static class CalendarEventHandler extends Handler {
@@ -160,7 +160,7 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
             finish();
             return;
         }
-        //appBarLayout.addOnOffsetChangedListener(this);
+        appBarLayout.addOnOffsetChangedListener(this);
         View headerLayout = navigationView.getHeaderView(0);
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
@@ -322,12 +322,14 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
             adapter_lessons.notifyDataSetChanged();
         });
         if (exams.isEmpty() && reservations.isEmpty() && lessons.isEmpty()) {
+            invalidateOptionsMenu();
             emptyContainer.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.VISIBLE);
             findViewById(R.id.lessons_container).setVisibility(View.GONE);
             findViewById(R.id.exams_container).setVisibility(View.GONE);
             findViewById(R.id.reservations_container).setVisibility(View.GONE);
         } else {
+            invalidateOptionsMenu();
             emptyContainer.setVisibility(View.GONE);
             emptyView.setVisibility(View.GONE);
             if (!lessons.isEmpty())
@@ -463,7 +465,6 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
         super.onSaveInstanceState(savedInstance);
     }
 
-    /*
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
         if (Math.abs(offset) < appBarLayout.getTotalScrollRange()/2)
@@ -477,7 +478,6 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
             isExpanded = false;
         }
     }
-    */
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calendar_bar, menu);
@@ -515,4 +515,17 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
             if (refreshAfterDismiss) updateCalendar(events);
         }
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (events == null || events.isEmpty()) {
+            MenuItem item = menu.findItem(R.id.filter);
+            item.setVisible(false);
+        } else {
+            MenuItem item = menu.findItem(R.id.filter);
+            item.setVisible(true);
+        }
+        return true;
+    }
+
 }
