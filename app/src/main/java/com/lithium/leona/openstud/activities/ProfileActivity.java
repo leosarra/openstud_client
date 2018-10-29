@@ -229,6 +229,13 @@ public class ProfileActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+
+                    case R.id.calendar_menu: {
+                        Intent intent = new Intent(ProfileActivity.this, CalendarActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                     case R.id.exit_menu: {
                         InfoManager.clearSharedPreferences(getApplication());
                         Intent i = new Intent(ProfileActivity.this, LauncherActivity.class);

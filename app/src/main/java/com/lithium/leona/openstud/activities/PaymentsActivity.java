@@ -97,6 +97,13 @@ public class PaymentsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+
+                    case R.id.calendar_menu: {
+                        Intent intent = new Intent(PaymentsActivity.this, CalendarActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                     case R.id.exit_menu: {
                         InfoManager.clearSharedPreferences(getApplication());
                         Intent i = new Intent(PaymentsActivity.this, LauncherActivity.class);

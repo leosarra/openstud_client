@@ -365,6 +365,13 @@ public class StatsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+
+                    case R.id.calendar_menu: {
+                        Intent intent = new Intent(StatsActivity.this, CalendarActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                     case R.id.exit_menu: {
                         InfoManager.clearSharedPreferences(getApplication());
                         Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
