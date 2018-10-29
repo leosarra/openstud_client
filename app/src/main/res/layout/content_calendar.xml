@@ -53,8 +53,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp"
-                    android:nestedScrollingEnabled="false"
-                    android:paddingBottom="5dp">
+                    android:nestedScrollingEnabled="false">
                 </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
                     <LinearLayout
@@ -79,8 +78,7 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
-                            android:nestedScrollingEnabled="false"
-                            android:paddingBottom="5dp">
+                            android:nestedScrollingEnabled="false">
                         </android.support.v7.widget.RecyclerView>
                     </LinearLayout>
                 <LinearLayout
@@ -105,8 +103,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="15dp"
                         android:paddingEnd="15dp"
-                        android:nestedScrollingEnabled="false"
-                        android:paddingBottom="5dp">
+                        android:nestedScrollingEnabled="false">
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
                 </LinearLayout>
