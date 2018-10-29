@@ -137,10 +137,14 @@
     <string name="recover_password_details">Rispondi alla domanda segreta per ricevere sulla tua email di recupero una nuova password</string>
     <string name="forgot_password">Hai dimenticato la password?</string>
     <string name="no_recovery">Impossibile recuperare la password. Contatta la segreteria.</string>
-    <string name="calendar">Calendar</string>
+    <string name="calendar">Calendario</string>
     <string name="no_events">No events found</string>
     <string name="where_event">Luogo: %1$s</string>
     <string name="start_lesson">Inizio lezione: %1$s</string>
     <string name="end_lesson">Fine lezione: %1$s</string>
+    <string name="lessons">Lezioni</string>
+    <string name="close">Chiudi</string>
+    <string name="filter_calendar_description">Scegli le lezioni che vuoi siano visualizzate nel calendario</string>
+    <string name="filter_lessons">Filtro lezioni</string>
 
 </resources>

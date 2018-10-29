@@ -41,8 +41,8 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     app:compactCalendarBackgroundColor="?attr/colorPrimary"
-                    app:compactCalendarCurrentDayBackgroundColor="#ffa007"
-                    app:compactCalendarCurrentSelectedDayBackgroundColor="#d72946"
+                    app:compactCalendarCurrentDayBackgroundColor="#ff7f07"
+                    app:compactCalendarCurrentSelectedDayBackgroundColor="#baf25358"
                     app:compactCalendarTextColor="#fff"
                     app:compactCalendarTextSize="12sp"
                     app:compactCalendarUppercaseWeekDaysHeader="true"/>

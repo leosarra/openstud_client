@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activities.CalendarActivity">
+    tools:context=".activities.CalendarActivity"
+    android:background="?attr/backgroundColor">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,15 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v4.widget.NestedScrollView
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:showIn="@layout/activity_calendar">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="13dp">
+                android:layout_height="wrap_content"
+                android:paddingTop="13dp"
+                android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -35,22 +37,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Lessons"
-                        android:textColor="?attr/primaryTextColor"
-                        android:textSize="30sp"
                         android:paddingStart="15dp"
                         android:paddingEnd="10dp"
-                        android:textStyle="bold"
-                        />
+                        android:text="@string/lessons"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/lessons_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="10dp">
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:nestedScrollingEnabled="false">
                 </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
                     <LinearLayout
@@ -59,21 +62,23 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         >
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Reservations"
-                            android:textColor="?attr/primaryTextColor"
-                            android:textSize="30sp"
                             android:paddingStart="15dp"
                             android:paddingEnd="10dp"
-                            android:textStyle="bold"/>
+                            android:text="@string/reservations"
+                            android:textColor="?attr/primaryTextColor"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/reservations_rv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="10dp">
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:nestedScrollingEnabled="false">
                         </android.support.v7.widget.RecyclerView>
                     </LinearLayout>
                 <LinearLayout
@@ -81,29 +86,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Exams"
-                        android:textColor="?attr/primaryTextColor"
-                        android:textSize="30sp"
                         android:paddingStart="15dp"
                         android:paddingEnd="10dp"
-                        android:textStyle="bold"/>
+                        android:text="@string/exams"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/exams_doable_rv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="10dp">
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
+                        android:nestedScrollingEnabled="false">
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/empty_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="80dp">
                 <include
                     layout="@layout/empty_view"/>
-            </FrameLayout>
-            </android.support.v4.widget.NestedScrollView>
+                </LinearLayout>
+            </LinearLayout>
+            </ScrollView>
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 

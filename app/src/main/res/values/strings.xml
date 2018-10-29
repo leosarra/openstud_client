@@ -156,4 +156,8 @@
     <string name="where_event">Place: %1$s</string>
     <string name="start_lesson">Start lesson: %1$s</string>
     <string name="end_lesson">End lesson: %1$s</string>
+    <string name="lessons">Lessons</string>
+    <string name="close">Close</string>
+    <string name="filter_calendar_description">Choose the lessons that you want to be shown in the calendar</string>
+    <string name="filter_lessons">Filter lessons</string>
 </resources>
