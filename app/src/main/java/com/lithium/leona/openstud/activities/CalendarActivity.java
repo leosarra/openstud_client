@@ -1,4 +1,5 @@
 package com.lithium.leona.openstud.activities;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,7 +35,6 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.EventAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.BottomSheetFilterEventFragment;
-import com.lithium.leona.openstud.fragments.BottomSheetRecoveryFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -92,22 +92,36 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
         }
     }
 
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.app_bar_layout) AppBarLayout appBarLayout;
-    @BindView(R.id.compactcalendar_view) CompactCalendarView compactCalendarView;
-    @BindView(R.id.nav_view) NavigationView navigationView;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.date_picker_arrow) ImageView arrow;
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.lessons_rv) RecyclerView lessons_rv;
-    @BindView(R.id.exams_doable_rv) RecyclerView exams_rv;
-    @BindView(R.id.reservations_rv) RecyclerView reservations_rv;
-    @BindView(R.id.empty_layout) LinearLayout emptyView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.compactcalendar_view)
+    CompactCalendarView compactCalendarView;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.date_picker_arrow)
+    ImageView arrow;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.lessons_rv)
+    RecyclerView lessons_rv;
+    @BindView(R.id.exams_doable_rv)
+    RecyclerView exams_rv;
+    @BindView(R.id.reservations_rv)
+    RecyclerView reservations_rv;
+    @BindView(R.id.empty_layout)
+    LinearLayout emptyView;
     @BindView(R.id.empty_text)
     TextView emptyText;
-    @BindView(R.id.empty_container) LinearLayout emptyContainer;
-    @OnClick(R.id.empty_button_reload) void onEmptyButton(){
-        if(swipeRefreshLayout.isRefreshing()) return;
+    @BindView(R.id.empty_container)
+    LinearLayout emptyContainer;
+
+    @OnClick(R.id.empty_button_reload)
+    void onEmptyButton() {
+        if (swipeRefreshLayout.isRefreshing()) return;
         getEvents();
     }
 
@@ -172,7 +186,7 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
             }
         });
         setupReciclerLayouts();
-        List<lithium.openstud.driver.core.Event> events_cached = InfoManager.getEventsCached(this,os);
+        List<lithium.openstud.driver.core.Event> events_cached = InfoManager.getEventsCached(this, os);
 
         if (events_cached != null && !events_cached.isEmpty()) events.addAll(events_cached);
         // Set current date to today
@@ -211,37 +225,38 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
         reservations_rv.setAdapter(adapter_reservations);
     }
 
-    private void getEvents(){
+    private void getEvents() {
         runOnUiThread(() -> swipeRefreshLayout.setRefreshing(true));
-        new Thread(()->{
-                try {
-                    List<lithium.openstud.driver.core.Event> newEvents = InfoManager.getEvents(this,os, student);
-                    updateEventList(newEvents);
-                    h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
-                } catch (OpenstudConnectionException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidResponseException e) {
-                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
-                    e.printStackTrace();
-                } catch (OpenstudInvalidCredentialsException e) {
-                    if (e.isPasswordExpired())
-                        h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                    else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
-                    e.printStackTrace();
-                } finally {
-                    runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
-                }
-            }).start();
+        new Thread(() -> {
+            try {
+                List<lithium.openstud.driver.core.Event> newEvents = InfoManager.getEvents(this, os, student);
+                updateEventList(newEvents);
+                h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
+            } catch (OpenstudConnectionException e) {
+                h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidResponseException e) {
+                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                e.printStackTrace();
+            } catch (OpenstudInvalidCredentialsException e) {
+                if (e.isPasswordExpired())
+                    h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                e.printStackTrace();
+            } finally {
+                runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
+            }
+        }).start();
     }
 
 
-    private void updateCalendar(List<lithium.openstud.driver.core.Event> events){
+    private void updateCalendar(List<lithium.openstud.driver.core.Event> events) {
         if (events == null) return;
         List<Event> calendarEvents = new LinkedList<>();
         List<Long> withLesson = new LinkedList<>();
-        for (lithium.openstud.driver.core.Event event: events){
-            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription())) continue;
+        for (lithium.openstud.driver.core.Event event : events) {
+            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription()))
+                continue;
             ZoneId zoneId = ZoneId.systemDefault();
             Timestamp timestamp = new Timestamp(event.getStart().toLocalDate().atStartOfDay(zoneId).toInstant().toEpochMilli());
             Event ev;
@@ -270,7 +285,8 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
         ZoneId zoneId = ZoneId.systemDefault();
         System.out.println(date);
         for (lithium.openstud.driver.core.Event event : events) {
-            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription())) continue;
+            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription()))
+                continue;
             Instant instant = Instant.ofEpochMilli(date.getTime());
             instant.atZone(zoneId);
             System.out.println(date);
@@ -302,15 +318,16 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
             findViewById(R.id.lessons_container).setVisibility(View.GONE);
             findViewById(R.id.exams_container).setVisibility(View.GONE);
             findViewById(R.id.reservations_container).setVisibility(View.GONE);
-        }
-        else {
+        } else {
             emptyContainer.setVisibility(View.GONE);
             emptyView.setVisibility(View.GONE);
-            if (!lessons.isEmpty()) findViewById(R.id.lessons_container).setVisibility(View.VISIBLE);
+            if (!lessons.isEmpty())
+                findViewById(R.id.lessons_container).setVisibility(View.VISIBLE);
             else findViewById(R.id.lessons_container).setVisibility(View.GONE);
             if (!exams.isEmpty()) findViewById(R.id.exams_container).setVisibility(View.VISIBLE);
             else findViewById(R.id.exams_container).setVisibility(View.GONE);
-            if (!reservations.isEmpty()) findViewById(R.id.reservations_container).setVisibility(View.VISIBLE);
+            if (!reservations.isEmpty())
+                findViewById(R.id.reservations_container).setVisibility(View.VISIBLE);
             else findViewById(R.id.reservations_container).setVisibility(View.GONE);
         }
 
@@ -361,7 +378,6 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     private void setupDrawerListener() {
@@ -424,7 +440,7 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
                 });
     }
 
-    void animateExpansion(){
+    void animateExpansion() {
         float rotation = isExpanded ? 0 : 180;
         ViewCompat.animate(arrow).rotation(rotation).start();
 
@@ -433,8 +449,8 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
     }
 
     public void onSaveInstanceState(Bundle savedInstance) {
-        savedInstance.putBoolean("loadOnStart",false);
-        savedInstance.putSerializable("currentDate",currentDate);
+        savedInstance.putBoolean("loadOnStart", false);
+        savedInstance.putSerializable("currentDate", currentDate);
         super.onSaveInstanceState(savedInstance);
     }
 
@@ -463,20 +479,21 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
         return true;
     }
 
-    private synchronized List<String> generateListEventsNames(){
+    private synchronized List<String> generateListEventsNames() {
         List<String> names = new LinkedList<>();
-        for (lithium.openstud.driver.core.Event event : events){
+        for (lithium.openstud.driver.core.Event event : events) {
             if (!names.contains(event.getDescription())) names.add(event.getDescription());
         }
         return names;
     }
-    private void showFilterDialog(){
+
+    private void showFilterDialog() {
         BottomSheetFilterEventFragment filterFrag = BottomSheetFilterEventFragment.newInstance(generateListEventsNames());
         filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());
     }
 
-    private synchronized void updateEventList(List<lithium.openstud.driver.core.Event> newEvents){
-        if (newEvents != null && events!= null && !events.equals(newEvents)) {
+    private synchronized void updateEventList(List<lithium.openstud.driver.core.Event> newEvents) {
+        if (newEvents != null && events != null && !events.equals(newEvents)) {
             events.clear();
             events.addAll(newEvents);
             updateCalendar(events);
@@ -485,7 +502,7 @@ public class CalendarActivity extends AppCompatActivity implements DialogInterfa
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        synchronized (this){
+        synchronized (this) {
             if (refreshAfterDismiss) updateCalendar(events);
         }
     }

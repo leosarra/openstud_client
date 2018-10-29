@@ -3,20 +3,15 @@ package com.lithium.leona.openstud.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 
 import org.threeten.bp.format.DateTimeFormatter;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -82,27 +77,27 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
 
         @SuppressLint("ResourceType")
         void setDetails(final Event ev) {
-            if(ev.getWhere() == null || ev.getWhere().trim().isEmpty()) txtWhere.setVisibility(View.GONE);
-            else txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getWhere()));
+            if (ev.getWhere() == null || ev.getWhere().trim().isEmpty())
+                txtWhere.setVisibility(View.GONE);
+            else
+                txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getWhere()));
             txtTeacher.setText(context.getResources().getString(R.string.teacher_event, ev.getTeacher()));
-            if(ev.getEventType() == EventType.DOABLE || ev.getEventType() == EventType.RESERVED) {
+            if (ev.getEventType() == EventType.DOABLE || ev.getEventType() == EventType.RESERVED) {
                 txtName.setText(ev.getDescription());
 
                 txtStartDate.setVisibility(View.GONE);
                 txtEndDate.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
                 String name = ev.getDescription().replace("\n", " ");
                 int startIdx = name.indexOf(" ");
                 int endIdx = name.indexOf("Docente:");
                 if (startIdx != -1 && endIdx != -1) {
                     if (name.endsWith(" ")) {
-                        name = name.substring(0,name.length()-1);
+                        name = name.substring(0, name.length() - 1);
                     }
-                    txtName.setText(name.substring(startIdx,endIdx));
-                }
-                else txtName.setText(ev.getDescription());
+                    txtName.setText(name.substring(startIdx, endIdx));
+                } else txtName.setText(ev.getDescription());
                 txtStartDate.setText(context.getResources().getString(R.string.start_lesson, ev.getStart().format(formatter)));
                 txtEndDate.setText(context.getResources().getString(R.string.end_lesson, ev.getEnd().format(formatter)));
             }

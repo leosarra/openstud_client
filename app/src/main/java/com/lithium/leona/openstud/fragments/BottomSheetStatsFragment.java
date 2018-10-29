@@ -94,7 +94,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
             }
         });
         examName.setOnKeyListener((v1, keyCode, event) -> {
-            if( keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 ClientHelper.hideKeyboard(v, getContext());
                 return true;
             }

@@ -103,17 +103,17 @@ public class AboutActivity extends MaterialAboutActivity {
                         .setOnClickAction(() -> startActivity(new Intent(this, ContributorsActivity.class)))
                         .build())
                 .addItem(new MaterialAboutActionItem.Builder()
-                .text(R.string.open_source_libs)
-                .icon(libraries)
-                .setOnClickAction(() -> new LibsBuilder()
-                        .withAutoDetect(true)
-                        .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                        .withActivityTheme(id_theme)
-                        .start(this))
-                .build());
+                        .text(R.string.open_source_libs)
+                        .icon(libraries)
+                        .setOnClickAction(() -> new LibsBuilder()
+                                .withAutoDetect(true)
+                                .withActivityTitle(this.getResources().getString(R.string.open_source_libs))
+                                .withAboutIconShown(true)
+                                .withAboutVersionShown(true)
+                                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                                .withActivityTheme(id_theme)
+                                .start(this))
+                        .build());
 
     }
 }

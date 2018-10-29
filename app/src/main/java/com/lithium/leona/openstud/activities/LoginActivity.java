@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,7 +16,6 @@ import android.widget.EditText;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.BottomSheetRecoveryFragment;
-import com.lithium.leona.openstud.fragments.BottomSheetStatsFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 
@@ -99,8 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                     activity.startActivity(intent);
                 } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                }
-                else if (msg.what == ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue()) {
+                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener2);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);

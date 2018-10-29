@@ -169,7 +169,8 @@ public class InfoManager {
         Map<String, List<Lesson>> newTimetable = os.getTimetable(os.getExamsDoable());
         List<lithium.openstud.driver.core.Event> newEvents = os.getCalendarEvents(student);
         if (newEvents == null) return null;
-        if (newTimetable != null && !newTimetable.isEmpty()) newEvents.addAll(OpenstudHelper.generateEventsFromTimetable(newTimetable));
+        if (newTimetable != null && !newTimetable.isEmpty())
+            newEvents.addAll(OpenstudHelper.generateEventsFromTimetable(newTimetable));
         synchronized (InfoManager.class) {
             events = newEvents;
             SharedPreferences.Editor prefsEditor = pref.edit();
@@ -467,7 +468,7 @@ public class InfoManager {
     }
 
 
-    public static synchronized void setupExceptionFilter(Context context) {
+    private static synchronized void setupExceptionFilter(Context context) {
         setupSharedPreferences(context);
         if (filter != null) return;
         synchronized (InfoManager.class) {
@@ -478,40 +479,39 @@ public class InfoManager {
             if (json == null) {
                 filter = new LinkedList<>();
                 SharedPreferences.Editor editor = pref.edit();
-                String toJson = gson.toJson(filter,listType);
+                String toJson = gson.toJson(filter, listType);
                 editor.putString("filter_calendar", toJson);
                 editor.apply();
-            }
-            else filter = gson.fromJson(json, listType);
+            } else filter = gson.fromJson(json, listType);
         }
     }
 
-    public static boolean filterContains(Context context, String name){
+    public static boolean filterContains(Context context, String name) {
         setupExceptionFilter(context);
-        synchronized (InfoManager.class){
+        synchronized (InfoManager.class) {
             return filter.contains(name);
         }
     }
 
-    public static void addExceptionToFilter(Context context, String name){
+    public static void addExceptionToFilter(Context context, String name) {
         setupExceptionFilter(context);
-        synchronized (InfoManager.class){
+        synchronized (InfoManager.class) {
             if (!filter.contains(name)) filter.add(name);
         }
         updateFilter();
     }
 
-    public static void removeExceptionFromFilter(Context context, String name){
+    public static void removeExceptionFromFilter(Context context, String name) {
         setupExceptionFilter(context);
-        synchronized (InfoManager.class){
-            if (filter.contains(name)) filter.remove(name);
+        synchronized (InfoManager.class) {
+            filter.remove(name);
         }
         updateFilter();
     }
 
-    public static void clearFilter(Context context, List<String> names){
+    public static void clearFilter(Context context, List<String> names) {
         setupExceptionFilter(context);
-        synchronized (InfoManager.class){
+        synchronized (InfoManager.class) {
             for (String exception : filter) {
                 if (!names.contains(exception)) filter.remove(exception);
             }
@@ -519,13 +519,13 @@ public class InfoManager {
         updateFilter();
     }
 
-    private static synchronized void updateFilter(){
+    private static synchronized void updateFilter() {
         if (filter == null) return;
         Gson gson = new Gson();
         Type listType = new TypeToken<List<String>>() {
         }.getType();
         SharedPreferences.Editor editor = pref.edit();
-        String toJson = gson.toJson(filter,listType);
+        String toJson = gson.toJson(filter, listType);
         editor.putString("filter_calendar", toJson);
         editor.apply();
     }

@@ -32,7 +32,7 @@ public class ContributorsActivity extends MaterialAboutActivity {
         buildContributors(context, appCardBuilder2, "Leonardo Razovic", "Logo designer", "https://www.twitter.com/lrazovic");
         buildContributors(context, appCardBuilder3, "Valerio Silvestro", "Tester", null);
         buildContributors(context, appCardBuilder4, "Ugo Possenti", "Concept designer", "https://twitter.com/MEPoss");
-        return new MaterialAboutList(appCardBuilder1.build(),appCardBuilder2.build(),appCardBuilder3.build(),appCardBuilder4.build());
+        return new MaterialAboutList(appCardBuilder1.build(), appCardBuilder2.build(), appCardBuilder3.build(), appCardBuilder4.build());
     }
 
     @Nullable

@@ -88,7 +88,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 boolean valid = true;
                 try {
                     int value = Integer.parseInt(newLaude);
-                    if (value>34 || value <30) valid = false;
+                    if (value > 34 || value < 30) valid = false;
                 } catch (NumberFormatException e) {
                     valid = false;
                 }

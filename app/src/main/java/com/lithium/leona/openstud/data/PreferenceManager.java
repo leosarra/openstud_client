@@ -34,7 +34,7 @@ public class PreferenceManager {
         try {
             laudeValue = Integer.parseInt(pref.getString(context.getResources().getString(R.string.key_default_laude), "30"));
             if (laudeValue < 30 || laudeValue > 34) laudeValue = 30;
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         return laudeValue;

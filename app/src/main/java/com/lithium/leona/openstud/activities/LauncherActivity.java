@@ -19,11 +19,11 @@ public class LauncherActivity extends AppCompatActivity {
                 InfoManager.clearSharedPreferences(getApplication());
             if (InfoManager.hasLogin(getApplication())) {
                 Intent intent = new Intent(LauncherActivity.this, ExamsActivity.class);
-                if (bdl !=null) intent.putExtras(bdl);
+                if (bdl != null) intent.putExtras(bdl);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(LauncherActivity.this, LoginActivity.class);
-                if (bdl !=null) intent.putExtras(bdl);
+                if (bdl != null) intent.putExtras(bdl);
                 startActivity(intent);
             }
         }).start();

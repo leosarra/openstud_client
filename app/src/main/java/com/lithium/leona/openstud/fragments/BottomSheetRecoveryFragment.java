@@ -18,19 +18,17 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.LoginActivity;
-import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.helpers.ClientHelper;
-import com.warkiz.widget.IndicatorSeekBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.OpenstudHelper;
 
 public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
     public BottomSheetRecoveryFragment() {
         // Required empty public constructor
     }
+
     String questionText;
     String studentID;
     @BindView(R.id.questionInput)
@@ -68,6 +66,7 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
         myFragment.setArguments(args);
         return myFragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +116,7 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
             }
         });
         questionInput.setOnKeyListener((v1, keyCode, event) -> {
-            if( keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                 ClientHelper.hideKeyboard(v, getContext());
                 return true;
             }

@@ -135,7 +135,8 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             txtEndDate.setText(activity.getResources().getString(R.string.end_date_reservation, res.getEndDate().format(formatter)));
             txtDate.setText(activity.getResources().getString(R.string.date_exam, res.getExamDate().format(formatter)));
             txtChannel.setText(activity.getResources().getString(R.string.channel_reservation, res.getChannel()));
-            if (res.getNote() == null || res.getNote().trim().isEmpty()) txtInfo.setVisibility(View.GONE);
+            if (res.getNote() == null || res.getNote().trim().isEmpty())
+                txtInfo.setVisibility(View.GONE);
             else {
                 txtInfo.setText(infos);
             }
