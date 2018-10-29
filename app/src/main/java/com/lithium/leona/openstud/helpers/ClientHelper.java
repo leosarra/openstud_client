@@ -25,13 +25,16 @@ import org.threeten.bp.ZoneId;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import lithium.openstud.driver.core.Event;
 import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.OpenstudHelper;
 
@@ -72,6 +75,31 @@ public class ClientHelper {
             return null;
         }
 
+    }
+
+    public static Date getDateWithoutTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    public static List<Event> orderByStartTime(List<Event> events, boolean ascending) {
+        Collections.sort(events, (o1, o2) -> {
+            if (o1.getStart() == null && o2.getStart() == null) return 0;
+            if (ascending)
+                if (o1.getStart() == null) return 1;
+                else if (o2.getStart() == null) return -1;
+                else return o1.getStart().compareTo(o2.getStart());
+            else {
+                if (o1.getStart() == null) return -1;
+                else if (o2.getStart() == null) return 1;
+                else return o2.getStart().compareTo(o1.getStart());
+            }
+        });
+        return events;
     }
 
     public static ArrayList<Entry> generateMarksPoints(List<ExamDone> exams, int laude) {
