@@ -150,4 +150,5 @@
     <string name="forgot_password">Forgot password</string>
     <string name="no_recovery">Unable to recover your password. Contact the Student Office</string>
     <string name="calendar">Calendar</string>
+    <string name="no_events">No events found</string>
 </resources>
