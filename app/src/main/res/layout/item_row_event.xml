@@ -23,10 +23,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textColor="?attr/primaryTextColor" />
+            android:textColor="?attr/primaryTextColor"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/dateExam"
+            android:id="@+id/startDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
+            android:text="TextView" />
+        <TextView
+            android:id="@+id/endDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
+            android:text="TextView" />
+        <TextView
+            android:id="@+id/where"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
+            android:text="TextView" />
+        <TextView
+            android:id="@+id/nameTeacher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?attr/primaryTextColor"

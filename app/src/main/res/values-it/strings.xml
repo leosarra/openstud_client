@@ -30,6 +30,7 @@
     <string name="search">Ricerca</string>
     <string name="number_reservation">Numero prenotazione: %1$s</string>
     <string name="teacher_reservation">Docente: %1$s</string>
+    <string name="teacher_event">Docente: %1$s</string>
     <string name="date_exam">Data esame: %1$s</string>
     <string name="description_reservation">Informazioni aggiuntive: %1$s</string>
     <string name="reload">Ricarica</string>
@@ -80,6 +81,7 @@
     <string name="send_email">Invia una email</string>
     <string name="pref_header_stats">Statistiche</string>
     <string name="pref_header_themes">Temi</string>
+    <string name="info_extra_reservation_format">Info: %1$s</string>
 
 
 
@@ -137,5 +139,8 @@
     <string name="no_recovery">Impossibile recuperare la password. Contatta la segreteria.</string>
     <string name="calendar">Calendar</string>
     <string name="no_events">No events found</string>
+    <string name="where_event">Luogo: %1$s</string>
+    <string name="start_lesson">Inizio lezione: %1$s</string>
+    <string name="end_lesson">Fine lezione: %1$s</string>
 
 </resources>

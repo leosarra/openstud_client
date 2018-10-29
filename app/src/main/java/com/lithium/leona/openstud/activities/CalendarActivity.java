@@ -25,6 +25,7 @@ import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.EventAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
@@ -110,30 +111,30 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             public void onDayClick(Date dateClicked) {
                 setSubtitle(dateFormat.format(dateClicked));
                 currentDate = dateClicked;
-                getEventsByDate(events, dateClicked);
+                getEventsByDate(dateClicked);
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 setSubtitle(dateFormat.format(firstDayOfNewMonth));
                 currentDate = firstDayOfNewMonth;
-                getEventsByDate(events, firstDayOfNewMonth);
+                getEventsByDate(firstDayOfNewMonth);
             }
         });
+        setupReciclerLayouts();
+        List<lithium.openstud.driver.core.Event> events_cached = InfoManager.getEventsCached(this,os);
+
+        if (events_cached != null && !events_cached.isEmpty()) events.addAll(events_cached);
         // Set current date to today
-        if (savedInstanceState == null) currentDate = new Date();
+        if (savedInstanceState == null) currentDate = ClientHelper.getDateWithoutTime();
         else currentDate = (Date) savedInstanceState.getSerializable("currentDate");
         setCurrentDate(currentDate);
+        updateCalendar(events);
         RelativeLayout datePickerButton = findViewById(R.id.date_picker_button);
         datePickerButton.setOnClickListener(v -> animateExpansion());
         setupDrawerListener();
         emptyText.setText(getResources().getString(R.string.no_events));
-        setupReciclerLayouts();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        List<lithium.openstud.driver.core.Event> events_cached = InfoManager.getEventsCached(this,os);
-        if (events_cached != null && !events_cached.isEmpty()) events.addAll(events_cached);
-        updateCalendar(events);
-        getEventsByDate(events, new Date());
         if (savedInstanceState == null) getEvents();
         swipeRefreshLayout.setOnRefreshListener(this::getEvents);
 
@@ -183,11 +184,11 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     }
 
 
-    private synchronized void updateCalendar(List<lithium.openstud.driver.core.Event> newEvents){
-        if (newEvents == null) return;
+    private synchronized void updateCalendar(List<lithium.openstud.driver.core.Event> events){
+        if (events == null) return;
         List<Event> calendarEvents = new LinkedList<>();
         List<Long> withLesson = new LinkedList<>();
-        for (lithium.openstud.driver.core.Event event: newEvents){
+        for (lithium.openstud.driver.core.Event event: events){
             ZoneId zoneId = ZoneId.systemDefault();
             Timestamp timestamp = new Timestamp(event.getStart().toLocalDate().atStartOfDay(zoneId).toInstant().toEpochMilli());
             Event ev;
@@ -204,20 +205,22 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         }
         compactCalendarView.removeAllEvents();
         compactCalendarView.addEvents(calendarEvents);
-        getEventsByDate(events, currentDate);
+        getEventsByDate(currentDate);
     }
 
-    private synchronized void getEventsByDate(List<lithium.openstud.driver.core.Event> events_list, Date date) {
+    private synchronized void getEventsByDate(Date date) {
         List<lithium.openstud.driver.core.Event> newLessons = new LinkedList<>();
         List<lithium.openstud.driver.core.Event> newReservations = new LinkedList<>();
         List<lithium.openstud.driver.core.Event> newDoable = new LinkedList<>();
         ZoneId zoneId = ZoneId.systemDefault();
-        if(events_list != null) {
+         int i = 0;
             for (lithium.openstud.driver.core.Event event : events) {
                 Instant instant = Instant.ofEpochMilli(date.getTime());
                 instant.atZone(zoneId);
+                System.out.println(date);
                 if (instant.toEpochMilli() != event.getStart().toLocalDate().atStartOfDay(zoneId).toInstant().toEpochMilli())
                     continue;
+                i++;
                 if (event.getEventType() == EventType.DOABLE) {
                     newDoable.add(event);
                 } else if (event.getEventType() == EventType.LESSON) {
@@ -226,19 +229,18 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                     newReservations.add(event);
                 }
             }
-
             lessons.clear();
             reservations.clear();
             exams.clear();
             exams.addAll(newDoable);
             reservations.addAll(newReservations);
             lessons.addAll(newLessons);
+            ClientHelper.orderByStartTime(lessons, true);
             runOnUiThread(() -> {
                 adapter_reservations.notifyDataSetChanged();
                 adapter_exams.notifyDataSetChanged();
                 adapter_lessons.notifyDataSetChanged();
             });
-        }
         if (exams.isEmpty() && reservations.isEmpty() && lessons.isEmpty()) {
             emptyView.setVisibility(View.VISIBLE);
             findViewById(R.id.lessons_container).setVisibility(View.GONE);
@@ -378,7 +380,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
-        if (offset == 0)
+        if (Math.abs(offset) < appBarLayout.getTotalScrollRange()/2)
         {
             if (!isExpanded) ViewCompat.animate(arrow).rotation(180).start();
             isExpanded = true;
