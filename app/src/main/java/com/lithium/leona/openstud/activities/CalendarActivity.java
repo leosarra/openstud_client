@@ -323,23 +323,29 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         });
         if (exams.isEmpty() && reservations.isEmpty() && lessons.isEmpty()) {
             invalidateOptionsMenu();
-            emptyContainer.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.VISIBLE);
-            findViewById(R.id.lessons_container).setVisibility(View.GONE);
-            findViewById(R.id.exams_container).setVisibility(View.GONE);
-            findViewById(R.id.reservations_container).setVisibility(View.GONE);
+            runOnUiThread(() -> {
+                emptyContainer.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.VISIBLE);
+                findViewById(R.id.lessons_container).setVisibility(View.GONE);
+                findViewById(R.id.exams_container).setVisibility(View.GONE);
+                findViewById(R.id.reservations_container).setVisibility(View.GONE);
+            });
+
         } else {
             invalidateOptionsMenu();
-            emptyContainer.setVisibility(View.GONE);
-            emptyView.setVisibility(View.GONE);
-            if (!lessons.isEmpty())
-                findViewById(R.id.lessons_container).setVisibility(View.VISIBLE);
-            else findViewById(R.id.lessons_container).setVisibility(View.GONE);
-            if (!exams.isEmpty()) findViewById(R.id.exams_container).setVisibility(View.VISIBLE);
-            else findViewById(R.id.exams_container).setVisibility(View.GONE);
-            if (!reservations.isEmpty())
-                findViewById(R.id.reservations_container).setVisibility(View.VISIBLE);
-            else findViewById(R.id.reservations_container).setVisibility(View.GONE);
+            runOnUiThread(() -> {
+                emptyContainer.setVisibility(View.GONE);
+                emptyView.setVisibility(View.GONE);
+                if (!lessons.isEmpty())
+                    findViewById(R.id.lessons_container).setVisibility(View.VISIBLE);
+                else findViewById(R.id.lessons_container).setVisibility(View.GONE);
+                if (!exams.isEmpty()) findViewById(R.id.exams_container).setVisibility(View.VISIBLE);
+                else findViewById(R.id.exams_container).setVisibility(View.GONE);
+                if (!reservations.isEmpty())
+                    findViewById(R.id.reservations_container).setVisibility(View.VISIBLE);
+                else findViewById(R.id.reservations_container).setVisibility(View.GONE);
+            });
+
         }
 
     }
