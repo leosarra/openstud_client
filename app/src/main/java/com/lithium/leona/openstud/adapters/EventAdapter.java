@@ -79,25 +79,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
         void setDetails(final Event ev) {
             if (ev.getWhere() == null || ev.getWhere().trim().isEmpty())
                 txtWhere.setVisibility(View.GONE);
-            else
-                txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getWhere()));
+            else if (ev.getEventType() == EventType.LESSON) txtWhere.setText(context.getResources().getString(R.string.where_event, ev.getWhere()));
+            else txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getWhere()));
             txtTeacher.setText(context.getResources().getString(R.string.teacher_event, ev.getTeacher()));
+            if (ev.getTeacher() == null) txtTeacher.setVisibility(View.GONE);
             if (ev.getEventType() == EventType.DOABLE || ev.getEventType() == EventType.RESERVED) {
                 txtName.setText(ev.getDescription());
-
                 txtStartDate.setVisibility(View.GONE);
                 txtEndDate.setVisibility(View.GONE);
             } else {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-                String name = ev.getDescription().replace("\n", " ");
-                int startIdx = name.indexOf(" ");
-                int endIdx = name.indexOf("Docente:");
-                if (startIdx != -1 && endIdx != -1) {
-                    if (name.endsWith(" ")) {
-                        name = name.substring(0, name.length() - 1);
-                    }
-                    txtName.setText(name.substring(startIdx, endIdx));
-                } else txtName.setText(ev.getDescription());
+                txtName.setText(ev.getDescription());
                 txtStartDate.setText(context.getResources().getString(R.string.start_lesson, ev.getStart().format(formatter)));
                 txtEndDate.setText(context.getResources().getString(R.string.end_lesson, ev.getEnd().format(formatter)));
             }
