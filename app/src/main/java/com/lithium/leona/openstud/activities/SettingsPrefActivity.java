@@ -82,6 +82,11 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 }
                 return true;
             });
+            Preference enableLesson = findPreference(getString(R.string.key_enable_lesson));
+            enableLesson.setOnPreferenceChangeListener((preference, newValue) -> {
+                PreferenceManager.setCalendarNotificationEnabled(getContext(), false);
+                return true;
+            });
             Preference laude = findPreference(getString(R.string.key_default_laude));
             laude.setOnPreferenceChangeListener((preference, newValue) -> {
                 String newLaude = (String) newValue;

@@ -42,6 +42,21 @@ public class PreferenceManager {
         }
     }
 
+    public static boolean getCalendarNotificationEnabled(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean("calendarLessonNotification", true);
+        }
+    }
+
+    public static void setCalendarNotificationEnabled(Context context, boolean enabled) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            pref.edit().putBoolean("calendarLessonNotification", enabled).apply();
+        }
+    }
+
+
     public synchronized static int getLaudeValue(Context context) {
         setupSharedPreferences(context);
         int laudeValue = 30;

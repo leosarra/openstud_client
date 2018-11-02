@@ -163,4 +163,5 @@
     <string name="enable_lessons">Show lessons in calendar (Experimental)</string>
     <string name="key_enable_lesson" translatable="false">key_enable_lesson</string>
     <string name="enable_lessons_description">Show lessons for non-passed exams in the calendar</string>
+    <string name="lesson_notification">Lesson timetable can be enabled in the settings</string>
 </resources>

@@ -238,6 +238,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                 List<lithium.openstud.driver.core.Event> newEvents = InfoManager.getEvents(this, os, student);
                 updateEventList(newEvents);
                 h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
+                showCalendarNotification();
             } catch (OpenstudConnectionException e) {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
@@ -519,6 +520,17 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     public void onDismiss(DialogInterface dialog) {
         synchronized (this) {
             if (refreshAfterDismiss) updateCalendar(events);
+        }
+    }
+
+    private void showCalendarNotification() {
+        if (com.lithium.leona.openstud.data.PreferenceManager.getCalendarNotificationEnabled(this)) {
+            LayoutHelper.createActionSnackBar(mDrawerLayout, R.string.lesson_notification, R.string.edit, 4000, v -> {
+                InfoManager.clearSharedPreferences(getApplication());
+                Intent i = new Intent(CalendarActivity.this, SettingsPrefActivity.class);
+                startActivity(i);
+            });
+            com.lithium.leona.openstud.data.PreferenceManager.setCalendarNotificationEnabled(this, false);
         }
     }
 
