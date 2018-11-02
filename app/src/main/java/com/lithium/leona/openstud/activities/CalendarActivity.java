@@ -497,7 +497,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     private synchronized List<String> generateListEventsNames() {
         List<String> names = new LinkedList<>();
         for (lithium.openstud.driver.core.Event event : events) {
-            if (!names.contains(event.getDescription())) names.add(event.getDescription());
+            if (!names.contains(event.getDescription()) && event.getEventType() == EventType.LESSON) names.add(event.getDescription());
         }
         return names;
     }
@@ -528,8 +528,15 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             MenuItem item = menu.findItem(R.id.filter);
             item.setVisible(false);
         } else {
+            boolean enable = false;
+            for (lithium.openstud.driver.core.Event event : events) {
+                if (event.getEventType() == EventType.LESSON) {
+                    enable = true;
+                    break;
+                }
+            }
             MenuItem item = menu.findItem(R.id.filter);
-            item.setVisible(true);
+            item.setVisible(enable);
         }
         return true;
     }
