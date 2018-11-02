@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="General">
+        <CheckBoxPreference
+            android:title="@string/enable_lessons"
+            android:summary="@string/enable_lessons_description"
+            android:key="@string/key_enable_lesson"
+            android:defaultValue="false"/>
         <EditTextPreference
             android:title="@string/default_laude"
             android:defaultValue="30"

@@ -20,6 +20,20 @@ public class PreferenceManager {
         }
     }
 
+    public static boolean isLessonEnabled(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean(context.getResources().getString(R.string.key_enable_lesson), false);
+        }
+    }
+
+
+    public static void setLessonEnabled(Context context, boolean enabled) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            pref.edit().putBoolean(context.getResources().getString(R.string.key_default_laude), enabled).apply();
+        }
+    }
 
     public static void setStatsNotificationEnabled(Context context, boolean enabled) {
         setupSharedPreferences(context);

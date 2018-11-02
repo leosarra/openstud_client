@@ -146,5 +146,7 @@
     <string name="close">Chiudi</string>
     <string name="filter_calendar_description">Scegli le lezioni che vuoi siano visualizzate nel calendario</string>
     <string name="filter_lessons">Filtro lezioni</string>
+    <string name="enable_lessons">Mostra le lezioni nel calendario (Sperimentale)</string>
+    <string name="enable_lessons_description">Abilita la visualizzazione delle lezioni per gli esami non ancora superati nel calendario</string>
 
 </resources>
