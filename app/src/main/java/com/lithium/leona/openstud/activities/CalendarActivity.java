@@ -128,7 +128,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     }
 
     private DelayedDrawerListener ddl;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.ITALIAN);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
     private boolean isExpanded = false;
     private CalendarEventHandler h = new CalendarEventHandler(this);
     private Openstud os;
