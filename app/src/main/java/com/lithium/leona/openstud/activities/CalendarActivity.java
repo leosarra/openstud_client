@@ -281,8 +281,11 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             }
             calendarEvents.add(ev);
         }
-        compactCalendarView.removeAllEvents();
-        compactCalendarView.addEvents(calendarEvents);
+        runOnUiThread(() -> {
+            compactCalendarView.removeAllEvents();
+            compactCalendarView.addEvents(calendarEvents);
+        });
+
         synchronized (this) {
             getEventsByDate(events, currentDate);
         }
@@ -354,7 +357,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     private void setCurrentDate(Date date) {
         setSubtitle(dateFormat.format(date));
         if (compactCalendarView != null) {
-            compactCalendarView.setCurrentDate(date);
+            runOnUiThread(() -> compactCalendarView.setCurrentDate(date));
+
         }
     }
 
