@@ -160,8 +160,11 @@
     <string name="close">Close</string>
     <string name="filter_calendar_description">Choose the lessons that you want to be shown in the calendar</string>
     <string name="filter_lessons">Filter lessons</string>
-    <string name="enable_lessons">Show lessons in calendar (Experimental)</string>
+    <string name="enable_lessons">Show lessons in calendar</string>
     <string name="key_enable_lesson" translatable="false">key_enable_lesson</string>
     <string name="enable_lessons_description">Show lessons for non-passed exams in the calendar</string>
     <string name="lesson_notification">Lesson timetable can be enabled in the settings</string>
+    <string name="ok" translatable="false">Ok</string>
+    <string name="experimental_feature">Experimental Feature!</string>
+    <string name="calendar_feature_description">Lesson support is an experimental feature for the calendar.\nDue of the Sapienza\'s server "exotic" data the lesson that will be shown may be incomplete or incorrect.</string>
 </resources>

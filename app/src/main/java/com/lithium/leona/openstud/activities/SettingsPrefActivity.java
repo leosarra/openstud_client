@@ -84,6 +84,8 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             Preference enableLesson = findPreference(getString(R.string.key_enable_lesson));
             enableLesson.setOnPreferenceChangeListener((preference, newValue) -> {
+                Boolean enable = (Boolean) newValue;
+                if (enable) activity.createCalendarNotification(alertDialogTheme);
                 PreferenceManager.setCalendarNotificationEnabled(getContext(), false);
                 return true;
             });
@@ -121,6 +123,15 @@ public class SettingsPrefActivity extends AppCompatActivity {
                     finish();
                 })
                 .setNegativeButton(getResources().getString(R.string.restart_cancel), (dialogInterface, i) -> {
+                })
+                .show();
+    }
+
+    private void createCalendarNotification(int styleId) {
+        new AlertDialog.Builder(new ContextThemeWrapper(this, styleId))
+                .setTitle(getResources().getString(R.string.experimental_feature))
+                .setMessage(getResources().getString(R.string.calendar_feature_description))
+                .setPositiveButton(getResources().getString(R.string.ok), (dialog, which) -> {
                 })
                 .show();
     }
