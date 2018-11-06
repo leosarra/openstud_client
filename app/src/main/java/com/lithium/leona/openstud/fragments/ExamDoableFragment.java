@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
-import com.lithium.leona.openstud.activities.SearchResultActivity;
+import com.lithium.leona.openstud.activities.SearchSessionsResultActivity;
 import com.lithium.leona.openstud.adapters.ExamDoableAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -125,7 +125,7 @@ public class ExamDoableFragment extends android.support.v4.app.Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
         adapter = new ExamDoableAdapter(activity, examsDoable, exam -> {
-            Intent intent = new Intent(activity, SearchResultActivity.class);
+            Intent intent = new Intent(activity, SearchSessionsResultActivity.class);
             intent.putExtra("exam", new Gson().toJson(exam));
             activity.startActivity(intent);
         });

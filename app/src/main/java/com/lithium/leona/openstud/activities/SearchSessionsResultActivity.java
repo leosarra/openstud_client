@@ -47,7 +47,7 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 
-public class SearchResultActivity extends AppCompatActivity {
+public class SearchSessionsResultActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.swipe_refresh)
@@ -77,17 +77,16 @@ public class SearchResultActivity extends AppCompatActivity {
     private SearchEventHandler h = new SearchEventHandler(this);
     private List<ExamReservation> activeReservations;
     private boolean firstStart = true;
-
     private static class SearchEventHandler extends Handler {
-        private final WeakReference<SearchResultActivity> mActivity;
+        private final WeakReference<SearchSessionsResultActivity> mActivity;
 
-        SearchEventHandler(SearchResultActivity activity) {
+        SearchEventHandler(SearchSessionsResultActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            SearchResultActivity activity = mActivity.get();
+            SearchSessionsResultActivity activity = mActivity.get();
             if (activity != null) {
                 OnClickListener listener = v -> new Thread(activity::refreshAvaiableReservations).start();
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
@@ -130,7 +129,7 @@ public class SearchResultActivity extends AppCompatActivity {
         }
         if (os == null || student == null || exam == null) {
             InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(SearchResultActivity.this, LauncherActivity.class);
+            Intent i = new Intent(SearchSessionsResultActivity.this, LauncherActivity.class);
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             finish();
             return;

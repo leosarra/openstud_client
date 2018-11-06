@@ -5,8 +5,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
-    <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
+
+    <meta-data
+        android:name="google_analytics_adid_collection_enabled"
+        android:value="false" />
+    <meta-data
+        android:name="firebase_analytics_collection_deactivated"
+        android:value="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +27,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -37,7 +44,7 @@
             android:name=".activities.ExamsActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
         <activity
-            android:name=".activities.SearchResultActivity"
+            android:name=".activities.SearchSessionsResultActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
         <activity
             android:name=".activities.CalendarActivity"
@@ -64,6 +71,9 @@
             android:theme="@style/NoActionBarAppLightTheme" />
         <activity
             android:name=".activities.StatsActivity"
+            android:theme="@style/NoActionBarAppLightTheme" />
+        <activity
+            android:name=".activities.SearchClassroomActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
     </application>
 
