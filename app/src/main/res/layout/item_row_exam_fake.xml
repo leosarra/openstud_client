@@ -33,11 +33,11 @@
 
         <TextView
             android:id="@+id/examName"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginStart="35dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="320dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:maxLines="3"
@@ -47,7 +47,7 @@
             android:textStyle="bold"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintHorizontal_bias="1.0"
             card_view:layout_constraintStart_toEndOf="@+id/imageView2"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintVertical_bias="0.0" />
