@@ -167,4 +167,5 @@
     <string name="ok" translatable="false">Ok</string>
     <string name="experimental_feature">Experimental Feature!</string>
     <string name="calendar_feature_description">Lesson support is an experimental feature for the calendar.\nDue of the Sapienza\'s server \"exotic\" data the lesson that will be shown may be incomplete or incorrect.</string>
+    <string name="pref_title_general">General</string>
 </resources>

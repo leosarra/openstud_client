@@ -151,5 +151,6 @@
     <string name="lesson_notification">La visualizzazione delle lezioni può essere abilitata dalle impostazioni</string>
     <string name="experimental_feature">Funzionalità sperimentale!</string>
     <string name="calendar_feature_description">Il supporto alle lezione per il calendario è una funzionalità sperimentale.\nA causa dei dati \"esotici\" del database della Sapienza le lezioni che verranno mostrate potrebbero essere incomplete o errate.</string>
+    <string name="pref_title_general">Generale</string>
 
 </resources>
