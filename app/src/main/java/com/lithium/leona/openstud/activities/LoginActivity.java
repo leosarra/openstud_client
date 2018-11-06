@@ -65,11 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     void onClickLogin(View v) {
         if (!ClientHelper.isNetworkAvailable(getApplication())) {
             LayoutHelper.createTextSnackBar(layout, R.string.device_no_internet, Snackbar.LENGTH_LONG);
-            btn.setEnabled(true);
-            recovery.setEnabled(true);
-            rememberFlag.setEnabled(true);
-            username.setEnabled(true);
-            password.setEnabled(true);
+            runOnUiThread(() -> setElementsEnabled(true));
             return;
         }
         login();
@@ -119,16 +115,11 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
                 }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
-                    activity.btn.setEnabled(true);
-                    activity.recovery.setEnabled(true);
-                    activity.rememberFlag.setEnabled(true);
-                    activity.username.setEnabled(true);
-                    activity.password.setEnabled(true);
+                    activity.runOnUiThread(() -> activity.setElementsEnabled(true));
                 }
             }
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,13 +130,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void sendRecoveryRequest(String answer, String studentID) {
-        runOnUiThread(() -> {
-            btn.setEnabled(false);
-            recovery.setEnabled(false);
-            rememberFlag.setEnabled(false);
-            username.setEnabled(false);
-            password.setEnabled(false);
-        });
+        runOnUiThread(() -> setElementsEnabled(false));
         Openstud os = InfoManager.getOpenStudRecovery(this, studentID);
         if (os == null) return;
         try {
@@ -168,11 +153,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void recovery() {
-        btn.setEnabled(false);
-        recovery.setEnabled(false);
-        rememberFlag.setEnabled(false);
-        username.setEnabled(false);
-        password.setEnabled(false);
+        runOnUiThread(() -> setElementsEnabled(false));
         String username = this.username.getText().toString();
         if (username.isEmpty()) {
             LayoutHelper.createTextSnackBar(layout, R.string.blank_username_error, Snackbar.LENGTH_LONG);
@@ -211,11 +192,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        btn.setEnabled(false);
-        recovery.setEnabled(false);
-        rememberFlag.setEnabled(false);
-        username.setEnabled(false);
-        password.setEnabled(false);
+        runOnUiThread(() -> setElementsEnabled(false));
         String username = this.username.getText().toString();
         final String password = this.password.getText().toString();
         if (username.isEmpty()) {
@@ -271,6 +248,14 @@ public class LoginActivity extends AppCompatActivity {
             LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
         else if (error == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue())
             LayoutHelper.createTextSnackBar(layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
+    }
+
+    private void setElementsEnabled(boolean enabled) {
+        btn.setEnabled(enabled);
+        recovery.setEnabled(enabled);
+        rememberFlag.setEnabled(enabled);
+        username.setEnabled(enabled);
+        password.setEnabled(enabled);
     }
 
 
