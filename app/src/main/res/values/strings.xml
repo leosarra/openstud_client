@@ -168,4 +168,11 @@
     <string name="experimental_feature">Experimental Feature!</string>
     <string name="calendar_feature_description">Lesson support is an experimental feature for the calendar.\nDue of the Sapienza\'s server \"exotic\" data the lesson that will be shown may be incomplete or incorrect.</string>
     <string name="pref_title_general">General</string>
+    <string name="position">Position: %1$s</string>
+    <string name="available">Available</string>
+    <string name="not_available">Not available</string>
+    <string name="status_classroom">Stato:\u0020</string>
+    <string name="lesson_now">Lesson now: %1$s</string>
+    <string name="next_lesson">Next lesson: %1$s - %2$s</string>
+    <string name="no_classrooms_found">No classrooms found</string>
 </resources>

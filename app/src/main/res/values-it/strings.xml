@@ -152,5 +152,12 @@
     <string name="experimental_feature">Funzionalità sperimentale!</string>
     <string name="calendar_feature_description">Il supporto alle lezione per il calendario è una funzionalità sperimentale.\nA causa dei dati \"esotici\" del database della Sapienza le lezioni che verranno mostrate potrebbero essere incomplete o errate.</string>
     <string name="pref_title_general">Generale</string>
+    <string name="position">Position: %1$s</string>
+    <string name="available">Available</string>
+    <string name="not_available">Not available</string>
+    <string name="status_classroom">Stato:\u0020</string>
+    <string name="lesson_now">Lesson now: %1$s</string>
+    <string name="next_lesson">Next lesson: %1$s - %2$s</string>
+    <string name="no_classrooms_found">No classrooms found</string>
 
 </resources>
