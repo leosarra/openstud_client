@@ -175,4 +175,7 @@
     <string name="lesson_now">Lesson now: %1$s</string>
     <string name="next_lesson">Next lesson: %1$s - %2$s</string>
     <string name="no_classrooms_found">No classrooms found</string>
+    <string name="map">Mappa</string>
+    <string name="timetable">Orari</string>
+    <string name="no_map_app">No application found to handle maps</string>
 </resources>
