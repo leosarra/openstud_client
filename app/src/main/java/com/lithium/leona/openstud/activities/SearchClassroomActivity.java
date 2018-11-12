@@ -49,55 +49,24 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 public class SearchClassroomActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener, MaterialSearchBar.OnClickListener {
 
 
-    private static class SearchClassroomHandler extends Handler {
-        private final WeakReference<SearchClassroomActivity> activity;
-
-        private SearchClassroomHandler(SearchClassroomActivity activity) {
-            this.activity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            final SearchClassroomActivity activity = this.activity.get();
-            if (activity == null) return;
-            View.OnClickListener ocl = v -> activity.searchClassrooms(activity.searchBar.getText());
-            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-            } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                InfoManager.clearSharedPreferences(activity.getApplication());
-                Intent i = new Intent(activity, LauncherActivity.class);
-                i.putExtra("error", msg.what);
-                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                activity.finish();
-            } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
-            }
-        }
-    }
-
-    @BindView(R.id.searchBar) MaterialSearchBar searchBar;
+    @BindView(R.id.searchBar)
+    MaterialSearchBar searchBar;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view)
     NavigationView nv;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
-    @BindView(R.id.recyclerView) RecyclerView rv;
+    @BindView(R.id.recyclerView)
+    RecyclerView rv;
     @BindView(R.id.empty_button_reload)
     Button emptyButton;
-    @BindView(R.id.empty_text) TextView emptyText;
+    @BindView(R.id.empty_text)
+    TextView emptyText;
     @BindView(R.id.empty_layout)
     LinearLayout emptyLayout;
     @BindView(R.id.frame)
     FrameLayout contentFrame;
-    @OnClick(R.id.empty_button_reload) void onClickReloadButton(){
-        searchClassrooms(searchBar.getText());
-    }
-
     private DelayedDrawerListener ddl;
     private Openstud os;
     private Student student;
@@ -105,7 +74,11 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     private ClassroomAdapter adapter;
     private SearchClassroomHandler h = new SearchClassroomHandler(this);
 
-    @SuppressLint("ClickableViewAccessibility")
+    @OnClick(R.id.empty_button_reload)
+    void onClickReloadButton() {
+        searchClassrooms(searchBar.getText());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,12 +88,8 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         setSupportActionBar(toolbar);
         searchBar.setPlaceHolder(getResources().getString(R.string.search_classroom));
         //enable searchbar callbacks
-        searchBar.setOnSearchActionListener(this);
-        searchBar.setOnClickListener(this);
         //restore last queries from disk
         //searchBar.setLastSuggestions(list);
-        //Inflate menu and setup OnMenuItemClickListener
-        //searchBar.inflateMenu(R.menu.drawer_view);
         os = InfoManager.getOpenStud(getApplication());
         emptyText.setText(getResources().getString(R.string.no_classrooms_found));
         student = InfoManager.getInfoStudentCached(getApplication(), os);
@@ -136,24 +105,18 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
         subTitle.setText(student.getStudentID());
-        setupDrawerListener();
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new ClassroomAdapter(mDrawerLayout,this,classes);
+        adapter = new ClassroomAdapter(mDrawerLayout, this, classes);
         rv.setAdapter(adapter);
         setLoadingEnabled(false, false);
         adapter.notifyDataSetChanged();
-        View.OnTouchListener otl = this::handleTouchEvent;
-        emptyLayout.setOnTouchListener(otl);
-        progressBar.setOnTouchListener(otl);
-        contentFrame.setOnTouchListener(otl);
-        rv.setOnTouchListener(otl);
-        findViewById(R.id.mt_editText).setOnClickListener(this);
+        setupDrawerListener();
+        setupContentListeners();
     }
 
-
-    public synchronized void searchClassrooms(String query){
+    public synchronized void searchClassrooms(String query) {
         new Thread(() -> {
             setLoadingEnabled(true, false);
             List<Classroom> update = null;
@@ -172,13 +135,11 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     }
 
     private void updateView(List<Classroom> update) {
-        if(update == null || update.isEmpty()) {
-            setLoadingEnabled(false,true);
-        }
-        else if (update.equals(classes)){
+        if (update == null || update.isEmpty()) {
+            setLoadingEnabled(false, true);
+        } else if (update.equals(classes)) {
             setLoadingEnabled(false, false);
-        }
-        else {
+        } else {
             classes.clear();
             classes.addAll(update);
             runOnUiThread(() -> adapter.notifyDataSetChanged());
@@ -186,27 +147,37 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         }
     }
 
-    private void setLoadingEnabled(boolean loading, boolean isEmpty){
+    private void setLoadingEnabled(boolean loading, boolean isEmpty) {
         if (loading) {
             runOnUiThread(() -> {
                 progressBar.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
                 emptyLayout.setVisibility(View.GONE);
             });
-        }
-        else {
+        } else {
             runOnUiThread(() -> {
                 progressBar.setVisibility(View.GONE);
                 if (!isEmpty) {
                     rv.setVisibility(View.VISIBLE);
                     emptyLayout.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     rv.setVisibility(View.GONE);
                     emptyLayout.setVisibility(View.VISIBLE);
                 }
             });
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupContentListeners() {
+        searchBar.setOnSearchActionListener(this);
+        searchBar.setOnClickListener(this);
+        View.OnTouchListener otl = this::handleTouchEvent;
+        emptyLayout.setOnTouchListener(otl);
+        progressBar.setOnTouchListener(otl);
+        contentFrame.setOnTouchListener(otl);
+        rv.setOnTouchListener(otl);
+        findViewById(R.id.mt_editText).setOnClickListener(this);
     }
 
     @Override
@@ -215,10 +186,9 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
 
     @Override
     public void onSearchConfirmed(CharSequence text) {
-        ClientHelper.hideKeyboard(mDrawerLayout,this);
+        ClientHelper.hideKeyboard(mDrawerLayout, this);
         if (!text.toString().trim().isEmpty()) searchClassrooms(text.toString());
     }
-
 
     @Override
     public void onBackPressed() {
@@ -232,16 +202,15 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     @Override
     public void onClick(View v) {
         System.out.println(searchBar.isSearchEnabled());
-        if(searchBar.isSearchEnabled() && !searchBar.isSuggestionsVisible()) {
+        if (searchBar.isSearchEnabled() && !searchBar.isSuggestionsVisible()) {
             searchBar.showSuggestionsList();
-        }
-        else searchBar.enableSearch();
+        } else searchBar.enableSearch();
     }
 
     @Override
     public void onButtonClicked(int buttonCode) {
         System.out.println(buttonCode);
-        switch (buttonCode){
+        switch (buttonCode) {
             case MaterialSearchBar.BUTTON_NAVIGATION:
                 mDrawerLayout.openDrawer(Gravity.START);
                 break;
@@ -311,9 +280,40 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
 
     private boolean handleTouchEvent(View view, MotionEvent event) {
         GestureDetector gd = new GestureDetector(SearchClassroomActivity.this, new ClickListener());
-        if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty()) searchBar.disableSearch();
+        if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty())
+            searchBar.disableSearch();
         else if (searchBar.isSearchEnabled()) searchBar.hideSuggestionsList();
         return gd.onTouchEvent(event);
+    }
+
+    private static class SearchClassroomHandler extends Handler {
+        private final WeakReference<SearchClassroomActivity> activity;
+
+        private SearchClassroomHandler(SearchClassroomActivity activity) {
+            this.activity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final SearchClassroomActivity activity = this.activity.get();
+            if (activity == null) return;
+            View.OnClickListener ocl = v -> activity.searchClassrooms(activity.searchBar.getText());
+            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+            } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                InfoManager.clearSharedPreferences(activity.getApplication());
+                Intent i = new Intent(activity, LauncherActivity.class);
+                i.putExtra("error", msg.what);
+                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                activity.finish();
+            } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+            }
+        }
     }
 
 }
