@@ -117,6 +117,10 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         adapter.notifyDataSetChanged();
         setupDrawerListener();
         setupContentListeners();
+        if (PreferenceManager.getClassroomNotificationEnabled(this)) {
+            LayoutHelper.createSearchClassroomNotification(this, ThemeEngine.getAlertDialogTheme(this));
+            PreferenceManager.setClassroomNotificationEnabled(this,false);
+        }
     }
 
     public synchronized void searchClassrooms(String query) {
