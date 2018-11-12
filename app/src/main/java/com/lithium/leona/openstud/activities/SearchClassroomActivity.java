@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.ClassroomAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.listeners.ClickListener;
@@ -87,9 +88,9 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         searchBar.setPlaceHolder(getResources().getString(R.string.search_classroom));
-        //enable searchbar callbacks
         //restore last queries from disk
-        //searchBar.setLastSuggestions(list);
+        List oldSuggestions = PreferenceManager.getSuggestions(this);
+        if (oldSuggestions != null) searchBar.setLastSuggestions(oldSuggestions);
         os = InfoManager.getOpenStud(getApplication());
         emptyText.setText(getResources().getString(R.string.no_classrooms_found));
         student = InfoManager.getInfoStudentCached(getApplication(), os);
@@ -218,6 +219,13 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
                 searchBar.disableSearch();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //save last queries to disk
+        PreferenceManager.saveSuggestions(this, searchBar.getLastSuggestions());
     }
 
     private void setupDrawerListener() {
