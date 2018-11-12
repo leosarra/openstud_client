@@ -2,6 +2,7 @@ package com.lithium.leona.openstud.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -10,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,7 +46,8 @@ import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class SearchClassroomActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener {
+public class SearchClassroomActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener, MaterialSearchBar.OnClickListener {
+
 
     private static class SearchClassroomHandler extends Handler {
         private final WeakReference<SearchClassroomActivity> activity;
@@ -112,9 +113,10 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         ButterKnife.bind(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        searchBar.setPlaceHolder("Ricerca aula");
+        searchBar.setPlaceHolder(getResources().getString(R.string.search_classroom));
         //enable searchbar callbacks
         searchBar.setOnSearchActionListener(this);
+        searchBar.setOnClickListener(this);
         //restore last queries from disk
         //searchBar.setLastSuggestions(list);
         //Inflate menu and setup OnMenuItemClickListener
@@ -147,6 +149,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         progressBar.setOnTouchListener(otl);
         contentFrame.setOnTouchListener(otl);
         rv.setOnTouchListener(otl);
+        findViewById(R.id.mt_editText).setOnClickListener(this);
     }
 
 
@@ -227,6 +230,15 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     }
 
     @Override
+    public void onClick(View v) {
+        System.out.println(searchBar.isSearchEnabled());
+        if(searchBar.isSearchEnabled() && !searchBar.isSuggestionsVisible()) {
+            searchBar.showSuggestionsList();
+        }
+        else searchBar.enableSearch();
+    }
+
+    @Override
     public void onButtonClicked(int buttonCode) {
         System.out.println(buttonCode);
         switch (buttonCode){
@@ -299,7 +311,8 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
 
     private boolean handleTouchEvent(View view, MotionEvent event) {
         GestureDetector gd = new GestureDetector(SearchClassroomActivity.this, new ClickListener());
-        if (searchBar.isSearchEnabled()) searchBar.disableSearch();
+        if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty()) searchBar.disableSearch();
+        else if (searchBar.isSearchEnabled()) searchBar.hideSuggestionsList();
         return gd.onTouchEvent(event);
     }
 

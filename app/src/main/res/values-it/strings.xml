@@ -162,5 +162,6 @@
     <string name="map">Mappa</string>
     <string name="timetable">Orari</string>
     <string name="no_map_app">No application found to handle maps</string>
+    <string name="search_classroom">Search classroom</string>
 
 </resources>
