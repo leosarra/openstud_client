@@ -281,6 +281,7 @@ public class StatsActivity extends AppCompatActivity {
         graph2.getAxisLeft().setMinWidth(0);
         graph2.getXAxis().setTextSize(Utils.convertDpToPixel(4));
         graph2.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        graph2.getXAxis().setGranularity(1);
         graph2.getAxisLeft().setTextColor(ThemeEngine.getPrimaryTextColor(this)); // left y-axis
         graph2.getAxisLeft().setGridColor(ThemeEngine.getSecondaryTextColor(this));
         graph2.getXAxis().setTextColor(ThemeEngine.getPrimaryTextColor(this));
