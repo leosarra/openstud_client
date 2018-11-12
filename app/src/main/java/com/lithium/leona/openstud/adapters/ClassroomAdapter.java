@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -21,17 +23,23 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.LauncherActivity;
+import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.ItemTouchHelperViewHolder;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnFocusChange;
 import lithium.openstud.driver.core.Classroom;
 
 public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassesHolder>  {
@@ -121,11 +129,15 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), statusPre.length(), (statusPre + status).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtStatus.setText(spannable, TextView.BufferType.SPANNABLE);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
-            if (room.getLessonNow() != null)
+            if (room.getLessonNow() != null){
                 txtLesson.setText(context.getResources().getString(R.string.lesson_now, room.getLessonNow().getName()));
+                txtLesson.setVisibility(View.VISIBLE);
+            }
             else txtLesson.setVisibility(View.GONE);
-            if (room.getNextLesson() != null)
+            if (room.getNextLesson() != null) {
                 txtNextLesson.setText(context.getResources().getString(R.string.next_lesson, room.getNextLesson().getStart().format(formatter), room.getNextLesson().getName()));
+                txtNextLesson.setVisibility(View.VISIBLE);
+            }
             else txtNextLesson.setVisibility(View.GONE);
 
             int tintColorMap;
