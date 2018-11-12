@@ -28,7 +28,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
                 <com.mancj.materialsearchbar.MaterialSearchBar
                     android:padding="10dp"
-                    style="@style/MaterialSearchBarLight"
+                    style="?attr/searchBarTheme"
                     app:mt_hint="Aula 33 San Pietro in Vincoli"
                     app:mt_maxSuggestionsCount="10"
                     app:mt_navIconEnabled="true"
@@ -42,7 +42,8 @@
             <FrameLayout
                 android:id="@+id/frame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="?attr/backgroundColor">
                 <ProgressBar
                     android:id="@+id/progress_bar"
                     style="?android:progressBarStyle"

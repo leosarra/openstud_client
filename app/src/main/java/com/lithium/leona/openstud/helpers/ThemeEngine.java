@@ -105,6 +105,20 @@ public class ThemeEngine {
         }
     }
 
+    public static void applySearchClassroomTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                activity.setTheme(R.style.NoActionBarAppLightTheme);
+                break;
+            case DARK:
+                activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+        }
+    }
+
+
+
     public static int getPrimaryTextColor(Activity activity) {
         int tintColor;
         TypedValue tV = new TypedValue();

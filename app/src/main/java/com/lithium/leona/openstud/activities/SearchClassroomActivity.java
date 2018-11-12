@@ -30,6 +30,7 @@ import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.ClickListener;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -83,6 +84,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeEngine.applySearchClassroomTheme(this);
         setContentView(R.layout.activity_search_classroom);
         ButterKnife.bind(this);
         Toolbar toolbar = findViewById(R.id.toolbar);

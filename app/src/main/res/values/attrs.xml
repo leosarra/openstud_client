@@ -21,5 +21,6 @@
         <attr name="popupBackgroundColor" format="color"/>
         <attr name="redSlider" format="color"/>
         <attr name="emptyViewColor" format="color" />
+        <attr name="searchBarTheme" format="reference" />
     </declare-styleable>
 </resources>
