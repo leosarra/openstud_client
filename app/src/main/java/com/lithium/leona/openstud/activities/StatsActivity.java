@@ -192,7 +192,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void updateStats() {
         runOnUiThread(() -> {
-            if (exams == null || exams.isEmpty() || !ClientHelper.hasPassedExams(exams)) {
+            if ((exams == null || exams.isEmpty() || !ClientHelper.hasPassedExams(exams)) && (examsFake == null || examsFake.isEmpty())) {
                 if (exams == null) setIconVisibility(false);
                 else if (exams.isEmpty()) setIconVisibility(true);
                 totalCFU.setText("--");
