@@ -88,6 +88,19 @@ public class PreferenceManager {
         }
     }
 
+    public static boolean getClassroomNotificationEnabled(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean("classroomNotification", true);
+        }
+    }
+
+    public static void setClassroomNotificationEnabled(Context context, boolean enabled) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            pref.edit().putBoolean("classroomNotification", enabled).apply();
+        }
+    }
 
     public synchronized static int getLaudeValue(Context context) {
         setupSharedPreferences(context);
