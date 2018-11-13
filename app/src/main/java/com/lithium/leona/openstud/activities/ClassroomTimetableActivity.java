@@ -90,7 +90,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     @BindView(R.id.empty_text)
     TextView emptyText;
     private HorizontalCalendar horizontalCalendar;
-    private Calendar today;
+    private Calendar defaultDate;
     private DelayedDrawerListener ddl;
     private NavigationView nv;
     private Openstud os;
@@ -100,6 +100,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     private EventAdapter adapter;
     private int roomId;
     private ClassroomTimetableHandler h = new ClassroomTimetableHandler(this);
+
     @SuppressLint("UseSparseArrays")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,19 +120,16 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
             return;
         }
         cachedLessons = new HashMap<>();
-        today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        today.set(Calendar.MINUTE, 0);
-        today.set(Calendar.SECOND, 0);
-        today.set(Calendar.MILLISECOND, 0);
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);
         /* ends after 1 month from now */
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
+        restoreInstance(savedInstanceState);
         horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
                 .range(startDate, endDate)
                 .datesNumberOnScreen(5)
+                .defaultSelectedDate(defaultDate)
                 .build();
         nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
@@ -152,13 +150,15 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
 
         if (name == null) Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.classroom_timetable);
         else Objects.requireNonNull(getSupportActionBar()).setTitle(name);
-        setTodayLessonFromBundle(bundle);
+        if (savedInstanceState == null) setTodayLessonFromBundle(bundle);
+        else getLessons(defaultDate, false);
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
                 getLessons(date, false);
             }
         });
+
         swipeRefreshLayout.setOnRefreshListener(() -> getLessons(horizontalCalendar.getSelectedDate(), true));
         emptyButton.setOnClickListener(v -> {
             if (!swipeRefreshLayout.isRefreshing()) getLessons(horizontalCalendar.getSelectedDate(), true);
@@ -196,6 +196,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
                 cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
             }
             runOnUiThread(() -> adapter.notifyDataSetChanged());
+            swapViews(false);
         }
     }
 
@@ -283,6 +284,11 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     }
 
     private void setTodayLessonFromBundle(Bundle bundle) {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
         String lessonsJson = bundle.getString("todayLessons", null);
         if (lessonsJson == null) return;
         Gson gson = new Gson();
@@ -292,4 +298,39 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         applyLessons(today,newLessons);
         runOnUiThread(() -> adapter.notifyDataSetChanged());
     }
+
+    public void onSaveInstanceState(Bundle savedInstance) {
+
+        Gson gson = new Gson();
+        Type typeMap = new TypeToken<Map<Long, List<Lesson>>>() {}.getType();
+        Type typeCalendar = new TypeToken<Calendar>() {}.getType();
+        String jsonMap = gson.toJson(cachedLessons,typeMap);
+        String jsonCalendar = gson.toJson( horizontalCalendar.getSelectedDate(),typeCalendar);
+        savedInstance.putString("cachedLessons", jsonMap);
+        savedInstance.putString("currentDate", jsonCalendar);
+        super.onSaveInstanceState(savedInstance);
+    }
+
+    @SuppressLint("UseSparseArrays")
+    private void restoreInstance(Bundle savedInstance) {
+        defaultDate = Calendar.getInstance();
+        defaultDate.set(Calendar.HOUR_OF_DAY, 0);
+        defaultDate.set(Calendar.MINUTE, 0);
+        defaultDate.set(Calendar.SECOND, 0);
+        defaultDate.set(Calendar.MILLISECOND, 0);
+        if (savedInstance != null) {
+            String jsonDate = savedInstance.getString("currentDate", null);
+            Gson gson = new Gson();
+            Type typeCalendar = new TypeToken<Calendar>() {}.getType();
+            if (jsonDate != null) defaultDate= gson.fromJson(jsonDate,typeCalendar);
+            String json = savedInstance.getString("cachedLessons", null);
+            if (json == null) cachedLessons = new HashMap<>();
+            else {
+                Type type = new TypeToken<Map<Long, List<Lesson>>>() {}.getType();
+
+                cachedLessons = gson.fromJson(json, type);
+            }
+        }
+    }
+
 }
