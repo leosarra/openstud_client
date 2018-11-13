@@ -151,7 +151,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
                 getLessons(date, false);
             }
         });
-
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(() -> getLessons(horizontalCalendar.getSelectedDate(), true));
         emptyButton.setOnClickListener(v -> {
             if (!swipeRefreshLayout.isRefreshing()) getLessons(horizontalCalendar.getSelectedDate(), true);
