@@ -13,7 +13,7 @@
                 android:title="@string/exams" />
             <item
                 android:id="@+id/stats_menu"
-                android:icon="@drawable/ic_baseline_assessment"
+                android:icon="@drawable/ic_timeline_black_24dp"
                 android:title="@string/stats" />
             <item
                 android:id="@+id/calendar_menu"
