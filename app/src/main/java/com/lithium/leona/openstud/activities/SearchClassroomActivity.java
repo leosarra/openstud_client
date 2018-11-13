@@ -264,6 +264,11 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
                         startActivity(intent);
                         break;
                     }
+                    case R.id.profile_menu: {
+                        Intent intent = new Intent(SearchClassroomActivity.this, ProfileActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
 
                     case R.id.calendar_menu: {
                         Intent intent = new Intent(SearchClassroomActivity.this, CalendarActivity.class);
