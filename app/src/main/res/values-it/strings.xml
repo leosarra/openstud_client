@@ -164,5 +164,6 @@
     <string name="no_map_app">No application found to handle maps</string>
     <string name="search_classroom">Search classroom</string>
     <string name="classroom_feature_description">Il supporto alle informazioni sulle aule è una funzionalità sperimentale.\nA causa dei dati \"esotici\" del database della Sapienza le informazioni che verranno mostrate molto probabilmente saranno incomplete o errate.\nPurtroppo questa problematica non è risolvibile da parte mia.</string>
+    <string name="classroom_timetable">Classroom timetable</string>
 
 </resources>
