@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -68,17 +66,15 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
             if (activity == null) return;
             View.OnClickListener ocl = v -> activity.getLessons(activity.horizontalCalendar.getSelectedDate(), true);
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             }
         }
     }
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView)
@@ -89,6 +85,8 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     Button emptyButton;
     @BindView(R.id.empty_text)
     TextView emptyText;
+    @BindView(R.id.constraintLayout)
+    ConstraintLayout constraintLayout;
     private HorizontalCalendar horizontalCalendar;
     private Calendar defaultDate;
     private DelayedDrawerListener ddl;
@@ -131,15 +129,8 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
                 .datesNumberOnScreen(5)
                 .defaultSelectedDate(defaultDate)
                 .build();
-        nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        View headerLayout = nv.getHeaderView(0);
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
-        subTitle.setText(student.getStudentID());
-        setupDrawerListener();
         String name = bundle.getString("roomName", null);
         lessons = new LinkedList<>();
         rv.setHasFixedSize(true);
@@ -214,73 +205,6 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
                 rv.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    private void setupDrawerListener() {
-        ddl = new DelayedDrawerListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                int item = getItemPressedAndReset();
-                if (item == -1) return;
-                switch (item) {
-                    case R.id.payments_menu: {
-                        Intent intent = new Intent(ClassroomTimetableActivity.this, PaymentsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.calendar_menu: {
-                        Intent intent = new Intent(ClassroomTimetableActivity.this, CalendarActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.exit_menu: {
-                        InfoManager.clearSharedPreferences(getApplication());
-                        Intent i = new Intent(ClassroomTimetableActivity.this, LauncherActivity.class);
-                        startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        break;
-                    }
-                    case R.id.exams_menu: {
-                        Intent intent = new Intent(ClassroomTimetableActivity.this, ExamsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.about_menu: {
-                        Intent intent = new Intent(ClassroomTimetableActivity.this, AboutActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.settings_menu: {
-                        Intent intent = new Intent(ClassroomTimetableActivity.this, SettingsPrefActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.profile_menu: {
-                        Intent intent = new Intent(ClassroomTimetableActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
-            }
-
-        };
-        mDrawerLayout.addDrawerListener(ddl);
-        nv.setNavigationItemSelectedListener(
-                item -> {
-                    mDrawerLayout.closeDrawers();
-                    ddl.setItemPressed(item.getItemId());
-                    return true;
-                });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void setTodayLessonFromBundle(Bundle bundle) {
