@@ -175,7 +175,6 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
                 Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + room.getLatitude() + "," + room.getLongitude() + "(" + room.getName() + ")");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
-                LayoutHelper.createTextSnackBar(view, R.string.no_map_app, Snackbar.LENGTH_LONG);
                 if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
                     context.startActivity(mapIntent);
                 } else {
