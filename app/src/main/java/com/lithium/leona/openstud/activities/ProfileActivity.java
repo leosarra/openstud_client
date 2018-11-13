@@ -247,6 +247,11 @@ public class ProfileActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.classrooms_menu: {
+                        Intent intent = new Intent(ProfileActivity.this, SearchClassroomActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                     case R.id.about_menu: {
                         Intent intent = new Intent(ProfileActivity.this, AboutActivity.class);
                         startActivity(intent);

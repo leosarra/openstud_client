@@ -385,6 +385,11 @@ public class StatsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.classrooms_menu: {
+                        Intent intent = new Intent(StatsActivity.this, SearchClassroomActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                     case R.id.about_menu: {
                         Intent intent = new Intent(StatsActivity.this, AboutActivity.class);
                         startActivity(intent);
