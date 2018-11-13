@@ -28,13 +28,4 @@ public class LauncherActivity extends AppCompatActivity {
             }
         }).start();
     }
-
-    protected void onDestroy() {
-        super.onDestroy();
-        /*
-         if (!InfoManager.getSaveFlag(getApplication())) {
-         InfoManager.clearSharedPreferences(getApplication());
-         }
-         */
-    }
 }
