@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.ClassroomAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -36,6 +38,7 @@ import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,6 +46,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lithium.openstud.driver.core.Classroom;
+import lithium.openstud.driver.core.Lesson;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
@@ -111,7 +115,19 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new ClassroomAdapter(mDrawerLayout, this, classes);
+        adapter = new ClassroomAdapter(mDrawerLayout, this, classes, room -> {
+            Bundle bundle = new Bundle();
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<Lesson>>() {
+            }.getType();
+            String json = gson.toJson(room.getTodayLessons(), listType);
+            bundle.putSerializable("todayLessons", json);
+            bundle.putString("roomName", room.getName());
+            Intent i = new Intent(SearchClassroomActivity.this, ClassroomTimetableActivity.class);
+            i.putExtras(bundle);
+            startActivity(i);
+        });
+
         rv.setAdapter(adapter);
         setLoadingEnabled(false, false);
         adapter.notifyDataSetChanged();

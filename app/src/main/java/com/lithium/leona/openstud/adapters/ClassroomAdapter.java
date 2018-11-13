@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -22,8 +23,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.ClassroomTimetableActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
+import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -34,6 +39,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,16 +47,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnFocusChange;
 import lithium.openstud.driver.core.Classroom;
+import lithium.openstud.driver.core.ExamReservation;
+import lithium.openstud.driver.core.Lesson;
 
-public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassesHolder>  {
+public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassesHolder> {
 
     private List<Classroom> classes;
     private Context context;
     private View view;
-    public ClassroomAdapter(View view, Context context, List<Classroom> classes) {
+    private ClassroomAdapterListener listener;
+
+    public ClassroomAdapter(View view, Context context, List<Classroom> classes, ClassroomAdapterListener listener) {
         this.classes = classes;
         this.context = context;
         this.view = view;
+        this.listener = listener;
     }
 
     @NonNull
@@ -59,6 +70,7 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
         View view = LayoutInflater.from(context).inflate(R.layout.item_classroom_details, parent, false);
         ClassesHolder holder = new ClassesHolder(view);
         holder.setContext(context);
+        holder.setListener(listener);
         holder.setView(view);
         return holder;
     }
@@ -91,13 +103,20 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
         Button openTimetable;
         private Context context;
         private View view;
+        private ClassroomAdapterListener listener;
+
+        private void setListener(ClassroomAdapterListener listener) {
+            this.listener = listener;
+        }
 
         private void setContext(Context context) {
             this.context = context;
         }
+
         private void setView(View view) {
             this.view = view;
         }
+
         ClassesHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -115,8 +134,7 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
                 if (success) tintColor = tV.data;
                 else tintColor = ContextCompat.getColor(context, R.color.green);
                 status = context.getResources().getString(R.string.not_available);
-            }
-            else {
+            } else {
                 boolean success = theme.resolveAttribute(R.attr.certifiedExamColor, tV, true);
                 if (success) tintColor = tV.data;
                 else tintColor = ContextCompat.getColor(context, R.color.red);
@@ -124,50 +142,47 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             }
 
             String statusPre = context.getResources().getString(R.string.status_classroom);
-            Spannable spannable = new SpannableString(statusPre+status);
+            Spannable spannable = new SpannableString(statusPre + status);
             spannable.setSpan(new ForegroundColorSpan(tintColor), statusPre.length(), (statusPre + status).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), statusPre.length(), (statusPre + status).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtStatus.setText(spannable, TextView.BufferType.SPANNABLE);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.ENGLISH);
-            if (room.getLessonNow() != null){
+            if (room.getLessonNow() != null) {
                 txtLesson.setText(context.getResources().getString(R.string.lesson_now, room.getLessonNow().getName()));
                 txtLesson.setVisibility(View.VISIBLE);
-            }
-            else txtLesson.setVisibility(View.GONE);
+            } else txtLesson.setVisibility(View.GONE);
             if (room.getNextLesson() != null) {
                 txtNextLesson.setText(context.getResources().getString(R.string.next_lesson, room.getNextLesson().getStart().format(formatter), room.getNextLesson().getName()));
                 txtNextLesson.setVisibility(View.VISIBLE);
-            }
-            else txtNextLesson.setVisibility(View.GONE);
+            } else txtNextLesson.setVisibility(View.GONE);
 
             int tintColorMap;
-            if(!room.hasCoordinates()) {
+            if (!room.hasCoordinates()) {
                 tintColorMap = ContextCompat.getColor(context, android.R.color.darker_gray);
                 openMap.setEnabled(false);
-            }
-            else {
+            } else {
                 TypedValue tv2 = new TypedValue();
                 boolean success = theme.resolveAttribute(R.attr.colorButtonNav, tv2, true);
                 if (success) tintColorMap = tv2.data;
                 else tintColorMap = ContextCompat.getColor(context, R.color.redSapienza);
             }
             openMap.setTextColor(tintColorMap);
-            Drawable drawable = ContextCompat.getDrawable(context,R.drawable.ic_map_black_24dp);
+            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_map_black_24dp);
             drawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(drawable.mutate(),tintColorMap);
+            DrawableCompat.setTint(drawable.mutate(), tintColorMap);
             openMap.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             openMap.setOnClickListener(v -> {
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q="+room.getLatitude()+","+room.getLongitude()+"("+room.getName()+")");
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + room.getLatitude() + "," + room.getLongitude() + "(" + room.getName() + ")");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 LayoutHelper.createTextSnackBar(view, R.string.no_map_app, Snackbar.LENGTH_LONG);
                 if (mapIntent.resolveActivity(context.getPackageManager()) != null) {
                     context.startActivity(mapIntent);
-                }
-                else {
+                } else {
                     LayoutHelper.createTextSnackBar(view, R.string.no_map_app, Snackbar.LENGTH_LONG);
                 }
             });
+            openTimetable.setOnClickListener(v -> listener.openTimetable(room));
         }
 
         @Override
@@ -179,4 +194,7 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
         }
     }
 
+    public interface ClassroomAdapterListener {
+        void openTimetable(Classroom room);
+    }
 }
