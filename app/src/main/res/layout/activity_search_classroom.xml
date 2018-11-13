@@ -29,8 +29,8 @@
                 <com.mancj.materialsearchbar.MaterialSearchBar
                     android:padding="10dp"
                     style="?attr/searchBarTheme"
-                    app:mt_hint="Aula 33 San Pietro in Vincoli"
-                    app:mt_maxSuggestionsCount="10"
+                    app:mt_hint="Aula 32 San Pietro in Vincoli"
+                    app:mt_maxSuggestionsCount="4"
                     app:mt_navIconEnabled="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
