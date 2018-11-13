@@ -3,7 +3,15 @@ package com.lithium.leona.openstud.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
+
+import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
+
+import lithium.openstud.driver.core.Tax;
 
 public class PreferenceManager {
     private static SharedPreferences pref;
@@ -35,6 +43,30 @@ public class PreferenceManager {
         }
     }
 
+    public static void saveSuggestions(Context context, List suggestions) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List>() {}.getType();
+            String json = gson.toJson(suggestions, listType);
+            pref.edit().putString("suggestion", json).apply();
+        }
+    }
+
+    public static List getSuggestions(Context context) {
+        setupSharedPreferences(context);
+        Gson gson = new Gson();
+        String json;
+        synchronized (PreferenceManager.class) {
+            json = pref.getString("suggestion", "null");
+        }
+        if (json == null) return null;
+        Type listType = new TypeToken<List>() {
+        }.getType();
+        return gson.fromJson(json, listType);
+    }
+
+
     public static void setStatsNotificationEnabled(Context context, boolean enabled) {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
@@ -56,6 +88,19 @@ public class PreferenceManager {
         }
     }
 
+    public static boolean getClassroomNotificationEnabled(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean("classroomNotification", true);
+        }
+    }
+
+    public static void setClassroomNotificationEnabled(Context context, boolean enabled) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            pref.edit().putBoolean("classroomNotification", enabled).apply();
+        }
+    }
 
     public synchronized static int getLaudeValue(Context context) {
         setupSharedPreferences(context);

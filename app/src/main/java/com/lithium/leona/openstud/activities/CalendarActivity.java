@@ -434,6 +434,12 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                         break;
                     }
 
+                    case R.id.classrooms_menu: {
+                        Intent intent = new Intent(CalendarActivity.this, SearchClassroomActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+
                     case R.id.about_menu: {
                         Intent intent = new Intent(CalendarActivity.this, AboutActivity.class);
                         startActivity(intent);

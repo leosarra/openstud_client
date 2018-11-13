@@ -36,6 +36,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lithium.openstud.driver.core.Exam;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
 
@@ -213,6 +214,12 @@ public class ExamsActivity extends AppCompatActivity {
                         InfoManager.clearSharedPreferences(getApplication());
                         Intent i = new Intent(ExamsActivity.this, LauncherActivity.class);
                         startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        break;
+                    }
+
+                    case R.id.classrooms_menu: {
+                        Intent intent = new Intent(ExamsActivity.this, SearchClassroomActivity.class);
+                        startActivity(intent);
                         break;
                     }
 

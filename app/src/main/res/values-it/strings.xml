@@ -152,5 +152,20 @@
     <string name="experimental_feature">Funzionalità sperimentale!</string>
     <string name="calendar_feature_description">Il supporto alle lezione per il calendario è una funzionalità sperimentale.\nA causa dei dati \"esotici\" del database della Sapienza le lezioni che verranno mostrate potrebbero essere incomplete o errate.</string>
     <string name="pref_title_general">Generale</string>
+    <string name="position">Edificio: %1$s</string>
+    <string name="available">Disponibile</string>
+    <string name="not_available">Occupata</string>
+    <string name="status_classroom">Stato:\u0020</string>
+    <string name="lesson_now">Lezione in corso: %1$s</string>
+    <string name="next_lesson">Prossima lezione: %1$s - %2$s</string>
+    <string name="no_classrooms_found">Nessuna aula trovata</string>
+    <string name="map">Mappa</string>
+    <string name="timetable">Orari</string>
+    <string name="no_map_app">Nessuna applicazione trovata per gestire le mappe</string>
+    <string name="search_classroom">Ricerca aule</string>
+    <string name="classroom_feature_description">Il supporto alle informazioni sulle aule è una funzionalità sperimentale.\nA causa dei dati \"esotici\" del database della Sapienza le informazioni che verranno mostrate molto probabilmente saranno incomplete o errate.\nPurtroppo questa problematica non è risolvibile da parte mia.</string>
+    <string name="classroom_timetable">Orari aula</string>
+    <string name="no_lesson_found">Nessuna lezione trovata</string>
+    <string name="classrooms">Aule</string>
 
 </resources>

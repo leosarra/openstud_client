@@ -62,6 +62,7 @@
         <item name="popupTextColor">@android:color/black</item>
         <item name="redSlider">@color/redSapienza</item>
         <item name="emptyViewColor">?attr/secondaryTextColor</item>
+        <item name="searchBarTheme">@style/MaterialSearchBarLight</item>
 
     </style>
 
@@ -88,6 +89,7 @@
         <item name="popupBackgroundColor">#262626</item>
         <item name="redSlider">#d93535</item>
         <item name="emptyViewColor">@android:color/darker_gray</item>
+        <item name="searchBarTheme">@style/MyDarkSearchBar</item>
     </style>
 
     <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -274,6 +276,28 @@
         <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="MyDarkSearchBar" parent="MaterialSearchBarDark">
+        <item name="mt_searchBarColor">@color/searchBarPrimaryColorDark</item>
+        <item name="mt_dividerColor">@color/searchBarDividerColorDark</item>
+        <item name="mt_navIconTint">@color/white</item>
+        <item name="mt_searchIconTint">@color/white</item>
+        <item name="mt_clearIconTint">@color/white</item>
+        <item name="mt_menuIconTint">@color/white</item>
+        <item name="mt_backIconTint">@color/white</item>
+        <item name="mt_textCursorTint">@color/redSapienza</item>
+        <item name="mt_textColor">@color/searchBarTextColorDark</item>
+        <item name="mt_hintColor">@color/searchBarHintColorDark</item>
+        <item name="mt_placeholderColor">@color/searchBarPlaceholderColorDark</item>
+        <item name="mt_highlightedTextColor">@color/red</item>
+        <item name="mt_leftTextSelectorTint">@color/red</item>
+        <item name="mt_middleTextSelectorTint">@color/red</item>
+        <item name="mt_rightTextSelectorTint">@color/red</item>
+        <item name="mt_leftTextSelectorDrawable">@drawable/text_select_handle_left_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_middleTextSelectorDrawable">@drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_rightTextSelectorDrawable">@drawable/text_select_handle_right_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_handlesTintEnabled">true</item>
     </style>
 
 </resources>

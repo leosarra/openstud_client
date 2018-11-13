@@ -75,6 +75,9 @@
         <activity
             android:name=".activities.SearchClassroomActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
+        <activity
+            android:name=".activities.ClassroomTimetableActivity"
+            android:theme="@style/NoActionBarAppLightTheme" />
     </application>
 
 </manifest>

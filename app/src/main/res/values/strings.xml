@@ -168,4 +168,19 @@
     <string name="experimental_feature">Experimental Feature!</string>
     <string name="calendar_feature_description">Lesson support is an experimental feature for the calendar.\nDue of the Sapienza\'s server \"exotic\" data the lesson that will be shown may be incomplete or incorrect.</string>
     <string name="pref_title_general">General</string>
+    <string name="position">Building: %1$s</string>
+    <string name="available">Available</string>
+    <string name="not_available">Occupied</string>
+    <string name="status_classroom">Status:\u0020</string>
+    <string name="lesson_now">Lesson in progress: %1$s</string>
+    <string name="next_lesson">Next lesson: %1$s - %2$s</string>
+    <string name="no_classrooms_found">No classrooms found</string>
+    <string name="map">Map</string>
+    <string name="timetable">Timetable</string>
+    <string name="no_map_app">No application found to handle maps</string>
+    <string name="search_classroom">Search classroom</string>
+    <string name="classroom_feature_description">Classroom support is an experimental feature.\nDue of the Sapienza\'s \"exotic\" data the infos that will be shown may be incomplete or incorrect.\nSorry for that but this can\'t be fixed on my end.</string>
+    <string name="classroom_timetable">Classroom timetable</string>
+    <string name="no_lesson_found">No lessons found</string>
+    <string name="classrooms">Classrooms</string>
 </resources>

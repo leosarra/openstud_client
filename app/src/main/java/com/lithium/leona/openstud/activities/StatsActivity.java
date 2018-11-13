@@ -11,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -192,7 +193,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void updateStats() {
         runOnUiThread(() -> {
-            if (exams == null || exams.isEmpty() || !ClientHelper.hasPassedExams(exams)) {
+            if ((exams == null || exams.isEmpty() || !ClientHelper.hasPassedExams(exams)) && (examsFake == null || examsFake.isEmpty())) {
                 if (exams == null) setIconVisibility(false);
                 else if (exams.isEmpty()) setIconVisibility(true);
                 totalCFU.setText("--");
@@ -281,6 +282,7 @@ public class StatsActivity extends AppCompatActivity {
         graph2.getAxisLeft().setMinWidth(0);
         graph2.getXAxis().setTextSize(Utils.convertDpToPixel(4));
         graph2.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        graph2.getXAxis().setGranularity(1);
         graph2.getAxisLeft().setTextColor(ThemeEngine.getPrimaryTextColor(this)); // left y-axis
         graph2.getAxisLeft().setGridColor(ThemeEngine.getSecondaryTextColor(this));
         graph2.getXAxis().setTextColor(ThemeEngine.getPrimaryTextColor(this));
@@ -383,6 +385,11 @@ public class StatsActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.classrooms_menu: {
+                        Intent intent = new Intent(StatsActivity.this, SearchClassroomActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                     case R.id.about_menu: {
                         Intent intent = new Intent(StatsActivity.this, AboutActivity.class);
                         startActivity(intent);
@@ -481,6 +488,15 @@ public class StatsActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         updateStats();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }
