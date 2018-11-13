@@ -68,41 +68,45 @@
             <Button
                 android:id="@+id/open_timetable"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="121dp"
+                android:layout_width="wrap_content"
                 android:layout_height="42dp"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/ic_event_black_24dp"
+                android:drawableTint="?attr/colorButtonNav"
                 android:text="@string/timetable"
                 android:textColor="?attr/colorButtonNav"
-                android:drawableTint="?attr/colorButtonNav"
                 android:textSize="14sp"
                 android:theme="@style/ButtonReservations"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="1.0"
+                card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
                 card_view:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/open_map"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="121dp"
+                android:layout_width="wrap_content"
                 android:layout_height="42dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginEnd="4dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@+id/open_timetable"
                 android:layout_weight="0.5"
                 android:drawableStart="@drawable/ic_map_black_24dp"
                 android:drawableTint="?attr/colorButtonNav"
-                android:textColor="?attr/colorButtonNav"
                 android:text="@string/map"
+                android:textColor="?attr/colorButtonNav"
                 android:textSize="14sp"
                 android:theme="@style/ButtonReservations"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toStartOf="@+id/open_timetable"
                 card_view:layout_constraintTop_toTopOf="parent"
-                card_view:layout_constraintVertical_bias="1.0" />
+                card_view:layout_constraintVertical_bias="0.0" />
         </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
