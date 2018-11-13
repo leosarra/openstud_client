@@ -228,15 +228,13 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
 
     @Override
     public void onClick(View v) {
-        System.out.println(searchBar.isSearchEnabled());
         if (searchBar.isSearchEnabled() && !searchBar.isSuggestionsVisible()) {
             searchBar.showSuggestionsList();
-        } else searchBar.enableSearch();
+        } else if (!searchBar.isSearchEnabled()) searchBar.enableSearch();
     }
 
     @Override
     public void onButtonClicked(int buttonCode) {
-        System.out.println(buttonCode);
         switch (buttonCode) {
             case MaterialSearchBar.BUTTON_NAVIGATION:
                 mDrawerLayout.openDrawer(Gravity.START);
