@@ -181,7 +181,10 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
 
     private synchronized void applyLessons(Calendar date, List<Lesson> lessonsUpdate){
         List<Event> newEvents = OpenstudHelper.generateEventsFromTimetable(lessonsUpdate);
-        if (newEvents == null || newEvents.isEmpty()) swapViews(true);
+        if (newEvents == null || newEvents.isEmpty()) {
+            if (newEvents!= null && !cachedLessons.containsKey(date.getTimeInMillis())) cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
+            swapViews(true);
+        }
         else if (!lessons.equals(newEvents)) {
             lessons.clear();
             lessons.addAll(newEvents);
