@@ -123,6 +123,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             String json = gson.toJson(room.getTodayLessons(), listType);
             bundle.putSerializable("todayLessons", json);
             bundle.putString("roomName", room.getName());
+            bundle.putInt("roomId", room.getInternalId());
             Intent i = new Intent(SearchClassroomActivity.this, ClassroomTimetableActivity.class);
             i.putExtras(bundle);
             startActivity(i);
