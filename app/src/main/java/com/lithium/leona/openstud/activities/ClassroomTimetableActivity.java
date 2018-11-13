@@ -25,6 +25,7 @@ import com.lithium.leona.openstud.adapters.EventAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import org.threeten.bp.Instant;
@@ -103,6 +104,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeEngine.applyClassroomTimetableTheme(this);
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
         /* starts before 1 month from now */
@@ -149,7 +151,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
                 getLessons(date, false);
             }
         });
-
+        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(() -> getLessons(horizontalCalendar.getSelectedDate(), true));
         emptyButton.setOnClickListener(v -> {
             if (!swipeRefreshLayout.isRefreshing()) getLessons(horizontalCalendar.getSelectedDate(), true);

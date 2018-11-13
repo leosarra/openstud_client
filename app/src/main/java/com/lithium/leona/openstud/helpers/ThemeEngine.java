@@ -117,6 +117,18 @@ public class ThemeEngine {
         }
     }
 
+    public static void applyClassroomTimetableTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                activity.setTheme(R.style.NoActionBarAppLightTheme);
+                break;
+            case DARK:
+                activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+        }
+    }
+
 
 
     public static int getPrimaryTextColor(Activity activity) {

@@ -204,7 +204,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         progressBar.setOnTouchListener(otl);
         contentFrame.setOnTouchListener(otl);
         rv.setOnTouchListener(otl);
-        findViewById(R.id.mt_editText).setOnClickListener(this);
+        searchBar.getSearchEditText().setOnClickListener(this);
     }
 
     @Override
