@@ -134,7 +134,6 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         adapter.notifyDataSetChanged();
         setupDrawerListener();
         setupContentListeners();
-        setSuggestionListener();
         if (PreferenceManager.getClassroomNotificationEnabled(this)) {
             LayoutHelper.createSearchClassroomNotification(this, ThemeEngine.getAlertDialogTheme(this));
             PreferenceManager.setClassroomNotificationEnabled(this,false);
@@ -315,26 +314,6 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
                 });
     }
 
-    private void setSuggestionListener(){
-        RecyclerView searchrv = findViewById(R.id.mt_recycler);
-        GestureDetector gd = new GestureDetector(SearchClassroomActivity.this, new ClickListener());
-        searchrv.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
-                if (!gd.onTouchEvent(motionEvent)) searchBar.hideSuggestionsList();
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean b) {
-
-            }
-        });
-    }
     private boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
         if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty())
             searchBar.disableSearch();
