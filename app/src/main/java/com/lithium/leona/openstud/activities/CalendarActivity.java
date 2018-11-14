@@ -296,13 +296,11 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         List<lithium.openstud.driver.core.Event> newReservations = new LinkedList<>();
         List<lithium.openstud.driver.core.Event> newDoable = new LinkedList<>();
         ZoneId zoneId = ZoneId.systemDefault();
-        System.out.println(date);
         for (lithium.openstud.driver.core.Event event : events) {
             if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription()))
                 continue;
             Instant instant = Instant.ofEpochMilli(date.getTime());
             instant.atZone(zoneId);
-            System.out.println(date);
             if (instant.toEpochMilli() != event.getStart().toLocalDate().atStartOfDay(zoneId).toInstant().toEpochMilli())
                 continue;
             if (event.getEventType() == EventType.DOABLE) {

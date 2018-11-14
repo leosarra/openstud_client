@@ -161,7 +161,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         os = InfoManager.getOpenStudRecovery(getApplication(), username);
-        System.out.println(os);
         new Thread(() -> _recovery(os, username)).start();
     }
 
