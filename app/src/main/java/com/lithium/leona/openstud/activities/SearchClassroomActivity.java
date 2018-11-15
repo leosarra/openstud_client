@@ -79,6 +79,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     private List<Classroom> classes = new LinkedList<>();
     private ClassroomAdapter adapter;
     private SearchClassroomHandler h = new SearchClassroomHandler(this);
+    private boolean touchBarDisabled;
 
     @OnClick(R.id.empty_button_reload)
     void onClickReloadButton() {
@@ -204,6 +205,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         contentFrame.setOnTouchListener(otl);
         rv.setOnTouchListener(otl);
         searchBar.getSearchEditText().setOnClickListener(this);
+        emptyText.setOnTouchListener(otl);
     }
 
     @Override
@@ -314,10 +316,13 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
                 });
     }
 
-    private boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
+    private synchronized boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
+        if(touchBarDisabled) return gd.onTouchEvent(event);
+        touchBarDisabled = true;
         if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty())
             searchBar.disableSearch();
         else if (searchBar.isSearchEnabled()) searchBar.hideSuggestionsList();
+        new Handler().postDelayed(() -> touchBarDisabled = false, 500);
         return gd.onTouchEvent(event);
     }
 
