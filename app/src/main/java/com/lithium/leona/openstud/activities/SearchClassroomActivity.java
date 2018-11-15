@@ -228,7 +228,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     }
 
     @Override
-    public void onClick(View v) {
+    public synchronized void onClick(View v) {
         if (searchBar.isSearchEnabled() && !searchBar.isSuggestionsVisible()) {
             searchBar.showSuggestionsList();
         } else if (!searchBar.isSearchEnabled()) searchBar.enableSearch();
