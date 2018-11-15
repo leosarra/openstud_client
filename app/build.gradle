@@ -59,7 +59,7 @@ dependencies {
     implementation 'com.android.support:preference-v7:28.0.0'
     implementation 'com.google.firebase:firebase-perf:16.2.0'
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.0'
-    implementation 'com.github.LithiumSR:MaterialSearchBar:0.8.7'
+    implementation 'com.github.LithiumSR:MaterialSearchBar:0.8.8'
     implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'
 
     // https://mvnrepository.com/artifact/org.threeten/threetenbp

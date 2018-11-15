@@ -243,6 +243,19 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             case MaterialSearchBar.BUTTON_BACK:
                 searchBar.disableSearch();
                 break;
+            case MaterialSearchBar.BUTTON_DELETE_SUGGESTION:
+                PreferenceManager.saveSuggestions(this, searchBar.getLastSuggestions());
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        List oldSuggestions = PreferenceManager.getSuggestions(this);
+        if (oldSuggestions != null) {
+            searchBar.clearSuggestions();
+            searchBar.setLastSuggestions(oldSuggestions);
         }
     }
 
