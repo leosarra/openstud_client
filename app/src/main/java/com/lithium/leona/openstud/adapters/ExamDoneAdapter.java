@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.data.PreferenceManager;
 
 import org.apache.commons.lang3.StringUtils;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -62,6 +64,8 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
         TextView txtCFU;
         @BindView(R.id.resultExam)
         TextView txtResult;
+        @BindView(R.id.examDate)
+        TextView txtExamDate;
         private int mode;
         private Context context;
 
@@ -81,6 +85,7 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
         void setDetails(ExamDone exam) {
             txtName.setText(exam.getDescription());
             String result = exam.getNominalResult();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
             if (result.equals("30 e lode")) txtResult.setText("30L / 30");
             else txtResult.setText(StringUtils.capitalize(result));
             if (exam.getResult() >= 18 || result.equals("idoneo") || exam.isPassed()) {
@@ -112,6 +117,10 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             }
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
+            if (PreferenceManager.isExamDateEnabled(context)) {
+                txtExamDate.setVisibility(View.VISIBLE);
+                txtExamDate.setText(context.getResources().getString(R.string.exam_done_date, exam.getDate().format(formatter)));
+            } else txtExamDate.setVisibility(View.GONE);
         }
     }
 }

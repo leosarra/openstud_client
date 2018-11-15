@@ -101,7 +101,7 @@
     <string name="success_delete_pdf">File cancellati con successo!</string>
     <string name="failed_delete_pdf">Impossibile cancellare i file. Riprova più tardi</string>
     <string name="restart_required">Riavvio richiesto</string>
-    <string name="restart_required_description">Al fine di applicare il tema correttamente OpenStud deve essere riavviato. Riavviare ora?</string>
+    <string name="restart_required_description">Al fine di applicare le modifiche correttamente OpenStud deve essere riavviato. Riavviare ora?</string>
     <string name="restart_ok">Riavvia</string>
     <string name="restart_cancel">Dopo</string>
     <string name="my_gpa">La mia media</string>
@@ -167,5 +167,8 @@
     <string name="classroom_timetable">Orari aula</string>
     <string name="no_lesson_found">Nessuna lezione trovata</string>
     <string name="classrooms">Aule</string>
+    <string name="exam_done_date">Sostenuto il: %1$s</string>
+    <string name="show_exam_date">Mostra data per gli esami superati</string>
+    <string name="show_exam_date_description">Abilita la visualizzazione della data per quanto riguarda gli esami sostenuti dallo studente.</string>
 
 </resources>

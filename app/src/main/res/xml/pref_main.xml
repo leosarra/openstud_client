@@ -6,6 +6,11 @@
             android:summary="@string/enable_lessons_description"
             android:key="@string/key_enable_lesson"
             android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:title="@string/show_exam_date"
+            android:summary="@string/show_exam_date_description"
+            android:key="@string/key_exam_date"
+            android:defaultValue="false"/>
         <EditTextPreference
             android:title="@string/default_laude"
             android:defaultValue="30"

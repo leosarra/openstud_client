@@ -108,7 +108,7 @@
     <string name="success_delete_pdf">Files deleted successfully!</string>
     <string name="failed_delete_pdf">Can\'t delete cached files. Try again later</string>
     <string name="restart_required">Restart required</string>
-    <string name="restart_required_description">In order to apply the new theme OpenStud must be restarted. Restart now?</string>
+    <string name="restart_required_description">In order to apply the last changes OpenStud must be restarted. Restart now?</string>
     <string name="restart_ok">Restart</string>
     <string name="restart_cancel">Later</string>
     <string name="my_gpa">My GPA</string>
@@ -183,4 +183,8 @@
     <string name="classroom_timetable">Classroom timetable</string>
     <string name="no_lesson_found">No lessons found</string>
     <string name="classrooms">Classrooms</string>
+    <string name="exam_done_date">Date exam: %1$s</string>
+    <string name="key_exam_date">key_exam_date</string>
+    <string name="show_exam_date">Show passed exam date</string>
+    <string name="show_exam_date_description">Show the day an exam was passed by the student</string>
 </resources>

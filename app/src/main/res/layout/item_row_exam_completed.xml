@@ -46,6 +46,12 @@
                 android:layout_height="wrap_content"
                 android:padding="1dp"
                 android:textColor="?attr/primaryTextColor" />
+            <TextView
+                android:id="@+id/examDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:textColor="?attr/primaryTextColor" />
         </LinearLayout>
 
     <LinearLayout
