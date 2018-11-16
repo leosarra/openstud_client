@@ -22,6 +22,7 @@ import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.adapters.ExamDoneAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
 import org.threeten.bp.Duration;
@@ -66,6 +67,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
     private boolean firstStart = true;
     private ExamsDoneHandler h = new ExamsDoneHandler(this);
     private LinearLayoutManager llm;
+    private boolean showExamDate;
 
     private static class ExamsDoneHandler extends Handler {
         private final WeakReference<ExamsDoneFragment> frag;
@@ -116,6 +118,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             return v;
         }
+        showExamDate = PreferenceManager.isExamDateEnabled(activity);
         emptyText.setText(getResources().getString(R.string.no_exams_done_found));
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(getActivity().getApplication(), os);
         rv.setHasFixedSize(true);
@@ -138,6 +141,7 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         super.onResume();
         LocalDateTime time = getTimer();
         Activity activity = getActivity();
+        if (activity != null && showExamDate!=PreferenceManager.isExamDateEnabled(activity)) adapter.notifyDataSetChanged();
         if (firstStart) firstStart = false;
         else if (activity != null && (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30))
             refreshExamsDone();

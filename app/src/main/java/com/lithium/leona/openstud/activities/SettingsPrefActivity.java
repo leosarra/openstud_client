@@ -102,11 +102,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 if (valid) PreferenceManager.setStatsNotificationEnabled(getContext(), false);
                 return valid;
             });
-            Preference examDate = findPreference(getString(R.string.key_exam_date));
-            examDate.setOnPreferenceChangeListener((preference, newValue) -> {
-                activity.createRestartDialog(alertDialogTheme);
-                return true;
-            });
         }
     }
 

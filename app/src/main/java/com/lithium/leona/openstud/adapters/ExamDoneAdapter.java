@@ -117,7 +117,7 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             }
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
-            if (PreferenceManager.isExamDateEnabled(context)) {
+            if (exam.getDate()!=null && PreferenceManager.isExamDateEnabled(context)) {
                 txtExamDate.setVisibility(View.VISIBLE);
                 txtExamDate.setText(context.getResources().getString(R.string.exam_done_date, exam.getDate().format(formatter)));
             } else txtExamDate.setVisibility(View.GONE);
