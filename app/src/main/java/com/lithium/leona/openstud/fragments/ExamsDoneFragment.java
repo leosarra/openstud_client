@@ -141,7 +141,10 @@ public class ExamsDoneFragment extends android.support.v4.app.Fragment {
         super.onResume();
         LocalDateTime time = getTimer();
         Activity activity = getActivity();
-        if (activity != null && showExamDate!=PreferenceManager.isExamDateEnabled(activity)) adapter.notifyDataSetChanged();
+        if (activity != null && showExamDate!=PreferenceManager.isExamDateEnabled(activity)) {
+            adapter.notifyDataSetChanged();
+            showExamDate = !showExamDate;
+        }
         if (firstStart) firstStart = false;
         else if (activity != null && (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30))
             refreshExamsDone();
