@@ -243,7 +243,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     public void onButtonClicked(int buttonCode) {
         switch (buttonCode) {
             case MaterialSearchBar.BUTTON_NAVIGATION:
-                mDrawerLayout.openDrawer(Gravity.START);
+                mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case MaterialSearchBar.BUTTON_BACK:
                 searchBar.disableSearch();
