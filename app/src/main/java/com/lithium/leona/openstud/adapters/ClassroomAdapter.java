@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -23,32 +21,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
-import com.lithium.leona.openstud.activities.ClassroomTimetableActivity;
-import com.lithium.leona.openstud.activities.LauncherActivity;
-import com.lithium.leona.openstud.activities.SearchClassroomActivity;
-import com.lithium.leona.openstud.activities.StatsActivity;
-import com.lithium.leona.openstud.data.InfoManager;
-import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.ItemTouchHelperViewHolder;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 
-import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnFocusChange;
 import lithium.openstud.driver.core.Classroom;
-import lithium.openstud.driver.core.ExamReservation;
-import lithium.openstud.driver.core.Lesson;
 
 public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassesHolder> {
 
