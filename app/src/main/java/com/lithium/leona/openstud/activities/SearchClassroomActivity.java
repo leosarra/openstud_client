@@ -37,6 +37,8 @@ import com.lithium.leona.openstud.listeners.ClickListener;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -139,13 +141,16 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             LayoutHelper.createSearchClassroomNotification(this, ThemeEngine.getAlertDialogTheme(this));
             PreferenceManager.setClassroomNotificationEnabled(this,false);
         }
-
+        searchBar.requestFocus();
+        searchBar.enableSearch();
     }
 
-    public synchronized void searchClassrooms(String query) {
+    public synchronized void searchClassrooms(String text) {
         new Thread(() -> {
             setLoadingEnabled(true, false);
             List<Classroom> update = null;
+            String query = text;
+            if (query.endsWith(".")) query = StringUtils.chomp(query);
             try {
                 update = os.getClassRoom(query);
             } catch (OpenstudInvalidResponseException e) {
@@ -215,7 +220,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     @Override
     public void onSearchConfirmed(CharSequence text) {
         ClientHelper.hideKeyboard(mDrawerLayout, this);
-        if (!text.toString().trim().isEmpty()) searchClassrooms(text.toString());
+        if (!text.toString().trim().isEmpty()) searchClassrooms(text.toString().trim());
     }
 
     @Override
