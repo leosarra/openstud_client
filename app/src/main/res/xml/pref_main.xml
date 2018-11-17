@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/pref_title_general">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
+    <PreferenceCategory android:title="@string/pref_title_general"
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:title="@string/enable_lessons"
             android:summary="@string/enable_lessons_description"
             android:key="@string/key_enable_lesson"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"/>
         <CheckBoxPreference
             android:title="@string/show_exam_date"
             android:summary="@string/show_exam_date_description"
             android:key="@string/key_exam_date"
-            android:defaultValue="false"/>
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"/>
         <EditTextPreference
             android:title="@string/default_laude"
             android:defaultValue="30"
             android:key="@string/key_default_laude"
-            android:inputType="numberDecimal" />
-        <Preference android:title="@string/delete_pdf" android:key="@string/key_delete">
-        </Preference>
+            android:inputType="numberDecimal"
+            app:iconSpaceReserved="false"/>
+        <Preference
+            android:title="@string/delete_pdf"
+            android:key="@string/key_delete"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_title_themes">
+    <PreferenceCategory android:title="@string/pref_title_themes"
+        app:iconSpaceReserved="false">
         <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/title_theme"
@@ -28,6 +37,7 @@
             android:entryValues="@array/pref_theme_values"
             android:key="@string/key_theme"
             android:summary="@string/summary_theme"
-            android:title="@string/title_theme" />
+            android:title="@string/title_theme"
+            app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 </PreferenceScreen>
