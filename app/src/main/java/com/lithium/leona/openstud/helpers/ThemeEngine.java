@@ -27,6 +27,7 @@ public class ThemeEngine {
         public static Theme getTheme(int theme) {
             if (theme == 0) return LIGHT;
             else if (theme == 1) return DARK;
+            else if (theme == 2) return BLACK;
             else return LIGHT;
         }
     }
@@ -54,6 +55,10 @@ public class ThemeEngine {
                 break;
             case DARK:
                 activity.setTheme(R.style.ExamDarkTheme);
+                break;
+            case BLACK:
+                activity.setTheme(R.style.ExamBlackTheme);
+                break;
         }
     }
 
@@ -63,9 +68,13 @@ public class ThemeEngine {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
+                break;
             case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
+
         }
     }
 
@@ -77,6 +86,9 @@ public class ThemeEngine {
                 break;
             case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
                 break;
         }
     }
@@ -90,6 +102,9 @@ public class ThemeEngine {
             case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
+                break;
         }
     }
 
@@ -101,6 +116,9 @@ public class ThemeEngine {
                 break;
             case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
                 break;
         }
     }
@@ -114,6 +132,9 @@ public class ThemeEngine {
             case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
+                break;
         }
     }
 
@@ -125,6 +146,9 @@ public class ThemeEngine {
                 break;
             case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
                 break;
         }
     }
@@ -160,6 +184,9 @@ public class ThemeEngine {
             case DARK:
                 activity.setTheme(R.style.AppTheme_MaterialAboutActivityDark);
                 break;
+            case BLACK:
+                activity.setTheme(R.style.AppTheme_MaterialAboutActivityBlack);
+                break;
         }
     }
 
@@ -172,6 +199,9 @@ public class ThemeEngine {
             case DARK:
                 activity.setTheme(R.style.NoActionBarAppDarkTheme);
                 break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
+                break;
         }
     }
 
@@ -181,6 +211,8 @@ public class ThemeEngine {
             case LIGHT:
                 return R.style.ThemeLightDialog;
             case DARK:
+                return R.style.ThemeDarkDialog;
+            case BLACK:
                 return R.style.ThemeDarkDialog;
             default:
                 return R.style.ThemeLightDialog;
@@ -193,6 +225,8 @@ public class ThemeEngine {
             case LIGHT:
                 return R.style.ThemeLightAlertDialog;
             case DARK:
+                return R.style.ThemeDarkAlertDialog;
+            case BLACK:
                 return R.style.ThemeDarkAlertDialog;
             default:
                 return R.style.ThemeLightAlertDialog;
@@ -209,6 +243,9 @@ public class ThemeEngine {
             case DARK:
                 activity.setTheme(R.style.PreferencesDark);
                 break;
+            case BLACK:
+                activity.setTheme(R.style.PreferencesBlack);
+                break;
         }
     }
 
@@ -219,6 +256,8 @@ public class ThemeEngine {
                 return R.style.AboutLibrariesThemeLight;
             case DARK:
                 return R.style.AboutLibrariesThemeDark;
+            case BLACK:
+                return R.style.AboutLibrariesThemeBlack;
             default:
                 return R.style.AboutLibrariesThemeLight;
         }
@@ -239,8 +278,6 @@ public class ThemeEngine {
         switch (theme) {
             case LIGHT:
                 return true;
-            case DARK:
-                return false;
         }
         return false;
     }
