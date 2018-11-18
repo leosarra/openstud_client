@@ -63,6 +63,7 @@
         <item name="redSlider">@color/redSapienza</item>
         <item name="emptyViewColor">?attr/secondaryTextColor</item>
         <item name="searchBarTheme">@style/MaterialSearchBarLight</item>
+        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
 
     </style>
 
@@ -90,6 +91,34 @@
         <item name="redSlider">#d93535</item>
         <item name="emptyViewColor">@android:color/darker_gray</item>
         <item name="searchBarTheme">@style/MyDarkSearchBar</item>
+        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
+    </style>
+
+    <style name="AppThemeBlack" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#5e0404</item>
+        <item name="colorPrimaryDark">#450202</item>
+        <item name="colorAccent">#8c0c0c</item>
+        <item name="colorSecondary">#a60c0c</item>
+        <item name="colorButtonNav">#e14242</item>
+        <item name="primaryTextColor">#F4F4F6</item>
+        <item name="secondaryTextColor">#96F4F4F6</item>
+        <item name="backgroundCardColor">@color/lesserBlack</item>
+        <item name="dividerColor">#96F4F4F6</item>
+        <item name="backgroundColor">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="defaultTextNav">@android:color/white</item>
+        <item name="colorNavText">@android:color/white</item>
+        <item name="bottomNavColor">#000000</item>
+        <item name="certifiedExamColor">@color/greenLight</item>
+        <item name="nonPassedExamColor">@color/redLight</item>
+        <item name="nonCertifiedExamColor">@color/yellowLight</item>
+        <item name="colorHeader">#450202</item>
+        <item name="popupTextColor">@android:color/white</item>
+        <item name="popupBackgroundColor">#262626</item>
+        <item name="redSlider">#941212</item>
+        <item name="emptyViewColor">@android:color/darker_gray</item>
+        <item name="searchBarTheme">@style/MyDarkSearchBar</item>
+        <item name="ToolBarStyle">@style/ToolBarStyleBlack</item>
     </style>
 
     <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -101,8 +130,18 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="NoActionBarAppBlackTheme" parent="AppThemeBlack">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="ExamDarkTheme" parent="NoActionBarAppDarkTheme">
-        <item name="android:navigationBarColor">#303030</item>
+    <item name="android:navigationBarColor">#303030</item>
+</style>
+
+    <style name="ExamBlackTheme" parent="NoActionBarAppBlackTheme">
+        <item name="android:navigationBarColor">#000000</item>
     </style>
 
     <style name="NoActionBarAppLightTheme" parent="AppThemeLight">
@@ -132,7 +171,14 @@
     </style>
 
 
-    <style name="ToolBarStyle" parent="AppThemeDark">
+    <style name="ToolBarStyle1" parent="AppThemeDark">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="ToolBarStyleBlack" parent="AppThemeBlack">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="actionMenuTextColor">@android:color/white</item>
@@ -156,6 +202,18 @@
         <item name="android:navigationBarColor">#303030</item>
         <item name="primaryTextColor">#FFFFFF</item>
     </style>
+
+    <style name="AppTheme.MaterialAboutActivityBlack" parent="Theme.Mal.Dark">
+        <item name="colorPrimary">#5e0404</item>
+        <item name="colorPrimaryDark">#450202</item>
+        <item name="colorAccent">#8c0c0c</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="primaryTextColor">#FFFFFF</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="mal_card_background">@color/lesserBlack</item>
+        <item name="ToolBarStyle">@style/ToolBarStyleBlack</item>
+    </style>
+
     <style name="AppTheme.MaterialAboutActivityLight" parent="Theme.Mal.Light.DarkActionBar">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
@@ -163,11 +221,11 @@
         <item name="primaryTextColor">@android:color/black</item>
     </style>
 
-
     <style name="BasePreferencesTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
         <item name="android:textColor">?attr/primaryTextColor</item>
         <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
     </style>
+
     <style name="PreferencesDark" parent="@style/PreferenceThemeOverlay.v14.Material">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
@@ -185,6 +243,27 @@
         <item name="android:textColor">?attr/primaryTextColor</item>
         <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
         <item name="android:alertDialogTheme">@style/ThemeDarkAlertDialog</item>
+        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
+    </style>
+
+    <style name="PreferencesBlack" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="colorPrimary">#5e0404</item>
+        <item name="colorPrimaryDark">#450202</item>
+        <item name="colorAccent">#b41111</item>
+        <item name="colorSecondary">#960808</item>
+        <item name="colorButtonNav">#e14242</item>
+        <item name="primaryTextColor">#F4F4F6</item>
+        <item name="secondaryTextColor">#96F4F4F6</item>
+        <item name="backgroundCardColor">#424242</item>
+        <item name="dividerColor">#96F4F4F6</item>
+        <item name="backgroundColor">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="defaultTextNav">@android:color/white</item>
+        <item name="colorNavText">@android:color/white</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
+        <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
+        <item name="android:alertDialogTheme">@style/ThemeDarkAlertDialog</item>
+        <item name="ToolBarStyle">@style/ToolBarStyleBlack</item>
     </style>
 
     <style name="PreferencesLight" parent="@style/PreferenceThemeOverlay.v14.Material">
@@ -198,6 +277,7 @@
         <item name="dividerColor">#B6B6B6</item>
         <item name="backgroundColor">@android:color/background_light</item>
         <item name="android:alertDialogTheme">@style/ThemeLightAlertDialog</item>
+        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
     </style>
 
     <style name="ThemeLightDialog" parent="@style/Theme.AppCompat.Light.Dialog">
@@ -255,6 +335,27 @@
         <item name="about_libraries_dividerDark_openSource">#B6B6B6</item>
         <item name="about_libraries_dividerLight_openSource">#B6B6B6</item>
         <item name="android:navigationBarColor">#2E2E2E</item>
+
+
+
+
+    </style>
+
+    <style name="AboutLibrariesThemeBlack" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">#5e0404</item>
+        <item name="colorPrimaryDark">#450202</item>
+        <item name="colorAccent">#8c0c0c</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorBackground">@android:color/black</item>
+        <!-- AboutLibraries specific values -->
+        <item name="about_libraries_window_background">@color/about_libraries_window_background</item>
+        <item name="about_libraries_card">@color/lesserBlack</item>
+        <item name="about_libraries_title_openSource">#F4F4F6</item>
+        <item name="about_libraries_text_openSource">#B6B6B6</item>
+        <item name="about_libraries_special_button_openSource">#B6B6B6</item>
+        <item name="about_libraries_dividerDark_openSource">#B6B6B6</item>
+        <item name="about_libraries_dividerLight_openSource">#B6B6B6</item>
+        <item name="android:navigationBarColor">#000000</item>
     </style>
 
     <style name="AboutLibrariesThemeLight" parent="Theme.AppCompat.NoActionBar">
