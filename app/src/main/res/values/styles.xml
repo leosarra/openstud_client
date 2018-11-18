@@ -17,29 +17,6 @@
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
-    <style name="Toolbar" parent="Theme.AppCompat">
-        <item name="actionMenuTextColor">@android:color/white</item>
-    </style>
-
-    <style name="ToolbarTitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="ToolbarSubtitleTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="ToolbarStyle">
-        <item name="android:minHeight">?attr/actionBarSize</item>
-        <!--<item name="android:background">@color/colorPrimary</item>-->
-        <item name="theme">@style/Toolbar</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="colorControlNormal">@android:color/white</item>
-        <item name="colorControlHighlight">#3fff</item>
-        <item name="titleTextAppearance">@style/ToolbarTitleTextAppearance</item>
-        <item name="subtitleTextAppearance">@style/ToolbarSubtitleTextAppearance</item>
-    </style>
-
     <style name="AppThemeLight" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>
@@ -62,8 +39,8 @@
         <item name="popupTextColor">@android:color/black</item>
         <item name="redSlider">@color/redSapienza</item>
         <item name="emptyViewColor">?attr/secondaryTextColor</item>
-        <item name="searchBarTheme">@style/MaterialSearchBarLight</item>
-        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
+        <item name="searchBarTheme">@style/LightSearchBar</item>
+        <item name="ToolBarStyle">@style/ToolBarStyleDefault</item>
 
     </style>
 
@@ -90,8 +67,8 @@
         <item name="popupBackgroundColor">#262626</item>
         <item name="redSlider">#d93535</item>
         <item name="emptyViewColor">@android:color/darker_gray</item>
-        <item name="searchBarTheme">@style/MyDarkSearchBar</item>
-        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
+        <item name="searchBarTheme">@style/DarkSearchBar</item>
+        <item name="ToolBarStyle">@style/ToolBarStyleDefault</item>
     </style>
 
     <style name="AppThemeBlack" parent="Base.Theme.AppCompat.Light.DarkActionBar">
@@ -117,7 +94,7 @@
         <item name="popupBackgroundColor">#262626</item>
         <item name="redSlider">#941212</item>
         <item name="emptyViewColor">@android:color/darker_gray</item>
-        <item name="searchBarTheme">@style/MyDarkSearchBar</item>
+        <item name="searchBarTheme">@style/BlackSearchBar</item>
         <item name="ToolBarStyle">@style/ToolBarStyleBlack</item>
     </style>
 
@@ -171,7 +148,7 @@
     </style>
 
 
-    <style name="ToolBarStyle1" parent="AppThemeDark">
+    <style name="ToolBarStyleDefault" parent="AppThemeDark">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="actionMenuTextColor">@android:color/white</item>
@@ -243,7 +220,7 @@
         <item name="android:textColor">?attr/primaryTextColor</item>
         <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
         <item name="android:alertDialogTheme">@style/ThemeDarkAlertDialog</item>
-        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
+        <item name="ToolBarStyle">@style/ToolBarStyleDefault</item>
     </style>
 
     <style name="PreferencesBlack" parent="@style/PreferenceThemeOverlay.v14.Material">
@@ -277,7 +254,7 @@
         <item name="dividerColor">#B6B6B6</item>
         <item name="backgroundColor">@android:color/background_light</item>
         <item name="android:alertDialogTheme">@style/ThemeLightAlertDialog</item>
-        <item name="ToolBarStyle">@style/ToolBarStyle1</item>
+        <item name="ToolBarStyle">@style/ToolBarStyleDefault</item>
     </style>
 
     <style name="ThemeLightDialog" parent="@style/Theme.AppCompat.Light.Dialog">
@@ -379,7 +356,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="MyDarkSearchBar" parent="MaterialSearchBarDark">
+    <style name="DarkSearchBar" parent="MaterialSearchBarDark">
         <item name="mt_searchBarColor">@color/searchBarPrimaryColorDark</item>
         <item name="mt_dividerColor">@color/searchBarDividerColorDark</item>
         <item name="mt_navIconTint">@color/white</item>
@@ -400,5 +377,50 @@
         <item name="mt_rightTextSelectorDrawable">@drawable/text_select_handle_right_mtrl_alpha_mtrlsearch</item>
         <item name="mt_handlesTintEnabled">true</item>
     </style>
+
+    <style name="BlackSearchBar" parent="MaterialSearchBarDark">
+        <item name="mt_searchBarColor">@color/lesserBlack</item>
+        <item name="mt_dividerColor">@color/searchBarDividerColorDark</item>
+        <item name="mt_navIconTint">@color/white</item>
+        <item name="mt_searchIconTint">@color/white</item>
+        <item name="mt_clearIconTint">@color/white</item>
+        <item name="mt_menuIconTint">@color/white</item>
+        <item name="mt_backIconTint">@color/white</item>
+        <item name="mt_textCursorTint">@color/redSapienza</item>
+        <item name="mt_textColor">@color/searchBarTextColorDark</item>
+        <item name="mt_hintColor">@color/searchBarHintColorDark</item>
+        <item name="mt_placeholderColor">@color/searchBarPlaceholderColorDark</item>
+        <item name="mt_highlightedTextColor">@color/red</item>
+        <item name="mt_leftTextSelectorTint">@color/red</item>
+        <item name="mt_middleTextSelectorTint">@color/red</item>
+        <item name="mt_rightTextSelectorTint">@color/red</item>
+        <item name="mt_leftTextSelectorDrawable">@drawable/text_select_handle_left_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_middleTextSelectorDrawable">@drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_rightTextSelectorDrawable">@drawable/text_select_handle_right_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_handlesTintEnabled">true</item>
+    </style>
+
+    <style name="LightSearchBar" parent="MaterialSearchBarLight">
+        <item name="mt_searchBarColor">@color/searchBarPrimaryColor</item>
+        <item name="mt_dividerColor">@color/searchBarDividerColor</item>
+        <item name="mt_navIconTint">@color/searchBarNavIconTintColor</item>
+        <item name="mt_searchIconTint">@color/searchBarSearchIconTintColor</item>
+        <item name="mt_clearIconTint">@color/searchBarClearIconTintColor</item>
+        <item name="mt_menuIconTint">@color/searchBarMenuIconTintColor</item>
+        <item name="mt_backIconTint">@color/searchBarBackIconTintColor</item>
+        <item name="mt_textCursorTint">@color/redSapienza</item>
+        <item name="mt_textColor">@color/searchBarTextColor</item>
+        <item name="mt_hintColor">@color/searchBarHintColor</item>
+        <item name="mt_placeholderColor">@color/searchBarPlaceholderColor</item>
+        <item name="mt_highlightedTextColor">@color/red</item>
+        <item name="mt_leftTextSelectorTint">@color/red</item>
+        <item name="mt_middleTextSelectorTint">@color/red</item>
+        <item name="mt_rightTextSelectorTint">@color/red</item>
+        <item name="mt_leftTextSelectorDrawable">@drawable/text_select_handle_left_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_middleTextSelectorDrawable">@drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_rightTextSelectorDrawable">@drawable/text_select_handle_right_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_handlesTintEnabled">true</item>
+    </style>
+
 
 </resources>
