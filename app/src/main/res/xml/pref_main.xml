@@ -20,7 +20,8 @@
             android:title="@string/default_laude"
             android:defaultValue="30"
             android:key="@string/key_default_laude"
-            android:inputType="numberDecimal"
+            android:numeric="integer"
+            android:inputType="number"
             app:iconSpaceReserved="false"/>
         <Preference
             android:title="@string/delete_pdf"
