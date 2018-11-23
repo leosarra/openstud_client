@@ -8,17 +8,14 @@ import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 
 import java.lang.reflect.Type;
-import java.util.LinkedList;
 import java.util.List;
-
-import lithium.openstud.driver.core.Tax;
 
 public class PreferenceManager {
     private static SharedPreferences pref;
 
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
-        pref = android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(context);
+        pref = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public static boolean getStatsNotificationEnabled(Context context) {

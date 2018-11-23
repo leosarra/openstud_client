@@ -2,7 +2,7 @@ package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
