@@ -258,6 +258,20 @@
     </style>
 
 
+    <style name="ThemeBlackAlertDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/redSapienza</item>
+        <item name="colorPrimaryDark">@color/redSapienzaDark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="android:colorAccent">@android:color/holo_red_light</item>
+        <item name="android:background">@color/lesserBlack</item>
+        <item name="primaryTextColor">#F4F4F6</item>
+        <item name="secondaryTextColor">#96F4F4F6</item>
+        <item name="android:textColorAlertDialogListItem">?attr/primaryTextColor</item>
+        <item name="android:textColorSecondary">?attr/secondaryTextColor</item>
+        <item name="textColorAlertDialogListItem">?attr/primaryTextColor</item>
+    </style>
+
+
     <style name="DialogStyle" parent="android:Theme.Material.Dialog.Alert">
         <item name="colorPrimary">@color/redSapienza</item>
         <item name="colorPrimaryDark">@color/redSapienzaDark</item>

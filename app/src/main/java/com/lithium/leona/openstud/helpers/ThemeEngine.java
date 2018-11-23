@@ -227,7 +227,7 @@ public class ThemeEngine {
             case DARK:
                 return R.style.ThemeDarkAlertDialog;
             case BLACK:
-                return R.style.ThemeDarkAlertDialog;
+                return R.style.ThemeBlackAlertDialog;
             default:
                 return R.style.ThemeLightAlertDialog;
         }
