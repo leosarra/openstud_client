@@ -12,7 +12,7 @@
         app:tabGravity="fill"
         app:tabMode="scrollable"
         app:tabMaxWidth="0dp"
-        android:background="@color/redSapienza"
+        android:background="?attr/colorPrimary"
         app:tabSelectedTextColor="@android:color/white"
         app:tabTextColor="@android:color/darker_gray"
         app:tabIndicatorColor="@android:color/white"

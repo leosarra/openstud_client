@@ -22,5 +22,6 @@
         <attr name="redSlider" format="color"/>
         <attr name="emptyViewColor" format="color" />
         <attr name="searchBarTheme" format="reference" />
+        <attr name="ToolBarStyle" format="reference" />
     </declare-styleable>
 </resources>

@@ -22,13 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:theme="@style/ToolBarStyle"
+            app:theme="?attr/ToolBarStyle"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
         <devs.mulham.horizontalcalendar.HorizontalCalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/redSapienza"
+            android:background="?attr/colorPrimary"
             app:textColorSelected="#FFFF" />
 
     </com.google.android.material.appbar.AppBarLayout>
