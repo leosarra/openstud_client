@@ -3,10 +3,15 @@ package com.lithium.leona.openstud.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
@@ -65,6 +70,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
         TextView txtWhere;
         @BindView(R.id.nameTeacher)
         TextView txtTeacher;
+        @BindView(R.id.event_options)
+        ImageView options;
         private Context context;
 
         private void setContext(Context context) {
@@ -84,6 +91,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
             else txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getWhere()));
             txtTeacher.setText(context.getResources().getString(R.string.teacher_event, StringUtils.capitalize(ev.getTeacher())));
             if (ev.getTeacher() == null) txtTeacher.setVisibility(View.GONE);
+            if (ev.getEventType() == EventType.LESSON) {
+                options.setVisibility(View.GONE);
+            }
+            else {
+                Context wrapper = new ContextThemeWrapper(context, R.style.popupMenuStyle);
+                PopupMenu popup = new PopupMenu(wrapper, options);
+                popup.inflate(R.menu.event_exam_doable_menu);
+            }
             if (ev.getEventType() == EventType.DOABLE || ev.getEventType() == EventType.RESERVED) {
                 txtName.setText(ev.getDescription());
                 txtStartDate.setVisibility(View.GONE);
