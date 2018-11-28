@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.BottomSheetRecoveryFragment;
@@ -21,6 +19,8 @@ import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import java.lang.ref.WeakReference;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     Button recovery;
     @BindView(R.id.rememberFlag)
     CheckBox rememberFlag;
+    private Openstud os;
+    private LoginEventHandler h = new LoginEventHandler(this);
 
     @OnFocusChange({R.id.studentIdLogin, R.id.passwordLogin})
     void onFocusChanged(View v, boolean focused) {
@@ -69,56 +71,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         login();
-    }
-
-    private Openstud os;
-    private LoginEventHandler h = new LoginEventHandler(this);
-
-    private static class LoginEventHandler extends Handler {
-        private final WeakReference<LoginActivity> mActivity;
-
-        LoginEventHandler(LoginActivity activity) {
-            mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            LoginActivity activity = mActivity.get();
-            if (activity != null) {
-                View.OnClickListener listener = v -> new Thread(activity::login).start();
-                View.OnClickListener listener2 = v -> new Thread(activity::recovery).start();
-                if (msg.what == ClientHelper.Status.OK.getValue()) {
-                    Intent intent = new Intent(activity, ExamsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    activity.startActivity(intent);
-                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener2);
-                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                } else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.RECOVERY_OK.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.recovery_ok, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.INVALID_STUDENT_ID.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_student_id, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.INVALID_ANSWER.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_answer, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.NO_RECOVERY.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
-                }
-                if (msg.what != ClientHelper.Status.OK.getValue()) {
-                    activity.runOnUiThread(() -> activity.setElementsEnabled(true));
-                }
-            }
-        }
     }
 
     @Override
@@ -255,6 +207,53 @@ public class LoginActivity extends AppCompatActivity {
         rememberFlag.setEnabled(enabled);
         username.setEnabled(enabled);
         password.setEnabled(enabled);
+    }
+
+    private static class LoginEventHandler extends Handler {
+        private final WeakReference<LoginActivity> mActivity;
+
+        LoginEventHandler(LoginActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            LoginActivity activity = mActivity.get();
+            if (activity != null) {
+                View.OnClickListener listener = v -> new Thread(activity::login).start();
+                View.OnClickListener listener2 = v -> new Thread(activity::recovery).start();
+                if (msg.what == ClientHelper.Status.OK.getValue()) {
+                    Intent intent = new Intent(activity, ExamsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    activity.startActivity(intent);
+                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener2);
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.RECOVERY_OK.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.recovery_ok, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.INVALID_STUDENT_ID.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_student_id, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.INVALID_ANSWER.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_answer, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.NO_RECOVERY.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
+                }
+                if (msg.what != ClientHelper.Status.OK.getValue()) {
+                    activity.runOnUiThread(() -> activity.setElementsEnabled(true));
+                }
+            }
+        }
     }
 
 

@@ -2,10 +2,6 @@ package com.lithium.leona.openstud.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +15,10 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamReservation;
@@ -55,6 +55,14 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         return reservations.size();
     }
 
+    public interface ReservationAdapterListener {
+        void deleteReservationOnClick(ExamReservation res);
+
+        void downloadReservationOnClick(ExamReservation res);
+
+        void addCalendarOnClick(ExamReservation res);
+    }
+
     class ActiveReservationsHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.nameExam)
         TextView txtName;
@@ -76,13 +84,13 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
         ImageView options;
         private Context context;
 
-        private void setContext(Context context) {
-            this.context = context;
-        }
-
         ActiveReservationsHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        private void setContext(Context context) {
+            this.context = context;
         }
 
         @SuppressLint("ResourceType")
@@ -119,13 +127,5 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             });
             getButton.setOnClickListener(v -> ral.downloadReservationOnClick(res));
         }
-    }
-
-    public interface ReservationAdapterListener {
-        void deleteReservationOnClick(ExamReservation res);
-
-        void downloadReservationOnClick(ExamReservation res);
-
-        void addCalendarOnClick(ExamReservation res);
     }
 }

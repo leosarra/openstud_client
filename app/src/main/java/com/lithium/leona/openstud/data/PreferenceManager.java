@@ -51,7 +51,8 @@ public class PreferenceManager {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<List>() {}.getType();
+            Type listType = new TypeToken<List>() {
+            }.getType();
             String json = gson.toJson(suggestions, listType);
             pref.edit().putString("suggestion", json).apply();
         }
@@ -120,7 +121,7 @@ public class PreferenceManager {
 
     public static boolean isExamDateEnabled(Context context) {
         setupSharedPreferences(context);
-        return  pref.getBoolean(context.getResources().getString(R.string.key_exam_date), false);
+        return pref.getBoolean(context.getResources().getString(R.string.key_exam_date), false);
     }
 
 }

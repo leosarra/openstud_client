@@ -1,8 +1,6 @@
 package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,8 @@ import com.lithium.leona.openstud.helpers.ItemTouchHelperViewHolder;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDone;
@@ -49,6 +49,21 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
         return exams.size();
     }
 
+    @Override
+
+    public void onItemDismiss(int position) {
+        activity.removeFakeExam(position);
+    }
+
+    @Override
+
+    public void onItemMove(int fromPosition, int toPosition) {
+        ExamDone prev = exams.remove(fromPosition);
+        exams.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
+        notifyItemMoved(fromPosition, toPosition);
+
+    }
+
     static class ExamDoneHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         @BindView(R.id.examName)
         TextView txtName;
@@ -58,13 +73,13 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
         TextView txtResult;
         private Context context;
 
-        private void setContext(Context context) {
-            this.context = context;
-        }
-
         ExamDoneHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        private void setContext(Context context) {
+            this.context = context;
         }
 
         void setDetails(ExamDone exam) {
@@ -82,23 +97,6 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
         @Override
         public void onItemClear() {
         }
-    }
-
-
-    @Override
-
-    public void onItemDismiss(int position) {
-        activity.removeFakeExam(position);
-    }
-
-
-    @Override
-
-    public void onItemMove(int fromPosition, int toPosition) {
-        ExamDone prev = exams.remove(fromPosition);
-        exams.add(toPosition > fromPosition ? toPosition - 1 : toPosition, prev);
-        notifyItemMoved(fromPosition, toPosition);
-
     }
 
 }

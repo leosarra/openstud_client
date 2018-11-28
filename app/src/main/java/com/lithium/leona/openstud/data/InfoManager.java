@@ -168,7 +168,8 @@ public class InfoManager {
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         Map<String, List<Lesson>> newTimetable = new HashMap<>();
-        if (PreferenceManager.isLessonEnabled(context)) newTimetable = os.getTimetable(os.getExamsDoable());
+        if (PreferenceManager.isLessonEnabled(context))
+            newTimetable = os.getTimetable(os.getExamsDoable());
         List<lithium.openstud.driver.core.Event> newEvents = os.getCalendarEvents(student);
         if (newEvents == null) return null;
         if (newTimetable != null && !newTimetable.isEmpty())

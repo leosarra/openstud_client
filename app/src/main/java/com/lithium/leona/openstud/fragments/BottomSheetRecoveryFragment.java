@@ -2,9 +2,6 @@ package com.lithium.leona.openstud.fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.core.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -16,42 +13,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.LoginActivity;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
-    public BottomSheetRecoveryFragment() {
-        // Required empty public constructor
-    }
-
     String questionText;
     String studentID;
     @BindView(R.id.questionInput)
     EditText questionInput;
-
     @BindView(R.id.question)
     TextView question;
-
     @BindView(R.id.confirm)
     Button confirm;
 
-    @OnClick(R.id.abort)
-    public void hide() {
-        dismiss();
-    }
-
-    @OnClick(R.id.confirm)
-    public void add() {
-        LoginActivity activity = (LoginActivity) getActivity();
-        if (activity != null) {
-            new Thread(() -> activity.sendRecoveryRequest(questionInput.getText().toString(), studentID)).start();
-            dismiss();
-        }
+    public BottomSheetRecoveryFragment() {
+        // Required empty public constructor
     }
 
     public static BottomSheetRecoveryFragment newInstance(String studentID, String question) {
@@ -65,6 +49,20 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
         args.putString("id", studentID);
         myFragment.setArguments(args);
         return myFragment;
+    }
+
+    @OnClick(R.id.abort)
+    public void hide() {
+        dismiss();
+    }
+
+    @OnClick(R.id.confirm)
+    public void add() {
+        LoginActivity activity = (LoginActivity) getActivity();
+        if (activity != null) {
+            new Thread(() -> activity.sendRecoveryRequest(questionInput.getText().toString(), studentID)).start();
+            dismiss();
+        }
     }
 
     @Override

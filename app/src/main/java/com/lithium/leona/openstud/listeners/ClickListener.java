@@ -14,6 +14,7 @@ public class ClickListener extends GestureDetector.SimpleOnGestureListener {
         // triggers after onDown only for long press
         super.onLongPress(event);
     }
+
     @Override
     public boolean onDown(MotionEvent event) {
         // triggers first for both single tap and long press

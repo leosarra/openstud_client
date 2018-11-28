@@ -43,9 +43,31 @@ public class SettingsPrefActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new MainPreferenceFragment()).commit();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void createRestartDialog(int styleId) {
+        new AlertDialog.Builder(new ContextThemeWrapper(this, styleId))
+                .setTitle(getResources().getString(R.string.restart_required))
+                .setMessage(getResources().getString(R.string.restart_required_description))
+                .setPositiveButton(getResources().getString(R.string.restart_ok), (dialog, which) -> {
+                    Intent i = new Intent(SettingsPrefActivity.this, LauncherActivity.class);
+                    startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                })
+                .setNegativeButton(getResources().getString(R.string.restart_cancel), (dialogInterface, i) -> {
+                })
+                .show();
+    }
+
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {
-        private int alertDialogTheme;
         ThemeEngine.Theme oldTheme;
+        private int alertDialogTheme;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -108,28 +130,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void createRestartDialog(int styleId) {
-        new AlertDialog.Builder(new ContextThemeWrapper(this, styleId))
-                .setTitle(getResources().getString(R.string.restart_required))
-                .setMessage(getResources().getString(R.string.restart_required_description))
-                .setPositiveButton(getResources().getString(R.string.restart_ok), (dialog, which) -> {
-                    Intent i = new Intent(SettingsPrefActivity.this, LauncherActivity.class);
-                    startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
-                })
-                .setNegativeButton(getResources().getString(R.string.restart_cancel), (dialogInterface, i) -> {
-                })
-                .show();
     }
 
 

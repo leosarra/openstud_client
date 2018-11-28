@@ -1,19 +1,20 @@
 package com.lithium.leona.openstud.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class TabFragment extends Fragment {
 
@@ -76,6 +77,13 @@ public class TabFragment extends Fragment {
         return x;
     }
 
+    private void notifyItemChanged(int item) {
+        PaymentsActivity act = (PaymentsActivity) getActivity();
+        if (act != null) {
+            act.updateSelectTab(item);
+        }
+    }
+
     class MyAdapter extends FragmentPagerAdapter {
 
         MyAdapter(FragmentManager fm) {
@@ -110,13 +118,6 @@ public class TabFragment extends Fragment {
                     return getResources().getString(R.string.paid);
             }
             return null;
-        }
-    }
-
-    private void notifyItemChanged(int item) {
-        PaymentsActivity act = (PaymentsActivity) getActivity();
-        if (act != null) {
-            act.updateSelectTab(item);
         }
     }
 }

@@ -3,21 +3,22 @@ package com.lithium.leona.openstud.helpers;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.view.ContextThemeWrapper;
+import android.view.View;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import com.lithium.leona.openstud.R;
+
+import java.util.Objects;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.ContextThemeWrapper;
-import android.view.View;
-
-import com.lithium.leona.openstud.R;
-
-import java.util.Objects;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 
 public class LayoutHelper {

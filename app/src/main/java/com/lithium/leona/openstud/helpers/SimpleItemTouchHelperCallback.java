@@ -1,8 +1,8 @@
 package com.lithium.leona.openstud.helpers;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * An implementation of {@link ItemTouchHelper.Callback} that enables basic drag & drop and

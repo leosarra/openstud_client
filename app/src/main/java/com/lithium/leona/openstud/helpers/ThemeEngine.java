@@ -4,33 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import androidx.core.content.ContextCompat;
 import android.util.TypedValue;
 
 import com.lithium.leona.openstud.R;
 
+import androidx.core.content.ContextCompat;
+
 public class ThemeEngine {
     private static SharedPreferences pref;
-
-    public enum Theme {
-        LIGHT(0), DARK(1), BLACK(2);
-        private int value;
-
-        Theme(int value) {
-            this.value = value;
-        }
-
-        private int getValue() {
-            return value;
-        }
-
-        public static Theme getTheme(int theme) {
-            if (theme == 0) return LIGHT;
-            else if (theme == 1) return DARK;
-            else if (theme == 2) return BLACK;
-            else return LIGHT;
-        }
-    }
 
     private static void setupSharedPreferences(Context context) {
         if (pref != null) return;
@@ -153,8 +134,6 @@ public class ThemeEngine {
         }
     }
 
-
-
     public static int getPrimaryTextColor(Activity activity) {
         int tintColor;
         TypedValue tV = new TypedValue();
@@ -233,7 +212,6 @@ public class ThemeEngine {
         }
     }
 
-
     public static void applySettingsTheme(Activity activity) {
         Theme theme = getTheme(activity);
         switch (theme) {
@@ -280,5 +258,25 @@ public class ThemeEngine {
                 return true;
         }
         return false;
+    }
+
+    public enum Theme {
+        LIGHT(0), DARK(1), BLACK(2);
+        private int value;
+
+        Theme(int value) {
+            this.value = value;
+        }
+
+        public static Theme getTheme(int theme) {
+            if (theme == 0) return LIGHT;
+            else if (theme == 1) return DARK;
+            else if (theme == 2) return BLACK;
+            else return LIGHT;
+        }
+
+        private int getValue() {
+            return value;
+        }
     }
 }

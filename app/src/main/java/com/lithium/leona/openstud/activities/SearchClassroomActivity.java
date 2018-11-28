@@ -5,17 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
@@ -44,6 +36,13 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -139,7 +138,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         setupContentListeners();
         if (PreferenceManager.getClassroomNotificationEnabled(this)) {
             LayoutHelper.createSearchClassroomNotification(this, ThemeEngine.getAlertDialogTheme(this));
-            PreferenceManager.setClassroomNotificationEnabled(this,false);
+            PreferenceManager.setClassroomNotificationEnabled(this, false);
         }
         searchBar.requestFocus();
         searchBar.enableSearch();
@@ -204,7 +203,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         searchBar.setOnSearchActionListener(this);
         searchBar.setOnClickListener(this);
         GestureDetector gd = new GestureDetector(SearchClassroomActivity.this, new ClickListener());
-        View.OnTouchListener otl = (v, event) -> handleTouchEvent(v,event, gd);
+        View.OnTouchListener otl = (v, event) -> handleTouchEvent(v, event, gd);
         emptyLayout.setOnTouchListener(otl);
         progressBar.setOnTouchListener(otl);
         contentFrame.setOnTouchListener(otl);
@@ -335,7 +334,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     }
 
     private synchronized boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
-        if(touchBarDisabled) return gd.onTouchEvent(event);
+        if (touchBarDisabled) return gd.onTouchEvent(event);
         touchBarDisabled = true;
         if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty())
             searchBar.disableSearch();

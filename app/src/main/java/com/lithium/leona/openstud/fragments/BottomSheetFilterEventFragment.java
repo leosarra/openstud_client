@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
@@ -23,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,19 +30,12 @@ import butterknife.OnClick;
 public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
     @BindView(R.id.list)
     LinearLayout linearLayout;
-
-    @OnClick(R.id.close)
-    void onClick() {
-        dismiss();
-    }
-
     private boolean refreshNeeded = false;
+    private List<String> elements = new LinkedList<>();
 
     public BottomSheetFilterEventFragment() {
         // Required empty public constructor
     }
-
-    private List<String> elements = new LinkedList<>();
 
     public static BottomSheetFilterEventFragment newInstance(List<String> names) {
         BottomSheetFilterEventFragment myFragment = new BottomSheetFilterEventFragment();
@@ -54,6 +47,11 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
         args.putSerializable("elements", json);
         myFragment.setArguments(args);
         return myFragment;
+    }
+
+    @OnClick(R.id.close)
+    void onClick() {
+        dismiss();
     }
 
     @Override

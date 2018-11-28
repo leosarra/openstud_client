@@ -7,16 +7,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.CalendarContract;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,33 +14,33 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
-import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import org.threeten.bp.Duration;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.Period;
-import org.threeten.bp.ZoneId;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.EventType;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
@@ -69,12 +59,6 @@ public class ReservationsFragment extends Fragment {
     Button emptyButton;
     @BindView(R.id.empty_text)
     TextView emptyText;
-
-    @OnClick(R.id.empty_button_reload)
-    public void OnClick(View v) {
-        refreshReservations();
-    }
-
     private List<ExamReservation> reservations;
     private Openstud os;
     private ActiveReservationsAdapter adapter;
@@ -82,47 +66,9 @@ public class ReservationsFragment extends Fragment {
     private boolean firstStart = true;
     private ReservationsHandler h = new ReservationsHandler(this);
 
-    private static class ReservationsHandler extends Handler {
-        private final WeakReference<ReservationsFragment> frag;
-
-        private ReservationsHandler(ReservationsFragment frag) {
-            this.frag = new WeakReference<>(frag);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            final ReservationsFragment reservationsFrag = frag.get();
-            if (reservationsFrag == null) return;
-            ExamsActivity activity = (ExamsActivity) reservationsFrag.getActivity();
-            if (activity != null) {
-                View.OnClickListener ocl = v -> reservationsFrag.refreshReservations();
-                if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
-                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createRetrySnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG, ocl);
-                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    InfoManager.clearSharedPreferences(activity.getApplication());
-                    Intent i = new Intent(activity, LauncherActivity.class);
-                    i.putExtra("error", msg.what);
-                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    activity.finish();
-                } else if (msg.what == (ClientHelper.Status.FAILED_DELETE).getValue()) {
-                    activity.createTextSnackBar(R.string.failed_delete, Snackbar.LENGTH_LONG);
-                } else if (msg.what == (ClientHelper.Status.OK_DELETE).getValue()) {
-                    activity.createTextSnackBar(R.string.ok_delete, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.FAILED_GET_IO.getValue()) {
-                    activity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.FAILED_GET.getValue()) {
-                    activity.createTextSnackBar(R.string.failed_get_network, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.CLOSED_RESERVATION.getValue()) {
-                    activity.createTextSnackBar(R.string.closed_reservation, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
-                }
-            }
-        }
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
+        refreshReservations();
     }
 
     @Override
@@ -182,7 +128,6 @@ public class ReservationsFragment extends Fragment {
         refreshReservations();
         return v;
     }
-
 
     private void getFile(Activity activity, ExamReservation res) {
         boolean check = false;
@@ -293,13 +238,11 @@ public class ReservationsFragment extends Fragment {
         });
     }
 
-
     private void setRefreshing(final boolean bool) {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
-
 
     private void setButtonReloadStatus(final boolean bool) {
         Activity activity = getActivity();
@@ -329,7 +272,6 @@ public class ReservationsFragment extends Fragment {
         return lastUpdate;
     }
 
-
     private void deleteReservation(ExamReservation res) {
         try {
             int ret = os.deleteReservation(res);
@@ -343,6 +285,49 @@ public class ReservationsFragment extends Fragment {
             h.sendEmptyMessage(ClientHelper.Status.FAILED_DELETE.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+        }
+    }
+
+    private static class ReservationsHandler extends Handler {
+        private final WeakReference<ReservationsFragment> frag;
+
+        private ReservationsHandler(ReservationsFragment frag) {
+            this.frag = new WeakReference<>(frag);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final ReservationsFragment reservationsFrag = frag.get();
+            if (reservationsFrag == null) return;
+            ExamsActivity activity = (ExamsActivity) reservationsFrag.getActivity();
+            if (activity != null) {
+                View.OnClickListener ocl = v -> reservationsFrag.refreshReservations();
+                if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    activity.createRetrySnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG, ocl);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                    activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                    InfoManager.clearSharedPreferences(activity.getApplication());
+                    Intent i = new Intent(activity, LauncherActivity.class);
+                    i.putExtra("error", msg.what);
+                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    activity.finish();
+                } else if (msg.what == (ClientHelper.Status.FAILED_DELETE).getValue()) {
+                    activity.createTextSnackBar(R.string.failed_delete, Snackbar.LENGTH_LONG);
+                } else if (msg.what == (ClientHelper.Status.OK_DELETE).getValue()) {
+                    activity.createTextSnackBar(R.string.ok_delete, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.FAILED_GET_IO.getValue()) {
+                    activity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.FAILED_GET.getValue()) {
+                    activity.createTextSnackBar(R.string.failed_get_network, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.CLOSED_RESERVATION.getValue()) {
+                    activity.createTextSnackBar(R.string.closed_reservation, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                }
+            }
         }
     }
 }

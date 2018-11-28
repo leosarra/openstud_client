@@ -5,13 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
@@ -34,6 +28,11 @@ import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,12 +55,6 @@ public class ExamsDoneFragment extends Fragment {
     Button emptyButton;
     @BindView(R.id.empty_text)
     TextView emptyText;
-
-    @OnClick(R.id.empty_button_reload)
-    public void OnClick(View v) {
-        refreshExamsDone();
-    }
-
     private List<ExamDone> exams;
     private Openstud os;
     private ExamDoneAdapter adapter;
@@ -71,39 +64,10 @@ public class ExamsDoneFragment extends Fragment {
     private LinearLayoutManager llm;
     private boolean showExamDate;
 
-    private static class ExamsDoneHandler extends Handler {
-        private final WeakReference<ExamsDoneFragment> frag;
-
-        private ExamsDoneHandler(ExamsDoneFragment frag) {
-            this.frag = new WeakReference<>(frag);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            final ExamsDoneFragment examsDoneFrag = frag.get();
-            if (examsDoneFrag == null) return;
-            ExamsActivity activity = (ExamsActivity) examsDoneFrag.getActivity();
-            if (activity != null) {
-                View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
-                if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
-                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
-                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    InfoManager.clearSharedPreferences(activity.getApplication());
-                    Intent i = new Intent(activity, LauncherActivity.class);
-                    i.putExtra("error", msg.what);
-                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    activity.finish();
-                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
-                }
-            }
-        }
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
+        refreshExamsDone();
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -143,7 +107,7 @@ public class ExamsDoneFragment extends Fragment {
         super.onResume();
         LocalDateTime time = getTimer();
         Activity activity = getActivity();
-        if (activity != null && showExamDate!=PreferenceManager.isExamDateEnabled(activity)) {
+        if (activity != null && showExamDate != PreferenceManager.isExamDateEnabled(activity)) {
             adapter.notifyDataSetChanged();
             showExamDate = !showExamDate;
         }
@@ -255,6 +219,39 @@ public class ExamsDoneFragment extends Fragment {
                 rv.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private static class ExamsDoneHandler extends Handler {
+        private final WeakReference<ExamsDoneFragment> frag;
+
+        private ExamsDoneHandler(ExamsDoneFragment frag) {
+            this.frag = new WeakReference<>(frag);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final ExamsDoneFragment examsDoneFrag = frag.get();
+            if (examsDoneFrag == null) return;
+            ExamsActivity activity = (ExamsActivity) examsDoneFrag.getActivity();
+            if (activity != null) {
+                View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
+                if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                    activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                    InfoManager.clearSharedPreferences(activity.getApplication());
+                    Intent i = new Intent(activity, LauncherActivity.class);
+                    i.putExtra("error", msg.what);
+                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    activity.finish();
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                }
+            }
+        }
     }
 
 }

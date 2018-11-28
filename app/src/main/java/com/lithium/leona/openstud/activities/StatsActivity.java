@@ -6,20 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +21,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.FakeExamAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -56,6 +44,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDone;
@@ -103,38 +103,6 @@ public class StatsActivity extends AppCompatActivity {
     private FakeExamAdapter adapter;
     private boolean showIcon = false;
 
-    private static class StatsHandler extends Handler {
-        private final WeakReference<StatsActivity> activity;
-
-        private StatsHandler(StatsActivity activity) {
-            this.activity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            final StatsActivity activity = this.activity.get();
-            if (activity == null) return;
-            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-            } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                InfoManager.clearSharedPreferences(activity.getApplication());
-                Intent i = new Intent(activity, LauncherActivity.class);
-                i.putExtra("error", msg.what);
-                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                activity.finish();
-            } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
-            }
-        }
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,7 +141,6 @@ public class StatsActivity extends AppCompatActivity {
 
     }
 
-
     public void addFakeExam(ExamDone exam) {
         examsFake.add(exam);
         updateStats();
@@ -211,7 +178,6 @@ public class StatsActivity extends AppCompatActivity {
             updateGraphs();
         });
     }
-
 
     private void updateGraphs() {
         runOnUiThread(() -> {
@@ -354,7 +320,6 @@ public class StatsActivity extends AppCompatActivity {
         return lastUpdate;
     }
 
-
     private void setupDrawerListener() {
         ddl = new DelayedDrawerListener() {
             @Override
@@ -454,7 +419,6 @@ public class StatsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     private void setIconVisibility(boolean visible) {
         if ((visible && !showIcon) || (!visible && showIcon)) {
             showIcon = visible;
@@ -496,6 +460,37 @@ public class StatsActivity extends AppCompatActivity {
             this.mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    private static class StatsHandler extends Handler {
+        private final WeakReference<StatsActivity> activity;
+
+        private StatsHandler(StatsActivity activity) {
+            this.activity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final StatsActivity activity = this.activity.get();
+            if (activity == null) return;
+            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                View.OnClickListener ocl = v -> activity.refreshExamsDone();
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                View.OnClickListener ocl = v -> activity.refreshExamsDone();
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+            } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                InfoManager.clearSharedPreferences(activity.getApplication());
+                Intent i = new Intent(activity, LauncherActivity.class);
+                i.putExtra("error", msg.what);
+                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                activity.finish();
+            } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                LayoutHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+            }
         }
     }
 

@@ -2,8 +2,6 @@ package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,8 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.PaymentDescription;
@@ -24,23 +24,9 @@ import lithium.openstud.driver.core.Tax;
 
 public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
 
-    public enum Mode {
-        PAID(0), UNPAID(1);
-        private final int value;
-
-        Mode(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
-
     private List<Tax> taxes;
     private Context context;
     private int mode;
-
     public TaxAdapter(Context context, List<Tax> taxes, int mode) {
         this.taxes = taxes;
         this.context = context;
@@ -68,6 +54,19 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
         return taxes.size();
     }
 
+    public enum Mode {
+        PAID(0), UNPAID(1);
+        private final int value;
+
+        Mode(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
     public static class TaxHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.codeTax)
         TextView txtCode;
@@ -84,17 +83,17 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
         private int mode;
         private Context context;
 
+        TaxHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
         private void setMode(int mode) {
             this.mode = mode;
         }
 
         private void setContext(Context context) {
             this.context = context;
-        }
-
-        TaxHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
         }
 
         void setDetails(Tax tax) {

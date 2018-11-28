@@ -4,10 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +20,10 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamReservation;
@@ -72,6 +72,10 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
         return reservations.size();
     }
 
+    public interface ReservationAdapterListener {
+        boolean placeReservation(ExamReservation res);
+    }
+
     class ActiveReservationsHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.nameExam)
         TextView txtName;
@@ -91,15 +95,14 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
         Button placeButton;
         private Activity activity;
 
-        private void setActivity(Activity activity) {
-            this.activity = activity;
-        }
-
         ActiveReservationsHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
+        private void setActivity(Activity activity) {
+            this.activity = activity;
+        }
 
         private void setPlaceButtonEnabled(boolean enabled) {
             int tintColor;
@@ -151,9 +154,5 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
                 else activity.runOnUiThread(() -> setPlaceButtonEnabled(true));
             }).start());
         }
-    }
-
-    public interface ReservationAdapterListener {
-        boolean placeReservation(ExamReservation res);
     }
 }

@@ -3,12 +3,13 @@ package com.lithium.leona.openstud.activities;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
