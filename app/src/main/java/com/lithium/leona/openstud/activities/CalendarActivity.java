@@ -208,22 +208,24 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
 
 
     private void setupReciclerLayouts() {
+
         lessons_rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         lessons_rv.setLayoutManager(llm);
-        adapter_lessons = new EventAdapter(this, lessons, null);
+        EventAdapter.EventAdapterListener eal = ev -> ClientHelper.addEventToCalendar(this,ev);
+        adapter_lessons = new EventAdapter(this, lessons, eal);
         lessons_rv.setAdapter(adapter_lessons);
 
         exams_rv.setHasFixedSize(true);
         LinearLayoutManager llm2 = new LinearLayoutManager(this);
         exams_rv.setLayoutManager(llm2);
-        adapter_exams = new EventAdapter(this, exams, null);
+        adapter_exams = new EventAdapter(this, exams, eal);
         exams_rv.setAdapter(adapter_exams);
 
         reservations_rv.setHasFixedSize(true);
         LinearLayoutManager llm3 = new LinearLayoutManager(this);
         reservations_rv.setLayoutManager(llm3);
-        adapter_reservations = new EventAdapter(this, reservations, null);
+        adapter_reservations = new EventAdapter(this, reservations, eal);
         reservations_rv.setAdapter(adapter_reservations);
     }
 

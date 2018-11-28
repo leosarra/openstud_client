@@ -50,6 +50,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import lithium.openstud.driver.core.EventType;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
@@ -167,7 +168,7 @@ public class ReservationsFragment extends Fragment {
 
             @Override
             public void addCalendarOnClick(ExamReservation res) {
-                addToCalendar(activity, res);
+                ClientHelper.addReservationToCalendar(activity, res);
             }
         });
         rv.setAdapter(adapter);
@@ -324,23 +325,6 @@ public class ReservationsFragment extends Fragment {
         return lastUpdate;
     }
 
-    private void addToCalendar(Activity activity, final ExamReservation res) {
-        ZoneId zoneId = ZoneId.systemDefault();
-        Timestamp timestamp = new Timestamp(res.getExamDate().atStartOfDay(zoneId).toEpochSecond());
-        Intent intent = new Intent(Intent.ACTION_EDIT);
-        intent.setType("vnd.android.cursor.item/event");
-        String title;
-        if (Locale.getDefault().getLanguage().equals("it"))
-            title = "Esame: " + res.getExamSubject();
-        else title = "Exam: " + res.getExamSubject();
-        intent.putExtra(CalendarContract.Events.TITLE, title);
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                timestamp.getTime() * 1000L);
-        intent.putExtra(CalendarContract.Events.ALL_DAY, true);
-        startActivity(intent);
-
-
-    }
 
     private void createConfirmDeleteDialog(Activity activity, final ExamReservation res) {
         if (Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1) {

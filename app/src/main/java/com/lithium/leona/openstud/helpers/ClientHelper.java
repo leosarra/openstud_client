@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,8 @@ import android.os.Environment;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.provider.CalendarContract;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -31,11 +34,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 import lithium.openstud.driver.core.Event;
+import lithium.openstud.driver.core.EventType;
 import lithium.openstud.driver.core.ExamDone;
+import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.OpenstudHelper;
 
 public class ClientHelper {
@@ -168,6 +174,60 @@ public class ClientHelper {
             if (exam.getResult() >= 18 && exam.isPassed()) return true;
         }
         return false;
+    }
+
+    public static void addReservationToCalendar(Activity activity, final ExamReservation res) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Timestamp timestamp = new Timestamp(res.getExamDate().atStartOfDay(zoneId).toEpochSecond());
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        String title;
+        if (Locale.getDefault().getLanguage().equals("it"))
+            title = "Esame: " + res.getExamSubject();
+        else title = "Exam: " + res.getExamSubject();
+        intent.putExtra(CalendarContract.Events.TITLE, title);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                timestamp.getTime() * 1000L);
+        intent.putExtra(CalendarContract.Events.ALL_DAY, true);
+        activity.startActivity(intent);
+    }
+
+    public static void addEventToCalendar(Activity activity, final Event ev) {
+        switch (ev.getEventType()){
+            case LESSON: {
+                ZoneId zoneId = ZoneId.systemDefault();
+                Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
+                Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                String title = title = ev.getDescription();
+                intent.putExtra(CalendarContract.Events.TITLE, title);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        timestampStart.getTime() * 1000L);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                        timestampEnd.getTime() * 1000L);
+                intent.putExtra(CalendarContract.Events.ALL_DAY, false);
+                activity.startActivity(intent);
+                break;
+            }
+            case DOABLE:
+            case RESERVED: {
+                ZoneId zoneId = ZoneId.systemDefault();
+                Timestamp timestamp = new Timestamp(ev.getExamDate().atStartOfDay(zoneId).toEpochSecond());
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                String title;
+                if (Locale.getDefault().getLanguage().equals("it"))
+                    title = "Esame: " + ev.getReservation().getExamSubject();
+                else title = "Exam: " + ev.getReservation().getExamSubject();
+                intent.putExtra(CalendarContract.Events.TITLE, title);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        timestamp.getTime() * 1000L);
+                intent.putExtra(CalendarContract.Events.ALL_DAY, true);
+                activity.startActivity(intent);
+            }
+        }
+
     }
 
     public static boolean isNetworkAvailable(Context context) {
