@@ -27,6 +27,7 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
     private List<Tax> taxes;
     private Context context;
     private int mode;
+
     public TaxAdapter(Context context, List<Tax> taxes, int mode) {
         this.taxes = taxes;
         this.context = context;

@@ -6,23 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
@@ -45,6 +35,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
@@ -59,26 +55,6 @@ import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class ClassroomTimetableActivity extends AppCompatActivity {
-
-    private static class ClassroomTimetableHandler extends Handler {
-        private final WeakReference<ClassroomTimetableActivity> activity;
-
-        private ClassroomTimetableHandler(ClassroomTimetableActivity activity) {
-            this.activity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            final ClassroomTimetableActivity activity = this.activity.get();
-            if (activity == null) return;
-            View.OnClickListener ocl = v -> activity.getLessons(activity.horizontalCalendar.getSelectedDate(), true);
-            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            }
-        }
-    }
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -287,6 +263,26 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
                 }.getType();
 
                 cachedLessons = gson.fromJson(json, type);
+            }
+        }
+    }
+
+    private static class ClassroomTimetableHandler extends Handler {
+        private final WeakReference<ClassroomTimetableActivity> activity;
+
+        private ClassroomTimetableHandler(ClassroomTimetableActivity activity) {
+            this.activity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final ClassroomTimetableActivity activity = this.activity.get();
+            if (activity == null) return;
+            View.OnClickListener ocl = v -> activity.getLessons(activity.horizontalCalendar.getSelectedDate(), true);
+            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             }
         }
     }

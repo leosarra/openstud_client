@@ -34,6 +34,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     IndicatorSeekBar grade;
     @BindView(R.id.add)
     Button add;
+
     public BottomSheetStatsFragment() {
         // Required empty public constructor
     }
