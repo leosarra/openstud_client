@@ -5,12 +5,6 @@
     <PreferenceCategory android:title="@string/pref_title_general"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
-            android:title="@string/enable_lessons"
-            android:summary="@string/enable_lessons_description"
-            android:key="@string/key_enable_lesson"
-            android:defaultValue="false"
-            app:iconSpaceReserved="false"/>
-        <CheckBoxPreference
             android:title="@string/show_exam_date"
             android:summary="@string/show_exam_date_description"
             android:key="@string/key_exam_date"
@@ -28,6 +22,23 @@
             android:key="@string/key_delete"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_lessons"
+        app:iconSpaceReserved="false">
+        <CheckBoxPreference
+            android:title="@string/enable_lessons"
+            android:summary="@string/enable_lessons_description"
+            android:key="@string/key_enable_lesson"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"/>
+        <CheckBoxPreference
+            android:title="@string/show_options_lesson"
+            android:summary="@string/show_options_lesson_description"
+            android:key="@string/key_options_lesson"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
 
     <PreferenceCategory android:title="@string/pref_title_themes"
         app:iconSpaceReserved="false">

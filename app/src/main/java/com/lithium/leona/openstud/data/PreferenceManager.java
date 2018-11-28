@@ -32,6 +32,13 @@ public class PreferenceManager {
         }
     }
 
+    public static boolean isLessonOptionEnabled(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean(context.getResources().getString(R.string.key_options_lesson), false);
+        }
+    }
+
 
     public static void setLessonEnabled(Context context, boolean enabled) {
         setupSharedPreferences(context);
