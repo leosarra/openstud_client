@@ -152,7 +152,11 @@ public class ReservationsFragment extends Fragment {
         adapter = new ActiveReservationsAdapter(activity, reservations, new ActiveReservationsAdapter.ReservationAdapterListener() {
             @Override
             public void deleteReservationOnClick(final ExamReservation res) {
-                createConfirmDeleteDialog(activity, res);
+                if (!ClientHelper.canDeleteReservation(res)) {
+                    h.sendEmptyMessage(ClientHelper.Status.CLOSED_RESERVATION.getValue());
+                    return;
+                }
+                ClientHelper.createConfirmDeleteReservationDialog(activity, res, () -> deleteReservation(res));
             }
 
             @Override
@@ -271,7 +275,7 @@ public class ReservationsFragment extends Fragment {
         }).start();
     }
 
-    public synchronized void refreshDataSet(List<ExamReservation> update) {
+    private synchronized void refreshDataSet(List<ExamReservation> update) {
         boolean flag = false;
         if (update != null && !reservations.equals(update)) {
             flag = true;
@@ -325,21 +329,6 @@ public class ReservationsFragment extends Fragment {
         return lastUpdate;
     }
 
-
-    private void createConfirmDeleteDialog(Activity activity, final ExamReservation res) {
-        if (Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1) {
-            h.sendEmptyMessage(ClientHelper.Status.CLOSED_RESERVATION.getValue());
-            return;
-        }
-        int themeId = ThemeEngine.getAlertDialogTheme(activity);
-        new AlertDialog.Builder(new ContextThemeWrapper(activity, themeId))
-                .setTitle(getResources().getString(R.string.delete_res_dialog_title))
-                .setMessage(getResources().getString(R.string.delete_res_dialog_description, res.getExamSubject()))
-                .setPositiveButton(getResources().getString(R.string.delete_ok), (dialog, which) -> new Thread(() -> deleteReservation(res)).start())
-                .setNegativeButton(getResources().getString(R.string.delete_abort), (dialog, which) -> {
-                })
-                .show();
-    }
 
     private void deleteReservation(ExamReservation res) {
         try {

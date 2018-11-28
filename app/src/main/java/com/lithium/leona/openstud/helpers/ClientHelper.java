@@ -12,11 +12,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.provider.CalendarContract;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -24,6 +27,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.lithium.leona.openstud.R;
 
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.Period;
 import org.threeten.bp.ZoneId;
 
 import java.sql.Timestamp;
@@ -168,6 +174,17 @@ public class ClientHelper {
         customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
+    public static void createConfirmDeleteReservationDialog(Activity activity, final ExamReservation res, Runnable action) {
+        if (activity == null) return;
+        int themeId = ThemeEngine.getAlertDialogTheme(activity);
+        activity.runOnUiThread(() -> new AlertDialog.Builder(new ContextThemeWrapper(activity, themeId))
+                .setTitle(activity.getResources().getString(R.string.delete_res_dialog_title))
+                .setMessage(activity.getResources().getString(R.string.delete_res_dialog_description, res.getExamSubject()))
+                .setPositiveButton(activity.getResources().getString(R.string.delete_ok), (dialog, which) -> new Thread(action).start())
+                .setNegativeButton(activity.getResources().getString(R.string.delete_abort), (dialog, which) -> {
+                })
+                .show());
+    }
 
     public static boolean hasPassedExams(List<ExamDone> exams) {
         for (ExamDone exam : exams) {
@@ -200,7 +217,7 @@ public class ClientHelper {
                 Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
-                String title = title = ev.getDescription();
+                String title = ev.getDescription();
                 intent.putExtra(CalendarContract.Events.TITLE, title);
                 intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                         timestampStart.getTime() * 1000L);
@@ -236,6 +253,14 @@ public class ClientHelper {
         if (connectivityManager == null) return false;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static boolean canPlaceReservation(ExamReservation res) {
+        return (Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 0 && !(Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1));
+    }
+
+    public static boolean canDeleteReservation(ExamReservation res) {
+        return !(Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1);
     }
 
     public static void hideKeyboard(View v, Context context) {
