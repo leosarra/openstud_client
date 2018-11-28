@@ -46,7 +46,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.github.LithiumSR:openstud_driver:0.27.5'
-    implementation 'com.jakewharton:butterknife:9.0.0-rc1'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation group: 'androidx.legacy', name: 'legacy-preference-v14', version: '1.0.0'
@@ -65,7 +65,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.threeten/threetenbp
     implementation group: 'org.threeten', name: 'threetenbp', version: '1.3.8'
     implementation 'com.github.LithiumSR:CompactCalendarView:3.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
