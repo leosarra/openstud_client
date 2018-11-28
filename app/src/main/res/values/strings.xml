@@ -192,4 +192,5 @@
     <string name="key_options_lesson" translatable="false">key_options_lesson</string>
     <string name="pref_title_lessons">Lessons</string>
     <string name="add_calendar_event">Add to system calendar</string>
+    <string name="place_reservation_event">Place reservation</string>
 </resources>

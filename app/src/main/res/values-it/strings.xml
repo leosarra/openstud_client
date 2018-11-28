@@ -174,5 +174,6 @@
     <string name="show_options_lesson_description">Permetti di esportare le lezioni sul calendario di sistema a partire dalla schermata \'\'Ricerca aule\'\' e \'\'Calendario\'\'</string>
     <string name="pref_title_lessons">Lezioni</string>
     <string name="add_calendar_event">Esporta sul calendario di sistema</string>
+    <string name="place_reservation_event">Prenota esame</string>
 
 </resources>

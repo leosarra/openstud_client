@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.PreferenceManager;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -24,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Event;
 import lithium.openstud.driver.core.EventType;
+import lithium.openstud.driver.core.ExamReservation;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder> {
 
@@ -94,20 +96,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
             }
             else {
                 options.setVisibility(View.VISIBLE);
-                Context wrapper = new ContextThemeWrapper(context, R.style.popupMenuStyle);
-                PopupMenu popup = new PopupMenu(wrapper, options);
-                popup.inflate(R.menu.event_exam_doable_menu);
-                options.setOnClickListener(v -> {
-                    popup.setOnMenuItemClickListener(menuItem -> {
-                        switch (menuItem.getItemId()) {
-                            case R.id.calendar_menu:
-                                eal.addCalendarOnClick(ev);
-                                break;
-                        }
-                        return false;
-                    });
-                    popup.show();
-                });
+                setupMenu(ev, options);
             }
             if (ev.getEventType() == EventType.DOABLE || ev.getEventType() == EventType.RESERVED) {
                 txtName.setText(ev.getDescription());
@@ -122,7 +111,44 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
         }
     }
 
+    private void setupMenu(Event ev, ImageView options) {
+        Context wrapper = new ContextThemeWrapper(context, R.style.popupMenuStyle);
+        PopupMenu popup = new PopupMenu(wrapper, options);
+        switch (ev.getEventType()) {
+            case LESSON:
+                popup.inflate(R.menu.event_generic_menu);
+                break;
+            case RESERVED:
+                if(ClientHelper.canDeleteReservation(ev.getReservation())) popup.inflate(R.menu.event_active_reservation_menu);
+                else popup.inflate(R.menu.event_generic_menu);
+                break;
+            case DOABLE:
+                if (ClientHelper.canPlaceReservation(ev.getReservation())) popup.inflate(R.menu.event_exam_doable_menu);
+                else popup.inflate(R.menu.event_generic_menu);
+                break;
+        }
+        options.setOnClickListener(v -> {
+            popup.setOnMenuItemClickListener(menuItem -> {
+                switch (menuItem.getItemId()) {
+                    case R.id.calendar_menu:
+                        eal.addCalendarOnClick(ev);
+                        break;
+                    case R.id.place_reservation_menu:
+                        if(ev.getEventType() == EventType.DOABLE) new Thread(() -> eal.placeReservation(ev, ev.getReservation())).start();
+                        break;
+                    case R.id.delete_reservation_menu:
+                        if(ev.getEventType() == EventType.RESERVED) eal.deleteReservation(ev, ev.getReservation());
+                        break;
+                }
+                return false;
+            });
+            popup.show();
+        });
+    }
+
     public interface EventAdapterListener {
         void addCalendarOnClick(Event ev);
+        void placeReservation(Event ev, ExamReservation res);
+        void deleteReservation(Event ev, ExamReservation res);
     }
 }

@@ -1,6 +1,7 @@
 package com.lithium.leona.openstud.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,6 +46,7 @@ import butterknife.ButterKnife;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import lithium.openstud.driver.core.Event;
+import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Lesson;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
@@ -107,6 +109,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         ThemeEngine.applyClassroomTimetableTheme(this);
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
+        Activity activity = this;
         /* starts before 1 month from now */
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
@@ -138,7 +141,22 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new EventAdapter(this, lessons, null);
+        adapter = new EventAdapter(this, lessons, new EventAdapter.EventAdapterListener() {
+            @Override
+            public void addCalendarOnClick(Event ev) {
+                ClientHelper.addEventToCalendar(activity, ev);
+            }
+
+            @Override
+            public void placeReservation(Event ev, ExamReservation res) {
+
+            }
+
+            @Override
+            public void deleteReservation(Event ev, ExamReservation res) {
+
+            }
+        });
         rv.setAdapter(adapter);
 
         if (name == null) Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.classroom_timetable);

@@ -140,6 +140,8 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             else {
                 txtInfo.setText(infos);
             }
+
+            //TODO Replace condition with function from ClientHelper
             if (existActiveReservations(res) || !(Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 0) || Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1)
                 setPlaceButtonEnabled(false);
             else setPlaceButtonEnabled(true);
