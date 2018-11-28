@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.EventAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.fragments.BottomSheetFilterEventFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
@@ -32,7 +33,9 @@ import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
 
 import java.lang.ref.WeakReference;
@@ -112,6 +115,10 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     private List<lithium.openstud.driver.core.Event> exams = new LinkedList<>();
     private List<lithium.openstud.driver.core.Event> reservations = new LinkedList<>();
     private Date currentDate;
+    private boolean lessonOptionsEnabled;
+    private boolean lessonsEnabled;
+    private boolean firstStart = true;
+    private LocalDateTime lastUpdate;
 
     @OnClick(R.id.empty_button_reload)
     void onEmptyButton() {
@@ -136,6 +143,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             finish();
             return;
         }
+        lessonOptionsEnabled = PreferenceManager.isLessonOptionEnabled(this);
+        lessonsEnabled = PreferenceManager.isLessonEnabled(this);
         appBarLayout.addOnOffsetChangedListener(this);
         View headerLayout = navigationView.getHeaderView(0);
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
@@ -233,6 +242,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                 updateEventList(newEvents);
                 h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
                 showCalendarNotification();
+                updateTimer();
             } catch (OpenstudConnectionException e) {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
@@ -566,6 +576,28 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         synchronized (this) {
             if (refreshAfterDismiss) updateCalendar(events);
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        LocalDateTime time = getTimer();
+        if (firstStart) firstStart = false;
+        else if (lessonsEnabled != PreferenceManager.isLessonEnabled(this)) {
+            refreshEvents();
+            lessonsEnabled = !lessonsEnabled;
+        } else if (lessonOptionsEnabled != PreferenceManager.isLessonOptionEnabled(this)) {
+            if (adapter_lessons != null) adapter_lessons.notifyDataSetChanged();
+            lessonOptionsEnabled = !lessonOptionsEnabled;
+        } else if (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 240)
+            refreshEvents();
+    }
+
+    private synchronized void updateTimer() {
+        lastUpdate = LocalDateTime.now();
+    }
+
+    private synchronized LocalDateTime getTimer() {
+        return lastUpdate;
     }
 
     private void showCalendarNotification() {
