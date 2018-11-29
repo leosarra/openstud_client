@@ -1,10 +1,12 @@
 package com.lithium.leona.openstud.helpers;
 
 import android.content.Context;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import com.google.android.material.appbar.AppBarLayout;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 @SuppressWarnings("unused")
 public class ScrollingCalendarBehavior extends AppBarLayout.Behavior {

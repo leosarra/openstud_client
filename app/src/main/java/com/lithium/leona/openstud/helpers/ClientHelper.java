@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +12,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.provider.CalendarContract;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -21,6 +21,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.lithium.leona.openstud.R;
 
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.Period;
 import org.threeten.bp.ZoneId;
 
 import java.sql.Timestamp;
@@ -31,51 +34,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import lithium.openstud.driver.core.Event;
 import lithium.openstud.driver.core.ExamDone;
+import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.OpenstudHelper;
 
 public class ClientHelper {
-
-    public enum Status {
-        OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5),
-        EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
-        PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15), FAIL_LOGIN(16), ENABLE_BUTTONS(17), RECOVERY_OK(18), INVALID_ANSWER(19),
-        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22);
-        private final int value;
-
-        Status(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-    }
-
-    public enum Sort {
-        Date(0), Mark(1);
-        private int value;
-
-        Sort(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public static Sort getSort(int type) {
-            if (type == 0) return Date;
-            else if (type == 1) return Mark;
-            return null;
-        }
-
-    }
 
     public static Date getDateWithoutTime() {
         Calendar calendar = Calendar.getInstance();
@@ -117,7 +89,6 @@ public class ClientHelper {
         }
         return ret;
     }
-
 
     public static ArrayList<Entry> generateWeightPoints(List<ExamDone> exams, int laude) {
         LinkedList<ExamDone> temp = new LinkedList<>(exams);
@@ -162,12 +133,77 @@ public class ClientHelper {
         customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
+    public static void createConfirmDeleteReservationDialog(Activity activity, final ExamReservation res, Runnable action) {
+        if (activity == null) return;
+        int themeId = ThemeEngine.getAlertDialogTheme(activity);
+        activity.runOnUiThread(() -> new AlertDialog.Builder(new ContextThemeWrapper(activity, themeId))
+                .setTitle(activity.getResources().getString(R.string.delete_res_dialog_title))
+                .setMessage(activity.getResources().getString(R.string.delete_res_dialog_description, res.getExamSubject()))
+                .setPositiveButton(activity.getResources().getString(R.string.delete_ok), (dialog, which) -> new Thread(action).start())
+                .setNegativeButton(activity.getResources().getString(R.string.delete_abort), (dialog, which) -> {
+                })
+                .show());
+    }
 
     public static boolean hasPassedExams(List<ExamDone> exams) {
         for (ExamDone exam : exams) {
             if (exam.getResult() >= 18 && exam.isPassed()) return true;
         }
         return false;
+    }
+
+    public static void addReservationToCalendar(Activity activity, final ExamReservation res) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        Timestamp timestamp = new Timestamp(res.getExamDate().atStartOfDay(zoneId).toEpochSecond());
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        String title;
+        if (Locale.getDefault().getLanguage().equals("it"))
+            title = "Esame: " + res.getExamSubject();
+        else title = "Exam: " + res.getExamSubject();
+        intent.putExtra(CalendarContract.Events.TITLE, title);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                timestamp.getTime() * 1000L);
+        intent.putExtra(CalendarContract.Events.ALL_DAY, true);
+        activity.startActivity(intent);
+    }
+
+    public static void addEventToCalendar(Activity activity, final Event ev) {
+        switch (ev.getEventType()) {
+            case LESSON: {
+                ZoneId zoneId = ZoneId.systemDefault();
+                Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
+                Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                String title = ev.getDescription();
+                intent.putExtra(CalendarContract.Events.TITLE, title);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        timestampStart.getTime() * 1000L);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                        timestampEnd.getTime() * 1000L);
+                intent.putExtra(CalendarContract.Events.ALL_DAY, false);
+                activity.startActivity(intent);
+                break;
+            }
+            case DOABLE:
+            case RESERVED: {
+                ZoneId zoneId = ZoneId.systemDefault();
+                Timestamp timestamp = new Timestamp(ev.getExamDate().atStartOfDay(zoneId).toEpochSecond());
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                String title;
+                if (Locale.getDefault().getLanguage().equals("it"))
+                    title = "Esame: " + ev.getReservation().getExamSubject();
+                else title = "Exam: " + ev.getReservation().getExamSubject();
+                intent.putExtra(CalendarContract.Events.TITLE, title);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        timestamp.getTime() * 1000L);
+                intent.putExtra(CalendarContract.Events.ALL_DAY, true);
+                activity.startActivity(intent);
+            }
+        }
+
     }
 
     public static boolean isNetworkAvailable(Context context) {
@@ -178,11 +214,18 @@ public class ClientHelper {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    public static boolean canPlaceReservation(ExamReservation res) {
+        return (Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 0 && !(Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1));
+    }
+
+    public static boolean canDeleteReservation(ExamReservation res) {
+        return !(Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1);
+    }
+
     public static void hideKeyboard(View v, Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         Objects.requireNonNull(inputMethodManager).hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
-
 
     public static boolean isExternalStorageReadOnly() {
         String extStorageState = Environment.getExternalStorageState();
@@ -194,6 +237,13 @@ public class ClientHelper {
         return Environment.MEDIA_MOUNTED.equals(extStorageState);
     }
 
+    public static boolean requestReadWritePermissions(Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat
+                    .requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+        }
+        return ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
 
     public void requestInternetPermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -206,12 +256,42 @@ public class ClientHelper {
         }
     }
 
-    public static boolean requestReadWritePermissions(Activity activity) {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat
-                    .requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+
+    public enum Status {
+        OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5),
+        EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
+        PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15), FAIL_LOGIN(16), ENABLE_BUTTONS(17), RECOVERY_OK(18), INVALID_ANSWER(19),
+        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22);
+        private final int value;
+
+        Status(int value) {
+            this.value = value;
         }
-        return ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+        public int getValue() {
+            return value;
+        }
+
+    }
+
+    public enum Sort {
+        Date(0), Mark(1);
+        private int value;
+
+        Sort(int value) {
+            this.value = value;
+        }
+
+        public static Sort getSort(int type) {
+            if (type == 0) return Date;
+            else if (type == 1) return Mark;
+            return null;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
     }
 
 }

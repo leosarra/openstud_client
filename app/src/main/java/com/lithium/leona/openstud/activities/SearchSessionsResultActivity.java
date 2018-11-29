@@ -5,19 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.AvaiableReservationsAdapter;
@@ -35,6 +29,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,12 +62,6 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
     TextView emptyText;
     @BindView(R.id.searchLayout)
     ConstraintLayout layout;
-
-    @OnClick(R.id.empty_button_reload)
-    public void OnClick(View v) {
-        refreshAvaiableReservations();
-    }
-
     private Openstud os;
     private AvaiableReservationsAdapter adapter;
     private LocalDateTime lastUpdate;
@@ -77,41 +71,10 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
     private SearchEventHandler h = new SearchEventHandler(this);
     private List<ExamReservation> activeReservations;
     private boolean firstStart = true;
-    private static class SearchEventHandler extends Handler {
-        private final WeakReference<SearchSessionsResultActivity> mActivity;
 
-        SearchEventHandler(SearchSessionsResultActivity activity) {
-            mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            SearchSessionsResultActivity activity = mActivity.get();
-            if (activity != null) {
-                OnClickListener listener = v -> new Thread(activity::refreshAvaiableReservations).start();
-                if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    InfoManager.clearSharedPreferences(activity.getApplication());
-                    Intent i = new Intent(activity, LauncherActivity.class);
-                    i.putExtra("error", msg.what);
-                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    activity.finish();
-                } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.reservation_ok, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.reservation_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.ALREADY_PLACED.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
-                }
-            }
-        }
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
+        refreshAvaiableReservations();
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +116,6 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
         refreshAvaiableReservations();
     }
-
 
     private boolean confirmReservation(ExamReservation res) {
         try {
@@ -251,11 +213,9 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
         });
     }
 
-
     private void setRefreshing(final boolean bool) {
         runOnUiThread(() -> swipeRefreshLayout.setRefreshing(bool));
     }
-
 
     private void setButtonReloadStatus(final boolean bool) {
         runOnUiThread(() -> emptyButton.setEnabled(bool));
@@ -279,6 +239,43 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
 
     private synchronized LocalDateTime getTimer() {
         return lastUpdate;
+    }
+
+    private static class SearchEventHandler extends Handler {
+        private final WeakReference<SearchSessionsResultActivity> mActivity;
+
+        SearchEventHandler(SearchSessionsResultActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            SearchSessionsResultActivity activity = mActivity.get();
+            if (activity != null) {
+                OnClickListener listener = v -> new Thread(activity::refreshAvaiableReservations).start();
+                if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                    InfoManager.clearSharedPreferences(activity.getApplication());
+                    Intent i = new Intent(activity, LauncherActivity.class);
+                    i.putExtra("error", msg.what);
+                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    activity.finish();
+                } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.reservation_ok, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.reservation_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.ALREADY_PLACED.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                }
+            }
+        }
     }
 
 

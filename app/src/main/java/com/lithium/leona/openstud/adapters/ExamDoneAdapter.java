@@ -2,9 +2,6 @@ package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +16,9 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDone;
@@ -69,17 +69,17 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
         private int mode;
         private Context context;
 
+        ExamDoneHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
         private void setMode(int mode) {
             this.mode = mode;
         }
 
         private void setContext(Context context) {
             this.context = context;
-        }
-
-        ExamDoneHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
         }
 
         void setDetails(ExamDone exam) {
@@ -117,7 +117,7 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             }
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
-            if (exam.getDate()!=null && PreferenceManager.isExamDateEnabled(context)) {
+            if (exam.getDate() != null && PreferenceManager.isExamDateEnabled(context)) {
                 txtExamDate.setVisibility(View.VISIBLE);
                 txtExamDate.setText(context.getResources().getString(R.string.exam_done_date, exam.getDate().format(formatter)));
             } else txtExamDate.setVisibility(View.GONE);

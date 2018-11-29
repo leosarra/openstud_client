@@ -170,5 +170,10 @@
     <string name="exam_done_date">Sostenuto il: %1$s</string>
     <string name="show_exam_date">Mostra data per gli esami superati</string>
     <string name="show_exam_date_description">Abilita la visualizzazione della data per quanto riguarda gli esami sostenuti dallo studente.</string>
+    <string name="show_options_lesson">Esporta lezioni dal calendario</string>
+    <string name="show_options_lesson_description">Permetti di esportare le lezioni sul calendario di sistema a partire dalla schermata \'\'Ricerca aule\'\' e \'\'Calendario\'\'</string>
+    <string name="pref_title_lessons">Lezioni</string>
+    <string name="add_calendar_event">Esporta sul calendario di sistema</string>
+    <string name="place_reservation_event">Prenota esame</string>
 
 </resources>

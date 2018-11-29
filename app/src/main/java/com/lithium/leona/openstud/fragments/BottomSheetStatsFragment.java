@@ -2,9 +2,6 @@ package com.lithium.leona.openstud.fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.core.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -15,21 +12,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.warkiz.widget.IndicatorSeekBar;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lithium.openstud.driver.core.OpenstudHelper;
 
 public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
-    public BottomSheetStatsFragment() {
-        // Required empty public constructor
-    }
-
     @BindView(R.id.exam_name)
     EditText examName;
     @BindView(R.id.cfu)
@@ -38,6 +34,10 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     IndicatorSeekBar grade;
     @BindView(R.id.add)
     Button add;
+
+    public BottomSheetStatsFragment() {
+        // Required empty public constructor
+    }
 
     @OnClick(R.id.abort)
     public void hide() {

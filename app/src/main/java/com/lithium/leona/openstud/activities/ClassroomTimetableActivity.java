@@ -1,23 +1,18 @@
 package com.lithium.leona.openstud.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
@@ -40,11 +35,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import lithium.openstud.driver.core.Event;
+import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Lesson;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
@@ -53,26 +55,6 @@ import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class ClassroomTimetableActivity extends AppCompatActivity {
-
-    private static class ClassroomTimetableHandler extends Handler {
-        private final WeakReference<ClassroomTimetableActivity> activity;
-
-        private ClassroomTimetableHandler(ClassroomTimetableActivity activity) {
-            this.activity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            final ClassroomTimetableActivity activity = this.activity.get();
-            if (activity == null) return;
-            View.OnClickListener ocl = v -> activity.getLessons(activity.horizontalCalendar.getSelectedDate(), true);
-            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
-            }
-        }
-    }
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -107,6 +89,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         ThemeEngine.applyClassroomTimetableTheme(this);
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
+        Activity activity = this;
         /* starts before 1 month from now */
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
@@ -138,10 +121,26 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new EventAdapter(this, lessons, null);
+        adapter = new EventAdapter(this, lessons, new EventAdapter.EventAdapterListener() {
+            @Override
+            public void addCalendarOnClick(Event ev) {
+                ClientHelper.addEventToCalendar(activity, ev);
+            }
+
+            @Override
+            public void placeReservation(Event ev, ExamReservation res) {
+
+            }
+
+            @Override
+            public void deleteReservation(Event ev, ExamReservation res) {
+
+            }
+        });
         rv.setAdapter(adapter);
 
-        if (name == null) Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.classroom_timetable);
+        if (name == null)
+            Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.classroom_timetable);
         else Objects.requireNonNull(getSupportActionBar()).setTitle(name);
         if (savedInstanceState == null) setTodayLessonFromBundle(bundle);
         else getLessons(defaultDate, false);
@@ -154,7 +153,8 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(() -> getLessons(horizontalCalendar.getSelectedDate(), true));
         emptyButton.setOnClickListener(v -> {
-            if (!swipeRefreshLayout.isRefreshing()) getLessons(horizontalCalendar.getSelectedDate(), true);
+            if (!swipeRefreshLayout.isRefreshing())
+                getLessons(horizontalCalendar.getSelectedDate(), true);
         });
         emptyText.setText(getResources().getString(R.string.no_lesson_found));
     }
@@ -162,7 +162,8 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     private void getLessons(Calendar date, boolean refresh) {
         new Thread(() -> {
             try {
-                if(!refresh && cachedLessons.containsKey(date.getTimeInMillis())) applyLessons(date, cachedLessons.get(date.getTimeInMillis()));
+                if (!refresh && cachedLessons.containsKey(date.getTimeInMillis()))
+                    applyLessons(date, cachedLessons.get(date.getTimeInMillis()));
                 else {
                     setRefreshing(true);
                     List<Lesson> newLessons = os.getClassroomTimetable(roomId, Instant.ofEpochMilli(date.getTime().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
@@ -179,13 +180,13 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         }).start();
     }
 
-    private synchronized void applyLessons(Calendar date, List<Lesson> lessonsUpdate){
+    private synchronized void applyLessons(Calendar date, List<Lesson> lessonsUpdate) {
         List<Event> newEvents = OpenstudHelper.generateEventsFromTimetable(lessonsUpdate);
         if (newEvents == null || newEvents.isEmpty()) {
-            if (newEvents!= null && !cachedLessons.containsKey(date.getTimeInMillis())) cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
+            if (newEvents != null && !cachedLessons.containsKey(date.getTimeInMillis()))
+                cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
             swapViews(true);
-        }
-        else if (!lessons.equals(newEvents)) {
+        } else if (!lessons.equals(newEvents)) {
             lessons.clear();
             lessons.addAll(newEvents);
             if (!cachedLessons.containsKey(date.getTimeInMillis())) {
@@ -224,17 +225,19 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         Type listType = new TypeToken<List<Lesson>>() {
         }.getType();
         List<Lesson> newLessons = gson.fromJson(lessonsJson, listType);
-        applyLessons(today,newLessons);
+        applyLessons(today, newLessons);
         runOnUiThread(() -> adapter.notifyDataSetChanged());
     }
 
     public void onSaveInstanceState(Bundle savedInstance) {
 
         Gson gson = new Gson();
-        Type typeMap = new TypeToken<Map<Long, List<Lesson>>>() {}.getType();
-        Type typeCalendar = new TypeToken<Calendar>() {}.getType();
-        String jsonMap = gson.toJson(cachedLessons,typeMap);
-        String jsonCalendar = gson.toJson( horizontalCalendar.getSelectedDate(),typeCalendar);
+        Type typeMap = new TypeToken<Map<Long, List<Lesson>>>() {
+        }.getType();
+        Type typeCalendar = new TypeToken<Calendar>() {
+        }.getType();
+        String jsonMap = gson.toJson(cachedLessons, typeMap);
+        String jsonCalendar = gson.toJson(horizontalCalendar.getSelectedDate(), typeCalendar);
         savedInstance.putString("cachedLessons", jsonMap);
         savedInstance.putString("currentDate", jsonCalendar);
         super.onSaveInstanceState(savedInstance);
@@ -250,14 +253,36 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         if (savedInstance != null) {
             String jsonDate = savedInstance.getString("currentDate", null);
             Gson gson = new Gson();
-            Type typeCalendar = new TypeToken<Calendar>() {}.getType();
-            if (jsonDate != null) defaultDate= gson.fromJson(jsonDate,typeCalendar);
+            Type typeCalendar = new TypeToken<Calendar>() {
+            }.getType();
+            if (jsonDate != null) defaultDate = gson.fromJson(jsonDate, typeCalendar);
             String json = savedInstance.getString("cachedLessons", null);
             if (json == null) cachedLessons = new HashMap<>();
             else {
-                Type type = new TypeToken<Map<Long, List<Lesson>>>() {}.getType();
+                Type type = new TypeToken<Map<Long, List<Lesson>>>() {
+                }.getType();
 
                 cachedLessons = gson.fromJson(json, type);
+            }
+        }
+    }
+
+    private static class ClassroomTimetableHandler extends Handler {
+        private final WeakReference<ClassroomTimetableActivity> activity;
+
+        private ClassroomTimetableHandler(ClassroomTimetableActivity activity) {
+            this.activity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final ClassroomTimetableActivity activity = this.activity.get();
+            if (activity == null) return;
+            View.OnClickListener ocl = v -> activity.getLessons(activity.horizontalCalendar.getSelectedDate(), true);
+            if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             }
         }
     }

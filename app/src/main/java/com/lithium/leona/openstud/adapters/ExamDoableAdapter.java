@@ -1,8 +1,6 @@
 package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,8 @@ import com.lithium.leona.openstud.R;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.ExamDoable;
@@ -49,6 +49,10 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
         return exams.size();
     }
 
+    public interface ExamDoableAdapterListener {
+        void showSessionsOnClick(ExamDoable exam);
+    }
+
     class ExamDoableHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.examName)
         TextView txtName;
@@ -60,13 +64,13 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
         Button showSessions;
         private Context context;
 
-        private void setContext(Context context) {
-            this.context = context;
-        }
-
         ExamDoableHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        private void setContext(Context context) {
+            this.context = context;
         }
 
         void setDetails(final ExamDoable exam) {
@@ -76,9 +80,5 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
             showSessions.setOnClickListener(v -> edal.showSessionsOnClick(exam));
 
         }
-    }
-
-    public interface ExamDoableAdapterListener {
-        void showSessionsOnClick(ExamDoable exam);
     }
 }

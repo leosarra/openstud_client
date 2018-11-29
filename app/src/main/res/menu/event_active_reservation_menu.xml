@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/calendar_menu"
+        android:title="@string/add_calendar_event" />
+    <item
+        android:id="@+id/delete_reservation_menu"
+        android:title="@string/delete_reservation" />
+
+</menu>

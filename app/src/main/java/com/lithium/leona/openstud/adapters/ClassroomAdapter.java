@@ -5,12 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -21,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.helpers.ItemTouchHelperViewHolder;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
@@ -30,6 +25,10 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Classroom;
@@ -70,6 +69,10 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
         return classes.size();
     }
 
+    public interface ClassroomAdapterListener {
+        void openTimetable(Classroom room);
+    }
+
     static class ClassesHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         @BindView(R.id.className)
         TextView txtName;
@@ -89,6 +92,11 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
         private View view;
         private ClassroomAdapterListener listener;
 
+        ClassesHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
         private void setListener(ClassroomAdapterListener listener) {
             this.listener = listener;
         }
@@ -99,11 +107,6 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
 
         private void setView(View view) {
             this.view = view;
-        }
-
-        ClassesHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
         }
 
         void setDetails(Classroom room) {
@@ -175,9 +178,5 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
         @Override
         public void onItemClear() {
         }
-    }
-
-    public interface ClassroomAdapterListener {
-        void openTimetable(Classroom room);
     }
 }

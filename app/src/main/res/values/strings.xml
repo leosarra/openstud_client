@@ -184,7 +184,13 @@
     <string name="no_lesson_found">No lessons found</string>
     <string name="classrooms">Classrooms</string>
     <string name="exam_done_date">Date exam: %1$s</string>
-    <string name="key_exam_date">key_exam_date</string>
+    <string name="key_exam_date" translatable="false">key_exam_date</string>
     <string name="show_exam_date">Show passed exam date</string>
     <string name="show_exam_date_description">Show the day an exam was passed by the student</string>
+    <string name="show_options_lesson">Add option to export lessons to system calendar</string>
+    <string name="show_options_lesson_description">Show an icon to let you add a lesson to your system calendar from the \'\'Classroom timetable\'\' and \'\'Calendar\'\' screens</string>
+    <string name="key_options_lesson" translatable="false">key_options_lesson</string>
+    <string name="pref_title_lessons">Lessons</string>
+    <string name="add_calendar_event">Add to system calendar</string>
+    <string name="place_reservation_event">Place reservation</string>
 </resources>

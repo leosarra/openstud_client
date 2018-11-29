@@ -1,8 +1,9 @@
 package com.lithium.leona.openstud.listeners;
 
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
-import android.view.View;
 
 public class DelayedDrawerListener implements DrawerLayout.DrawerListener {
     private int item_pressed = -1;
