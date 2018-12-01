@@ -175,5 +175,8 @@
     <string name="pref_title_lessons">Lezioni</string>
     <string name="add_calendar_event">Esporta sul calendario di sistema</string>
     <string name="place_reservation_event">Prenota esame</string>
+    <string name="baseFinalGrade">Base</string>
+    <string name="average">Media</string>
+    <string name="widget_login_error">Devi aver salvato le credenziali per utilizzare il widget!</string>
 
 </resources>

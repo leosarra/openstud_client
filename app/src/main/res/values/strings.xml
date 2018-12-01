@@ -193,4 +193,7 @@
     <string name="pref_title_lessons">Lessons</string>
     <string name="add_calendar_event">Add to system calendar</string>
     <string name="place_reservation_event">Place reservation</string>
+    <string name="baseFinalGrade">Base</string>
+    <string name="average">Average</string>
+    <string name="widget_login_error">You have to save the credentials in order to enable the widget!</string>
 </resources>
