@@ -169,6 +169,8 @@ public class ExamsDoneFragment extends Fragment {
             flag = true;
             exams.clear();
             exams.addAll(update);
+            Activity activity = getActivity();
+            if (activity != null) ClientHelper.updateGradesWidget(activity,true);
         }
         final boolean finalFlag = flag;
         Activity activity = getActivity();

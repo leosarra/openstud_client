@@ -3,6 +3,8 @@ package com.lithium.leona.openstud.helpers;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.lithium.leona.openstud.GradesWidget;
 import com.lithium.leona.openstud.R;
 
 import org.threeten.bp.LocalDate;
@@ -107,6 +110,15 @@ public class ClientHelper {
         return ret;
     }
 
+    public static void updateGradesWidget(Activity activity, boolean cached){
+        Intent intent = new Intent(activity, GradesWidget.class);
+        intent.setAction("CUSTOM");
+        intent.putExtra("cached", cached);
+        int[] ids = AppWidgetManager.getInstance(activity.getApplication()).getAppWidgetIds(new ComponentName(activity.getApplication(), GradesWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        activity.sendBroadcast(intent);
+    }
+
     public static ArrayList<BarEntry> generateMarksBar(List<ExamDone> exams) {
         @SuppressLint("UseSparseArrays") Map<Integer, Integer> map = new HashMap<>();
         for (ExamDone exam : exams) {
@@ -146,6 +158,7 @@ public class ClientHelper {
     }
 
     public static boolean hasPassedExams(List<ExamDone> exams) {
+        if (exams == null || exams.isEmpty()) return false;
         for (ExamDone exam : exams) {
             if (exam.getResult() >= 18 && exam.isPassed()) return true;
         }
