@@ -1,22 +1,21 @@
-package com.lithium.leona.openstud;
+package com.lithium.leona.openstud.widgets;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.IDNA;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,15 +32,14 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 public class GradesWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, boolean cached) {
-        Handler mHandler = new Handler();
+                                int appWidgetId) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.grades_widget);
         Openstud os = InfoManager.getOpenStud(context);
         if (os!=null) {
             views.setViewVisibility(R.id.content_layout, View.VISIBLE);
             views.setViewVisibility(R.id.empty_layout, View.GONE);
-            updateStats(context, mHandler, appWidgetManager, appWidgetId, views, os, cached);
+            updateStats(context, appWidgetManager, appWidgetId, views, os);
         } else {
             views.setViewVisibility(R.id.content_layout, View.GONE);
             views.setViewVisibility(R.id.empty_layout, View.VISIBLE);
@@ -50,60 +48,59 @@ public class GradesWidget extends AppWidgetProvider {
         // Instruct the widget manager to update the widget
     }
 
-    private static void updateStats(Context context, Handler handler, AppWidgetManager appWidgetManager, int appWidgetId, RemoteViews views, Openstud os, boolean cached){
-        new Thread(() -> {
-            List<ExamDone> ret;
-            System.out.println("HO VALORE"+cached);
-            try {
-                if(cached) ret = InfoManager.getExamsDoneCached(context,os);
-                else ret = InfoManager.getExamsDone(context, os);
-                updateView(context,handler,appWidgetManager,appWidgetId,views,ret);
-            } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
-                e.printStackTrace();
-            } catch (OpenstudInvalidCredentialsException e) {
-                InfoManager.clearSharedPreferences(context);
-                e.printStackTrace();
-            } finally {
-                appWidgetManager.updateAppWidget(appWidgetId, views);
-            }
-        }).start();
+    private static void updateStats(Context context, AppWidgetManager appWidgetManager, int appWidgetId, RemoteViews views, Openstud os){
+        List<ExamDone> ret;
+        ret = InfoManager.getExamsDoneCached(context,os);
+        updateView(context,appWidgetManager,appWidgetId,views,ret);
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private static void updateView(Context context, Handler handler, AppWidgetManager appWidgetManager, int appWidgetId, RemoteViews views, List<ExamDone> exams) {
+    private static void updateView(Context context, AppWidgetManager appWidgetManager, int appWidgetId, RemoteViews views, List<ExamDone> exams) {
         if (ClientHelper.hasPassedExams(exams)) {
-            System.out.println("ciao");
             NumberFormat numFormat = NumberFormat.getInstance();
             numFormat.setMaximumFractionDigits(2);
             numFormat.setMinimumFractionDigits(1);
-            handler.post(() -> {
-                views.setTextViewText(R.id.totalCFU, String.valueOf(OpenstudHelper.getSumCFU(exams)));
-                views.setTextViewText(R.id.weightedValue, String.valueOf(numFormat.format(OpenstudHelper.computeWeightedAverage(exams, PreferenceManager.getLaudeValue(context)))));
-                views.setTextViewText(R.id.baseFinalGrade, String.valueOf(OpenstudHelper.computeBaseGraduation(exams, PreferenceManager.getLaudeValue(context))));
-                appWidgetManager.updateAppWidget(appWidgetId, views);
-            });
-
+            views.setTextViewText(R.id.totalCFU, String.valueOf(OpenstudHelper.getSumCFU(exams)));
+            views.setTextViewText(R.id.weightedValue, String.valueOf(numFormat.format(OpenstudHelper.computeWeightedAverage(exams, PreferenceManager.getLaudeValue(context)))));
+            views.setTextViewText(R.id.baseFinalGrade, String.valueOf(OpenstudHelper.computeBaseGraduation(exams, PreferenceManager.getLaudeValue(context))));
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         } else {
-            handler.post(() -> {
-                views.setTextViewText(R.id.totalCFU, "--");
-                views.setTextViewText(R.id.weightedValue, "--");
-                views.setTextViewText(R.id.baseFinalGrade, "--");
-                appWidgetManager.updateAppWidget(appWidgetId, views);
-            });
+            views.setTextViewText(R.id.totalCFU, "--");
+            views.setTextViewText(R.id.weightedValue, "--");
+            views.setTextViewText(R.id.baseFinalGrade, "--");
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
 
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, false);
-        }
+        Handler mHandler = new Handler();
+        new Thread(() -> {
+            Openstud os = InfoManager.getOpenStud(context);
+            if (os!=null) {
+                try {
+                    InfoManager.getExamsDone(context,os);
+                } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
+                    e.printStackTrace();
+                } catch (OpenstudInvalidCredentialsException e) {
+                    InfoManager.clearSharedPreferences(context);
+                    e.printStackTrace();
+                }
+            }
+            mHandler.post(() -> {
+                for (int appWidgetId : appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId);
+                }
+            });
+        }).start();
+
     }
 
     public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, boolean cached) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, cached);
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
@@ -126,7 +123,7 @@ public class GradesWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), GradesWidget.class.getName());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
-            if(Objects.equals(intent.getAction(), "CUSTOM")) onUpdateCustom(context, appWidgetManager, appWidgetIds,extras.getBoolean("cached", true));
+            if(Objects.equals(intent.getAction(), "MANUAL_UPDATE")) onUpdateCustom(context, appWidgetManager, appWidgetIds,extras.getBoolean("cached", true));
         }
     }
 }

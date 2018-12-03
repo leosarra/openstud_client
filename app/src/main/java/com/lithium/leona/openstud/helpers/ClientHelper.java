@@ -21,7 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.lithium.leona.openstud.GradesWidget;
+import com.lithium.leona.openstud.widgets.GradesWidget;
 import com.lithium.leona.openstud.R;
 
 import org.threeten.bp.LocalDate;
@@ -112,7 +112,7 @@ public class ClientHelper {
 
     public static void updateGradesWidget(Activity activity, boolean cached){
         Intent intent = new Intent(activity, GradesWidget.class);
-        intent.setAction("CUSTOM");
+        intent.setAction("MANUAL_UPDATE");
         intent.putExtra("cached", cached);
         int[] ids = AppWidgetManager.getInstance(activity.getApplication()).getAppWidgetIds(new ComponentName(activity.getApplication(), GradesWidget.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
