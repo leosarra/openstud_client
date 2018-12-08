@@ -228,7 +228,6 @@ public class ClientHelper {
     }
 
     public static boolean canPlaceReservation(ExamReservation res) {
-        if(res == null) return false;
         return (Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 0 && !(Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1));
     }
 
