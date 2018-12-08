@@ -196,4 +196,6 @@
     <string name="baseFinalGrade">Base</string>
     <string name="average">Average</string>
     <string name="widget_login_error">You have to save the credentials in order to enable the widget!</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>
