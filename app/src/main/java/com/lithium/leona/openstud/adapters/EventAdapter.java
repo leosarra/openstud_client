@@ -67,12 +67,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
                 popup.inflate(R.menu.event_generic_menu);
                 break;
             case RESERVED:
-                if (ClientHelper.canDeleteReservation(ev.getReservation()))
+                if (ev.getReservation() != null && ClientHelper.canDeleteReservation(ev.getReservation()))
                     popup.inflate(R.menu.event_active_reservation_menu);
                 else popup.inflate(R.menu.event_generic_menu);
                 break;
             case DOABLE:
-                if (ClientHelper.canPlaceReservation(ev.getReservation()))
+                if (ev.getReservation() != null && ClientHelper.canPlaceReservation(ev.getReservation()))
                     popup.inflate(R.menu.event_exam_doable_menu);
                 else popup.inflate(R.menu.event_generic_menu);
                 break;
