@@ -247,7 +247,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
-                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                if (e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
                 if (e.isPasswordExpired())
@@ -646,6 +647,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
+                        LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);

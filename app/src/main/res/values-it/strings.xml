@@ -178,5 +178,6 @@
     <string name="baseFinalGrade">Base</string>
     <string name="average">Media</string>
     <string name="widget_login_error">Devi aver salvato le credenziali per utilizzare il widget!</string>
+    <string name="rate_limit">Raggiunto il limite di richieste sulle API di SapienzaApps</string>
 
 </resources>

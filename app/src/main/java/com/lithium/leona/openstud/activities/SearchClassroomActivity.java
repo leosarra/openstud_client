@@ -151,10 +151,11 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             String query = text;
             if (query.endsWith(".")) query = StringUtils.chomp(query);
             try {
-                update = os.getClassRoom(query);
+                update = os.getClassRoom(query, true);
             } catch (OpenstudInvalidResponseException e) {
                 e.printStackTrace();
-                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                if(e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
+                else h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             } catch (OpenstudConnectionException e) {
                 e.printStackTrace();
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
@@ -359,6 +360,8 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
                 LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                 LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+            } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
