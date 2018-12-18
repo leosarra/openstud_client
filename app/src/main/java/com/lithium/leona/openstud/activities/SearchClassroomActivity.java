@@ -335,6 +335,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     }
 
     private synchronized boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
+        ClientHelper.hideKeyboard(view,this);
         if (touchBarDisabled) return gd.onTouchEvent(event);
         touchBarDisabled = true;
         if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty())
