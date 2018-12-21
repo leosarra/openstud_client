@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.InputType;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 
@@ -22,6 +23,7 @@ import java.util.Objects;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import butterknife.BindView;
@@ -111,7 +113,12 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 PreferenceManager.setCalendarNotificationEnabled(getContext(), false);
                 return true;
             });
-            Preference laude = findPreference(getString(R.string.key_default_laude));
+            EditTextPreference laude = findPreference(getString(R.string.key_default_laude));
+            laude.setOnBindEditTextListener(editText -> {
+                if (activity == null) return;
+                editText.setTextColor(ThemeEngine.getPrimaryTextColor(activity));
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            });
             laude.setOnPreferenceChangeListener((preference, newValue) -> {
                 String newLaude = (String) newValue;
                 boolean valid = true;
