@@ -20,7 +20,6 @@ import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.Duration;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -150,7 +149,6 @@ public class ProfileActivity extends AppCompatActivity {
         TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
         navSubtitle.setText(st.getStudentID());
         studentId.setText(st.getStudentID());
-        LocalDate date = st.getBirthDate();
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());
         if (isee == null) isee_field.setText(getResources().getString(R.string.isee_not_available));
@@ -162,9 +160,13 @@ public class ProfileActivity extends AppCompatActivity {
                 courseYear.setText(getResources().getString(R.string.year_corse_profile, st.getCourseYear() + "°"));
             else {
                 String year = st.getCourseYear();
-                if (StringUtils.isNumeric(st.getCourseYear()) && Integer.parseInt(year) <= 3)
-                    year = year + "rd";
-                else year = year + "th";
+                if (StringUtils.isNumeric(st.getCourseYear())) {
+                    int number = Integer.parseInt(year);
+                    if (number == 1) year = year + "st";
+                    else if (number == 2) year = year + "nd";
+                    else if (number == 3) year = year + "rd";
+                    else year = year + "th";
+                }
                 courseYear.setText(getResources().getString(R.string.year_corse_profile, year));
             }
             studentStatus.setText(st.getStudentStatus());
