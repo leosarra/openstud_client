@@ -23,11 +23,24 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="3"
-            android:padding="1dp"
+            android:paddingTop="1dp"
+            android:paddingStart="1dp"
+            android:paddingEnd="1dp"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/dateExam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
+            android:paddingStart="1dp"
+            android:paddingEnd="1dp"
+            android:paddingBottom="1dp"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            />
         <TextView
             android:id="@+id/nameTeacher"
             android:layout_width="match_parent"
@@ -41,13 +54,6 @@
             android:layout_height="wrap_content"
             android:textColor="?attr/primaryTextColor"
             android:padding="1dp" />
-
-        <TextView
-            android:id="@+id/dateExam"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:text="TextView" />
 
         <TextView
             android:id="@+id/startDate"
