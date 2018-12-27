@@ -21,13 +21,13 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.lithium.leona.openstud.widgets.GradesWidget;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.widgets.GradesWidget;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.Period;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -228,11 +228,12 @@ public class ClientHelper {
     }
 
     public static boolean canPlaceReservation(ExamReservation res) {
-        return (Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 0 && !(Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1));
+
+        return (ChronoUnit.DAYS.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())) >= 0 && ChronoUnit.DAYS.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())) <=0);
     }
 
     public static boolean canDeleteReservation(ExamReservation res) {
-        return !(Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1);
+        return !(ChronoUnit.DAYS.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())) >= 1);
     }
 
     public static void hideKeyboard(View v, Context context) {
