@@ -224,7 +224,8 @@ public class LoginActivity extends AppCompatActivity {
                 View.OnClickListener listener = v -> new Thread(activity::login).start();
                 View.OnClickListener listener2 = v -> new Thread(activity::recovery).start();
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
-                    if (activity.rememberFlag.isChecked()) ClientHelper.updateGradesWidget(activity, true);
+                    if (activity.rememberFlag.isChecked())
+                        ClientHelper.updateGradesWidget(activity, true);
                     Intent intent = new Intent(activity, ExamsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);

@@ -36,7 +36,7 @@ public class GradesWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.grades_widget);
         Openstud os = InfoManager.getOpenStud(context);
-        if (os!=null) {
+        if (os != null) {
             views.setViewVisibility(R.id.content_layout, View.VISIBLE);
             views.setViewVisibility(R.id.empty_layout, View.GONE);
             updateStats(context, appWidgetManager, appWidgetId, views, os);
@@ -48,10 +48,10 @@ public class GradesWidget extends AppWidgetProvider {
         // Instruct the widget manager to update the widget
     }
 
-    private static void updateStats(Context context, AppWidgetManager appWidgetManager, int appWidgetId, RemoteViews views, Openstud os){
+    private static void updateStats(Context context, AppWidgetManager appWidgetManager, int appWidgetId, RemoteViews views, Openstud os) {
         List<ExamDone> ret;
-        ret = InfoManager.getExamsDoneCached(context,os);
-        updateView(context,appWidgetManager,appWidgetId,views,ret);
+        ret = InfoManager.getExamsDoneCached(context, os);
+        updateView(context, appWidgetManager, appWidgetId, views, ret);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
@@ -78,9 +78,9 @@ public class GradesWidget extends AppWidgetProvider {
         Handler mHandler = new Handler();
         new Thread(() -> {
             Openstud os = InfoManager.getOpenStud(context);
-            if (os!=null) {
+            if (os != null) {
                 try {
-                    InfoManager.getExamsDone(context,os);
+                    InfoManager.getExamsDone(context, os);
                 } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
                     e.printStackTrace();
                 } catch (OpenstudInvalidCredentialsException e) {
@@ -116,14 +116,15 @@ public class GradesWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent){
+    public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Bundle extras = intent.getExtras();
-        if(extras!=null) {
+        if (extras != null) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), GradesWidget.class.getName());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
-            if(Objects.equals(intent.getAction(), "MANUAL_UPDATE")) onUpdateCustom(context, appWidgetManager, appWidgetIds,extras.getBoolean("cached", true));
+            if (Objects.equals(intent.getAction(), "MANUAL_UPDATE"))
+                onUpdateCustom(context, appWidgetManager, appWidgetIds, extras.getBoolean("cached", true));
         }
     }
 }

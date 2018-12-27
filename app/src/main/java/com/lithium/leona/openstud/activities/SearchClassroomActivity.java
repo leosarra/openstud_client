@@ -154,7 +154,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
                 update = os.getClassRoom(query, true);
             } catch (OpenstudInvalidResponseException e) {
                 e.printStackTrace();
-                if(e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
+                if (e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             } catch (OpenstudConnectionException e) {
                 e.printStackTrace();
@@ -335,7 +335,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     }
 
     private synchronized boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
-        ClientHelper.hideKeyboard(view,this);
+        ClientHelper.hideKeyboard(view, this);
         if (touchBarDisabled) return gd.onTouchEvent(event);
         touchBarDisabled = true;
         if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty())

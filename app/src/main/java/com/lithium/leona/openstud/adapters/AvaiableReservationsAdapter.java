@@ -104,14 +104,13 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
 
         private void setPlaceButtonEnabled(boolean enabled, boolean alreadyExist) {
             int tintColor;
-            if(alreadyExist) {
+            if (alreadyExist) {
                 TypedValue tV = new TypedValue();
                 Resources.Theme theme = activity.getTheme();
                 boolean success = theme.resolveAttribute(R.attr.certifiedExamColor, tV, true);
                 if (success) tintColor = tV.data;
                 else tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
-            }
-            else if (!enabled)
+            } else if (!enabled)
                 tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
             else {
                 TypedValue tV = new TypedValue();
@@ -121,18 +120,18 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
                 else tintColor = ContextCompat.getColor(activity, R.color.redSapienza);
             }
 
-            if(alreadyExist) {
+            if (alreadyExist)
                 placeButton.setText(activity.getResources().getString(R.string.already_placed_button));
-            }
             else placeButton.setText(activity.getResources().getString(R.string.place_reservation));
 
             placeButton.setEnabled(enabled);
             placeButton.setTextColor(tintColor);
 
             Drawable drawable;
-            if(alreadyExist) drawable = ContextCompat.getDrawable(activity, R.drawable.ic_check_black_24dp);
+            if (alreadyExist)
+                drawable = ContextCompat.getDrawable(activity, R.drawable.ic_check_black_24dp);
             else drawable = ContextCompat.getDrawable(activity, R.drawable.ic_library_add_small);
-            if(drawable!=null) {
+            if (drawable != null) {
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable.mutate(), tintColor);
                 placeButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
@@ -156,10 +155,9 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             else {
                 txtInfo.setText(infos);
             }
-            if(existActiveReservations(res)) {
+            if (existActiveReservations(res)) {
                 setPlaceButtonEnabled(false, true);
-            }
-            else if (!ClientHelper.canPlaceReservation(res))  setPlaceButtonEnabled(false, false);
+            } else if (!ClientHelper.canPlaceReservation(res)) setPlaceButtonEnabled(false, false);
             else setPlaceButtonEnabled(true, false);
             placeButton.setOnClickListener(v -> new Thread(() -> {
                 if (ral.placeReservation(res))

@@ -110,7 +110,7 @@ public class ClientHelper {
         return ret;
     }
 
-    public static void updateGradesWidget(Activity activity, boolean cached){
+    public static void updateGradesWidget(Activity activity, boolean cached) {
         Intent intent = new Intent(activity, GradesWidget.class);
         intent.setAction("MANUAL_UPDATE");
         intent.putExtra("cached", cached);
@@ -228,8 +228,7 @@ public class ClientHelper {
     }
 
     public static boolean canPlaceReservation(ExamReservation res) {
-
-        return (ChronoUnit.DAYS.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())) >= 0 && ChronoUnit.DAYS.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())) <=0);
+        return (ChronoUnit.DAYS.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())) >= 0 && ChronoUnit.DAYS.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())) <= 0);
     }
 
     public static boolean canDeleteReservation(ExamReservation res) {
