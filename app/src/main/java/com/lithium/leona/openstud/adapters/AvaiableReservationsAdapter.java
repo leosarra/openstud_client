@@ -12,10 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.Period;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
@@ -104,9 +102,16 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             this.activity = activity;
         }
 
-        private void setPlaceButtonEnabled(boolean enabled) {
+        private void setPlaceButtonEnabled(boolean enabled, boolean alreadyExist) {
             int tintColor;
-            if (!enabled)
+            if(alreadyExist) {
+                TypedValue tV = new TypedValue();
+                Resources.Theme theme = activity.getTheme();
+                boolean success = theme.resolveAttribute(R.attr.certifiedExamColor, tV, true);
+                if (success) tintColor = tV.data;
+                else tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
+            }
+            else if (!enabled)
                 tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
             else {
                 TypedValue tV = new TypedValue();
@@ -115,11 +120,19 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
                 if (success) tintColor = tV.data;
                 else tintColor = ContextCompat.getColor(activity, R.color.redSapienza);
             }
+
+            if(alreadyExist) {
+                placeButton.setText(activity.getResources().getString(R.string.already_placed_button));
+            }
+            else placeButton.setText(activity.getResources().getString(R.string.place_reservation));
+
             placeButton.setEnabled(enabled);
             placeButton.setTextColor(tintColor);
 
-            Drawable drawable = ContextCompat.getDrawable(activity, R.drawable.ic_library_add_small);
-            if (drawable != null) {
+            Drawable drawable;
+            if(alreadyExist) drawable = ContextCompat.getDrawable(activity, R.drawable.ic_check_black_24dp);
+            else drawable = ContextCompat.getDrawable(activity, R.drawable.ic_library_add_small);
+            if(drawable!=null) {
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable.mutate(), tintColor);
                 placeButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
@@ -143,15 +156,15 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             else {
                 txtInfo.setText(infos);
             }
-
-            //TODO Replace condition with function from ClientHelper
-            if (existActiveReservations(res) || !(Period.between(res.getStartDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 0) || Period.between(res.getEndDate(), LocalDate.from(LocalDateTime.now())).getDays() >= 1)
-                setPlaceButtonEnabled(false);
-            else setPlaceButtonEnabled(true);
+            if(existActiveReservations(res)) {
+                setPlaceButtonEnabled(false, true);
+            }
+            else if (!ClientHelper.canPlaceReservation(res))  setPlaceButtonEnabled(false, false);
+            else setPlaceButtonEnabled(true, false);
             placeButton.setOnClickListener(v -> new Thread(() -> {
                 if (ral.placeReservation(res))
-                    activity.runOnUiThread(() -> setPlaceButtonEnabled(false));
-                else activity.runOnUiThread(() -> setPlaceButtonEnabled(true));
+                    activity.runOnUiThread(() -> setPlaceButtonEnabled(false, true));
+                else activity.runOnUiThread(() -> setPlaceButtonEnabled(true, false));
             }).start());
         }
     }

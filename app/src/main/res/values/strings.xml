@@ -199,4 +199,5 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="rate_limit">Reached rate limit on SapienzaApps\' API</string>
+    <string name="already_placed_button">Reservation placed</string>
 </resources>
