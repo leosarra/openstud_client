@@ -124,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
         try {
             student = InfoManager.getInfoStudent(getApplication(), os);
             isee = InfoManager.getIsee(getApplication(), os);
+            runOnUiThread(() -> applyInfos(student, isee));
         } catch (OpenstudConnectionException e) {
             h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
             e.printStackTrace();
@@ -141,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void applyInfos(Student st, Isee isee) {
+        if (st == null) return;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
         TextView navTitle = headerLayout.findViewById(R.id.nav_title);
         navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
@@ -270,9 +272,7 @@ public class ProfileActivity extends AppCompatActivity {
             ProfileActivity activity = mActivity.get();
             if (activity != null) {
                 View.OnClickListener listener = v -> new Thread(() -> activity.refresh(activity.os)).start();
-                if (msg.what == ClientHelper.Status.OK.getValue()) {
-                    activity.applyInfos(activity.student, activity.isee);
-                } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
+                if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
