@@ -180,5 +180,6 @@
     <string name="widget_login_error">Devi aver salvato le credenziali per utilizzare il widget!</string>
     <string name="rate_limit">Raggiunto il limite di richieste sulle API di SapienzaApps</string>
     <string name="already_placed_button">Prenotato</string>
+    <string name="no_pdf_app">Nessuna applicazione trovata per visualizzare i file PDF!</string>
 
 </resources>

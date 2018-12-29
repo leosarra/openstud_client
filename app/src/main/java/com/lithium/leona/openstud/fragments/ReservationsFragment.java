@@ -21,6 +21,7 @@ import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
@@ -168,7 +169,10 @@ public class ReservationsFragment extends Fragment {
         Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
         intent.setDataAndType(uri, "application/pdf");
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity(intent);
+        if (intent.resolveActivity(activity.getPackageManager()) != null) startActivity(intent);
+        else {
+            activity.runOnUiThread(() -> LayoutHelper.createTextSnackBar(swipeRefreshLayout, R.string.no_pdf_app, Snackbar.LENGTH_LONG));
+        }
     }
 
     public void onResume() {
