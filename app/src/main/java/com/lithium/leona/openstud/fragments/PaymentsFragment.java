@@ -155,6 +155,7 @@ public class PaymentsFragment extends Fragment {
             if (update == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
+                swapViews(taxes);
                 return;
             }
             updateTimer();
@@ -204,7 +205,7 @@ public class PaymentsFragment extends Fragment {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> {
-            if (taxes.isEmpty()) {
+            if (taxes == null || taxes.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
             } else {
