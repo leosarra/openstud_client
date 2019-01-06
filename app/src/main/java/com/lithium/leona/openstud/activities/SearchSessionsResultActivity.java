@@ -185,7 +185,7 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
             if (update == null || updateActiveReservations == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
-                if(reservations==null || reservations.isEmpty()) swapViews(reservations);
+                swapViews(reservations);
                 return;
             }
             updateTimer();
@@ -222,9 +222,9 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
         runOnUiThread(() -> emptyButton.setEnabled(bool));
     }
 
-    private void swapViews(final List<ExamReservation> exams) {
+    private void swapViews(final List<ExamReservation> reservations) {
         runOnUiThread(() -> {
-            if (exams.isEmpty()) {
+            if (reservations == null || reservations.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
             } else {
