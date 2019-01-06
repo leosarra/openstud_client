@@ -156,6 +156,7 @@ public class ExamsDoneFragment extends Fragment {
             if (update == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
+                swapViews(exams);
                 return;
             }
             updateTimer();
@@ -213,7 +214,7 @@ public class ExamsDoneFragment extends Fragment {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> {
-            if (exams.isEmpty()) {
+            if (exams == null || exams.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
             } else {
