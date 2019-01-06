@@ -181,7 +181,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void updateGraphs() {
         runOnUiThread(() -> {
-            OpenstudHelper.sortByDate(exams, false);
+            OpenstudHelper.sortExamByDate(exams, false);
             graphCard.setVisibility(View.VISIBLE);
             graphCard2.setVisibility(View.VISIBLE);
             NumberFormat numFormat = NumberFormat.getInstance();

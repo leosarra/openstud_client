@@ -119,10 +119,10 @@ public class ExamsDoneFragment extends Fragment {
     public synchronized void sortList(ClientHelper.Sort sort) {
         if (adapter == null || sort == null) return;
         if (sort == ClientHelper.Sort.Date) {
-            OpenstudHelper.sortByDate(exams, false);
+            OpenstudHelper.sortExamByDate(exams, false);
             adapter.notifyDataSetChanged();
         } else if (sort == ClientHelper.Sort.Mark) {
-            OpenstudHelper.sortByGrade(exams, false);
+            OpenstudHelper.sortExamByGrade(exams, false);
             adapter.notifyDataSetChanged();
         }
     }
