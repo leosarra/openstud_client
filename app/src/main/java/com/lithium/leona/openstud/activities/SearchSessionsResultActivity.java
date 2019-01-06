@@ -185,6 +185,7 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
             if (update == null || updateActiveReservations == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
+                if(reservations==null || reservations.isEmpty()) swapViews(reservations);
                 return;
             }
             updateTimer();
