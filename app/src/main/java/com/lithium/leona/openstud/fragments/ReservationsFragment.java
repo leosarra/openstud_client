@@ -217,6 +217,7 @@ public class ReservationsFragment extends Fragment {
             if (update == null) {
                 setRefreshing(false);
                 setButtonReloadStatus(true);
+                swapViews(reservations);
                 return;
             }
             updateTimer();
@@ -258,7 +259,7 @@ public class ReservationsFragment extends Fragment {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> {
-            if (reservations.isEmpty()) {
+            if (reservations == null || reservations.isEmpty()) {
                 emptyView.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.GONE);
             } else {
