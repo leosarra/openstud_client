@@ -132,7 +132,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         ThemeEngine.applyCalendarTheme(this);
         setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
-        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         setTitle(getResources().getString(R.string.calendar));
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
@@ -394,9 +395,6 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.filter:
                 showFilterDialog();
                 return true;
