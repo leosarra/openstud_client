@@ -326,51 +326,7 @@ public class StatsActivity extends AppCompatActivity {
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
                 if (item == -1) return;
-                switch (item) {
-                    case R.id.payments_menu: {
-                        Intent intent = new Intent(StatsActivity.this, PaymentsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.calendar_menu: {
-                        Intent intent = new Intent(StatsActivity.this, CalendarActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.exit_menu: {
-                        InfoManager.clearSharedPreferences(getApplication());
-                        Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
-                        startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        break;
-                    }
-                    case R.id.exams_menu: {
-                        Intent intent = new Intent(StatsActivity.this, ExamsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.classrooms_menu: {
-                        Intent intent = new Intent(StatsActivity.this, SearchClassroomActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.about_menu: {
-                        Intent intent = new Intent(StatsActivity.this, AboutActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.settings_menu: {
-                        Intent intent = new Intent(StatsActivity.this, SettingsPrefActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.profile_menu: {
-                        Intent intent = new Intent(StatsActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
+                ClientHelper.startDrawerActivity(item, StatsActivity.this);
             }
 
         };

@@ -22,6 +22,17 @@ import android.view.inputmethod.InputMethodManager;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.AboutActivity;
+import com.lithium.leona.openstud.activities.CalendarActivity;
+import com.lithium.leona.openstud.activities.ExamsActivity;
+import com.lithium.leona.openstud.activities.LauncherActivity;
+import com.lithium.leona.openstud.activities.NewsActivity;
+import com.lithium.leona.openstud.activities.PaymentsActivity;
+import com.lithium.leona.openstud.activities.ProfileActivity;
+import com.lithium.leona.openstud.activities.SearchClassroomActivity;
+import com.lithium.leona.openstud.activities.SettingsPrefActivity;
+import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.widgets.GradesWidget;
 
 import org.threeten.bp.LocalDate;
@@ -181,6 +192,74 @@ public class ClientHelper {
         activity.startActivity(intent);
     }
 
+    public static void startDrawerActivity(int item, Activity activity){
+        switch (item) {
+            case R.id.payments_menu: {
+                if (activity instanceof PaymentsActivity) break;
+                Intent intent = new Intent(activity, PaymentsActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.calendar_menu: {
+                if (activity instanceof CalendarActivity) break;
+                Intent intent = new Intent(activity, CalendarActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.profile_menu: {
+                if (activity instanceof ProfileActivity) break;
+                Intent intent = new Intent(activity, ProfileActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.exit_menu: {
+                InfoManager.clearSharedPreferences(activity.getApplication());
+                Intent i = new Intent(activity, LauncherActivity.class);
+                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                break;
+            }
+
+            case R.id.classrooms_menu: {
+                if (activity instanceof SearchClassroomActivity) break;
+                Intent intent = new Intent(activity, SearchClassroomActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.about_menu: {
+                Intent intent = new Intent(activity, AboutActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+            case R.id.settings_menu: {
+                Intent intent = new Intent(activity, SettingsPrefActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+            case R.id.stats_menu: {
+                if (activity instanceof StatsActivity) break;
+                Intent intent = new Intent(activity, StatsActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+            case R.id.exams_menu: {
+                if (activity instanceof ExamsActivity) break;
+                Intent intent = new Intent(activity, ExamsActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.news_menu: {
+                if (activity instanceof NewsActivity) break;
+                Intent intent = new Intent(activity, NewsActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+        }
+    }
     public static void addEventToCalendar(Activity activity, final Event ev) {
         switch (ev.getEventType()) {
             case LESSON: {

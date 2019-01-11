@@ -408,54 +408,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
                 if (item == -1) return;
-                switch (item) {
-                    case R.id.payments_menu: {
-                        Intent intent = new Intent(CalendarActivity.this, PaymentsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.exams_menu: {
-                        Intent intent = new Intent(CalendarActivity.this, ExamsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.profile_menu: {
-                        Intent intent = new Intent(CalendarActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.exit_menu: {
-                        InfoManager.clearSharedPreferences(getApplication());
-                        Intent i = new Intent(CalendarActivity.this, LauncherActivity.class);
-                        startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        break;
-                    }
-
-                    case R.id.classrooms_menu: {
-                        Intent intent = new Intent(CalendarActivity.this, SearchClassroomActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.about_menu: {
-                        Intent intent = new Intent(CalendarActivity.this, AboutActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.settings_menu: {
-                        Intent intent = new Intent(CalendarActivity.this, SettingsPrefActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.stats_menu: {
-                        Intent intent = new Intent(CalendarActivity.this, StatsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
+                ClientHelper.startDrawerActivity(item, CalendarActivity.this);
             }
 
         };
