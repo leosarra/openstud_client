@@ -19,6 +19,7 @@ import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Isee;
 import lithium.openstud.driver.core.Lesson;
+import lithium.openstud.driver.core.News;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudBuilder;
 import lithium.openstud.driver.core.OpenstudHelper;
@@ -38,6 +39,7 @@ public class InfoManager {
     private static List<ExamDone> examsDone;
     private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
+    private static List<News> news;
     private static List<ExamDone> fakeExams;
     private static List<Event> events;
     private static List<String> filter;
@@ -391,6 +393,43 @@ public class InfoManager {
         return newUnpaidTaxes;
     }
 
+    public static List<News> getNews(Context context, Openstud os, String locale) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        Gson gson = new Gson();
+        List<News> newNews = os.getNews(locale, true);
+        synchronized (InfoManager.class) {
+            news = newNews;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            Type listType = new TypeToken<List<News>>() {
+            }.getType();
+            String json = gson.toJson(newNews, listType);
+            prefsEditor.putString("news", json);
+            prefsEditor.apply();
+        }
+        return newNews;
+    }
+
+    public static List<News> getNewsCached(Context context, Openstud os, String locale) {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (news != null) {
+                if(!news.isEmpty() && !news.get(0).getLocale().equals(locale)) return null;
+                return news;
+            }
+            oldObj = pref.getString("news", "null");
+        }
+        Type listType = new TypeToken<List<News>>() {
+        }.getType();
+        List<News> ret = gson.fromJson(oldObj, listType);
+        if(ret != null && !ret.isEmpty() && !ret.get(0).getLocale().equals(locale)) return null;
+        return ret;
+    }
 
     public static boolean hasLogin(Context context) {
         setupSharedPreferences(context);
