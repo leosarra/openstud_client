@@ -54,7 +54,7 @@ public class LayoutHelper {
     }
 
     public static void createCalendarNotification(Context context, int styleId) {
-        AlertDialog dialog2 = new AlertDialog.Builder(new ContextThemeWrapper(context, styleId))
+       new AlertDialog.Builder(new ContextThemeWrapper(context, styleId))
                 .setTitle(context.getResources().getString(R.string.experimental_feature))
                 .setMessage(context.getResources().getString(R.string.calendar_feature_description))
                 .setPositiveButton(context.getResources().getString(R.string.ok), (dialog, which) -> {

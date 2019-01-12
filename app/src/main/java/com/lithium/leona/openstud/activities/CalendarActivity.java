@@ -601,7 +601,6 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                 } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
                     i.putExtra("error", msg.what);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
