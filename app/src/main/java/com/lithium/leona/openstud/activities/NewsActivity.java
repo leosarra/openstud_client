@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lithium.openstud.driver.core.News;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
@@ -61,6 +62,11 @@ public class NewsActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
+        refreshNews();
+    }
+
     private NavigationView nv;
     private DelayedDrawerListener ddl;
     private Openstud os;
@@ -112,8 +118,8 @@ public class NewsActivity extends AppCompatActivity {
         List<News> news_cached = InfoManager.getNewsCached(this,os,locale);
         if (news_cached != null && !news_cached.isEmpty()) {
             news.addAll(news_cached);
+            adapter.notifyDataSetChanged();
         }
-        adapter.notifyDataSetChanged();
         swipeRefreshLayout.setOnRefreshListener(this::refreshNews);
         if (savedInstanceState==null) refreshNews();
 
@@ -267,13 +273,13 @@ public class NewsActivity extends AppCompatActivity {
             if (activity == null) return;
             View.OnClickListener ocl = v -> activity.refreshNews();
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.swipeRefreshLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.swipeRefreshLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.swipeRefreshLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.swipeRefreshLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             }
         }
     }
