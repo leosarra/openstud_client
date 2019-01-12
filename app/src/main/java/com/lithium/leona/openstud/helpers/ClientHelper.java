@@ -40,6 +40,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.temporal.ChronoUnit;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -296,6 +297,15 @@ public class ClientHelper {
             }
         }
 
+    }
+
+    public static void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File file : fileOrDirectory.listFiles()) {
+                deleteRecursive(file);
+            }
+        }
+        fileOrDirectory.delete();
     }
 
     public static boolean isNetworkAvailable(Context context) {
