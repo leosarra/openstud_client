@@ -202,4 +202,5 @@
     <string name="already_placed_button">Reservation placed</string>
     <string name="no_pdf_app">No application found that can handle PDF files!</string>
     <string name="news">News</string>
+    <string name="no_news_found">No news was found</string>
 </resources>
