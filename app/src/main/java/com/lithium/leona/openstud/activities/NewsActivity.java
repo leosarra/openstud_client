@@ -17,6 +17,7 @@ import com.lithium.leona.openstud.adapters.NewsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import org.threeten.bp.Duration;
@@ -71,6 +72,7 @@ public class NewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeEngine.applyNewsTheme(this);
         setContentView(R.layout.activity_news);
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(this);
