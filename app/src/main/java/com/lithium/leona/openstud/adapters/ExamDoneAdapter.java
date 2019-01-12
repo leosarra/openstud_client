@@ -1,8 +1,6 @@
 package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,7 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.PreferenceManager;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -17,7 +16,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,32 +87,9 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             if (result.equals("30 e lode")) txtResult.setText("30L / 30");
             else txtResult.setText(StringUtils.capitalize(result));
             if (exam.getResult() >= 18 || result.equals("idoneo") || exam.isPassed()) {
-                if (exam.isCertified()) {
-                    int tintColor;
-                    TypedValue tV = new TypedValue();
-                    Resources.Theme theme = context.getTheme();
-                    boolean success = theme.resolveAttribute(R.attr.certifiedExamColor, tV, true);
-                    if (success) tintColor = tV.data;
-                    else tintColor = ContextCompat.getColor(context, R.color.green);
-                    txtResult.setTextColor(tintColor);
-                } else {
-                    int tintColor;
-                    TypedValue tV = new TypedValue();
-                    Resources.Theme theme = context.getTheme();
-                    boolean success = theme.resolveAttribute(R.attr.nonCertifiedExamColor, tV, true);
-                    if (success) tintColor = tV.data;
-                    else tintColor = ContextCompat.getColor(context, R.color.yellow);
-                    txtResult.setTextColor(tintColor);
-                }
-            } else {
-                int tintColor;
-                TypedValue tV = new TypedValue();
-                Resources.Theme theme = context.getTheme();
-                boolean success = theme.resolveAttribute(R.attr.nonPassedExamColor, tV, true);
-                if (success) tintColor = tV.data;
-                else tintColor = ContextCompat.getColor(context, R.color.red);
-                txtResult.setTextColor(tintColor);
-            }
+                if (exam.isCertified()) txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.certifiedExamColor, R.color.green));
+                else txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.nonCertifiedExamColor, R.color.yellow));
+            } else txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.nonPassedExamColor, R.color.red));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
             if (exam.getDate() != null && PreferenceManager.isExamDateEnabled(context)) {

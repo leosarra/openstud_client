@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import java.util.List;
 
@@ -77,6 +78,8 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
             txtName.setText(exam.getDescription());
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
+            //Tint for old devices
+            showSessions.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(context,R.drawable.ic_format_list_small, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
             showSessions.setOnClickListener(v -> edal.showSessionsOnClick(exam));
 
         }

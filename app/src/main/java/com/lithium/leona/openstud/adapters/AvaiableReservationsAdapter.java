@@ -2,9 +2,7 @@ package com.lithium.leona.openstud.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,7 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import org.threeten.bp.format.DateTimeFormatter;
 
@@ -20,7 +19,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,38 +104,24 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
 
         private void setPlaceButtonEnabled(boolean enabled, boolean alreadyExist) {
             int tintColor;
+            Drawable placeDrawable;
             if (alreadyExist) {
-                TypedValue tV = new TypedValue();
-                Resources.Theme theme = activity.getTheme();
-                boolean success = theme.resolveAttribute(R.attr.certifiedExamColor, tV, true);
-                if (success) tintColor = tV.data;
-                else tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
-            } else if (!enabled)
-                tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
-            else {
-                TypedValue tV = new TypedValue();
-                Resources.Theme theme = activity.getTheme();
-                boolean success = theme.resolveAttribute(R.attr.colorButtonNav, tV, true);
-                if (success) tintColor = tV.data;
-                else tintColor = ContextCompat.getColor(activity, R.color.redSapienza);
-            }
-
-            if (alreadyExist)
+                placeDrawable = LayoutHelper.getDrawableWithColorAttr(activity,R.drawable.ic_check_black_24dp,R.attr.certifiedExamColor, android.R.color.darker_gray);
                 placeButton.setText(activity.getResources().getString(R.string.already_placed_button));
-            else placeButton.setText(activity.getResources().getString(R.string.place_reservation));
-
+                tintColor = LayoutHelper.getColorByAttr(activity, R.attr.certifiedExamColor, android.R.color.darker_gray);
+            } else if (!enabled) {
+                placeDrawable = LayoutHelper.getDrawableWithColorId(activity, R.drawable.ic_library_add_small, android.R.color.darker_gray);
+                placeButton.setText(activity.getResources().getString(R.string.place_reservation));
+                tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
+            }
+            else {
+                placeDrawable = LayoutHelper.getDrawableWithColorAttr(activity,R.drawable.ic_library_add_small,R.attr.colorButtonNav, android.R.color.darker_gray);
+                placeButton.setText(activity.getResources().getString(R.string.place_reservation));
+                tintColor = LayoutHelper.getColorByAttr(activity, R.attr.colorButtonNav, android.R.color.darker_gray);
+            }
             placeButton.setEnabled(enabled);
             placeButton.setTextColor(tintColor);
-
-            Drawable drawable;
-            if (alreadyExist)
-                drawable = ContextCompat.getDrawable(activity, R.drawable.ic_check_black_24dp);
-            else drawable = ContextCompat.getDrawable(activity, R.drawable.ic_library_add_small);
-            if (drawable != null) {
-                drawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(drawable.mutate(), tintColor);
-                placeButton.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            }
+            if (placeDrawable != null) placeButton.setCompoundDrawablesWithIntrinsicBounds(placeDrawable, null, null, null);
         }
 
         @SuppressLint("ResourceType")

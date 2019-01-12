@@ -1,8 +1,10 @@
 package com.lithium.leona.openstud.helpers;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 
@@ -16,6 +18,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -69,6 +72,38 @@ public class LayoutHelper {
                 .setPositiveButton(context.getResources().getString(R.string.ok), (dialog, which) -> {
                 })
                 .show();
+    }
+
+    public static Drawable getDrawableWithColorAttr(Context context, int drawable_id, int color_attr, int fallback_color_id) {
+        int tintColor;
+        TypedValue tV = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        boolean success = theme.resolveAttribute(color_attr, tV, true);
+        if (success) tintColor = tV.data;
+        else tintColor = ContextCompat.getColor(context, fallback_color_id);
+        Drawable drawable = ContextCompat.getDrawable(context, drawable_id);
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable.mutate(), tintColor);
+        return drawable;
+    }
+
+    public static Drawable getDrawableWithColorId(Context context, int drawable_id, int color_id) {
+        int tintColor;
+        tintColor = ContextCompat.getColor(context, color_id);
+        Drawable drawable = ContextCompat.getDrawable(context, drawable_id);
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable.mutate(), tintColor);
+        return drawable;
+    }
+
+    public static int getColorByAttr(Context context, int color_id, int fallback_color_id) {
+        int tintColor;
+        TypedValue tV = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        boolean success = theme.resolveAttribute(color_id, tV, true);
+        if (success) tintColor = tV.data;
+        else tintColor = ContextCompat.getColor(context, fallback_color_id);
+        return tintColor;
     }
 
 
