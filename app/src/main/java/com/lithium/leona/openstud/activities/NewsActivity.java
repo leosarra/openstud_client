@@ -273,13 +273,13 @@ public class NewsActivity extends AppCompatActivity {
             if (activity == null) return;
             View.OnClickListener ocl = v -> activity.refreshNews();
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.swipeRefreshLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.swipeRefreshLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.swipeRefreshLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.swipeRefreshLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             }
         }
     }
