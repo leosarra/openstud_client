@@ -441,11 +441,15 @@ public class InfoManager {
         pref.edit().clear().commit();
         os = null;
         student = null;
-        isee = null;
         paidTaxes = null;
         unpaidTaxes = null;
         examsDone = null;
+        examsDoable = null;
         reservations = null;
+        news = null;
+        fakeExams = null;
+        events = null;
+        filter = null;
     }
 
     private static synchronized String getStudentId(Context context) {
