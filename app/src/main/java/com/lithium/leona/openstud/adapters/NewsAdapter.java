@@ -86,6 +86,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static class NewsHolderLarge extends RecyclerView.ViewHolder {
         @BindView(R.id.nameNews)
         TextView txtName;
+        @BindView(R.id.descriptionNews)
+        TextView txtDescription;
         @BindView(R.id.image_news)
         ImageView imageView;
 
@@ -97,6 +99,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         void setDetails(News news) {
             txtName.setText(news.getTitle());
+            txtDescription.setText(news.getDescription());
             Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
         }
     }

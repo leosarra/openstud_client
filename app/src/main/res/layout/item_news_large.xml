@@ -24,8 +24,8 @@
                 android:id="@+id/image_news"
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
-                android:layout_gravity="right"
-                android:layout_margin="6dp"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
                 android:gravity="center"
                 android:scaleType="fitXY"
                 android:textColor="?attr/primaryTextColor"
@@ -38,10 +38,20 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:layout_margin="6dp"
+                android:layout_margin="4dp"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
+            <TextView
+                android:id="@+id/descriptionNews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:padding="1dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="1dp"
+                android:ellipsize="end"
+                android:textColor="?attr/primaryTextColor" />
         </LinearLayout>
 </androidx.cardview.widget.CardView>
