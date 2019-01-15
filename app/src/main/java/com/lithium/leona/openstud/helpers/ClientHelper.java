@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -154,7 +155,12 @@ public class ClientHelper {
         builder.setToolbarColor(ContextCompat.getColor(context, R.color.redSapienza));
         builder.setCloseButtonIcon(closeIcon);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(context, Uri.parse(url));
+        try {
+            customTabsIntent.launchUrl(context, Uri.parse(url));
+        } catch (ActivityNotFoundException e) {
+            //No browser that supports custom tabs
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        }
     }
 
     public static void createConfirmDeleteReservationDialog(Activity activity, final ExamReservation res, Runnable action) {
