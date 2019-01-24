@@ -9,6 +9,7 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -21,7 +22,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.Utils;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.FakeExamAdapter;
@@ -32,7 +32,7 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.SimpleItemTouchHelperCallback;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
-import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
+import com.mikepenz.materialdrawer.Drawer;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
@@ -44,14 +44,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,8 +65,8 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class StatsActivity extends AppCompatActivity {
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
+    @BindView(R.id.main_layout)
+    LinearLayout mainLayout;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.toolbar)
@@ -90,9 +87,8 @@ public class StatsActivity extends AppCompatActivity {
     CardView graphCard2;
     @BindView(R.id.recyclerView)
     RecyclerView rv;
-    private DelayedDrawerListener ddl;
-    private NavigationView nv;
     private Openstud os;
+    private Drawer drawer;
     private StatsHandler h = new StatsHandler(this);
     private List<ExamDone> exams = new LinkedList<>();
     private LocalDateTime lastUpdate;
@@ -110,11 +106,6 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
         ThemeEngine.applyPaymentsTheme(this);
         ButterKnife.bind(this);
-        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.stats);
-        setupDrawerListener();
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
         if (os == null || student == null) {
@@ -124,11 +115,10 @@ public class StatsActivity extends AppCompatActivity {
             finish();
             return;
         }
-        View headerLayout = nv.getHeaderView(0);
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
-        subTitle.setText(student.getStudentID());
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
+        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.stats);
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(this, os);
         createRecyclerView();
         if (exams_cached != null && !exams_cached.isEmpty()) {
@@ -321,24 +311,6 @@ public class StatsActivity extends AppCompatActivity {
         return lastUpdate;
     }
 
-    private void setupDrawerListener() {
-        ddl = new DelayedDrawerListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                int item = getItemPressedAndReset();
-                if (item == -1) return;
-                ClientHelper.startDrawerActivity(item, StatsActivity.this);
-            }
-
-        };
-        mDrawerLayout.addDrawerListener(ddl);
-        nv.setNavigationItemSelectedListener(
-                item -> {
-                    mDrawerLayout.closeDrawers();
-                    ddl.setItemPressed(item.getItemId());
-                    return true;
-                });
-    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar_stats, menu);
@@ -356,7 +328,7 @@ public class StatsActivity extends AppCompatActivity {
 
     private void showLaudeNotification() {
         if (com.lithium.leona.openstud.data.PreferenceManager.getStatsNotificationEnabled(this)) {
-            LayoutHelper.createActionSnackBar(mDrawerLayout, R.string.no_value_laude, R.string.edit, 4000, v -> {
+            LayoutHelper.createActionSnackBar(mainLayout, R.string.no_value_laude, R.string.edit, 4000, v -> {
                 InfoManager.clearSharedPreferences(getApplication());
                 Intent i = new Intent(StatsActivity.this, SettingsPrefActivity.class);
                 startActivity(i);
@@ -413,8 +385,8 @@ public class StatsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
         } else {
             super.onBackPressed();
         }
@@ -433,13 +405,13 @@ public class StatsActivity extends AppCompatActivity {
             if (activity == null) return;
             View.OnClickListener listener = v -> activity.refreshExamsDone();
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
             } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
             } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                 InfoManager.clearSharedPreferences(activity.getApplication());
                 Intent i = new Intent(activity, LauncherActivity.class);
@@ -447,7 +419,7 @@ public class StatsActivity extends AppCompatActivity {
                 activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 activity.finish();
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             }
         }
     }

@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.ExamDoableFragment;
@@ -19,7 +17,7 @@ import com.lithium.leona.openstud.fragments.ReservationsFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
-import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
+import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.Objects;
 
@@ -28,10 +26,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
@@ -40,17 +37,15 @@ import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.Student;
 
 public class ExamsActivity extends AppCompatActivity {
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
+    @BindView(R.id.container)
+    ConstraintLayout mainLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    private NavigationView nv;
-    private DelayedDrawerListener ddl;
     private Fragment active;
     private ExamsDoneFragment fragDone;
     private ExamDoableFragment fragDoable;
     private ReservationsFragment fragRes;
-
+    private Drawer drawer;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -90,19 +85,11 @@ public class ExamsActivity extends AppCompatActivity {
             finish();
             return;
         }
-        nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.exams);
-        View headerLayout = nv.getHeaderView(0);
-
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
-        subTitle.setText(student.getStudentID());
-
+        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        setupDrawerListener();
         FragmentManager fm = getSupportFragmentManager();
 
         if (savedInstanceState != null) {
@@ -152,9 +139,6 @@ public class ExamsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
             case R.id.sort:
                 showSortDialog();
                 return true;
@@ -164,11 +148,9 @@ public class ExamsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+            if (drawer.isDrawerOpen()) drawer.closeDrawer();
+            else super.onBackPressed();
+
     }
 
     private void showSortDialog() {
@@ -184,24 +166,6 @@ public class ExamsActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void setupDrawerListener() {
-        ddl = new DelayedDrawerListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                int item = getItemPressedAndReset();
-                if (item == -1) return;
-                ClientHelper.startDrawerActivity(item, ExamsActivity.this);
-            }
-
-        };
-        mDrawerLayout.addDrawerListener(ddl);
-        nv.setNavigationItemSelectedListener(
-                item -> {
-                    mDrawerLayout.closeDrawers();
-                    ddl.setItemPressed(item.getItemId());
-                    return true;
-                });
-    }
 
     private void switchToExamsCompletedFragment() {
         FragmentManager manager = getSupportFragmentManager();
@@ -232,11 +196,11 @@ public class ExamsActivity extends AppCompatActivity {
 
 
     public void createTextSnackBar(int string_id, int length) {
-        LayoutHelper.createTextSnackBar(mDrawerLayout, string_id, length);
+        LayoutHelper.createTextSnackBar(mainLayout, string_id, length);
     }
 
     public void createRetrySnackBar(final int string_id, int length, View.OnClickListener listener) {
-        LayoutHelper.createActionSnackBar(mDrawerLayout, string_id, R.string.retry, length, listener);
+        LayoutHelper.createActionSnackBar(mainLayout, string_id, R.string.retry, length, listener);
     }
 
     @Override

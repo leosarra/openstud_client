@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,8 +25,8 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.ClickListener;
-import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.mikepenz.materialdrawer.Drawer;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,11 +35,9 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -58,10 +55,8 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
 
     @BindView(R.id.searchBar)
     MaterialSearchBar searchBar;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.nav_view)
-    NavigationView nv;
+    @BindView(R.id.main_layout)
+    CoordinatorLayout mainLayout;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @BindView(R.id.recyclerView)
@@ -74,9 +69,9 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     LinearLayout emptyLayout;
     @BindView(R.id.frame)
     FrameLayout contentFrame;
-    private DelayedDrawerListener ddl;
     private Openstud os;
     private Student student;
+    private Drawer drawer;
     private List<Classroom> classes = new LinkedList<>();
     private ClassroomAdapter adapter;
     private SearchClassroomHandler h = new SearchClassroomHandler(this);
@@ -109,15 +104,11 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             finish();
             return;
         }
-        View headerLayout = nv.getHeaderView(0);
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
-        subTitle.setText(student.getStudentID());
+        drawer = LayoutHelper.applyDrawer(this,toolbar,student);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new ClassroomAdapter(mDrawerLayout, this, classes, room -> {
+        adapter = new ClassroomAdapter(mainLayout, this, classes, room -> {
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
             Type listType = new TypeToken<List<Lesson>>() {
@@ -134,7 +125,6 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         rv.setAdapter(adapter);
         setLoadingEnabled(false, false);
         adapter.notifyDataSetChanged();
-        setupDrawerListener();
         setupContentListeners();
         if (PreferenceManager.getClassroomNotificationEnabled(this)) {
             LayoutHelper.createSearchClassroomNotification(this, ThemeEngine.getAlertDialogTheme(this));
@@ -219,14 +209,14 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
 
     @Override
     public void onSearchConfirmed(CharSequence text) {
-        ClientHelper.hideKeyboard(mDrawerLayout, this);
+        ClientHelper.hideKeyboard(mainLayout, this);
         if (!text.toString().trim().isEmpty()) searchClassrooms(text.toString().trim());
     }
 
     @Override
     public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
         } else {
             super.onBackPressed();
         }
@@ -243,7 +233,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     public void onButtonClicked(int buttonCode) {
         switch (buttonCode) {
             case MaterialSearchBar.BUTTON_NAVIGATION:
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                drawer.openDrawer();
                 break;
             case MaterialSearchBar.BUTTON_BACK:
                 searchBar.disableSearch();
@@ -271,24 +261,6 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         PreferenceManager.saveSuggestions(this, searchBar.getLastSuggestions());
     }
 
-    private void setupDrawerListener() {
-        ddl = new DelayedDrawerListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                int item = getItemPressedAndReset();
-                if (item == -1) return;
-                ClientHelper.startDrawerActivity(item, SearchClassroomActivity.this);
-            }
-
-        };
-        mDrawerLayout.addDrawerListener(ddl);
-        nv.setNavigationItemSelectedListener(
-                item -> {
-                    mDrawerLayout.closeDrawers();
-                    ddl.setItemPressed(item.getItemId());
-                    return true;
-                });
-    }
 
     private synchronized boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
         ClientHelper.hideKeyboard(view, this);
@@ -314,13 +286,13 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             if (activity == null) return;
             View.OnClickListener ocl = v -> activity.searchClassrooms(activity.searchBar.getText());
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                 InfoManager.clearSharedPreferences(activity.getApplication());
                 Intent i = new Intent(activity, LauncherActivity.class);
@@ -328,7 +300,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
                 activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 activity.finish();
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             }
         }
     }

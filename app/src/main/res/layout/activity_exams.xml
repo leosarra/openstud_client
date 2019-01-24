@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -51,21 +43,4 @@
         app:itemIconTint="@drawable/bottom_nav_selector"
         android:elevation="25dp"
         app:menu="@menu/navigation" />
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header"
-        android:background="?attr/backgroundColor"
-        app:itemTextColor="@drawable/drawer_nav_text_selector"
-        app:itemIconTint="@drawable/drawer_nav_icon_selector"/>
-
-</androidx.drawerlayout.widget.DrawerLayout>

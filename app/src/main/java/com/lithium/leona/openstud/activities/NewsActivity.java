@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.NewsAdapter;
@@ -18,7 +16,7 @@ import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
-import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
+import com.mikepenz.materialdrawer.Drawer;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
@@ -29,11 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -47,7 +42,8 @@ import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class NewsActivity extends AppCompatActivity {
-
+    @BindView(R.id.main_layout)
+    LinearLayout mainLayout;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recyclerView)
@@ -58,8 +54,6 @@ public class NewsActivity extends AppCompatActivity {
     Button emptyButton;
     @BindView(R.id.empty_text)
     TextView emptyText;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @OnClick(R.id.empty_button_reload)
@@ -67,9 +61,9 @@ public class NewsActivity extends AppCompatActivity {
         refreshNews();
     }
 
-    private NavigationView nv;
-    private DelayedDrawerListener ddl;
+
     private Openstud os;
+    private Drawer drawer;
     private LocalDateTime lastUpdate;
     private String locale;
     private NewsAdapter adapter;
@@ -90,16 +84,10 @@ public class NewsActivity extends AppCompatActivity {
             finish();
             return;
         }
-        nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
+        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.news);
-        View headerLayout = nv.getHeaderView(0);
-
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
-        subTitle.setText(student.getStudentID());
-        setupDrawerListener();
         locale = getLocale();
         emptyText.setText(getResources().getString(R.string.no_news_found));
         news = new LinkedList<>();
@@ -174,40 +162,11 @@ public class NewsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setupDrawerListener() {
-        ddl = new DelayedDrawerListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                int item = getItemPressedAndReset();
-                if (item == -1) return;
-                ClientHelper.startDrawerActivity(item, NewsActivity.this);
-            }
-
-        };
-        mDrawerLayout.addDrawerListener(ddl);
-        nv.setNavigationItemSelectedListener(
-                item -> {
-                    mDrawerLayout.closeDrawers();
-                    ddl.setItemPressed(item.getItemId());
-                    return true;
-                });
     }
 
     private String getLocale(){
@@ -273,13 +232,13 @@ public class NewsActivity extends AppCompatActivity {
             if (activity == null) return;
             View.OnClickListener ocl = v -> activity.refreshNews();
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             }
         }
     }

@@ -17,6 +17,7 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
+import com.mikepenz.materialdrawer.Drawer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.Duration;
@@ -26,11 +27,9 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,8 +42,8 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
+    @BindView(R.id.main_layout)
+    CoordinatorLayout mainLayout;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.toolbar)
@@ -71,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView cfu;
     private DelayedDrawerListener ddl;
     private View headerLayout;
+    private Drawer drawer;
     private NavigationView nv;
     private Student student;
     private Isee isee;
@@ -84,11 +84,6 @@ public class ProfileActivity extends AppCompatActivity {
         ThemeEngine.applyProfileTheme(this);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
-        nv = LayoutHelper.setupNavigationDrawer(this, mDrawerLayout);
-        setupDrawerListener();
-        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        headerLayout = nv.getHeaderView(0);
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(getApplication(), os);
         isee = InfoManager.getIseeCached(getApplication(), os);
@@ -99,7 +94,9 @@ public class ProfileActivity extends AppCompatActivity {
             finish();
             return;
         }
-
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
+        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         applyInfos(student, isee);
         swipeRefreshLayout.setNestedScrollingEnabled(true);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
@@ -144,11 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void applyInfos(Student st, Isee isee) {
         if (st == null) return;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
         collapsingToolbarLayout.setTitle(st.getFirstName() + " " + st.getLastName());
-        TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
-        navSubtitle.setText(st.getStudentID());
         studentId.setText(st.getStudentID());
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());
@@ -181,31 +174,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        if (drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+        } else super.onBackPressed();
     }
 
-    private void setupDrawerListener() {
-        ddl = new DelayedDrawerListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                int item = getItemPressedAndReset();
-                if (item == -1) return;
-                ClientHelper.startDrawerActivity(item, ProfileActivity.this);
-            }
-
-        };
-        mDrawerLayout.addDrawerListener(ddl);
-        nv.setNavigationItemSelectedListener(
-                item -> {
-                    mDrawerLayout.closeDrawers();
-                    ddl.setItemPressed(item.getItemId());
-                    return true;
-                });
-    }
 
     private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
@@ -232,13 +205,13 @@ public class ProfileActivity extends AppCompatActivity {
             if (activity != null) {
                 View.OnClickListener listener = v -> new Thread(() -> activity.refresh(activity.os)).start();
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());
                     Intent i = new Intent(activity, LauncherActivity.class);
