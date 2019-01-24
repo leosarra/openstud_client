@@ -24,10 +24,6 @@
                 android:icon="@drawable/ic_location_city_black_24dp"
                 android:title="@string/classrooms" />
             <item
-                android:id="@+id/news_menu"
-                android:icon="@drawable/ic_newspaper"
-                android:title="@string/news" />
-            <item
                 android:id="@+id/payments_menu"
                 android:icon="@drawable/ic_baseline_payment"
                 android:title="@string/payments" />
