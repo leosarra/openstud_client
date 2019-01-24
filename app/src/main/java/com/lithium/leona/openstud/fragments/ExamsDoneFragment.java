@@ -144,6 +144,7 @@ public class ExamsDoneFragment extends Fragment {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
+                if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
@@ -237,11 +238,13 @@ public class ExamsDoneFragment extends Fragment {
             if (examsDoneFrag == null) return;
             ExamsActivity activity = (ExamsActivity) examsDoneFrag.getActivity();
             if (activity != null) {
-                View.OnClickListener ocl = v -> examsDoneFrag.refreshExamsDone();
+                View.OnClickListener listener = v -> examsDoneFrag.refreshExamsDone();
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
+                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, ocl);
+                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
+                    activity.createRetrySnackBar(R.string.infostud_maintenance, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {

@@ -128,6 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
             h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidResponseException e) {
+            if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
@@ -234,6 +235,8 @@ public class ProfileActivity extends AppCompatActivity {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
