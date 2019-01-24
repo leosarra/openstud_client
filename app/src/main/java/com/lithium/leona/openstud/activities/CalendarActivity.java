@@ -249,6 +249,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
                 if (e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
+                if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
@@ -501,7 +502,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         return true;
     }
 
-    private synchronized List<String> generateListEventsNames() {
+    private synchronized List<String> generateListLessonsNames() {
         List<String> names = new LinkedList<>();
         for (lithium.openstud.driver.core.Event event : events) {
             if (!names.contains(event.getDescription()) && event.getEventType() == EventType.LESSON)
@@ -511,7 +512,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     }
 
     private void showFilterDialog() {
-        BottomSheetFilterEventFragment filterFrag = BottomSheetFilterEventFragment.newInstance(generateListEventsNames());
+        BottomSheetFilterEventFragment filterFrag = BottomSheetFilterEventFragment.newInstance(generateListLessonsNames());
         filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());
     }
 
@@ -598,6 +599,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {

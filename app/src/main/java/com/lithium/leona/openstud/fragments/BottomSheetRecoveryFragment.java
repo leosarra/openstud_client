@@ -1,10 +1,8 @@
 package com.lithium.leona.openstud.fragments;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.LoginActivity;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -80,16 +80,11 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recovery_password, container, false);
         ButterKnife.bind(this, v);
-
+        ClientHelper.setDialogView(v,getDialog(), BottomSheetBehavior.STATE_EXPANDED);
         if (questionText == null || studentID == null) dismiss();
         else question.setText(questionText);
 
-        int tintColorEnabled;
-        TypedValue tV = new TypedValue();
-        Resources.Theme theme = getContext().getTheme();
-        boolean success = theme.resolveAttribute(R.attr.colorButtonNav, tV, true);
-        if (success) tintColorEnabled = tV.data;
-        else tintColorEnabled = ContextCompat.getColor(getContext(), R.color.redSapienza);
+        int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(),R.attr.colorButtonNav, R.color.redSapienza);
         confirm.setEnabled(false);
         confirm.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
         questionInput.addTextChangedListener(new TextWatcher() {
@@ -120,7 +115,7 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
             }
             return false;
         });
-        return v;
+        return null;
     }
 
 }

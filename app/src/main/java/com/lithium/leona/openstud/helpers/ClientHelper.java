@@ -3,6 +3,7 @@ package com.lithium.leona.openstud.helpers;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -22,12 +23,12 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.AboutActivity;
 import com.lithium.leona.openstud.activities.CalendarActivity;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
-import com.lithium.leona.openstud.activities.NewsActivity;
 import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.activities.ProfileActivity;
 import com.lithium.leona.openstud.activities.SearchClassroomActivity;
@@ -56,6 +57,7 @@ import java.util.Objects;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import lithium.openstud.driver.core.Event;
@@ -258,13 +260,6 @@ public class ClientHelper {
                 activity.startActivity(intent);
                 break;
             }
-
-            case R.id.news_menu: {
-                if (activity instanceof NewsActivity) break;
-                Intent intent = new Intent(activity, NewsActivity.class);
-                activity.startActivity(intent);
-                break;
-            }
         }
     }
     public static void addEventToCalendar(Activity activity, final Event ev) {
@@ -303,6 +298,14 @@ public class ClientHelper {
             }
         }
 
+    }
+
+    public static void setDialogView(View v, Dialog dialog, int state) {
+        if (dialog == null) return;
+        dialog.setContentView(v);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) v.getParent()).getLayoutParams();
+        CoordinatorLayout.Behavior behavior = params.getBehavior();
+        ((BottomSheetBehavior) behavior).setState(state);
     }
 
     public static void deleteRecursive(File fileOrDirectory) {
@@ -369,7 +372,7 @@ public class ClientHelper {
         OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5),
         EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
         PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15), FAIL_LOGIN(16), ENABLE_BUTTONS(17), RECOVERY_OK(18), INVALID_ANSWER(19),
-        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23);
+        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23), MAINTENANCE(24);
         private final int value;
 
         Status(int value) {

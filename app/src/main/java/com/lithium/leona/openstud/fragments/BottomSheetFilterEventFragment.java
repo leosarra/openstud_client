@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.CalendarActivity;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import java.lang.reflect.Type;
@@ -76,11 +78,11 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.filter_calendar, container, false);
         ButterKnife.bind(this, v);
-
+        ClientHelper.setDialogView(v,getDialog(), BottomSheetBehavior.STATE_EXPANDED);
         Context context = getContext();
         Activity activity = getActivity();
-        InfoManager.clearFilter(context, elements);
-        if (context == null || activity == null) return v;
+        InfoManager.removeOldEntriesFilter(context, elements);
+        if (context == null || activity == null) return null;
         int i = 0;
         for (String name : elements) {
             CheckBox ckb = new CheckBox(context);
@@ -96,13 +98,14 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
                 else InfoManager.addExceptionToFilter(context, name);
             });
         }
-        return v;
+        return null;
     }
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
         super.onDismiss(dialog);
         CalendarActivity activity = (CalendarActivity) getActivity();
+        if (activity == null) return;
         activity.refreshAfterDismiss = refreshNeeded;
         activity.onDismiss(dialog);
     }
