@@ -15,10 +15,7 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 import androidx.appcompat.app.AlertDialog;
@@ -96,11 +93,11 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 boolean result = ClientHelper.requestReadWritePermissions(activity);
                 if (!result) return false;
                 String directory = Environment.getExternalStorageDirectory() + "/OpenStud";
-                File dirs = new File(directory);
+                File dir = new File(directory);
                 try {
-                    FileUtils.deleteDirectory(dirs);
+                    ClientHelper.deleteRecursive(dir);
                     LayoutHelper.createTextSnackBar(getView(), R.string.success_delete_pdf, Snackbar.LENGTH_LONG);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     LayoutHelper.createTextSnackBar(getView(), R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
                 }

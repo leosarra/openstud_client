@@ -3,7 +3,9 @@ package com.lithium.leona.openstud.helpers;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +23,18 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.AboutActivity;
+import com.lithium.leona.openstud.activities.CalendarActivity;
+import com.lithium.leona.openstud.activities.ExamsActivity;
+import com.lithium.leona.openstud.activities.LauncherActivity;
+import com.lithium.leona.openstud.activities.PaymentsActivity;
+import com.lithium.leona.openstud.activities.ProfileActivity;
+import com.lithium.leona.openstud.activities.SearchClassroomActivity;
+import com.lithium.leona.openstud.activities.SettingsPrefActivity;
+import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.widgets.GradesWidget;
 
 import org.threeten.bp.LocalDate;
@@ -29,6 +42,7 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.temporal.ChronoUnit;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +57,7 @@ import java.util.Objects;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import lithium.openstud.driver.core.Event;
@@ -142,7 +157,12 @@ public class ClientHelper {
         builder.setToolbarColor(ContextCompat.getColor(context, R.color.redSapienza));
         builder.setCloseButtonIcon(closeIcon);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(context, Uri.parse(url));
+        try {
+            customTabsIntent.launchUrl(context, Uri.parse(url));
+        } catch (ActivityNotFoundException e) {
+            //No browser that supports custom tabs
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        }
     }
 
     public static void createConfirmDeleteReservationDialog(Activity activity, final ExamReservation res, Runnable action) {
@@ -181,6 +201,67 @@ public class ClientHelper {
         activity.startActivity(intent);
     }
 
+    public static void startDrawerActivity(int item, Activity activity){
+        switch (item) {
+            case R.id.payments_menu: {
+                if (activity instanceof PaymentsActivity) break;
+                Intent intent = new Intent(activity, PaymentsActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.calendar_menu: {
+                if (activity instanceof CalendarActivity) break;
+                Intent intent = new Intent(activity, CalendarActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.profile_menu: {
+                if (activity instanceof ProfileActivity) break;
+                Intent intent = new Intent(activity, ProfileActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.exit_menu: {
+                InfoManager.clearSharedPreferences(activity.getApplication());
+                Intent i = new Intent(activity, LauncherActivity.class);
+                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                break;
+            }
+
+            case R.id.classrooms_menu: {
+                if (activity instanceof SearchClassroomActivity) break;
+                Intent intent = new Intent(activity, SearchClassroomActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+
+            case R.id.about_menu: {
+                Intent intent = new Intent(activity, AboutActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+            case R.id.settings_menu: {
+                Intent intent = new Intent(activity, SettingsPrefActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+            case R.id.stats_menu: {
+                if (activity instanceof StatsActivity) break;
+                Intent intent = new Intent(activity, StatsActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+            case R.id.exams_menu: {
+                if (activity instanceof ExamsActivity) break;
+                Intent intent = new Intent(activity, ExamsActivity.class);
+                activity.startActivity(intent);
+                break;
+            }
+        }
+    }
     public static void addEventToCalendar(Activity activity, final Event ev) {
         switch (ev.getEventType()) {
             case LESSON: {
@@ -217,6 +298,23 @@ public class ClientHelper {
             }
         }
 
+    }
+
+    public static void setDialogView(View v, Dialog dialog, int state) {
+        if (dialog == null) return;
+        dialog.setContentView(v);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) v.getParent()).getLayoutParams();
+        CoordinatorLayout.Behavior behavior = params.getBehavior();
+        ((BottomSheetBehavior) behavior).setState(state);
+    }
+
+    public static void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory()) {
+            for (File file : fileOrDirectory.listFiles()) {
+                deleteRecursive(file);
+            }
+        }
+        fileOrDirectory.delete();
     }
 
     public static boolean isNetworkAvailable(Context context) {
@@ -274,7 +372,7 @@ public class ClientHelper {
         OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5),
         EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
         PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15), FAIL_LOGIN(16), ENABLE_BUTTONS(17), RECOVERY_OK(18), INVALID_ANSWER(19),
-        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23);
+        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23), MAINTENANCE(24);
         private final int value;
 
         Status(int value) {

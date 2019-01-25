@@ -46,36 +46,36 @@
             android:id="@+id/nameTeacher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:text="TextView" />
+            android:textColor="?attr/primaryTextColor" />
+        <TextView
+            android:id="@+id/academicYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor" />
 
         <TextView
             android:id="@+id/channelReservation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:padding="1dp" />
+            android:textColor="?attr/primaryTextColor" />
 
         <TextView
             android:id="@+id/startDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:text="TextView" />
+            android:textColor="?attr/primaryTextColor" />
 
         <TextView
             android:id="@+id/endDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:text="TextView" />
+            android:textColor="?attr/primaryTextColor" />
 
         <TextView
             android:id="@+id/infosExtra"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:padding="1dp" />
+            android:textColor="?attr/primaryTextColor" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

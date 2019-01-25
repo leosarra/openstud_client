@@ -1,10 +1,8 @@
 package com.lithium.leona.openstud.fragments;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import androidx.annotation.NonNull;
@@ -63,12 +63,8 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.add_exam_stats, container, false);
         ButterKnife.bind(this, v);
-        int tintColorEnabled;
-        TypedValue tV = new TypedValue();
-        Resources.Theme theme = getContext().getTheme();
-        boolean success = theme.resolveAttribute(R.attr.colorButtonNav, tV, true);
-        if (success) tintColorEnabled = tV.data;
-        else tintColorEnabled = ContextCompat.getColor(getContext(), R.color.redSapienza);
+        ClientHelper.setDialogView(v,getDialog(), BottomSheetBehavior.STATE_EXPANDED);
+        int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(),R.attr.colorButtonNav, R.color.redSapienza);
         add.setEnabled(false);
         add.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
         examName.addTextChangedListener(new TextWatcher() {
@@ -100,7 +96,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
             }
             return false;
         });
-        return v;
+        return null;
     }
 
 }

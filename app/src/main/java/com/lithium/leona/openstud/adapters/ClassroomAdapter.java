@@ -2,13 +2,11 @@ package com.lithium.leona.openstud.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +24,6 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,17 +110,11 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             txtWhere.setText(context.getResources().getString(R.string.position, room.getWhere()));
             String status;
             int tintColor;
-            TypedValue tV = new TypedValue();
-            Resources.Theme theme = context.getTheme();
             if (room.isOccupied()) {
-                boolean success = theme.resolveAttribute(R.attr.nonCertifiedExamColor, tV, true);
-                if (success) tintColor = tV.data;
-                else tintColor = ContextCompat.getColor(context, R.color.green);
+                tintColor = LayoutHelper.getColorByAttr(context, R.attr.nonCertifiedExamColor,R.color.red);
                 status = context.getResources().getString(R.string.not_available);
             } else {
-                boolean success = theme.resolveAttribute(R.attr.certifiedExamColor, tV, true);
-                if (success) tintColor = tV.data;
-                else tintColor = ContextCompat.getColor(context, R.color.red);
+                tintColor = LayoutHelper.getColorByAttr(context, R.attr.certifiedExamColor,R.color.green);
                 status = context.getResources().getString(R.string.available);
             }
 
@@ -143,21 +133,13 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
                 txtNextLesson.setVisibility(View.VISIBLE);
             } else txtNextLesson.setVisibility(View.GONE);
 
-            int tintColorMap;
+            Drawable mapDrawable;
             if (!room.hasCoordinates()) {
-                tintColorMap = ContextCompat.getColor(context, android.R.color.darker_gray);
+                mapDrawable = LayoutHelper.getDrawableWithColorId(context, R.drawable.ic_map_black_24dp, android.R.color.darker_gray);
                 openMap.setEnabled(false);
-            } else {
-                TypedValue tv2 = new TypedValue();
-                boolean success = theme.resolveAttribute(R.attr.colorButtonNav, tv2, true);
-                if (success) tintColorMap = tv2.data;
-                else tintColorMap = ContextCompat.getColor(context, R.color.redSapienza);
-            }
-            openMap.setTextColor(tintColorMap);
-            Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_map_black_24dp);
-            drawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(drawable.mutate(), tintColorMap);
-            openMap.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            } else mapDrawable = LayoutHelper.getDrawableWithColorAttr(context, R.drawable.ic_map_black_24dp, R.attr.colorButtonNav, R.color.redSapienza);
+            openMap.setCompoundDrawablesWithIntrinsicBounds(mapDrawable, null, null, null);
+            openTimetable.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(context,R.drawable.ic_event_black_24dp, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
             openMap.setOnClickListener(v -> {
                 Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + room.getLatitude() + "," + room.getLongitude() + "(" + room.getName() + ")");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);

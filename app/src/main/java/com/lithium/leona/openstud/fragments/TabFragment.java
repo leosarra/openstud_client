@@ -110,11 +110,12 @@ public class TabFragment extends Fragment {
         //This method returns the title of the tab according to the position.
         @Override
         public CharSequence getPageTitle(int position) {
-
             switch (position) {
                 case 0:
+                    if(!isAdded()) return "Unpaid";
                     return getResources().getString(R.string.unpaid);
                 case 1:
+                    if(!isAdded()) return "Paid";
                     return getResources().getString(R.string.paid);
             }
             return null;

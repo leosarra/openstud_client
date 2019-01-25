@@ -29,11 +29,13 @@ public class ContributorsActivity extends MaterialAboutActivity {
         MaterialAboutCard.Builder appCardBuilder2 = new MaterialAboutCard.Builder();
         MaterialAboutCard.Builder appCardBuilder3 = new MaterialAboutCard.Builder();
         MaterialAboutCard.Builder appCardBuilder4 = new MaterialAboutCard.Builder();
+        MaterialAboutCard.Builder appCardBuilder5 = new MaterialAboutCard.Builder();
         buildContributors(context, appCardBuilder1, "Luigi Russo", getResources().getString(R.string.developer), null);
         buildContributors(context, appCardBuilder2, "Leonardo Razovic", "Logo designer", "https://www.twitter.com/lrazovic");
         buildContributors(context, appCardBuilder3, "Valerio Silvestro", "Tester", null);
         buildContributors(context, appCardBuilder4, "Ugo Possenti", "Concept designer", "https://twitter.com/MEPoss");
-        return new MaterialAboutList(appCardBuilder1.build(), appCardBuilder2.build(), appCardBuilder3.build(), appCardBuilder4.build());
+        buildContributors(context, appCardBuilder5, "SapienzaApps", getResources().getString(R.string.sapienzaaps), null);
+        return new MaterialAboutList(appCardBuilder1.build(), appCardBuilder5.build(), appCardBuilder2.build(), appCardBuilder3.build(), appCardBuilder4.build());
     }
 
     @Nullable

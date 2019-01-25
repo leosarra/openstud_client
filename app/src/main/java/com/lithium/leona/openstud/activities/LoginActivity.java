@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidResponseException e) {
+            if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
@@ -135,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
             h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidResponseException e) {
+            if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
@@ -187,6 +189,7 @@ public class LoginActivity extends AppCompatActivity {
             h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidResponseException e) {
+            if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
         }
@@ -234,7 +237,9 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener2);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.infostud_maintenance, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {

@@ -136,6 +136,7 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
             }
         } catch (OpenstudInvalidResponseException e) {
             e.printStackTrace();
+            if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
             h.sendEmptyMessage(ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue());
         } catch (OpenstudConnectionException e) {
             e.printStackTrace();
@@ -258,6 +259,8 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
+                    LayoutHelper.createActionSnackBar(activity.layout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {

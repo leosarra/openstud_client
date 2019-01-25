@@ -241,6 +241,22 @@ public class ThemeEngine {
         }
     }
 
+    public static void applyNewsTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                activity.setTheme(R.style.NoActionBarAppLightTheme);
+                break;
+            case DARK:
+                activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
+                break;
+        }
+    }
+
+
     private static int getPrimaryTextColor(Context context) {
         int tintColor;
         TypedValue tV = new TypedValue();

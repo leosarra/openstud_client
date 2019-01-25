@@ -277,6 +277,7 @@ public class StatsActivity extends AppCompatActivity {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
+                if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
@@ -326,51 +327,7 @@ public class StatsActivity extends AppCompatActivity {
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
                 if (item == -1) return;
-                switch (item) {
-                    case R.id.payments_menu: {
-                        Intent intent = new Intent(StatsActivity.this, PaymentsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.calendar_menu: {
-                        Intent intent = new Intent(StatsActivity.this, CalendarActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.exit_menu: {
-                        InfoManager.clearSharedPreferences(getApplication());
-                        Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
-                        startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        break;
-                    }
-                    case R.id.exams_menu: {
-                        Intent intent = new Intent(StatsActivity.this, ExamsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.classrooms_menu: {
-                        Intent intent = new Intent(StatsActivity.this, SearchClassroomActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.about_menu: {
-                        Intent intent = new Intent(StatsActivity.this, AboutActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.settings_menu: {
-                        Intent intent = new Intent(StatsActivity.this, SettingsPrefActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.profile_menu: {
-                        Intent intent = new Intent(StatsActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
+                ClientHelper.startDrawerActivity(item, StatsActivity.this);
             }
 
         };
@@ -474,12 +431,13 @@ public class StatsActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             final StatsActivity activity = this.activity.get();
             if (activity == null) return;
+            View.OnClickListener listener = v -> activity.refreshExamsDone();
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                View.OnClickListener ocl = v -> activity.refreshExamsDone();
-                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+            } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
+                LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
             } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
@@ -489,7 +447,7 @@ public class StatsActivity extends AppCompatActivity {
                 activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 activity.finish();
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
-                LayoutHelper.createTextSnackBar(activity.getWindow().getDecorView(), R.string.invalid_response_error, Snackbar.LENGTH_LONG);
+                LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             }
         }
     }

@@ -43,7 +43,7 @@
     <string name="ok_delete">Prenotazione cancellata con successo</string>
     <string name="failed_delete">Impossibile cancellare la prenotazione. Riprova più tardi</string>
     <string name="failed_get_io">La ricevuta non può essere salvata sul dispositivo.</string>
-    <string name="failed_get_network">Infostud non sta funzionando correttamente. Impossibile scaricare la ricevuta!</string>
+    <string name="failed_get_network">Errore di rete. Impossibile scaricare la ricevuta!</string>
     <string name="delete_res_dialog_title">Cancellare la prenotazione?</string>
     <string name="delete_res_dialog_description">La prenotazioni di %1$s sarà cancellata. Sei sicuro?</string>
     <string name="delete_ok">Cancella</string>
@@ -181,5 +181,8 @@
     <string name="rate_limit">Raggiunto il limite di richieste sulle API di SapienzaApps</string>
     <string name="already_placed_button">Prenotato</string>
     <string name="no_pdf_app">Nessuna applicazione trovata per visualizzare i file PDF!</string>
-
+    <string name="news">Notizie</string>
+    <string name="no_news_found">Nessuna notizia trovata</string>
+    <string name="sapienzaaps">API per GOMP</string>
+    <string name="infostud_maintenance">InfoStud è momentaneamente in manutenzione</string>
 </resources>

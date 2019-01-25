@@ -277,51 +277,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             public void onDrawerClosed(@NonNull View drawerView) {
                 int item = getItemPressedAndReset();
                 if (item == -1) return;
-                switch (item) {
-                    case R.id.payments_menu: {
-                        Intent intent = new Intent(SearchClassroomActivity.this, PaymentsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.profile_menu: {
-                        Intent intent = new Intent(SearchClassroomActivity.this, ProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.calendar_menu: {
-                        Intent intent = new Intent(SearchClassroomActivity.this, CalendarActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-
-                    case R.id.exit_menu: {
-                        InfoManager.clearSharedPreferences(getApplication());
-                        Intent i = new Intent(SearchClassroomActivity.this, LauncherActivity.class);
-                        startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                        break;
-                    }
-                    case R.id.exams_menu: {
-                        Intent intent = new Intent(SearchClassroomActivity.this, ExamsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.about_menu: {
-                        Intent intent = new Intent(SearchClassroomActivity.this, AboutActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.settings_menu: {
-                        Intent intent = new Intent(SearchClassroomActivity.this, SettingsPrefActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case R.id.stats_menu: {
-                        Intent intent = new Intent(SearchClassroomActivity.this, StatsActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
+                ClientHelper.startDrawerActivity(item, SearchClassroomActivity.this);
             }
 
         };

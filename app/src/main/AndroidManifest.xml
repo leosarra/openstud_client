@@ -12,7 +12,6 @@
     <meta-data
         android:name="firebase_analytics_collection_deactivated"
         android:value="true" />
-
     <meta-data
         android:name="firebase_crashlytics_collection_enabled"
         android:value="true" />
@@ -101,7 +100,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/event_widget_info" />
         </receiver>
-         -->
+        -->
+        <activity android:name=".activities.NewsActivity"
+            android:theme="@style/NoActionBarAppLightTheme"/>
     </application>
 
 </manifest>
