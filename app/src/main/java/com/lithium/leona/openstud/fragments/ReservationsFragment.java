@@ -133,7 +133,6 @@ public class ReservationsFragment extends Fragment {
             });
             refreshReservations();
         }).start();
-        refreshReservations();
         return v;
     }
 
