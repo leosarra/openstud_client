@@ -2,11 +2,12 @@ package com.lithium.leona.openstud.listeners;
 
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.drawerlayout.widget.DrawerLayout;
+import com.mikepenz.materialdrawer.Drawer;
 
-public class DelayedDrawerListener implements DrawerLayout.DrawerListener {
-    private int item_pressed = -1;
+import androidx.annotation.NonNull;
+
+public class DelayedDrawerListener implements Drawer.OnDrawerListener {
+    private long item_pressed = -1;
 
     @Override
     public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -23,18 +24,13 @@ public class DelayedDrawerListener implements DrawerLayout.DrawerListener {
 
     }
 
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
-    }
-
-    public synchronized int getItemPressedAndReset() {
-        int ret = item_pressed;
+    public synchronized long getItemPressedAndReset() {
+        long ret = item_pressed;
         item_pressed = -1;
         return ret;
     }
 
-    public synchronized void setItemPressed(int item) {
+    public synchronized void setItemPressed(long item) {
         item_pressed = item;
     }
 }

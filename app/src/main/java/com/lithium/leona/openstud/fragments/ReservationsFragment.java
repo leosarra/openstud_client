@@ -88,10 +88,6 @@ public class ReservationsFragment extends Fragment {
             return v;
         }
         emptyText.setText(getResources().getString(R.string.no_reservations_found));
-        List<ExamReservation> reservations_cached = InfoManager.getActiveReservationsCached(getActivity().getApplication(), os);
-        if (reservations_cached != null && !reservations_cached.isEmpty()) {
-            reservations.addAll(reservations_cached);
-        }
 
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(activity);
@@ -123,10 +119,20 @@ public class ReservationsFragment extends Fragment {
             }
         });
         rv.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshReservations);
-        refreshReservations();
+        swipeRefreshLayout.setEnabled(false);
+        new Thread(() -> {
+            List<ExamReservation> reservations_cached = InfoManager.getActiveReservationsCached(getActivity().getApplication(), os);
+            if (reservations_cached != null && !reservations_cached.isEmpty()) {
+                reservations.addAll(reservations_cached);
+            }
+            activity.runOnUiThread(() -> {
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setEnabled(true);
+            });
+            refreshReservations();
+        }).start();
         return v;
     }
 

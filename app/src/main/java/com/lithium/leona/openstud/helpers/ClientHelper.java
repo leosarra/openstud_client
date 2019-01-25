@@ -29,6 +29,7 @@ import com.lithium.leona.openstud.activities.AboutActivity;
 import com.lithium.leona.openstud.activities.CalendarActivity;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
+import com.lithium.leona.openstud.activities.NewsActivity;
 import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.activities.ProfileActivity;
 import com.lithium.leona.openstud.activities.SearchClassroomActivity;
@@ -201,67 +202,59 @@ public class ClientHelper {
         activity.startActivity(intent);
     }
 
-    public static void startDrawerActivity(int item, Activity activity){
-        switch (item) {
-            case R.id.payments_menu: {
-                if (activity instanceof PaymentsActivity) break;
+    public static void startDrawerActivity(long item, Activity activity){
+        if (item == LayoutHelper.Selection.TAX.getValue()) {
+                if (activity instanceof PaymentsActivity) return;
                 Intent intent = new Intent(activity, PaymentsActivity.class);
                 activity.startActivity(intent);
-                break;
+            }
+        else if (item == LayoutHelper.Selection.CALENDAR.getValue()) {
+            if (activity instanceof CalendarActivity) return;
+            Intent intent = new Intent(activity, CalendarActivity.class);
+            activity.startActivity(intent);
             }
 
-            case R.id.calendar_menu: {
-                if (activity instanceof CalendarActivity) break;
-                Intent intent = new Intent(activity, CalendarActivity.class);
-                activity.startActivity(intent);
-                break;
-            }
-
-            case R.id.profile_menu: {
-                if (activity instanceof ProfileActivity) break;
+        else if (item == LayoutHelper.Selection.PROFILE.getValue()) {
+                if (activity instanceof ProfileActivity) return;
                 Intent intent = new Intent(activity, ProfileActivity.class);
                 activity.startActivity(intent);
-                break;
             }
-
-            case R.id.exit_menu: {
-                InfoManager.clearSharedPreferences(activity.getApplication());
-                Intent i = new Intent(activity, LauncherActivity.class);
-                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-                break;
-            }
-
-            case R.id.classrooms_menu: {
-                if (activity instanceof SearchClassroomActivity) break;
+        else if (item == LayoutHelper.Selection.EXIT.getValue()){
+            InfoManager.clearSharedPreferences(activity.getApplication());
+            Intent i = new Intent(activity, LauncherActivity.class);
+            activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        }
+        else if (item == LayoutHelper.Selection.CLASSROOMS.getValue()) {
+            if (activity instanceof SearchClassroomActivity) return;
                 Intent intent = new Intent(activity, SearchClassroomActivity.class);
                 activity.startActivity(intent);
-                break;
             }
 
-            case R.id.about_menu: {
+        else if (item == LayoutHelper.Selection.ABOUT.getValue()) {
                 Intent intent = new Intent(activity, AboutActivity.class);
                 activity.startActivity(intent);
-                break;
             }
-            case R.id.settings_menu: {
-                Intent intent = new Intent(activity, SettingsPrefActivity.class);
-                activity.startActivity(intent);
-                break;
-            }
-            case R.id.stats_menu: {
-                if (activity instanceof StatsActivity) break;
+        else if (item == LayoutHelper.Selection.SETTINGS.getValue()) {
+            Intent intent = new Intent(activity, SettingsPrefActivity.class);
+            activity.startActivity(intent);
+        }
+        else if (item == LayoutHelper.Selection.STATS.getValue()){
+                if (activity instanceof StatsActivity) return;
                 Intent intent = new Intent(activity, StatsActivity.class);
                 activity.startActivity(intent);
-                break;
             }
-            case R.id.exams_menu: {
-                if (activity instanceof ExamsActivity) break;
-                Intent intent = new Intent(activity, ExamsActivity.class);
-                activity.startActivity(intent);
-                break;
-            }
+        else if (item == LayoutHelper.Selection.EXAMS.getValue()) {
+            if (activity instanceof ExamsActivity) return;
+            Intent intent = new Intent(activity, ExamsActivity.class);
+            activity.startActivity(intent);
+        }
+        else if (item == LayoutHelper.Selection.NEWS.getValue()) {
+            if (activity instanceof NewsActivity) return;
+            Intent intent = new Intent(activity, NewsActivity.class);
+            activity.startActivity(intent);
         }
     }
+
     public static void addEventToCalendar(Activity activity, final Event ev) {
         switch (ev.getEventType()) {
             case LESSON: {

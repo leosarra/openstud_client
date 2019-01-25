@@ -1,5 +1,6 @@
 package com.lithium.leona.openstud.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -7,13 +8,27 @@ import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.TextView;
 
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.CalendarActivity;
+import com.lithium.leona.openstud.activities.ExamsActivity;
+import com.lithium.leona.openstud.activities.NewsActivity;
+import com.lithium.leona.openstud.activities.PaymentsActivity;
+import com.lithium.leona.openstud.activities.ProfileActivity;
+import com.lithium.leona.openstud.activities.SearchClassroomActivity;
+import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.DimenHolder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,14 +36,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import lithium.openstud.driver.core.Student;
 
 
 public class LayoutHelper {
-    public static NavigationView setupNavigationDrawer(AppCompatActivity aca, DrawerLayout dl) {
-        NavigationView navigationView = aca.findViewById(R.id.nav_view);
-        return navigationView;
-    }
 
     public static void setupToolbar(AppCompatActivity aca, Toolbar toolbar, int icon) {
         aca.setSupportActionBar(toolbar);
@@ -107,4 +118,80 @@ public class LayoutHelper {
     }
 
 
+    public static Drawer applyDrawer(Activity activity, Toolbar toolbar, Student student) {
+        int primaryColor = ThemeEngine.getPrimaryTextColor(activity);
+        DelayedDrawerListener ddl = new DelayedDrawerListener() {
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                long item = getItemPressedAndReset();
+                if (item == -1) return;
+                ClientHelper.startDrawerActivity(item, activity);
+            }
+        };
+        int activityIdentifier = LayoutHelper.getIdentifier(activity);
+        PrimaryDrawerItem profile = new PrimaryDrawerItem().withIdentifier(Selection.PROFILE.getValue()).withIcon(R.drawable.ic_baseline_account_circle).withName(R.string.profile).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.PROFILE.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem exams = new PrimaryDrawerItem().withIdentifier(Selection.EXAMS.getValue()).withIcon(R.drawable.ic_baseline_class).withName(R.string.exams).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.EXAMS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem stats = new PrimaryDrawerItem().withIdentifier(Selection.STATS.getValue()).withIcon(R.drawable.ic_timeline_black_24dp).withName(R.string.stats).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.STATS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem calendar = new PrimaryDrawerItem().withIdentifier(Selection.CALENDAR.getValue()).withIcon(R.drawable.ic_date_range_black).withName(R.string.calendar).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.CALENDAR.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem classrooms = new PrimaryDrawerItem().withIdentifier(Selection.CLASSROOMS.getValue()).withIcon(R.drawable.ic_location_city_black_24dp).withName(R.string.classrooms).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.CLASSROOMS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem tax = new PrimaryDrawerItem().withIdentifier(Selection.TAX.getValue()).withIcon(R.drawable.ic_baseline_payment).withName(R.string.payments).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.TAX.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem news = new PrimaryDrawerItem().withIdentifier(Selection.NEWS.getValue()).withIcon(R.drawable.ic_newspaper).withName(R.string.news).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.NEWS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem settings = new PrimaryDrawerItem().withIdentifier(Selection.SETTINGS.getValue()).withIcon(R.drawable.ic_baseline_settings).withTextColor(primaryColor).withIconColor(primaryColor).withName(R.string.settings).withSelectable(false).withIconTintingEnabled(true);
+        PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(Selection.ABOUT.getValue()).withIcon(R.drawable.ic_baseline_info).withTextColor(primaryColor).withIconColor(primaryColor).withName(R.string.about).withSelectable(false).withIconTintingEnabled(true);
+        PrimaryDrawerItem exit = new PrimaryDrawerItem().withIdentifier(Selection.EXIT.getValue()).withIcon(R.drawable.ic_baseline_exit_to_app).withTextColor(primaryColor).withIconColor(primaryColor).withName(R.string.exit).withIconTintingEnabled(true);
+        //create the drawer and remember the `Drawer` result object
+        Drawer result = new DrawerBuilder()
+                .withActivity(activity)
+                .withToolbar(toolbar)
+                .addDrawerItems(
+                        profile,exams,stats,calendar,news,classrooms,tax,
+                        new DividerDrawerItem(),
+                        settings,about,exit
+                ).withOnDrawerListener(ddl)
+                .withHeader(R.layout.nav_header)
+                .withSelectedItem(activityIdentifier)
+                .withHeaderHeight(DimenHolder.fromDp(125))
+                .withDrawerWidthDp(285)
+                .withActionBarDrawerToggle(false)
+                .build();
+        result.setSelection(activityIdentifier);
+        result.getDrawerItem(activityIdentifier).withSetSelected(true);
+        result.setSelection(activityIdentifier);
+        result.setOnDrawerItemClickListener((view, position, drawerItem) -> {
+            ddl.setItemPressed(drawerItem.getIdentifier());
+            result.closeDrawer();
+            return true;
+        });
+        View headerLayout = result.getHeader();
+        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
+        navTitle.setText(activity.getString(R.string.fullname, student.getFirstName(), student.getLastName()));
+        TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
+        navSubtitle.setText(student.getStudentID());
+        return result;
+    }
+
+    private static int getIdentifier(Activity activity) {
+            if (activity instanceof ProfileActivity) return Selection.PROFILE.getValue();
+            else if (activity instanceof ExamsActivity) return Selection.EXAMS.getValue();
+            else if (activity instanceof StatsActivity) return Selection.STATS.getValue();
+            else if (activity instanceof CalendarActivity) return Selection.CALENDAR.getValue();
+            else if (activity instanceof SearchClassroomActivity) return Selection.CLASSROOMS.getValue();
+            else if (activity instanceof PaymentsActivity) return Selection.TAX.getValue();
+            else if (activity instanceof NewsActivity) return Selection.NEWS.getValue();
+            else return -1;
+            }
+
+    public enum Selection {
+        PROFILE(1), EXAMS(2), STATS(3), CALENDAR(4), CLASSROOMS(5), TAX(6), NEWS(7), SETTINGS(8), ABOUT(9), EXIT(10);
+        private final int value;
+
+        Selection(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+    }
 }

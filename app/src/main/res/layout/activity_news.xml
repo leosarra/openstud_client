@@ -1,45 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/container"
+    android:background="?attr/backgroundColor"
+    android:orientation="vertical"
+    tools:context=".activities.StatsActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/backgroundColor"
-        android:orientation="vertical"
-        tools:context=".activities.StatsActivity">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:theme="?attr/ToolBarStyle"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="10dp"/>
-        <include
-            layout="@layout/base_swipe_fragment"/>
-    </LinearLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:theme="?attr/ToolBarStyle"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="10dp"/>
+    <include
+        layout="@layout/base_swipe_fragment"/>
+</LinearLayout>
 
-    <!-- Container for contents of drawer - use NavigationView to make configuration easier
--->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        android:background="?attr/backgroundColor"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header"
-        app:itemTextColor="@drawable/drawer_nav_text_selector"
-        app:itemIconTint="@drawable/drawer_nav_icon_selector"/>
-
-</androidx.drawerlayout.widget.DrawerLayout>

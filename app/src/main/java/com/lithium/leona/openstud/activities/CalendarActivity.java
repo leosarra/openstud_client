@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.EventAdapter;
@@ -31,6 +30,7 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
+import com.mikepenz.materialdrawer.Drawer;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.threeten.bp.Duration;
@@ -47,14 +47,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -74,14 +71,12 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
     public boolean refreshAfterDismiss = false;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
+    @BindView(R.id.main_layout)
+    RelativeLayout mainLayout;
     @BindView(R.id.app_bar_layout)
     AppBarLayout appBarLayout;
     @BindView(R.id.compactcalendar_view)
     CompactCalendarView compactCalendarView;
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.date_picker_arrow)
@@ -107,6 +102,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     private CalendarEventHandler h = new CalendarEventHandler(this);
     private Openstud os;
     private Student student;
+    private Drawer drawer;
     private EventAdapter adapter_lessons;
     private EventAdapter adapter_exams;
     private EventAdapter adapter_reservations;
@@ -132,8 +128,6 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         ThemeEngine.applyCalendarTheme(this);
         setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
-        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         setTitle(getResources().getString(R.string.calendar));
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
@@ -144,14 +138,12 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             finish();
             return;
         }
+        LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
+        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         lessonOptionsEnabled = PreferenceManager.isLessonOptionEnabled(this);
         lessonsEnabled = PreferenceManager.isLessonEnabled(this);
         appBarLayout.addOnOffsetChangedListener(this);
-        View headerLayout = navigationView.getHeaderView(0);
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        TextView subTitle = headerLayout.findViewById(R.id.nav_subtitle);
-        subTitle.setText(student.getStudentID());
         compactCalendarView.setLocale(TimeZone.getDefault(), Locale.getDefault());
         compactCalendarView.setShouldDrawDaysHeader(true);
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -184,7 +176,6 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         updateCalendar(events);
         RelativeLayout datePickerButton = findViewById(R.id.date_picker_button);
         datePickerButton.setOnClickListener(v -> animateExpansion());
-        setupDrawerListener();
         emptyText.setText(getResources().getString(R.string.no_events));
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         if (savedInstanceState == null) refreshEvents();
@@ -386,8 +377,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
 
     @Override
     public void onBackPressed() {
-        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
         } else {
             super.onBackPressed();
         }
@@ -403,24 +394,6 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupDrawerListener() {
-        ddl = new DelayedDrawerListener() {
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-                int item = getItemPressedAndReset();
-                if (item == -1) return;
-                ClientHelper.startDrawerActivity(item, CalendarActivity.this);
-            }
-
-        };
-        mDrawerLayout.addDrawerListener(ddl);
-        navigationView.setNavigationItemSelectedListener(
-                item -> {
-                    mDrawerLayout.closeDrawers();
-                    ddl.setItemPressed(item.getItemId());
-                    return true;
-                });
-    }
 
     void animateExpansion() {
         float rotation = isExpanded ? 0 : 180;
@@ -555,7 +528,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
 
     private void showCalendarNotification() {
         if (com.lithium.leona.openstud.data.PreferenceManager.getCalendarNotificationEnabled(this)) {
-            LayoutHelper.createActionSnackBar(mDrawerLayout, R.string.lesson_notification, R.string.edit, 4000, v -> {
+            LayoutHelper.createActionSnackBar(mainLayout, R.string.lesson_notification, R.string.edit, 4000, v -> {
                 InfoManager.clearSharedPreferences(getApplication());
                 Intent i = new Intent(CalendarActivity.this, SettingsPrefActivity.class);
                 startActivity(i);
@@ -596,32 +569,32 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             if (activity != null) {
                 View.OnClickListener listener = v -> activity.refreshEvents();
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.invalid_response_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.mDrawerLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     Intent i = new Intent(activity, LauncherActivity.class);
                     i.putExtra("error", msg.what);
                     activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     activity.finish();
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.reservation_ok, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.reservation_ok, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.reservation_error, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.reservation_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.ALREADY_PLACED.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.already_placed_reservation, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.FAILED_DELETE).getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.failed_delete, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.failed_delete, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.OK_DELETE).getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.ok_delete, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.ok_delete, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.FAILED_GET.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.failed_get_network, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.failed_get_network, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.CLOSED_RESERVATION.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mDrawerLayout, R.string.closed_reservation, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.closed_reservation, Snackbar.LENGTH_LONG);
                 }
 
             }
