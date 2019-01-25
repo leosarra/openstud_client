@@ -84,11 +84,6 @@ public class ExamDoableFragment extends Fragment {
             return v;
         }
         emptyText.setText(getResources().getString(R.string.no_exams_doable_found));
-        List<ExamDoable> exams_cached = InfoManager.getExamsDoableCached(getActivity().getApplication(), os);
-        if (exams_cached != null && !exams_cached.isEmpty()) {
-            examsDoable.addAll(exams_cached);
-        }
-
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
@@ -98,10 +93,21 @@ public class ExamDoableFragment extends Fragment {
             activity.startActivity(intent);
         });
         rv.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDoable);
-        refreshExamsDoable();
+        swipeRefreshLayout.setEnabled(false);
+        new Thread(() -> {
+            List<ExamDoable> exams_cached = InfoManager.getExamsDoableCached(getActivity().getApplication(), os);
+            if (exams_cached != null && !exams_cached.isEmpty()) {
+                examsDoable.addAll(exams_cached);
+            }
+            activity.runOnUiThread(() -> {
+                swipeRefreshLayout.setEnabled(true);
+                adapter.notifyDataSetChanged();
+            });
+            refreshExamsDoable();
+        }).start();
+
         return v;
     }
 
