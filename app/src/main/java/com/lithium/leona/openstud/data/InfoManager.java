@@ -398,7 +398,7 @@ public class InfoManager {
         if (os == null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
-        List<News> newNews = os.getNews(locale, true);
+        List<News> newNews = os.getNews(locale, true,null,0,null,null);
         synchronized (InfoManager.class) {
             news = newNews;
             SharedPreferences.Editor prefsEditor = pref.edit();

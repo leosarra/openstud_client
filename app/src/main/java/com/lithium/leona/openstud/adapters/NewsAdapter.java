@@ -79,7 +79,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setDetails(News news) {
             txtName.setText(news.getTitle());
             txtDescription.setText(news.getDescription());
-            Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
+            if (news.getSmallImageUrl()!=null) Picasso.get().load(news.getSmallImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
+            else if (news.getImageUrl() != null) Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
+            else imageView.setVisibility(View.GONE);
         }
     }
 
@@ -100,7 +102,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setDetails(News news) {
             txtName.setText(news.getTitle());
             txtDescription.setText(news.getDescription());
-            Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
+            if (news.getImageUrl() != null) Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
+            else imageView.setVisibility(View.GONE);
         }
     }
 
