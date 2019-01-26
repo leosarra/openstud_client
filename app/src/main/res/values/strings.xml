@@ -203,6 +203,6 @@
     <string name="no_pdf_app">No application found that can handle PDF files!</string>
     <string name="news">News</string>
     <string name="no_news_found">No news was found</string>
-    <string name="sapienzaaps">GOMP and news API</string>
+    <string name="sapienzaaps">GOMP API</string>
     <string name="infostud_maintenance">InfoStud is in maintenance</string>
 </resources>
