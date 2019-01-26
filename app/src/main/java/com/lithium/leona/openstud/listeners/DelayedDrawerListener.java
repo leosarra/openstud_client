@@ -7,7 +7,7 @@ import com.mikepenz.materialdrawer.Drawer;
 import androidx.annotation.NonNull;
 
 public class DelayedDrawerListener implements Drawer.OnDrawerListener {
-    private long item_pressed = -1;
+    private volatile long item_pressed = -1;
 
     @Override
     public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -16,7 +16,6 @@ public class DelayedDrawerListener implements Drawer.OnDrawerListener {
 
     @Override
     public void onDrawerOpened(@NonNull View drawerView) {
-
     }
 
     @Override
@@ -24,7 +23,7 @@ public class DelayedDrawerListener implements Drawer.OnDrawerListener {
 
     }
 
-    public synchronized long getItemPressedAndReset() {
+    public long getItemPressedAndReset() {
         long ret = item_pressed;
         item_pressed = -1;
         return ret;
