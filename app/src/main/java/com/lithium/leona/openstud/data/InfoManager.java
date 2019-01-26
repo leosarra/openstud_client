@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -91,7 +92,13 @@ public class InfoManager {
             if (student != null) return student;
             oldObj = pref.getString("student", "null");
         }
-        return gson.fromJson(oldObj, Student.class);
+        Student ret = null;
+        try {
+            ret = gson.fromJson(oldObj, Student.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
 
@@ -160,7 +167,13 @@ public class InfoManager {
         }
         Type listType = new TypeToken<List<Event>>() {
         }.getType();
-        return gson.fromJson(oldObj, listType);
+        List<Event> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
 
@@ -208,7 +221,13 @@ public class InfoManager {
             if (isee != null) return isee;
             oldObj = pref.getString("isee", "null");
         }
-        return gson.fromJson(oldObj, Isee.class);
+        Isee ret = null;
+        try {
+            ret = gson.fromJson(oldObj, Isee.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public static Isee getIsee(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
@@ -239,7 +258,13 @@ public class InfoManager {
         }
         Type listType = new TypeToken<List<Tax>>() {
         }.getType();
-        return gson.fromJson(oldObj, listType);
+        List<Tax> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public static List<ExamDone> getExamsDoneCached(Context context, Openstud os) {
@@ -254,7 +279,13 @@ public class InfoManager {
         }
         Type listType = new TypeToken<List<ExamDone>>() {
         }.getType();
-        return gson.fromJson(oldObj, listType);
+        List<ExamDone> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public static List<ExamDone> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
@@ -287,7 +318,14 @@ public class InfoManager {
         }
         Type listType = new TypeToken<List<ExamDoable>>() {
         }.getType();
-        return gson.fromJson(oldObj, listType);
+        List<ExamDoable> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
     }
 
     public static List<ExamDoable> getExamsDoable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
@@ -321,7 +359,13 @@ public class InfoManager {
         }
         Type listType = new TypeToken<List<ExamReservation>>() {
         }.getType();
-        return gson.fromJson(oldObj, listType);
+        List<ExamReservation> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public static List<ExamReservation> getActiveReservations(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
@@ -372,7 +416,13 @@ public class InfoManager {
         }
         Type listType = new TypeToken<List<Tax>>() {
         }.getType();
-        return gson.fromJson(oldObj, listType);
+        List<Tax> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
@@ -426,7 +476,12 @@ public class InfoManager {
         }
         Type listType = new TypeToken<List<News>>() {
         }.getType();
-        List<News> ret = gson.fromJson(oldObj, listType);
+        List<News> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
         if(ret != null && !ret.isEmpty() && !ret.get(0).getLocale().equals(locale)) return null;
         return ret;
     }
