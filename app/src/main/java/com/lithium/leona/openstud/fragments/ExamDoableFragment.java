@@ -105,7 +105,12 @@ public class ExamDoableFragment extends Fragment {
                 swipeRefreshLayout.setEnabled(true);
                 adapter.notifyDataSetChanged();
             });
-            refreshExamsDoable();
+            try {
+                Thread.sleep(500);
+                refreshExamsDoable();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }).start();
 
         return v;

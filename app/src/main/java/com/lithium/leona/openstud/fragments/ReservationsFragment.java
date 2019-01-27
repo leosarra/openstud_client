@@ -66,7 +66,7 @@ public class ReservationsFragment extends Fragment {
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private ReservationsHandler h = new ReservationsHandler(this);
-
+    private Handler handler = new Handler();
     @OnClick(R.id.empty_button_reload)
     public void OnClick(View v) {
         refreshReservations();
@@ -119,6 +119,7 @@ public class ReservationsFragment extends Fragment {
             }
         });
         rv.setAdapter(adapter);
+        swipeRefreshLayout.measure(1,1);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshReservations);
         swipeRefreshLayout.setEnabled(false);
@@ -131,7 +132,12 @@ public class ReservationsFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setEnabled(true);
             });
-            refreshReservations();
+            try {
+                Thread.sleep(500);
+                refreshReservations();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }).start();
         return v;
     }
