@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/barcode"
+        android:icon="@drawable/ic_credit_card_black_24dp"
+        android:title="@string/personal_identifier"
+        app:showAsAction="always"
+        android:orderInCategory="0"/>
+
+</menu>

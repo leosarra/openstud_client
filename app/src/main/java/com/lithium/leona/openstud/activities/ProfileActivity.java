@@ -1,9 +1,12 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.fragments.BottomSheetPersonalIdentifier;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -30,6 +34,8 @@ import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Openstud os;
     private ProfileEventHandler h = new ProfileEventHandler(this);
     private LocalDateTime lastUpdate;
+    private String personalId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
         applyInfos(student, isee);
         swipeRefreshLayout.setNestedScrollingEnabled(true);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        personalId = student.getCF();
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Thread t1 = new Thread(() -> refresh(os));
             t1.start();
@@ -179,6 +187,27 @@ public class ProfileActivity extends AppCompatActivity {
         } else super.onBackPressed();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (personalId == null) return false;
+        getMenuInflater().inflate(R.menu.action_bar_profile, menu);
+        Drawable drawable = menu.findItem(R.id.barcode).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
+        menu.findItem(R.id.barcode).setIcon(drawable);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.barcode:
+                BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(personalId);
+                identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();

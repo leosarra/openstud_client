@@ -205,4 +205,5 @@
     <string name="no_news_found">No news was found</string>
     <string name="sapienzaaps">GOMP API</string>
     <string name="infostud_maintenance">InfoStud is in maintenance</string>
+    <string name="personal_identifier">Social security number</string>
 </resources>

@@ -185,4 +185,5 @@
     <string name="no_news_found">Nessuna notizia trovata</string>
     <string name="sapienzaaps">API per GOMP </string>
     <string name="infostud_maintenance">InfoStud è momentaneamente in manutenzione</string>
+    <string name="personal_identifier">Codice fiscale</string>
 </resources>
