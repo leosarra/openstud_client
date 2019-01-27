@@ -82,6 +82,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (news.getSmallImageUrl()!=null) Picasso.get().load(news.getSmallImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
             else if (news.getImageUrl() != null) Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
             else imageView.setVisibility(View.GONE);
+            if(news.getDescription() == null || news.getDescription().isEmpty()) {
+                txtName.setMaxLines(txtName.getMaxLines()+1);
+            }
         }
     }
 
