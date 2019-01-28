@@ -114,7 +114,7 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
-        refreshAvaiableReservations();
+        if (savedInstanceState == null) refreshAvaiableReservations();
     }
 
     private boolean confirmReservation(ExamReservation res) {

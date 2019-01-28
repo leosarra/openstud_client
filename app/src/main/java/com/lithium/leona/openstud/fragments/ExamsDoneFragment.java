@@ -99,7 +99,7 @@ public class ExamsDoneFragment extends Fragment {
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
-        refreshExamsDone();
+        if (savedInstanceState == null) refreshExamsDone();
         return v;
     }
 
