@@ -112,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
             Thread t1 = new Thread(() -> refresh(os));
             t1.start();
         });
-        new Thread(() -> refresh(os)).start();
+        if (savedInstanceState == null) new Thread(() -> refresh(os)).start();
     }
 
     protected void onRestart() {
