@@ -132,11 +132,13 @@ public class ReservationsFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setEnabled(true);
             });
-            try {
-                Thread.sleep(500);
-                refreshReservations();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (savedInstanceState == null) {
+                try {
+                    Thread.sleep(500);
+                    refreshReservations();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
         return v;
