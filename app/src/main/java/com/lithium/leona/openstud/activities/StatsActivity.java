@@ -49,6 +49,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -122,6 +123,10 @@ public class StatsActivity extends AppCompatActivity {
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(this, os);
         createRecyclerView(exams_cached);
         if (savedInstanceState == null) refreshExamsDone();
+        else {
+            NestedScrollView scrollView = findViewById(R.id.scrollView);
+            scrollView.scrollTo(0,0);
+        }
 
     }
 
