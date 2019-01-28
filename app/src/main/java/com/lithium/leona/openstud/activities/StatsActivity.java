@@ -120,14 +120,8 @@ public class StatsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.stats);
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(this, os);
-        createRecyclerView();
-        if (exams_cached != null && !exams_cached.isEmpty()) {
-            exams.addAll(exams_cached);
-            updateStats();
-        } else {
-            graphCard.setVisibility(View.GONE);
-            graphCard2.setVisibility(View.GONE);
-        }
+        createRecyclerView(exams_cached);
+        if (savedInstanceState == null) refreshExamsDone();
 
     }
 
@@ -355,7 +349,7 @@ public class StatsActivity extends AppCompatActivity {
         }
     }
 
-    private void createRecyclerView() {
+    private void createRecyclerView(List<ExamDone> exams_cached) {
         examsFake = InfoManager.getTemporaryFakeExams();
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -364,12 +358,16 @@ public class StatsActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
-        refreshExamsDone();
         adapter.notifyDataSetChanged();
         ItemTouchHelper.Callback callback =
                 new SimpleItemTouchHelperCallback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(rv);
+        if (exams_cached != null && !exams_cached.isEmpty()) {
+            exams.addAll(exams_cached);
+            updateStats();
+        }
+        adapter.notifyDataSetChanged();
     }
 
     public void removeFakeExam(int position) {
