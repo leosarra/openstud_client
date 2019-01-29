@@ -207,6 +207,6 @@
     <string name="infostud_maintenance">InfoStud is in maintenance</string>
     <string name="personal_identifier">Social security number</string>
     <string name="events">Events</string>
-    <string name="event_theatre_when">Start at %1$s</string>
+    <string name="event_theatre_when">Starts at %1$s</string>
     <string name="event_theatre_where">Location: %1$s</string>
 </resources>
