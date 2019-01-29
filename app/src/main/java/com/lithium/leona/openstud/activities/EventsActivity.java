@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,7 +25,6 @@ import org.threeten.bp.ZoneId;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +39,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.model.CalendarEvent;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import lithium.openstud.driver.core.Event;
 import lithium.openstud.driver.core.Openstud;
@@ -146,7 +143,6 @@ public class EventsActivity extends AppCompatActivity {
                     if (newEvents != null && !newEvents.equals(events)) {
                         events.clear();
                         events.addAll(newEvents);
-                        runOnUiThread(new Thread(() -> horizontalCalendar.refresh()));
                     }
                 }
             } catch (OpenstudConnectionException e) {
@@ -224,15 +220,6 @@ public class EventsActivity extends AppCompatActivity {
             horizontalCalendar = new HorizontalCalendar.Builder(activity, R.id.calendarView)
                     .range(start, end)
                     .datesNumberOnScreen(5)
-                    .addEvents(date -> {
-                        if (events == null || events.isEmpty()) return null;
-                        List<CalendarEvent> list = new ArrayList<>();
-                        for (Event ev : events) {
-                            if (date.getTimeInMillis() == ev.getStart().toLocalDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                                list.add(new CalendarEvent(Color.CYAN));
-                        }
-                        return list;
-                        })
                     .defaultSelectedDate(defaultDate).build();
             horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
                 @Override
