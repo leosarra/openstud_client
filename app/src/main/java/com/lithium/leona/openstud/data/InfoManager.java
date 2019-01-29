@@ -44,6 +44,7 @@ public class InfoManager {
     private static List<ExamDone> fakeExams;
     private static List<Event> events;
     private static List<String> filter;
+    private static List<Event> theatre_events;
 
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
@@ -486,6 +487,48 @@ public class InfoManager {
         return ret;
     }
 
+
+    public static List<Event> getEventsUniversity(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        Gson gson = new Gson();
+        List<Event> newEvents = os.getNewsEvents();
+        synchronized (InfoManager.class) {
+            theatre_events = newEvents;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            Type listType = new TypeToken<List<Event>>() {
+            }.getType();
+            String json = gson.toJson(newEvents, listType);
+            prefsEditor.putString("eventsUniversity", json);
+            prefsEditor.apply();
+        }
+        return newEvents;
+    }
+
+    public static List<Event> getEventsUniversityCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (!hasLogin(context)) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (theatre_events != null) {
+                return theatre_events;
+            }
+            oldObj = pref.getString("eventsUniversity", "null");
+        }
+        Type listType = new TypeToken<List<Event>>() {
+        }.getType();
+        List<Event> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
     public static boolean hasLogin(Context context) {
         setupSharedPreferences(context);
         return getStudentId(context) != null && getPassword(context) != null;
@@ -505,6 +548,7 @@ public class InfoManager {
         fakeExams = null;
         events = null;
         filter = null;
+        theatre_events = null;
     }
 
     private static synchronized String getStudentId(Context context) {
