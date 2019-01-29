@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.CalendarActivity;
+import com.lithium.leona.openstud.activities.EventsActivity;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.NewsActivity;
 import com.lithium.leona.openstud.activities.PaymentsActivity;
@@ -134,6 +135,7 @@ public class LayoutHelper {
         PrimaryDrawerItem stats = new PrimaryDrawerItem().withIdentifier(Selection.STATS.getValue()).withIcon(R.drawable.ic_timeline_black_24dp).withName(R.string.stats).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.STATS.getValue()).withIconTintingEnabled(true);
         PrimaryDrawerItem calendar = new PrimaryDrawerItem().withIdentifier(Selection.CALENDAR.getValue()).withIcon(R.drawable.ic_date_range_black).withName(R.string.calendar).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.CALENDAR.getValue()).withIconTintingEnabled(true);
         PrimaryDrawerItem classrooms = new PrimaryDrawerItem().withIdentifier(Selection.CLASSROOMS.getValue()).withIcon(R.drawable.ic_location_city_black_24dp).withName(R.string.classrooms).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.CLASSROOMS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem events = new PrimaryDrawerItem().withIdentifier(Selection.EVENTS.getValue()).withIcon(R.drawable.ic_stage_24dp).withName(R.string.events).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.EVENTS.getValue()).withIconTintingEnabled(true);
         PrimaryDrawerItem tax = new PrimaryDrawerItem().withIdentifier(Selection.TAX.getValue()).withIcon(R.drawable.ic_baseline_payment).withName(R.string.payments).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.TAX.getValue()).withIconTintingEnabled(true);
         PrimaryDrawerItem news = new PrimaryDrawerItem().withIdentifier(Selection.NEWS.getValue()).withIcon(R.drawable.ic_newspaper).withName(R.string.news).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.NEWS.getValue()).withIconTintingEnabled(true);
         PrimaryDrawerItem settings = new PrimaryDrawerItem().withIdentifier(Selection.SETTINGS.getValue()).withIcon(R.drawable.ic_baseline_settings).withTextColor(primaryColor).withIconColor(primaryColor).withName(R.string.settings).withSelectable(false).withIconTintingEnabled(true);
@@ -144,7 +146,7 @@ public class LayoutHelper {
                 .withActivity(activity)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        profile,exams,stats,calendar,news,classrooms,tax,
+                        profile,exams,stats,calendar,news,events, classrooms,tax,
                         new DividerDrawerItem(),
                         settings,about,exit
                 ).withOnDrawerListener(ddl)
@@ -178,11 +180,12 @@ public class LayoutHelper {
             else if (activity instanceof SearchClassroomActivity) return Selection.CLASSROOMS.getValue();
             else if (activity instanceof PaymentsActivity) return Selection.TAX.getValue();
             else if (activity instanceof NewsActivity) return Selection.NEWS.getValue();
+            else if (activity instanceof EventsActivity) return Selection.EVENTS.getValue();
             else return -1;
             }
 
     public enum Selection {
-        PROFILE(1), EXAMS(2), STATS(3), CALENDAR(4), CLASSROOMS(5), TAX(6), NEWS(7), SETTINGS(8), ABOUT(9), EXIT(10);
+        PROFILE(1), EXAMS(2), STATS(3), CALENDAR(4), CLASSROOMS(5), TAX(6), NEWS(7), SETTINGS(8), ABOUT(9), EXIT(10), EVENTS(11);
         private final int value;
 
         Selection(int value) {

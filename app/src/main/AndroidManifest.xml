@@ -103,6 +103,8 @@
         -->
         <activity android:name=".activities.NewsActivity"
             android:theme="@style/NoActionBarAppLightTheme"/>
+        <activity android:name=".activities.EventsActivity"
+            android:theme="@style/NoActionBarAppLightTheme"/>
     </application>
 
 </manifest>

@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.AboutActivity;
 import com.lithium.leona.openstud.activities.CalendarActivity;
+import com.lithium.leona.openstud.activities.EventsActivity;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.activities.NewsActivity;
@@ -62,6 +63,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import lithium.openstud.driver.core.Event;
+import lithium.openstud.driver.core.EventType;
 import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.OpenstudHelper;
@@ -253,22 +255,30 @@ public class ClientHelper {
             Intent intent = new Intent(activity, NewsActivity.class);
             activity.startActivity(intent);
         }
+        else if (item == LayoutHelper.Selection.EVENTS.getValue()) {
+            if (activity instanceof EventsActivity) return;
+            Intent intent = new Intent(activity, EventsActivity.class);
+            activity.startActivity(intent);
+        }
     }
 
     public static void addEventToCalendar(Activity activity, final Event ev) {
         switch (ev.getEventType()) {
+            case THEATRE:
             case LESSON: {
                 ZoneId zoneId = ZoneId.systemDefault();
-                Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
-                Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title = ev.getDescription();
                 intent.putExtra(CalendarContract.Events.TITLE, title);
+                Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
                 intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                         timestampStart.getTime() * 1000L);
-                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                        timestampEnd.getTime() * 1000L);
+                if(ev.getEventType() == EventType.LESSON) {
+                    Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
+                    intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                            timestampEnd.getTime() * 1000L);
+                }
                 intent.putExtra(CalendarContract.Events.ALL_DAY, false);
                 activity.startActivity(intent);
                 break;
