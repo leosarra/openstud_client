@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -21,7 +20,6 @@ import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
-import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
@@ -72,8 +70,6 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     ConstraintLayout constraintLayout;
     private HorizontalCalendar horizontalCalendar;
     private Calendar defaultDate;
-    private DelayedDrawerListener ddl;
-    private NavigationView nv;
     private Openstud os;
     private Student student;
     private List<Event> lessons;
