@@ -8,13 +8,17 @@
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
     card_view:cardBackgroundColor="?attr/backgroundCardColor"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="4dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="8dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:paddingStart="8dp"
         android:paddingEnd="2dp">
 
@@ -24,7 +28,6 @@
             android:layout_height="wrap_content"
             android:textColor="?attr/primaryTextColor"
             android:textSize="16sp"
-            android:text="TextView"
             android:textStyle="bold"
             />
 
@@ -32,52 +35,13 @@
             android:id="@+id/ssdExam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:text="TextView" />
+            android:textColor="?attr/primaryTextColor" />
 
         <TextView
             android:id="@+id/cfuExam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/primaryTextColor"
-            android:text="TextView" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:textColor="?attr/primaryTextColor"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/show_sessions"
-                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="0.5"
-                android:drawablePadding="3dp"
-                android:drawableStart="@drawable/ic_format_list_small"
-                android:drawableTint="?attr/colorButtonNav"
-                android:text="@string/show_exam_sessions"
-                android:textSize="14sp"
-                android:theme="@style/ButtonReservations"
-                android:textColor="?attr/colorButtonNav"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="1.0"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                card_view:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </RelativeLayout>
+            android:textColor="?attr/primaryTextColor" />
 
     </LinearLayout>
 

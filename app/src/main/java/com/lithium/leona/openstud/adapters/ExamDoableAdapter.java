@@ -4,11 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
-import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import java.util.List;
 
@@ -22,12 +20,12 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
 
     private List<ExamDoable> exams;
     private Context context;
-    private ExamDoableAdapterListener edal;
+    private View.OnClickListener edal;
 
-    public ExamDoableAdapter(Context context, List<ExamDoable> exams, ExamDoableAdapterListener edal) {
+    public ExamDoableAdapter(Context context, List<ExamDoable> exams, View.OnClickListener listener) {
         this.exams = exams;
         this.context = context;
-        this.edal = edal;
+        this.edal = listener;
     }
 
     @NonNull
@@ -36,6 +34,7 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
         View view = LayoutInflater.from(context).inflate(R.layout.item_row_exam_doable, parent, false);
         ExamDoableHolder holder = new ExamDoableHolder(view);
         holder.setContext(context);
+        view.setOnClickListener(edal);
         return holder;
     }
 
@@ -50,9 +49,6 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
         return exams.size();
     }
 
-    public interface ExamDoableAdapterListener {
-        void showSessionsOnClick(ExamDoable exam);
-    }
 
     class ExamDoableHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.examName)
@@ -61,8 +57,6 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
         TextView txtSSD;
         @BindView(R.id.cfuExam)
         TextView txtCFU;
-        @BindView(R.id.show_sessions)
-        Button showSessions;
         private Context context;
 
         ExamDoableHolder(View itemView) {
@@ -78,10 +72,6 @@ public class ExamDoableAdapter extends RecyclerView.Adapter<ExamDoableAdapter.Ex
             txtName.setText(exam.getDescription());
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
-            //Tint for old devices
-            showSessions.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(context,R.drawable.ic_format_list_small, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
-            showSessions.setOnClickListener(v -> edal.showSessionsOnClick(exam));
-
         }
     }
 }

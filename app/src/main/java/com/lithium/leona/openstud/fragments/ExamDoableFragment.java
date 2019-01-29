@@ -87,10 +87,17 @@ public class ExamDoableFragment extends Fragment {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
-        adapter = new ExamDoableAdapter(activity, examsDoable, exam -> {
-            Intent intent = new Intent(activity, SearchSessionsResultActivity.class);
-            intent.putExtra("exam", new Gson().toJson(exam));
-            activity.startActivity(intent);
+        adapter = new ExamDoableAdapter(activity, examsDoable, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int itemPosition = rv.getChildLayoutPosition(v);
+                if(itemPosition<examsDoable.size()) {
+                    ExamDoable exam = examsDoable.get(itemPosition);
+                    Intent intent = new Intent(activity, SearchSessionsResultActivity.class);
+                    intent.putExtra("exam", new Gson().toJson(exam, ExamDoable.class));
+                    activity.startActivity(intent);
+                }
+            }
         });
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
