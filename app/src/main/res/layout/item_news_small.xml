@@ -66,9 +66,7 @@
                 android:layout_margin="6dp"
                 android:gravity="center|end"
                 android:scaleType="fitXY"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="20sp"
-                android:textStyle="normal|bold" />
+                android:textColor="?attr/primaryTextColor" />
         </LinearLayout>
 
     </LinearLayout>

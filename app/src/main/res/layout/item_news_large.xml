@@ -28,9 +28,7 @@
                 android:layout_margin="4dp"
                 android:gravity="center"
                 android:scaleType="fitXY"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="20sp"
-                android:textStyle="normal|bold" />
+                android:textColor="?attr/primaryTextColor" />
 
             <TextView
                 android:id="@+id/nameNews"
