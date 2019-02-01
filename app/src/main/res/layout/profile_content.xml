@@ -226,7 +226,7 @@
                 android:layout_toRightOf="@id/ivContactItem4"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:text="@string/department"
+                android:text="@string/course"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="?attr/primaryTextColor" />
 
@@ -272,8 +272,8 @@
                 android:id="@+id/departmentDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_toEndOf="@id/ivContactItem6"
                 android:layout_toRightOf="@id/ivContactItem6"
                 android:ellipsize="end"
@@ -281,18 +281,18 @@
                 android:text="@string/department"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="?attr/primaryTextColor"
-                tools:text="@string/course" />
+                tools:text="@string/department" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/departmentDescription"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem6"
                 android:layout_toRightOf="@id/ivContactItem6"
-                android:text="@string/course"
+                android:text="@string/department"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?attr/secondaryTextColor" />
 
