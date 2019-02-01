@@ -144,6 +144,7 @@ public class EventsActivity extends AppCompatActivity {
                         events.clear();
                         events.addAll(newEvents);
                     }
+                    setRefreshing(false);
                 }
             } catch (OpenstudConnectionException e) {
                 e.printStackTrace();
@@ -153,7 +154,6 @@ public class EventsActivity extends AppCompatActivity {
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             }
             applyEvents(date);
-            setRefreshing(false);
         }).start();
     }
 
