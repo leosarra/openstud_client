@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.ExamDone;
+import lithium.openstud.driver.core.models.ExamDone;
 
 public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDoneHolder> implements ItemTouchHelperAdapter {
 

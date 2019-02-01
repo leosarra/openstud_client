@@ -18,7 +18,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.Event;
+import lithium.openstud.driver.core.models.Event;
 
 public class EventTheatreAdapter extends RecyclerView.Adapter<EventTheatreAdapter.EventHolder> {
 

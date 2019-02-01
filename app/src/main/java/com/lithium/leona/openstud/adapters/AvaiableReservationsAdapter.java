@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.ExamReservation;
+import lithium.openstud.driver.core.models.ExamReservation;
 
 public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableReservationsAdapter.ActiveReservationsHolder> {
 

@@ -34,7 +34,7 @@ import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Openstud;
-import lithium.openstud.driver.core.Student;
+import lithium.openstud.driver.core.models.Student;
 
 public class ExamsActivity extends AppCompatActivity {
     @BindView(R.id.container)

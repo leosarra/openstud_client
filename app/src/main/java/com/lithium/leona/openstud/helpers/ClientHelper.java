@@ -62,11 +62,11 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import lithium.openstud.driver.core.Event;
-import lithium.openstud.driver.core.EventType;
-import lithium.openstud.driver.core.ExamDone;
-import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.OpenstudHelper;
+import lithium.openstud.driver.core.models.Event;
+import lithium.openstud.driver.core.models.EventType;
+import lithium.openstud.driver.core.models.ExamDone;
+import lithium.openstud.driver.core.models.ExamReservation;
 
 public class ClientHelper {
 

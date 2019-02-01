@@ -19,8 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.PaymentDescription;
-import lithium.openstud.driver.core.Tax;
+import lithium.openstud.driver.core.models.PaymentDescription;
+import lithium.openstud.driver.core.models.Tax;
 
 public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
 

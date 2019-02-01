@@ -19,9 +19,9 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Objects;
 
-import lithium.openstud.driver.core.ExamDone;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
+import lithium.openstud.driver.core.models.ExamDone;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;

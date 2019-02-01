@@ -14,18 +14,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import lithium.openstud.driver.core.Event;
-import lithium.openstud.driver.core.ExamDoable;
-import lithium.openstud.driver.core.ExamDone;
-import lithium.openstud.driver.core.ExamReservation;
-import lithium.openstud.driver.core.Isee;
-import lithium.openstud.driver.core.Lesson;
-import lithium.openstud.driver.core.News;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudBuilder;
 import lithium.openstud.driver.core.OpenstudHelper;
-import lithium.openstud.driver.core.Student;
-import lithium.openstud.driver.core.Tax;
+import lithium.openstud.driver.core.models.Event;
+import lithium.openstud.driver.core.models.ExamDoable;
+import lithium.openstud.driver.core.models.ExamDone;
+import lithium.openstud.driver.core.models.ExamReservation;
+import lithium.openstud.driver.core.models.Isee;
+import lithium.openstud.driver.core.models.Lesson;
+import lithium.openstud.driver.core.models.News;
+import lithium.openstud.driver.core.models.Student;
+import lithium.openstud.driver.core.models.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
@@ -186,7 +186,7 @@ public class InfoManager {
         Map<String, List<Lesson>> newTimetable = new HashMap<>();
         if (PreferenceManager.isLessonEnabled(context))
             newTimetable = os.getTimetable(os.getExamsDoable());
-        List<lithium.openstud.driver.core.Event> newEvents = os.getCalendarEvents(student);
+        List<lithium.openstud.driver.core.models.Event> newEvents = os.getCalendarEvents(student);
         if (newEvents == null) return null;
         if (newTimetable != null && !newTimetable.isEmpty())
             newEvents.addAll(OpenstudHelper.generateEventsFromTimetable(newTimetable));
@@ -493,7 +493,7 @@ public class InfoManager {
         if (os == null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
-        List<Event> newEvents = os.getNewsEvents();
+        List<Event> newEvents = os.getNewsletterEvents();
         synchronized (InfoManager.class) {
             theatre_events = newEvents;
             SharedPreferences.Editor prefsEditor = pref.edit();

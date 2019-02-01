@@ -23,9 +23,9 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.Event;
-import lithium.openstud.driver.core.EventType;
-import lithium.openstud.driver.core.ExamReservation;
+import lithium.openstud.driver.core.models.Event;
+import lithium.openstud.driver.core.models.EventType;
+import lithium.openstud.driver.core.models.ExamReservation;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder> {
 

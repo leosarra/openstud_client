@@ -27,7 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.Classroom;
+import lithium.openstud.driver.core.models.Classroom;
 
 public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassesHolder> {
 

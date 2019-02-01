@@ -58,10 +58,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.EventType;
-import lithium.openstud.driver.core.ExamReservation;
 import lithium.openstud.driver.core.Openstud;
-import lithium.openstud.driver.core.Student;
+import lithium.openstud.driver.core.models.EventType;
+import lithium.openstud.driver.core.models.ExamReservation;
+import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
@@ -106,10 +106,10 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     private EventAdapter adapter_lessons;
     private EventAdapter adapter_exams;
     private EventAdapter adapter_reservations;
-    private List<lithium.openstud.driver.core.Event> events = new LinkedList<>();
-    private List<lithium.openstud.driver.core.Event> lessons = new LinkedList<>();
-    private List<lithium.openstud.driver.core.Event> exams = new LinkedList<>();
-    private List<lithium.openstud.driver.core.Event> reservations = new LinkedList<>();
+    private List<lithium.openstud.driver.core.models.Event> events = new LinkedList<>();
+    private List<lithium.openstud.driver.core.models.Event> lessons = new LinkedList<>();
+    private List<lithium.openstud.driver.core.models.Event> exams = new LinkedList<>();
+    private List<lithium.openstud.driver.core.models.Event> reservations = new LinkedList<>();
     private Date currentDate;
     private boolean lessonOptionsEnabled;
     private boolean lessonsEnabled;
@@ -166,7 +166,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             }
         });
         setupRecyclerLayouts();
-        List<lithium.openstud.driver.core.Event> events_cached = InfoManager.getEventsCached(this, os);
+        List<lithium.openstud.driver.core.models.Event> events_cached = InfoManager.getEventsCached(this, os);
 
         if (events_cached != null && !events_cached.isEmpty()) events.addAll(events_cached);
         // Set current date to today
@@ -191,17 +191,17 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         Activity activity = this;
         EventAdapter.EventAdapterListener eal = new EventAdapter.EventAdapterListener() {
             @Override
-            public void addCalendarOnClick(lithium.openstud.driver.core.Event ev) {
+            public void addCalendarOnClick(lithium.openstud.driver.core.models.Event ev) {
                 ClientHelper.addEventToCalendar(activity, ev);
             }
 
             @Override
-            public void placeReservation(lithium.openstud.driver.core.Event ev, ExamReservation res) {
+            public void placeReservation(lithium.openstud.driver.core.models.Event ev, ExamReservation res) {
                 confirmReservation(res);
             }
 
             @Override
-            public void deleteReservation(lithium.openstud.driver.core.Event ev, ExamReservation res) {
+            public void deleteReservation(lithium.openstud.driver.core.models.Event ev, ExamReservation res) {
                 ClientHelper.createConfirmDeleteReservationDialog(activity, res, () -> CalendarActivity.this.deleteReservation(res));
             }
         };
@@ -230,7 +230,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         });
         new Thread(() -> {
             try {
-                List<lithium.openstud.driver.core.Event> newEvents = InfoManager.getEvents(this, os, student);
+                List<lithium.openstud.driver.core.models.Event> newEvents = InfoManager.getEvents(this, os, student);
                 updateEventList(newEvents);
                 h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
                 showCalendarNotification();
@@ -257,11 +257,11 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         }).start();
     }
 
-    private void updateCalendar(List<lithium.openstud.driver.core.Event> events) {
+    private void updateCalendar(List<lithium.openstud.driver.core.models.Event> events) {
         if (events == null) return;
         List<Event> calendarEvents = new LinkedList<>();
         List<Long> withLesson = new LinkedList<>();
-        for (lithium.openstud.driver.core.Event event : events) {
+        for (lithium.openstud.driver.core.models.Event event : events) {
             if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription()))
                 continue;
             ZoneId zoneId = ZoneId.systemDefault();
@@ -288,12 +288,12 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         }
     }
 
-    private void getEventsByDate(List<lithium.openstud.driver.core.Event> events, Date date) {
-        List<lithium.openstud.driver.core.Event> newLessons = new LinkedList<>();
-        List<lithium.openstud.driver.core.Event> newReservations = new LinkedList<>();
-        List<lithium.openstud.driver.core.Event> newDoable = new LinkedList<>();
+    private void getEventsByDate(List<lithium.openstud.driver.core.models.Event> events, Date date) {
+        List<lithium.openstud.driver.core.models.Event> newLessons = new LinkedList<>();
+        List<lithium.openstud.driver.core.models.Event> newReservations = new LinkedList<>();
+        List<lithium.openstud.driver.core.models.Event> newDoable = new LinkedList<>();
         ZoneId zoneId = ZoneId.systemDefault();
-        for (lithium.openstud.driver.core.Event event : events) {
+        for (lithium.openstud.driver.core.models.Event event : events) {
             if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription()))
                 continue;
             Instant instant = Instant.ofEpochMilli(date.getTime());
@@ -477,7 +477,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
 
     private synchronized List<String> generateListLessonsNames() {
         List<String> names = new LinkedList<>();
-        for (lithium.openstud.driver.core.Event event : events) {
+        for (lithium.openstud.driver.core.models.Event event : events) {
             if (!names.contains(event.getDescription()) && event.getEventType() == EventType.LESSON)
                 names.add(event.getDescription());
         }
@@ -489,7 +489,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());
     }
 
-    private synchronized void updateEventList(List<lithium.openstud.driver.core.Event> newEvents) {
+    private synchronized void updateEventList(List<lithium.openstud.driver.core.models.Event> newEvents) {
         if (newEvents != null && events != null && !events.equals(newEvents)) {
             events.clear();
             events.addAll(newEvents);
@@ -544,7 +544,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             item.setVisible(false);
         } else {
             boolean enable = false;
-            for (lithium.openstud.driver.core.Event event : events) {
+            for (lithium.openstud.driver.core.models.Event event : events) {
                 if (event.getEventType() == EventType.LESSON) {
                     enable = true;
                     break;

@@ -43,10 +43,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Classroom;
-import lithium.openstud.driver.core.Lesson;
 import lithium.openstud.driver.core.Openstud;
-import lithium.openstud.driver.core.Student;
+import lithium.openstud.driver.core.models.Classroom;
+import lithium.openstud.driver.core.models.Lesson;
+import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 

@@ -37,7 +37,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import lithium.openstud.driver.core.Student;
+import lithium.openstud.driver.core.models.Student;
 
 
 public class LayoutHelper {
