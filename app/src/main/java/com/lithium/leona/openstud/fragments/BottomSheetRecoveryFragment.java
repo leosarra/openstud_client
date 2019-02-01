@@ -80,11 +80,11 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recovery_password, container, false);
         ButterKnife.bind(this, v);
-        ClientHelper.setDialogView(v,getDialog(), BottomSheetBehavior.STATE_EXPANDED);
+        ClientHelper.setDialogView(v, getDialog(), BottomSheetBehavior.STATE_EXPANDED);
         if (questionText == null || studentID == null) dismiss();
         else question.setText(questionText);
 
-        int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(),R.attr.colorButtonNav, R.color.redSapienza);
+        int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(), R.attr.colorButtonNav, R.color.redSapienza);
         confirm.setEnabled(false);
         confirm.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
         questionInput.addTextChangedListener(new TextWatcher() {

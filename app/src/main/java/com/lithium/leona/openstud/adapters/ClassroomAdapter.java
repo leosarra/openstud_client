@@ -111,10 +111,10 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             String status;
             int tintColor;
             if (room.isOccupied()) {
-                tintColor = LayoutHelper.getColorByAttr(context, R.attr.nonCertifiedExamColor,R.color.red);
+                tintColor = LayoutHelper.getColorByAttr(context, R.attr.nonCertifiedExamColor, R.color.red);
                 status = context.getResources().getString(R.string.not_available);
             } else {
-                tintColor = LayoutHelper.getColorByAttr(context, R.attr.certifiedExamColor,R.color.green);
+                tintColor = LayoutHelper.getColorByAttr(context, R.attr.certifiedExamColor, R.color.green);
                 status = context.getResources().getString(R.string.available);
             }
 
@@ -137,9 +137,10 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             if (!room.hasCoordinates()) {
                 mapDrawable = LayoutHelper.getDrawableWithColorId(context, R.drawable.ic_map_black_24dp, android.R.color.darker_gray);
                 openMap.setEnabled(false);
-            } else mapDrawable = LayoutHelper.getDrawableWithColorAttr(context, R.drawable.ic_map_black_24dp, R.attr.colorButtonNav, R.color.redSapienza);
+            } else
+                mapDrawable = LayoutHelper.getDrawableWithColorAttr(context, R.drawable.ic_map_black_24dp, R.attr.colorButtonNav, R.color.redSapienza);
             openMap.setCompoundDrawablesWithIntrinsicBounds(mapDrawable, null, null, null);
-            openTimetable.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(context,R.drawable.ic_event_black_24dp, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
+            openTimetable.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(context, R.drawable.ic_event_black_24dp, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
             openMap.setOnClickListener(v -> {
                 Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + room.getLatitude() + "," + room.getLongitude() + "(" + room.getName() + ")");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);

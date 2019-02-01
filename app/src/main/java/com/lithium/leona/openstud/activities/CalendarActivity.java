@@ -139,7 +139,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
             return;
         }
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         lessonOptionsEnabled = PreferenceManager.isLessonOptionEnabled(this);
         lessonsEnabled = PreferenceManager.isLessonEnabled(this);
@@ -240,7 +240,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
                 if (e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
-                if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
+                if (e.isMaintenance())
+                    h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {

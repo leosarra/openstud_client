@@ -110,7 +110,7 @@ public class ActiveReservationsAdapter extends RecyclerView.Adapter<ActiveReserv
             Context wrapper = new ContextThemeWrapper(context, R.style.popupMenuStyle);
             PopupMenu popup = new PopupMenu(wrapper, options);
             popup.inflate(R.menu.reservation_menu);
-            getButton.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(context,R.drawable.ic_get_small, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
+            getButton.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(context, R.drawable.ic_get_small, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
             options.setOnClickListener(v -> {
                 popup.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {

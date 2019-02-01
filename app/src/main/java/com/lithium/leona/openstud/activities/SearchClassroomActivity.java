@@ -104,7 +104,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
             finish();
             return;
         }
-        drawer = LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);

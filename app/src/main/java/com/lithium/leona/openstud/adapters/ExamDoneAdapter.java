@@ -87,9 +87,12 @@ public class ExamDoneAdapter extends RecyclerView.Adapter<ExamDoneAdapter.ExamDo
             if (result.equals("30 e lode")) txtResult.setText("30L / 30");
             else txtResult.setText(StringUtils.capitalize(result));
             if (exam.getResult() >= 18 || result.equals("idoneo") || exam.isPassed()) {
-                if (exam.isCertified()) txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.certifiedExamColor, R.color.green));
-                else txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.nonCertifiedExamColor, R.color.yellow));
-            } else txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.nonPassedExamColor, R.color.red));
+                if (exam.isCertified())
+                    txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.certifiedExamColor, R.color.green));
+                else
+                    txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.nonCertifiedExamColor, R.color.yellow));
+            } else
+                txtResult.setTextColor(LayoutHelper.getColorByAttr(context, R.attr.nonPassedExamColor, R.color.red));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, String.valueOf(exam.getCfu())));
             txtSSD.setText(context.getResources().getString(R.string.ssd_exams, exam.getSsd()));
             if (exam.getDate() != null && PreferenceManager.isExamDateEnabled(context)) {

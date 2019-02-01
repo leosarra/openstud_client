@@ -63,8 +63,8 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.add_exam_stats, container, false);
         ButterKnife.bind(this, v);
-        ClientHelper.setDialogView(v,getDialog(), BottomSheetBehavior.STATE_EXPANDED);
-        int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(),R.attr.colorButtonNav, R.color.redSapienza);
+        ClientHelper.setDialogView(v, getDialog(), BottomSheetBehavior.STATE_EXPANDED);
+        int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(), R.attr.colorButtonNav, R.color.redSapienza);
         add.setEnabled(false);
         add.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
         examName.addTextChangedListener(new TextWatcher() {

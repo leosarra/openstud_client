@@ -67,6 +67,7 @@ public class ReservationsFragment extends Fragment {
     private boolean firstStart = true;
     private ReservationsHandler h = new ReservationsHandler(this);
     private Handler handler = new Handler();
+
     @OnClick(R.id.empty_button_reload)
     public void OnClick(View v) {
         refreshReservations();
@@ -119,7 +120,7 @@ public class ReservationsFragment extends Fragment {
             }
         });
         rv.setAdapter(adapter);
-        swipeRefreshLayout.measure(1,1);
+        swipeRefreshLayout.measure(1, 1);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshReservations);
         swipeRefreshLayout.setEnabled(false);
@@ -219,7 +220,8 @@ public class ReservationsFragment extends Fragment {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
-                if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
+                if (e.isMaintenance())
+                    h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
@@ -328,7 +330,7 @@ public class ReservationsFragment extends Fragment {
                     activity.createRetrySnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
                     activity.createRetrySnackBar(R.string.infostud_maintenance, Snackbar.LENGTH_LONG, listener);
-                }  else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
+                } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
                     InfoManager.clearSharedPreferences(activity.getApplication());

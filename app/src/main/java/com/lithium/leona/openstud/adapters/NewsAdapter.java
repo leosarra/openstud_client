@@ -24,21 +24,21 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<News> news;
     private Context context;
     private View.OnClickListener ocl;
+
     public NewsAdapter(Context context, List<News> news, View.OnClickListener onClickListener) {
         this.news = news;
         this.context = context;
-        this.ocl=onClickListener;
+        this.ocl = onClickListener;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType==0) {
+        if (viewType == 0) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_news_large, parent, false);
             view.setOnClickListener(ocl);
             return new NewsHolderLarge(view);
-        }
-        else {
+        } else {
             View view = LayoutInflater.from(context).inflate(R.layout.item_news_small, parent, false);
             view.setOnClickListener(ocl);
             return new NewsHolderSmall(view);
@@ -48,7 +48,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         News el = news.get(position);
-        if (holder.getItemViewType()==0) ((NewsHolderLarge) holder).setDetails(el);
+        if (holder.getItemViewType() == 0) ((NewsHolderLarge) holder).setDetails(el);
         else ((NewsHolderSmall) holder).setDetails(el);
     }
 
@@ -79,11 +79,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setDetails(News news) {
             txtName.setText(news.getTitle());
             txtDescription.setText(news.getDescription());
-            if (news.getSmallImageUrl()!=null) Picasso.get().load(news.getSmallImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
-            else if (news.getImageUrl() != null) Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
+            if (news.getSmallImageUrl() != null)
+                Picasso.get().load(news.getSmallImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15, 0)).into(imageView);
+            else if (news.getImageUrl() != null)
+                Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15, 0)).into(imageView);
             else imageView.setVisibility(View.GONE);
-            if(news.getDescription() == null || news.getDescription().isEmpty()) {
-                txtName.setMaxLines(txtName.getMaxLines()+1);
+            if (news.getDescription() == null || news.getDescription().isEmpty()) {
+                txtName.setMaxLines(txtName.getMaxLines() + 1);
             }
         }
     }
@@ -105,7 +107,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setDetails(News news) {
             txtName.setText(news.getTitle());
             txtDescription.setText(news.getDescription());
-            if (news.getImageUrl() != null) Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15,0)).into(imageView);
+            if (news.getImageUrl() != null)
+                Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15, 0)).into(imageView);
             else imageView.setVisibility(View.GONE);
         }
     }

@@ -102,7 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         applyInfos(student, isee);
         swipeRefreshLayout.setNestedScrollingEnabled(true);

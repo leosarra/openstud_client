@@ -78,7 +78,7 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.filter_calendar, container, false);
         ButterKnife.bind(this, v);
-        ClientHelper.setDialogView(v,getDialog(), BottomSheetBehavior.STATE_EXPANDED);
+        ClientHelper.setDialogView(v, getDialog(), BottomSheetBehavior.STATE_EXPANDED);
         Context context = getContext();
         Activity activity = getActivity();
         InfoManager.removeOldEntriesFilter(context, elements);

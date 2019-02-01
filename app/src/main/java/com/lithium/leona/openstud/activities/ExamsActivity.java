@@ -87,7 +87,7 @@ public class ExamsActivity extends AppCompatActivity {
         }
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.exams);
-        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentManager fm = getSupportFragmentManager();
@@ -148,8 +148,8 @@ public class ExamsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-            if (drawer.isDrawerOpen()) drawer.closeDrawer();
-            else super.onBackPressed();
+        if (drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
 
     }
 

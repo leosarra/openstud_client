@@ -144,7 +144,8 @@ public class ExamsDoneFragment extends Fragment {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
-                if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
+                if (e.isMaintenance())
+                    h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {

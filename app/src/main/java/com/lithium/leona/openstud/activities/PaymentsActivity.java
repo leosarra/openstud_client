@@ -54,7 +54,7 @@ public class PaymentsActivity extends AppCompatActivity {
             return;
         }
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.payments);
         FragmentManager fragmentManager = getSupportFragmentManager();

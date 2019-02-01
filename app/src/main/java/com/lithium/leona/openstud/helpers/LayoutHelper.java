@@ -69,7 +69,7 @@ public class LayoutHelper {
     }
 
     public static void createCalendarNotification(Context context, int styleId) {
-       new AlertDialog.Builder(new ContextThemeWrapper(context, styleId))
+        new AlertDialog.Builder(new ContextThemeWrapper(context, styleId))
                 .setTitle(context.getResources().getString(R.string.experimental_feature))
                 .setMessage(context.getResources().getString(R.string.calendar_feature_description))
                 .setPositiveButton(context.getResources().getString(R.string.ok), (dialog, which) -> {
@@ -130,14 +130,14 @@ public class LayoutHelper {
             }
         };
         int activityIdentifier = LayoutHelper.getIdentifier(activity);
-        PrimaryDrawerItem profile = new PrimaryDrawerItem().withIdentifier(Selection.PROFILE.getValue()).withIcon(R.drawable.ic_baseline_account_circle).withName(R.string.profile).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.PROFILE.getValue()).withIconTintingEnabled(true);
-        PrimaryDrawerItem exams = new PrimaryDrawerItem().withIdentifier(Selection.EXAMS.getValue()).withIcon(R.drawable.ic_baseline_class).withName(R.string.exams).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.EXAMS.getValue()).withIconTintingEnabled(true);
-        PrimaryDrawerItem stats = new PrimaryDrawerItem().withIdentifier(Selection.STATS.getValue()).withIcon(R.drawable.ic_timeline_black_24dp).withName(R.string.stats).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.STATS.getValue()).withIconTintingEnabled(true);
-        PrimaryDrawerItem calendar = new PrimaryDrawerItem().withIdentifier(Selection.CALENDAR.getValue()).withIcon(R.drawable.ic_date_range_black).withName(R.string.calendar).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.CALENDAR.getValue()).withIconTintingEnabled(true);
-        PrimaryDrawerItem classrooms = new PrimaryDrawerItem().withIdentifier(Selection.CLASSROOMS.getValue()).withIcon(R.drawable.ic_location_city_black_24dp).withName(R.string.classrooms).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.CLASSROOMS.getValue()).withIconTintingEnabled(true);
-        PrimaryDrawerItem events = new PrimaryDrawerItem().withIdentifier(Selection.EVENTS.getValue()).withIcon(R.drawable.ic_stage_24dp).withName(R.string.events).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.EVENTS.getValue()).withIconTintingEnabled(true);
-        PrimaryDrawerItem tax = new PrimaryDrawerItem().withIdentifier(Selection.TAX.getValue()).withIcon(R.drawable.ic_baseline_payment).withName(R.string.payments).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.TAX.getValue()).withIconTintingEnabled(true);
-        PrimaryDrawerItem news = new PrimaryDrawerItem().withIdentifier(Selection.NEWS.getValue()).withIcon(R.drawable.ic_newspaper).withName(R.string.news).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier==Selection.NEWS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem profile = new PrimaryDrawerItem().withIdentifier(Selection.PROFILE.getValue()).withIcon(R.drawable.ic_baseline_account_circle).withName(R.string.profile).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.PROFILE.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem exams = new PrimaryDrawerItem().withIdentifier(Selection.EXAMS.getValue()).withIcon(R.drawable.ic_baseline_class).withName(R.string.exams).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.EXAMS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem stats = new PrimaryDrawerItem().withIdentifier(Selection.STATS.getValue()).withIcon(R.drawable.ic_timeline_black_24dp).withName(R.string.stats).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.STATS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem calendar = new PrimaryDrawerItem().withIdentifier(Selection.CALENDAR.getValue()).withIcon(R.drawable.ic_date_range_black).withName(R.string.calendar).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.CALENDAR.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem classrooms = new PrimaryDrawerItem().withIdentifier(Selection.CLASSROOMS.getValue()).withIcon(R.drawable.ic_location_city_black_24dp).withName(R.string.classrooms).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.CLASSROOMS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem events = new PrimaryDrawerItem().withIdentifier(Selection.EVENTS.getValue()).withIcon(R.drawable.ic_stage_24dp).withName(R.string.events).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.EVENTS.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem tax = new PrimaryDrawerItem().withIdentifier(Selection.TAX.getValue()).withIcon(R.drawable.ic_baseline_payment).withName(R.string.payments).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.TAX.getValue()).withIconTintingEnabled(true);
+        PrimaryDrawerItem news = new PrimaryDrawerItem().withIdentifier(Selection.NEWS.getValue()).withIcon(R.drawable.ic_newspaper).withName(R.string.news).withTextColor(primaryColor).withIconColor(primaryColor).withSelectable(activityIdentifier == Selection.NEWS.getValue()).withIconTintingEnabled(true);
         PrimaryDrawerItem settings = new PrimaryDrawerItem().withIdentifier(Selection.SETTINGS.getValue()).withIcon(R.drawable.ic_baseline_settings).withTextColor(primaryColor).withIconColor(primaryColor).withName(R.string.settings).withSelectable(false).withIconTintingEnabled(true);
         PrimaryDrawerItem about = new PrimaryDrawerItem().withIdentifier(Selection.ABOUT.getValue()).withIcon(R.drawable.ic_baseline_info).withTextColor(primaryColor).withIconColor(primaryColor).withName(R.string.about).withSelectable(false).withIconTintingEnabled(true);
         PrimaryDrawerItem exit = new PrimaryDrawerItem().withIdentifier(Selection.EXIT.getValue()).withIcon(R.drawable.ic_baseline_exit_to_app).withTextColor(primaryColor).withIconColor(primaryColor).withName(R.string.exit).withIconTintingEnabled(true);
@@ -146,9 +146,9 @@ public class LayoutHelper {
                 .withActivity(activity)
                 .withToolbar(toolbar)
                 .addDrawerItems(
-                        profile,exams,stats,calendar,news,events, classrooms,tax,
+                        profile, exams, stats, calendar, news, events, classrooms, tax,
                         new DividerDrawerItem(),
-                        settings,about,exit
+                        settings, about, exit
                 ).withOnDrawerListener(ddl)
                 .withHeader(R.layout.nav_header)
                 .withSelectedItem(activityIdentifier)
@@ -173,16 +173,16 @@ public class LayoutHelper {
     }
 
     private static int getIdentifier(Activity activity) {
-            if (activity instanceof ProfileActivity) return Selection.PROFILE.getValue();
-            else if (activity instanceof ExamsActivity) return Selection.EXAMS.getValue();
-            else if (activity instanceof StatsActivity) return Selection.STATS.getValue();
-            else if (activity instanceof CalendarActivity) return Selection.CALENDAR.getValue();
-            else if (activity instanceof SearchClassroomActivity) return Selection.CLASSROOMS.getValue();
-            else if (activity instanceof PaymentsActivity) return Selection.TAX.getValue();
-            else if (activity instanceof NewsActivity) return Selection.NEWS.getValue();
-            else if (activity instanceof EventsActivity) return Selection.EVENTS.getValue();
-            else return -1;
-            }
+        if (activity instanceof ProfileActivity) return Selection.PROFILE.getValue();
+        else if (activity instanceof ExamsActivity) return Selection.EXAMS.getValue();
+        else if (activity instanceof StatsActivity) return Selection.STATS.getValue();
+        else if (activity instanceof CalendarActivity) return Selection.CALENDAR.getValue();
+        else if (activity instanceof SearchClassroomActivity) return Selection.CLASSROOMS.getValue();
+        else if (activity instanceof PaymentsActivity) return Selection.TAX.getValue();
+        else if (activity instanceof NewsActivity) return Selection.NEWS.getValue();
+        else if (activity instanceof EventsActivity) return Selection.EVENTS.getValue();
+        else return -1;
+    }
 
     public enum Selection {
         PROFILE(1), EXAMS(2), STATS(3), CALENDAR(4), CLASSROOMS(5), TAX(6), NEWS(7), SETTINGS(8), ABOUT(9), EXIT(10), EVENTS(11);

@@ -80,7 +80,7 @@ public class EventsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null ) {
+        if (os == null || student == null) {
             InfoManager.clearSharedPreferences(getApplication());
             Intent i = new Intent(EventsActivity.this, LauncherActivity.class);
             startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -94,7 +94,7 @@ public class EventsActivity extends AppCompatActivity {
 
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         emptyText.setText(getResources().getString(R.string.no_events));
-        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -110,26 +110,26 @@ public class EventsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v) {
                 int itemPosition = rv.getChildLayoutPosition(v);
-                if(itemPosition<selectedDateEvents.size()) {
+                if (itemPosition < selectedDateEvents.size()) {
                     Event ev = selectedDateEvents.get(itemPosition);
-                    ClientHelper.createCustomTab(activity,ev.getUrl());
+                    ClientHelper.createCustomTab(activity, ev.getUrl());
                 }
             }
         });
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.events);
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(() -> refreshEvents(horizontalCalendar.getSelectedDate(),true));
+        swipeRefreshLayout.setOnRefreshListener(() -> refreshEvents(horizontalCalendar.getSelectedDate(), true));
         emptyButton.setOnClickListener(v -> {
             if (!swipeRefreshLayout.isRefreshing())
                 refreshEvents(horizontalCalendar.getSelectedDate(), true);
         });
         List<Event> cached_events = InfoManager.getEventsUniversityCached(this, os);
         swapViews(true);
-        if (cached_events!=null && !cached_events.isEmpty()) {
+        if (cached_events != null && !cached_events.isEmpty()) {
             events.clear();
             events.addAll(cached_events);
-            refreshEvents(defaultDate,false);
+            refreshEvents(defaultDate, false);
         }
         if (savedInstanceState == null) refreshEvents(defaultDate, true);
     }
@@ -137,9 +137,9 @@ public class EventsActivity extends AppCompatActivity {
     private synchronized void refreshEvents(Calendar date, boolean refresh) {
         new Thread(() -> {
             try {
-                if(refresh) {
+                if (refresh) {
                     setRefreshing(true);
-                    List<Event> newEvents = InfoManager.getEventsUniversity(this,os);
+                    List<Event> newEvents = InfoManager.getEventsUniversity(this, os);
                     if (newEvents != null && !newEvents.equals(events)) {
                         events.clear();
                         events.addAll(newEvents);
@@ -159,8 +159,8 @@ public class EventsActivity extends AppCompatActivity {
 
     private void applyEvents(Calendar date) {
         List<Event> eventDate = new LinkedList<>();
-        for (Event ev : events){
-            if (ev.getStart() != null && date.getTimeInMillis() == ev.getStart().toLocalDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() )
+        for (Event ev : events) {
+            if (ev.getStart() != null && date.getTimeInMillis() == ev.getStart().toLocalDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
                 eventDate.add(ev);
         }
         selectedDateEvents.clear();
@@ -192,9 +192,8 @@ public class EventsActivity extends AppCompatActivity {
             Gson gson = new Gson();
             Type typeCalendar = new TypeToken<Calendar>() {
             }.getType();
-            return gson.fromJson(jsonDate,typeCalendar);
-        }
-        else {
+            return gson.fromJson(jsonDate, typeCalendar);
+        } else {
             Calendar today = Calendar.getInstance();
             today.set(Calendar.HOUR_OF_DAY, 0);
             today.set(Calendar.MINUTE, 0);
@@ -214,7 +213,7 @@ public class EventsActivity extends AppCompatActivity {
     }
 
 
-    private void createCalendar(Calendar start, Calendar end){
+    private void createCalendar(Calendar start, Calendar end) {
         Activity activity = this;
         runOnUiThread(() -> {
             horizontalCalendar = new HorizontalCalendar.Builder(activity, R.id.calendarView)

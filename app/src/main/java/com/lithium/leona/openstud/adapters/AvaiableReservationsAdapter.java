@@ -106,22 +106,22 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             int tintColor;
             Drawable placeDrawable;
             if (alreadyExist) {
-                placeDrawable = LayoutHelper.getDrawableWithColorAttr(activity,R.drawable.ic_check_black_24dp,R.attr.certifiedExamColor, android.R.color.darker_gray);
+                placeDrawable = LayoutHelper.getDrawableWithColorAttr(activity, R.drawable.ic_check_black_24dp, R.attr.certifiedExamColor, android.R.color.darker_gray);
                 placeButton.setText(activity.getResources().getString(R.string.already_placed_button));
                 tintColor = LayoutHelper.getColorByAttr(activity, R.attr.certifiedExamColor, android.R.color.darker_gray);
             } else if (!enabled) {
                 placeDrawable = LayoutHelper.getDrawableWithColorId(activity, R.drawable.ic_library_add_small, android.R.color.darker_gray);
                 placeButton.setText(activity.getResources().getString(R.string.place_reservation));
                 tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
-            }
-            else {
-                placeDrawable = LayoutHelper.getDrawableWithColorAttr(activity,R.drawable.ic_library_add_small,R.attr.colorButtonNav, android.R.color.darker_gray);
+            } else {
+                placeDrawable = LayoutHelper.getDrawableWithColorAttr(activity, R.drawable.ic_library_add_small, R.attr.colorButtonNav, android.R.color.darker_gray);
                 placeButton.setText(activity.getResources().getString(R.string.place_reservation));
                 tintColor = LayoutHelper.getColorByAttr(activity, R.attr.colorButtonNav, android.R.color.darker_gray);
             }
             placeButton.setEnabled(enabled);
             placeButton.setTextColor(tintColor);
-            if (placeDrawable != null) placeButton.setCompoundDrawablesWithIntrinsicBounds(placeDrawable, null, null, null);
+            if (placeDrawable != null)
+                placeButton.setCompoundDrawablesWithIntrinsicBounds(placeDrawable, null, null, null);
         }
 
         @SuppressLint("ResourceType")
@@ -136,11 +136,10 @@ public class AvaiableReservationsAdapter extends RecyclerView.Adapter<AvaiableRe
             txtEndDate.setText(activity.getResources().getString(R.string.end_date_reservation, res.getEndDate().format(formatter)));
             txtDate.setText(activity.getResources().getString(R.string.date_exam, res.getExamDate().format(formatter)));
             txtChannel.setText(activity.getResources().getString(R.string.channel_reservation, res.getChannel()));
-            if(res.getYearCourse()!= null) {
+            if (res.getYearCourse() != null) {
                 txtYear.setVisibility(View.VISIBLE);
                 txtYear.setText(activity.getResources().getString(R.string.accademic_year_pay, res.getYearCourse()));
-            }
-            else txtYear.setVisibility(View.GONE);
+            } else txtYear.setVisibility(View.GONE);
             if (res.getNote() == null || res.getNote().trim().isEmpty())
                 txtInfo.setVisibility(View.GONE);
             else {

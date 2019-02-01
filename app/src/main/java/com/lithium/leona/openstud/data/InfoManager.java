@@ -449,7 +449,7 @@ public class InfoManager {
         if (os == null) return null;
         if (!hasLogin(context)) return null;
         Gson gson = new Gson();
-        List<News> newNews = os.getNews(locale, true,null,0,null,null);
+        List<News> newNews = os.getNews(locale, true, null, 0, null, null);
         synchronized (InfoManager.class) {
             news = newNews;
             SharedPreferences.Editor prefsEditor = pref.edit();
@@ -470,7 +470,7 @@ public class InfoManager {
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
             if (news != null) {
-                if(!news.isEmpty() && !news.get(0).getLocale().equals(locale)) return null;
+                if (!news.isEmpty() && !news.get(0).getLocale().equals(locale)) return null;
                 return news;
             }
             oldObj = pref.getString("news", "null");
@@ -483,7 +483,7 @@ public class InfoManager {
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
-        if(ret != null && !ret.isEmpty() && !ret.get(0).getLocale().equals(locale)) return null;
+        if (ret != null && !ret.isEmpty() && !ret.get(0).getLocale().equals(locale)) return null;
         return ret;
     }
 

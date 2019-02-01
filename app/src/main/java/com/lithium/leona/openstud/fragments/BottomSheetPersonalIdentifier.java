@@ -46,7 +46,7 @@ public class BottomSheetPersonalIdentifier extends BottomSheetDialogFragment {
     public static BottomSheetPersonalIdentifier newInstance(String identifier) {
         BottomSheetPersonalIdentifier myFragment = new BottomSheetPersonalIdentifier();
         Bundle args = new Bundle();
-        if (identifier!=null && !identifier.isEmpty()) args.putString("identifier", identifier);
+        if (identifier != null && !identifier.isEmpty()) args.putString("identifier", identifier);
         myFragment.setArguments(args);
         return myFragment;
     }
@@ -71,7 +71,7 @@ public class BottomSheetPersonalIdentifier extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.cf_barcode, container, false);
         ButterKnife.bind(this, v);
-        ClientHelper.setDialogView(v,getDialog(), BottomSheetBehavior.STATE_EXPANDED);
+        ClientHelper.setDialogView(v, getDialog(), BottomSheetBehavior.STATE_EXPANDED);
         Activity activity = getActivity();
         if (identifier == null || activity == null) dismiss();
         else {
@@ -79,7 +79,7 @@ public class BottomSheetPersonalIdentifier extends BottomSheetDialogFragment {
             subtitle.setText(identifier.toUpperCase());
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             try {
-                BitMatrix bitMatrix = multiFormatWriter.encode(identifier, BarcodeFormat.CODE_39,1000,200);
+                BitMatrix bitMatrix = multiFormatWriter.encode(identifier, BarcodeFormat.CODE_39, 1000, 200);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 barcode.setImageBitmap(bitmap);
@@ -94,7 +94,7 @@ public class BottomSheetPersonalIdentifier extends BottomSheetDialogFragment {
 
     private void setBrightness(Activity activity, Float value) {
         Window window = activity.getWindow();
-        if (window !=null && value!=null) {
+        if (window != null && value != null) {
             WindowManager.LayoutParams new_params = window.getAttributes();
             if (original_brightness == null) original_brightness = new_params.screenBrightness;
             new_params.screenBrightness = value;
@@ -107,7 +107,7 @@ public class BottomSheetPersonalIdentifier extends BottomSheetDialogFragment {
     public void onDismiss(final DialogInterface dialog) {
         super.onDismiss(dialog);
         Activity activity = getActivity();
-        if (activity!=null) setBrightness(activity,original_brightness);
+        if (activity != null) setBrightness(activity, original_brightness);
     }
 
 }

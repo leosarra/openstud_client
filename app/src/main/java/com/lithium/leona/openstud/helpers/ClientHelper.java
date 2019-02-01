@@ -204,58 +204,46 @@ public class ClientHelper {
         activity.startActivity(intent);
     }
 
-    public static void startDrawerActivity(long item, Activity activity){
+    public static void startDrawerActivity(long item, Activity activity) {
         if (item == LayoutHelper.Selection.TAX.getValue()) {
-                if (activity instanceof PaymentsActivity) return;
-                Intent intent = new Intent(activity, PaymentsActivity.class);
-                activity.startActivity(intent);
-            }
-        else if (item == LayoutHelper.Selection.CALENDAR.getValue()) {
+            if (activity instanceof PaymentsActivity) return;
+            Intent intent = new Intent(activity, PaymentsActivity.class);
+            activity.startActivity(intent);
+        } else if (item == LayoutHelper.Selection.CALENDAR.getValue()) {
             if (activity instanceof CalendarActivity) return;
             Intent intent = new Intent(activity, CalendarActivity.class);
             activity.startActivity(intent);
-            }
-
-        else if (item == LayoutHelper.Selection.PROFILE.getValue()) {
-                if (activity instanceof ProfileActivity) return;
-                Intent intent = new Intent(activity, ProfileActivity.class);
-                activity.startActivity(intent);
-            }
-        else if (item == LayoutHelper.Selection.EXIT.getValue()){
+        } else if (item == LayoutHelper.Selection.PROFILE.getValue()) {
+            if (activity instanceof ProfileActivity) return;
+            Intent intent = new Intent(activity, ProfileActivity.class);
+            activity.startActivity(intent);
+        } else if (item == LayoutHelper.Selection.EXIT.getValue()) {
             InfoManager.clearSharedPreferences(activity.getApplication());
             Intent i = new Intent(activity, LauncherActivity.class);
             activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        }
-        else if (item == LayoutHelper.Selection.CLASSROOMS.getValue()) {
+        } else if (item == LayoutHelper.Selection.CLASSROOMS.getValue()) {
             if (activity instanceof SearchClassroomActivity) return;
-                Intent intent = new Intent(activity, SearchClassroomActivity.class);
-                activity.startActivity(intent);
-            }
-
-        else if (item == LayoutHelper.Selection.ABOUT.getValue()) {
-                Intent intent = new Intent(activity, AboutActivity.class);
-                activity.startActivity(intent);
-            }
-        else if (item == LayoutHelper.Selection.SETTINGS.getValue()) {
+            Intent intent = new Intent(activity, SearchClassroomActivity.class);
+            activity.startActivity(intent);
+        } else if (item == LayoutHelper.Selection.ABOUT.getValue()) {
+            Intent intent = new Intent(activity, AboutActivity.class);
+            activity.startActivity(intent);
+        } else if (item == LayoutHelper.Selection.SETTINGS.getValue()) {
             Intent intent = new Intent(activity, SettingsPrefActivity.class);
             activity.startActivity(intent);
-        }
-        else if (item == LayoutHelper.Selection.STATS.getValue()){
-                if (activity instanceof StatsActivity) return;
-                Intent intent = new Intent(activity, StatsActivity.class);
-                activity.startActivity(intent);
-            }
-        else if (item == LayoutHelper.Selection.EXAMS.getValue()) {
+        } else if (item == LayoutHelper.Selection.STATS.getValue()) {
+            if (activity instanceof StatsActivity) return;
+            Intent intent = new Intent(activity, StatsActivity.class);
+            activity.startActivity(intent);
+        } else if (item == LayoutHelper.Selection.EXAMS.getValue()) {
             if (activity instanceof ExamsActivity) return;
             Intent intent = new Intent(activity, ExamsActivity.class);
             activity.startActivity(intent);
-        }
-        else if (item == LayoutHelper.Selection.NEWS.getValue()) {
+        } else if (item == LayoutHelper.Selection.NEWS.getValue()) {
             if (activity instanceof NewsActivity) return;
             Intent intent = new Intent(activity, NewsActivity.class);
             activity.startActivity(intent);
-        }
-        else if (item == LayoutHelper.Selection.EVENTS.getValue()) {
+        } else if (item == LayoutHelper.Selection.EVENTS.getValue()) {
             if (activity instanceof EventsActivity) return;
             Intent intent = new Intent(activity, EventsActivity.class);
             activity.startActivity(intent);
@@ -276,12 +264,11 @@ public class ClientHelper {
                 Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
                 intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                         timestampStart.getTime() * 1000L);
-                if(ev.getEventType() == EventType.LESSON) {
+                if (ev.getEventType() == EventType.LESSON) {
                     Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
                     intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
                             timestampEnd.getTime() * 1000L);
-                }
-                else {
+                } else {
                     intent.putExtra(CalendarContract.Events.EVENT_LOCATION, ev.getWhere());
                 }
                 intent.putExtra(CalendarContract.Events.ALL_DAY, false);

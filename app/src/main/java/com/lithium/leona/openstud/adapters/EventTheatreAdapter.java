@@ -72,6 +72,7 @@ public class EventTheatreAdapter extends RecyclerView.Adapter<EventTheatreAdapte
 
     public interface EventAdapterListener {
         void addCalendarOnClick(Event ev);
+
         void onItemClick(View v);
     }
 
@@ -103,8 +104,8 @@ public class EventTheatreAdapter extends RecyclerView.Adapter<EventTheatreAdapte
             setupMenu(ev, options);
             txtName.setText(ev.getTitle());
             txtDescription.setText(ev.getDescription());
-            txtWhere.setText(context.getResources().getString(R.string.event_theatre_where,String.format("%s, %s",ev.getRoom(),ev.getWhere())));
-            txtWhen.setText(context.getResources().getString(R.string.event_theatre_when,String.format("%02d:%02d", ev.getStart().getHour(), ev.getStart().getMinute())));
+            txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, String.format("%s, %s", ev.getRoom(), ev.getWhere())));
+            txtWhen.setText(context.getResources().getString(R.string.event_theatre_when, String.format("%02d:%02d", ev.getStart().getHour(), ev.getStart().getMinute())));
         }
     }
 }

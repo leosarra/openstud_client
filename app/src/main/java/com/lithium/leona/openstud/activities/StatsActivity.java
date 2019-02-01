@@ -117,7 +117,7 @@ public class StatsActivity extends AppCompatActivity {
             return;
         }
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.stats);
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(this, os);
@@ -125,7 +125,7 @@ public class StatsActivity extends AppCompatActivity {
         if (savedInstanceState == null) refreshExamsDone();
         else {
             NestedScrollView scrollView = findViewById(R.id.scrollView);
-            scrollView.scrollTo(0,0);
+            scrollView.scrollTo(0, 0);
         }
 
     }
@@ -266,7 +266,8 @@ public class StatsActivity extends AppCompatActivity {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
-                if (e.isMaintenance()) h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
+                if (e.isMaintenance())
+                    h.sendEmptyMessage(ClientHelper.Status.MAINTENANCE.getValue());
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {

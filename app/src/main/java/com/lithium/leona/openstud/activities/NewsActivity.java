@@ -56,12 +56,6 @@ public class NewsActivity extends AppCompatActivity {
     TextView emptyText;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @OnClick(R.id.empty_button_reload)
-    public void OnClick(View v) {
-        refreshNews();
-    }
-
-
     private Openstud os;
     private Drawer drawer;
     private LocalDateTime lastUpdate;
@@ -69,6 +63,12 @@ public class NewsActivity extends AppCompatActivity {
     private NewsAdapter adapter;
     private List<News> news;
     private NewsHandler h = new NewsHandler(this);
+
+    @OnClick(R.id.empty_button_reload)
+    public void OnClick(View v) {
+        refreshNews();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +85,7 @@ public class NewsActivity extends AppCompatActivity {
             return;
         }
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        drawer=LayoutHelper.applyDrawer(this,toolbar,student);
+        drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.news);
         locale = getLocale();
@@ -96,24 +96,24 @@ public class NewsActivity extends AppCompatActivity {
         rv.setLayoutManager(llm);
         adapter = new NewsAdapter(this, news, v -> {
             int itemPosition = rv.getChildLayoutPosition(v);
-            if(itemPosition<news.size()) {
+            if (itemPosition < news.size()) {
                 News el = news.get(itemPosition);
-                ClientHelper.createCustomTab(this,el.getUrl());
+                ClientHelper.createCustomTab(this, el.getUrl());
             }
         });
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        List<News> news_cached = InfoManager.getNewsCached(this,os,locale);
+        List<News> news_cached = InfoManager.getNewsCached(this, os, locale);
         if (news_cached != null && !news_cached.isEmpty()) {
             news.addAll(news_cached);
             adapter.notifyDataSetChanged();
         }
         swipeRefreshLayout.setOnRefreshListener(this::refreshNews);
-        if (savedInstanceState==null) refreshNews();
+        if (savedInstanceState == null) refreshNews();
 
     }
 
-    private void refreshNews(){
+    private void refreshNews() {
         if (os == null) return;
         setRefreshing(true);
         setButtonReloadStatus(false);
@@ -129,7 +129,7 @@ public class NewsActivity extends AppCompatActivity {
                 h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidResponseException e) {
-                if(e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
+                if (e.isRateLimit()) h.sendEmptyMessage(ClientHelper.Status.RATE_LIMIT.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             }
@@ -169,7 +169,7 @@ public class NewsActivity extends AppCompatActivity {
         }
     }
 
-    private String getLocale(){
+    private String getLocale() {
         if (!Locale.getDefault().getLanguage().equals("it")) return "en";
         else return "it";
     }
@@ -216,7 +216,8 @@ public class NewsActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         LocalDateTime time = getTimer();
-        if (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 60) refreshNews();
+        if (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 60)
+            refreshNews();
     }
 
     private static class NewsHandler extends Handler {
