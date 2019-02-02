@@ -1,7 +1,7 @@
 ![banner](https://user-images.githubusercontent.com/8293810/46977822-72575800-d0cd-11e8-90d9-6132083a0c33.png)
 
 ![GitHub tag](https://img.shields.io/github/tag/lithiumsr/openstud_client.svg)
-[![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=28)
+[![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=23)
 
 OpenStud is an unofficial client for Sapienza's Infostud.\
 It was written with Java 8 in mind and it supports Android 6.0+ (API Level 23+), at the time of writing it targets Android Pie (API Level 28).
@@ -16,16 +16,19 @@ The features that are supported are:
 - Get active reservations.
 - Get available reservations.
 - Compilation of the class' survey.
-- Delete an active reservation.
+- Delete of an active reservation.
 - Get and store a receipt of an active reservation.
 - Get paid/unpaid taxes.
 - Show stats based on student's performance.
+- Get university's events and last news.
+- Find classrooms and check their availability.
+- Calendar with student's lessons, exams and reservations.
 
 ## What's next?
 OpenStud is stable and it's perfectly working, but it's development is far from over.\
-A version with AndroidX (new support libraries for Android) it's in the works.\
-Preferences activity requires some extra work to ensure that it will work in the new releases of Android.
+Some visual bugs needs to be fixed and some new features will be worked on (like biometrics support and widgets).
 
 ## Special thanks
 Huge thanks to Leonardo Razovic for the icon and logo and to Valerio Silvestro that helped me testing the app when it was in its infancy.
+Also thanks to Luigi Russo that helped me by contributing to OpenStud Driver's repo.
 Last but not least, a special thanks also to Ugo Possenti who inspired me to do this app with his [Medium article](https://medium.com/@MEPoss/ora-infostud-non-fa-più-schifo-21720720e556).
