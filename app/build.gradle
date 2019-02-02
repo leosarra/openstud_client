@@ -7,8 +7,8 @@ android {
         applicationId "com.lithium.leona.openstud"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 80
-        versionName "1.14.2"
+        versionCode 81
+        versionName "1.14.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -46,7 +46,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation group: 'androidx.core', name: 'core', version: '1.0.1'
-    implementation 'com.github.LithiumSR:openstud_driver:0.50.0'
+    implementation 'com.github.LithiumSR:openstud_driver:0.50.1'
     implementation 'com.jakewharton:butterknife:10.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
