@@ -52,4 +52,16 @@
             android:title="@string/title_theme"
             app:iconSpaceReserved="false"/>
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_security"
+        app:iconSpaceReserved="false">
+        <CheckBoxPreference
+            android:title="@string/enable_biometric_login"
+            android:summary="@string/enable_biometric_login_description"
+            android:key="@string/key_biometrics"
+            android:defaultValue="false"
+            android:clickable="false"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>

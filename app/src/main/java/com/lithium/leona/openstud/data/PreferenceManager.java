@@ -32,6 +32,19 @@ public class PreferenceManager {
         }
     }
 
+    public static boolean isBiometricsEnabled(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean(context.getResources().getString(R.string.key_biometrics), true);
+        }
+    }
+    public static void setBiometricsEnabled(Context context, boolean enabled) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            pref.edit().putBoolean(context.getResources().getString(R.string.key_biometrics), enabled).apply();
+        }
+    }
+
     public static boolean isLessonOptionEnabled(Context context) {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {

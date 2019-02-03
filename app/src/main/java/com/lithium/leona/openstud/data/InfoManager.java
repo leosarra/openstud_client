@@ -86,7 +86,6 @@ public class InfoManager {
     public static Student getInfoStudentCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -106,7 +105,6 @@ public class InfoManager {
     public static Student getInfoStudent(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         Student newStudent = os.getInfoStudent();
         synchronized (InfoManager.class) {
@@ -159,7 +157,6 @@ public class InfoManager {
     public static List<Event> getEventsCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -181,7 +178,6 @@ public class InfoManager {
     public static List<Event> getEvents(Context context, Openstud os, Student student) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         Map<String, List<Lesson>> newTimetable = new HashMap<>();
         if (PreferenceManager.isLessonEnabled(context))
@@ -215,7 +211,6 @@ public class InfoManager {
     public static Isee getIseeCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -234,7 +229,6 @@ public class InfoManager {
     public static Isee getIsee(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         Isee newIsee = os.getCurrentIsee();
         synchronized (InfoManager.class) {
@@ -250,7 +244,6 @@ public class InfoManager {
     public static List<Tax> getPaidTaxesCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -271,7 +264,6 @@ public class InfoManager {
     public static List<ExamDone> getExamsDoneCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -292,7 +284,6 @@ public class InfoManager {
     public static List<ExamDone> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<ExamDone> newExamsDone = os.getExamsDone();
         synchronized (InfoManager.class) {
@@ -310,7 +301,6 @@ public class InfoManager {
     public static List<ExamDoable> getExamsDoableCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -332,7 +322,6 @@ public class InfoManager {
     public static List<ExamDoable> getExamsDoable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<ExamDoable> newExamsDoable = os.getExamsDoable();
         synchronized (InfoManager.class) {
@@ -351,7 +340,6 @@ public class InfoManager {
     public static List<ExamReservation> getActiveReservationsCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -372,7 +360,6 @@ public class InfoManager {
     public static List<ExamReservation> getActiveReservations(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<ExamReservation> newExamsDone = os.getActiveReservations();
         synchronized (InfoManager.class) {
@@ -390,7 +377,6 @@ public class InfoManager {
     public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<Tax> newPaidTaxes = os.getPaidTaxes();
         synchronized (InfoManager.class) {
@@ -408,7 +394,6 @@ public class InfoManager {
     public static List<Tax> getUnpaidTaxesCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -429,7 +414,6 @@ public class InfoManager {
     public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<Tax> newUnpaidTaxes = os.getUnpaidTaxes();
         synchronized (InfoManager.class) {
@@ -447,7 +431,6 @@ public class InfoManager {
     public static List<News> getNews(Context context, Openstud os, String locale) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<News> newNews = os.getNews(locale, true, null, 0, null, null);
         synchronized (InfoManager.class) {
@@ -465,7 +448,6 @@ public class InfoManager {
     public static List<News> getNewsCached(Context context, Openstud os, String locale) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -491,7 +473,6 @@ public class InfoManager {
     public static List<Event> getEventsUniversity(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<Event> newEvents = os.getNewsletterEvents();
         synchronized (InfoManager.class) {
@@ -509,7 +490,6 @@ public class InfoManager {
     public static List<Event> getEventsUniversityCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -551,7 +531,7 @@ public class InfoManager {
         theatre_events = null;
     }
 
-    private static synchronized String getStudentId(Context context) {
+    public static synchronized String getStudentId(Context context) {
         setupSharedPreferences(context);
         String id = null;
         try {

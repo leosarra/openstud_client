@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.fragments.BottomSheetRecoveryFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
@@ -80,6 +81,10 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         analyzeExtras(getIntent().getExtras());
         ClientHelper.updateGradesWidget(this, false);
+        if (InfoManager.hasLogin(this)) {
+            username.setText(InfoManager.getStudentId(this));
+            rememberFlag.setChecked(true);
+        }
     }
 
     public void sendRecoveryRequest(String answer, String studentID) {
@@ -173,9 +178,11 @@ public class LoginActivity extends AppCompatActivity {
         }
         try {
             os.login();
-            InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             InfoManager.getInfoStudent(this, os);
             InfoManager.getIsee(this, os);
+            if(!rememberFlag || (InfoManager.hasLogin(this) && !InfoManager.getStudentId(this).equals(id)))
+                PreferenceManager.setBiometricsEnabled(this,false);
+            InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
             if (e.isPasswordExpired())
@@ -203,6 +210,8 @@ public class LoginActivity extends AppCompatActivity {
             LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
         else if (error == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue())
             LayoutHelper.createTextSnackBar(layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
+        else if (error == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue())
+            LayoutHelper.createTextSnackBar(layout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
     }
 
     private void setElementsEnabled(boolean enabled) {

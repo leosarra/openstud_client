@@ -60,8 +60,9 @@ public class PaymentsActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt("tabSelected", -1);
+            tabFrag = (TabFragment) getSupportFragmentManager().getFragment(savedInstanceState, "tab");
         }
-        tabFrag = TabFragment.newInstance(selectedItem);
+        else tabFrag = TabFragment.newInstance(selectedItem);
         fragmentManager.beginTransaction().replace(R.id.content_frame, tabFrag).commit();
 
     }
@@ -106,5 +107,6 @@ public class PaymentsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("tabSelected", selectedItem);
+        getSupportFragmentManager().putFragment(outState, "tab", tabFrag);
     }
 }

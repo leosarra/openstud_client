@@ -5,8 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="redSapienza">#6e0918</color>
     <color name="redSapienzaDark">#5c0916</color>
-    <color name="accent">#ffffff</color>
-    <color name="accentLight">#ffffff</color>
+    <color name="accent">#6e0918</color>
+    <color name="accentLight">#6e0918</color>
     <color name="green">#328b4a</color>
     <color name="red">#9e0f24</color>
     <color name="yellow">#ffbf00</color>

@@ -1,5 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +18,15 @@ import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -29,7 +36,8 @@ import butterknife.ButterKnife;
 public class SettingsPrefActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     androidx.appcompat.widget.Toolbar toolbar;
-
+    @BindView(R.id.main_layout)
+    ConstraintLayout mainLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +70,37 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 .setNegativeButton(getResources().getString(R.string.restart_cancel), (dialogInterface, i) -> {
                 })
                 .show();
+    }
+
+    private void createBiometricDialog(CheckBoxPreference preference) {
+        Activity activity = this;
+        ExecutorService exe = Executors.newSingleThreadExecutor();
+        BiometricPrompt prompt = new BiometricPrompt(this, exe, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT) LayoutHelper.createTextSnackBar(mainLayout,R.string.no_biometrics_found,Snackbar.LENGTH_LONG);
+                else if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS) LayoutHelper.createTextSnackBar(mainLayout,R.string.no_biometrics_found,Snackbar.LENGTH_LONG);
+                else if (errorCode == BiometricPrompt.ERROR_LOCKOUT || errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT) LayoutHelper.createTextSnackBar(mainLayout,R.string.biometric_lockout,Snackbar.LENGTH_LONG);
+                runOnUiThread(() -> preference.setChecked(false));
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                runOnUiThread(() -> preference.setChecked(true));
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(this.getResources().getString(R.string.biometric_login_enable))
+                .setNegativeButtonText(this.getResources().getString(R.string.delete_abort))
+                .build();
+        prompt.authenticate(promptInfo);
     }
 
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {
@@ -128,6 +167,13 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 if (valid) PreferenceManager.setStatsNotificationEnabled(getContext(), false);
                 return valid;
             });
+            CheckBoxPreference enableBiometricLogin = findPreference(getString(R.string.key_biometrics));
+            enableBiometricLogin.setOnPreferenceClickListener(preference -> {
+                if (enableBiometricLogin.isChecked()) enableBiometricLogin.setChecked(false);
+                else if (activity!=null) activity.createBiometricDialog(enableBiometricLogin);
+                return true;
+            });
+            enableBiometricLogin.setOnPreferenceChangeListener((preference, newValue) -> false);
         }
 
         @Override
