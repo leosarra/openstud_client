@@ -37,6 +37,7 @@ import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.widgets.GradesWidget;
 
 import org.threeten.bp.LocalDate;
@@ -248,6 +249,14 @@ public class ClientHelper {
             Intent intent = new Intent(activity, EventsActivity.class);
             activity.startActivity(intent);
         }
+    }
+
+    public static void rebirthApp(Activity activity) {
+        InfoManager.clearSharedPreferences(activity);
+        PreferenceManager.setBiometricsEnabled(activity, false);
+        Intent i = new Intent(activity, LauncherActivity.class);
+        activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        activity.finish();
     }
 
     public static void addEventToCalendar(Activity activity, final Event ev) {

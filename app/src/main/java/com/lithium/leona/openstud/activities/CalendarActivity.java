@@ -131,13 +131,7 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
         setTitle(getResources().getString(R.string.calendar));
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(CalendarActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());

@@ -1,13 +1,15 @@
 package com.lithium.leona.openstud.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
@@ -46,8 +48,16 @@ public class SettingsPrefActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.settings);
-        // load settings fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new MainPreferenceFragment()).commit();
+        for (int i = 0; i < toolbar.getChildCount(); ++i) {
+            View child = toolbar.getChildAt(i);
+            if (child instanceof TextView) {
+                TextView toolbarTitle = (TextView)child;
+                toolbarTitle.setBackgroundColor(Color.TRANSPARENT);
+                break;
+            }
+        }
+
     }
 
     @Override
@@ -73,7 +83,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
     }
 
     private void createBiometricDialog(CheckBoxPreference preference) {
-        Activity activity = this;
         ExecutorService exe = Executors.newSingleThreadExecutor();
         BiometricPrompt prompt = new BiometricPrompt(this, exe, new BiometricPrompt.AuthenticationCallback() {
             @Override
@@ -111,6 +120,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             SettingsPrefActivity activity = (SettingsPrefActivity) getActivity();
+            if (activity == null) return;
             addPreferencesFromResource(R.xml.pref_main);
             alertDialogTheme = ThemeEngine.getAlertDialogTheme(activity);
             oldTheme = ThemeEngine.getTheme(activity);
@@ -128,7 +138,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             Preference delete = findPreference(getString(R.string.key_delete));
             delete.setOnPreferenceClickListener(preference -> {
-                if (activity == null) return false;
                 boolean result = ClientHelper.requestReadWritePermissions(activity);
                 if (!result) return false;
                 String directory = Environment.getExternalStorageDirectory() + "/OpenStud";
@@ -151,7 +160,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             EditTextPreference laude = findPreference(getString(R.string.key_default_laude));
             laude.setOnBindEditTextListener(editText -> {
-                if (activity == null) return;
                 editText.setTextColor(ThemeEngine.getPrimaryTextColor(activity));
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
             });
@@ -170,7 +178,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
             CheckBoxPreference enableBiometricLogin = findPreference(getString(R.string.key_biometrics));
             enableBiometricLogin.setOnPreferenceClickListener(preference -> {
                 if (enableBiometricLogin.isChecked()) enableBiometricLogin.setChecked(false);
-                else if (activity!=null) activity.createBiometricDialog(enableBiometricLogin);
+                else activity.createBiometricDialog(enableBiometricLogin);
                 return true;
             });
             enableBiometricLogin.setOnPreferenceChangeListener((preference, newValue) -> false);

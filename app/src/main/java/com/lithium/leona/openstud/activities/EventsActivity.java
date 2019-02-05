@@ -1,7 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -80,13 +79,7 @@ public class EventsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(EventsActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_YEAR, 7);

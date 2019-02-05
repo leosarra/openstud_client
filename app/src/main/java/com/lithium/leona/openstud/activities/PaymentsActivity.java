@@ -1,6 +1,5 @@
 package com.lithium.leona.openstud.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.View;
@@ -10,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.TabFragment;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.mikepenz.materialdrawer.Drawer;
@@ -46,13 +46,7 @@ public class PaymentsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(this);
         student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(PaymentsActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
