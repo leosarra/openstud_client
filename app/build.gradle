@@ -46,7 +46,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation group: 'androidx.core', name: 'core', version: '1.0.1'
-    implementation 'com.github.LithiumSR:openstud_driver:0.50.1'
+    implementation 'com.github.LithiumSR:openstud_driver:0.50.2'
     implementation 'com.jakewharton:butterknife:10.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
