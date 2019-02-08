@@ -210,7 +210,11 @@ public class ExamsActivity extends AppCompatActivity {
     private void analyzeExtras(Bundle bdl) {
         if (bdl == null) return;
         int error = bdl.getInt("error", -1);
-        if (error != -1 && error == ClientHelper.Status.NO_BIOMETRICS.getValue())
-            LayoutHelper.createTextSnackBar(mainLayout, R.string.no_biometrics_found, Snackbar.LENGTH_LONG);
+        if (error == -1) return;
+        if (error == ClientHelper.Status.NO_BIOMETRICS.getValue())
+            LayoutHelper.createTextSnackBar(mainLayout, R.string.login_no_biometrics_found, Snackbar.LENGTH_LONG);
+        else if (error == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()){
+            LayoutHelper.createTextSnackBar(mainLayout, R.string.login_no_biometric_hw_found, Snackbar.LENGTH_LONG);
+        }
     }
 }

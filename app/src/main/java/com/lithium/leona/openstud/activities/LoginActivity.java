@@ -236,9 +236,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS || errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT) {
+                if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS ) {
                     PreferenceManager.setBiometricsEnabled(LoginActivity.this,false);
                     h.sendEmptyMessage(ClientHelper.Status.NO_BIOMETRICS.getValue());
+                } else if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT) {
+                    PreferenceManager.setBiometricsEnabled(LoginActivity.this,false);
+                    h.sendEmptyMessage(ClientHelper.Status.NO_BIOMETRIC_HW.getValue());
                 }
                 else if (errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT || errorCode == BiometricPrompt.ERROR_LOCKOUT )
                     h.sendEmptyMessage(ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue());
@@ -308,10 +311,10 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.NO_BIOMETRICS.getValue()) {
+                } else if (msg.what == ClientHelper.Status.NO_BIOMETRICS.getValue() || msg.what == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()) {
                     Intent intent = new Intent(activity, ExamsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("error", ClientHelper.Status.NO_BIOMETRICS.getValue());
+                    intent.putExtra("error", msg.what);
                     activity.startActivity(intent);
                 }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {

@@ -210,10 +210,13 @@
     <string name="event_theatre_when">Starts at %1$s</string>
     <string name="event_theatre_where">Location: %1$s</string>
     <string name="key_biometrics" translatable="false">key_biometrics</string>
-    <string name="no_biometrics_found">Biometric login disabled because no available biometrics were found!</string>
+    <string name="login_no_biometrics_found">Biometric login disabled because no available biometric inputs were found!</string>
+    <string name="login_no_biometric_hw_found">Biometric login disabled because no compatible hardware were found!</string>
+    <string name="no_biometrics_found">Can\'t enable the feature because no available biometric inputs were found!</string>
+    <string name="no_biometric_hw_found">Can\'t enable the feature because no compatible hardware were found!</string>
     <string name="pref_title_security">Security</string>
     <string name="enable_biometric_login">Enable biometric login</string>
-    <string name="enable_biometric_login_description">Force the user to login using a biometric input (e.g: fingerprint, iris).</string>
+    <string name="enable_biometric_login_description">Force the user to login using a biometric input (e.g: fingerprint).</string>
     <string name="warning">Warning</string>
     <string name="biometric_warning">From the next start the app will request a biometric input already configured in the phone settings .\n\nIf no method of input is available this feature will be automatically disabled.</string>
     <string name="biometric_login">Biometric login</string>

@@ -189,7 +189,10 @@
     <string name="events">Eventi</string>
     <string name="event_theatre_when">Inizio alle ore %1$s</string>
     <string name="event_theatre_where">Presso: %1$s</string>
-    <string name="no_biometrics_found">Login biometrico disattivato perché nessun input valido è disponibile!</string>
+    <string name="login_no_biometrics_found">Login biometrico disattivato perché nessun input valido è disponibile</string>
+    <string name="login_no_biometric_hw_found">Login biometrico disattivato perché nessun hardware compatibile è disponibile</string>
+    <string name="no_biometrics_found">Impossibile attivare la funzionalità perché nessun input valido è disponibile</string>
+    <string name="no_biometric_hw_found">Impossibile attivare la funzionalità perché nessun hardware compatibile è disponibile</string>
     <string name="pref_title_security">Sicurezza</string>
     <string name="enable_biometric_login">Utilizza login biometrico</string>
     <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico (come impronta e iride).</string>
