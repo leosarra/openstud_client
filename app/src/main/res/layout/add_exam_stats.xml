@@ -16,10 +16,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
         android:text="@string/add_exams"
         android:textColor="?attr/primaryTextColor"
         android:textSize="18sp"
