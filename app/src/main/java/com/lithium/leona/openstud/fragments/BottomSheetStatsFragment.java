@@ -7,16 +7,24 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.adapters.DropdownExamAdapter;
+import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.warkiz.widget.IndicatorSeekBar;
+
+import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -24,10 +32,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lithium.openstud.driver.core.OpenstudHelper;
+import lithium.openstud.driver.core.models.Exam;
+import lithium.openstud.driver.core.models.ExamDoable;
+import lithium.openstud.driver.core.models.ExamDone;
 
 public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     @BindView(R.id.exam_name)
-    EditText examName;
+    AutoCompleteTextView examName;
     @BindView(R.id.cfu)
     IndicatorSeekBar cfu;
     @BindView(R.id.grade)
@@ -35,10 +46,23 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     @BindView(R.id.add)
     Button add;
 
+    private List<ExamDoable> examsDoable = new LinkedList<>();
     public BottomSheetStatsFragment() {
         // Required empty public constructor
     }
 
+    public static BottomSheetStatsFragment newInstance(List<ExamDoable> exams) {
+        BottomSheetStatsFragment myFragment = new BottomSheetStatsFragment();
+        if (exams!=null) {
+            Bundle args = new Bundle();
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<ExamDoable>>() {
+            }.getType();
+            args.putString("doable", gson.toJson(exams,listType));
+            myFragment.setArguments(args);
+        }
+        return myFragment;
+    }
     @OnClick(R.id.abort)
     public void hide() {
         dismiss();
@@ -56,6 +80,16 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bdl = getArguments();
+        if (bdl != null) {
+            String examsJson = bdl.getString("doable", null);
+            if (examsJson!=null) {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<ExamDoable>>() {
+                }.getType();
+                examsDoable.addAll(gson.fromJson(examsJson,listType));
+            }
+        }
     }
 
     @Override
@@ -67,6 +101,18 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(), R.attr.colorButtonNav, R.color.redSapienza);
         add.setEnabled(false);
         add.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
+        DropdownExamAdapter adapter = new DropdownExamAdapter(getActivity(), (List<Exam>)(Object)examsDoable);
+        filterExamsDoable();
+        examName.setThreshold(3);
+        examName.setAdapter(adapter);
+        examName.setOnItemClickListener((parent, view, position, id) -> {
+            Exam exam = adapter.getItem(position);
+            if (exam!=null) {
+                examName.setText(exam.getDescription());
+                cfu.setProgress(exam.getCfu());
+            }
+        });
+
         examName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,4 +145,18 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         return null;
     }
 
+    private void filterExamsDoable(){
+        List<ExamDone> fakeExams = InfoManager.getTemporaryFakeExams();
+        System.out.println(fakeExams);
+        List<ExamDoable> remove = new LinkedList<>();
+        for (ExamDone fake : fakeExams) {
+            for (ExamDoable doable : examsDoable) {
+                if (doable.getDescription().toLowerCase().equals(fake.getDescription().toLowerCase())) {
+                    remove.add(doable);
+                    break;
+                }
+            }
+        }
+        examsDoable.removeAll(remove);
+    }
 }

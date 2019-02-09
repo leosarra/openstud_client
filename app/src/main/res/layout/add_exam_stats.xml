@@ -34,7 +34,7 @@
         app:hintEnabled="true"
         android:theme="@style/StatsThemeEditText">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:id="@+id/exam_name"
             android:layout_width="330dp"
             android:layout_height="wrap_content"

@@ -128,14 +128,12 @@ public class StatsActivity extends AppCompatActivity {
         examsFake.add(exam);
         updateStats();
         adapter.notifyDataSetChanged();
+        InfoManager.saveTemporaryFakeExams(examsFake);
     }
 
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
-        if (!firstStart) {
-            if (examsFake != null) InfoManager.saveTemporaryFakeExams(examsFake);
-        }
         if (firstStart) firstStart = false;
         else if (PreferenceManager.getLaudeValue(this) != laude || time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30)
             refreshExamsDone();
@@ -335,7 +333,7 @@ public class StatsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_exam:
-                BottomSheetStatsFragment bottomSheetStatsFragment = new BottomSheetStatsFragment();
+                BottomSheetStatsFragment bottomSheetStatsFragment = BottomSheetStatsFragment.newInstance(InfoManager.getExamsDoableCached(this,os));
                 bottomSheetStatsFragment.show(getSupportFragmentManager(), bottomSheetStatsFragment.getTag());
                 return true;
         }
