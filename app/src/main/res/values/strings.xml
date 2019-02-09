@@ -13,7 +13,7 @@
     <string name="birthDate">Birth date</string>
     <string name="birthPlace">Birth place</string>
     <string name="year_corse_profile">%1$s year</string>
-    <string name="cfu" translatable="false">CFU</string>
+    <string name="ects">ECTS</string>
     <string name="isee" translatable="false">ISEE</string>
     <string name="profile">Profile</string>
     <string name="about">About</string>

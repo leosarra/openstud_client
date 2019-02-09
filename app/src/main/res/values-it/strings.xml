@@ -19,6 +19,7 @@
     <string name="exit">Esci</string>
     <string name="paid">Pagate</string>
     <string name="unpaid">Non pagate</string>
+    <string name="ects">CFU</string>
     <string name="payment_number">Bollettino n. %1$s</string>
     <string name="payment_number_ext">Numero bollettino: %1$s</string>
     <string name="course_code_pay">Codice corso: %1$s</string>

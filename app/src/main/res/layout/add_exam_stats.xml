@@ -87,7 +87,7 @@
         android:paddingStart="40dp"
         android:paddingEnd="40dp"
         android:textColor="?attr/secondaryTextColor"
-        android:text="@string/cfu" />
+        android:text="@string/ects" />
 
     <com.warkiz.widget.IndicatorSeekBar
         android:id="@+id/cfu"

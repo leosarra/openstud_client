@@ -417,7 +417,7 @@
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_toEndOf="@id/ivContactItem9"
                 android:layout_toRightOf="@id/ivContactItem9"
-                android:text="@string/cfu"
+                android:text="@string/ects"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="?attr/primaryTextColor" />
 
@@ -430,7 +430,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/ivContactItem9"
                 android:layout_toRightOf="@id/ivContactItem9"
-                android:text="@string/cfu"
+                android:text="@string/ects"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="?attr/secondaryTextColor" />
         </RelativeLayout>
