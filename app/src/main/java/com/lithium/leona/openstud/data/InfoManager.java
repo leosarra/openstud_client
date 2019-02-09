@@ -41,7 +41,7 @@ public class InfoManager {
     private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
     private static List<News> news;
-    private static List<ExamDone> fakeExams;
+    private static List<ExamDone> fakeExams = new LinkedList<>();
     private static List<Event> events;
     private static List<String> filter;
     private static List<Event> theatre_events;
@@ -199,13 +199,13 @@ public class InfoManager {
     }
 
 
-    public static void saveTemporaryFakeExams(List<ExamDone> exams) {
-        fakeExams = exams;
+    public static synchronized void saveTemporaryFakeExams(List<ExamDone> exams) {
+        fakeExams.clear();
+        if (exams!=null) fakeExams.addAll(exams);
     }
 
-    public static List<ExamDone> getTemporaryFakeExams() {
-        if (fakeExams == null) fakeExams = new LinkedList<>();
-        return fakeExams;
+    public static synchronized List<ExamDone> getTemporaryFakeExams() {
+        return new LinkedList<>(fakeExams);
     }
 
     public static Isee getIseeCached(Context context, Openstud os) {
