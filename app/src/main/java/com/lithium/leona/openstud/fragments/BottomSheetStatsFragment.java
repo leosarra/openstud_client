@@ -1,5 +1,6 @@
 package com.lithium.leona.openstud.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -98,10 +99,15 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.add_exam_stats, container, false);
         ButterKnife.bind(this, v);
         ClientHelper.setDialogView(v, getDialog(), BottomSheetBehavior.STATE_EXPANDED);
-        int tintColorEnabled = LayoutHelper.getColorByAttr(getContext(), R.attr.colorButtonNav, R.color.redSapienza);
+        Context context = getContext();
+        if (context == null) {
+            dismiss();
+            return null;
+        }
+        int tintColorEnabled = LayoutHelper.getColorByAttr(context, R.attr.colorButtonNav, R.color.redSapienza);
         add.setEnabled(false);
-        add.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
-        DropdownExamAdapter adapter = new DropdownExamAdapter(getActivity(), (List<Exam>)(Object)examsDoable);
+        add.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
+        DropdownExamAdapter adapter = new DropdownExamAdapter(context, (List<Exam>)(Object)examsDoable);
         filterExamsDoable();
         examName.setThreshold(3);
         examName.setAdapter(adapter);
@@ -123,7 +129,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
                 String text = s.toString();
                 if (text.trim().length() == 0) {
                     add.setEnabled(false);
-                    add.setTextColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
+                    add.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
                 } else {
                     add.setEnabled(true);
                     add.setTextColor(tintColorEnabled);
@@ -137,7 +143,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         });
         examName.setOnKeyListener((v1, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                ClientHelper.hideKeyboard(v, getContext());
+                ClientHelper.hideKeyboard(v, context);
                 return true;
             }
             return false;
