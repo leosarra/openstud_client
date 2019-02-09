@@ -93,6 +93,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         add.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
         DropdownExamAdapter adapter = new DropdownExamAdapter(context, (List<Exam>)(Object)examsDoable);
         filterExamsDoable();
-        examName.setThreshold(3);
+        examName.setThreshold(2);
         examName.setAdapter(adapter);
         examName.setOnItemClickListener((parent, view, position, id) -> {
             Exam exam = adapter.getItem(position);

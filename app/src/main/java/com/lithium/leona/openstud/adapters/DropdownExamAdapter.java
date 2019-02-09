@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class DropdownExamAdapter extends ArrayAdapter<Exam> {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
-            ArrayList<Exam> tempList= new ArrayList<>();
+            LinkedList<Exam> tempList= new LinkedList<>();
             if(constraint != null && all!=null) {
                 int length=all.size();
                 int i=0;
@@ -33,7 +32,8 @@ public class DropdownExamAdapter extends ArrayAdapter<Exam> {
                     Exam item=all.get(i);
                     String title = item.getDescription().toLowerCase().trim();
                     String filterText = constraint.toString().toLowerCase().trim();
-                    if (title.equals(filterText) || title.contains(filterText)) tempList.add(item);
+                    if (title.startsWith(filterText)) tempList.addFirst(item);
+                    else if (title.contains(filterText)) tempList.addLast(item);
                     i++;
                 }
                 filterResults.values = tempList;
