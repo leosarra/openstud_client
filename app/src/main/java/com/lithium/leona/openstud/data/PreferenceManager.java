@@ -35,7 +35,7 @@ public class PreferenceManager {
     public static boolean isBiometricsEnabled(Context context) {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
-            return pref.getBoolean(context.getResources().getString(R.string.key_biometrics), true);
+            return pref.getBoolean(context.getResources().getString(R.string.key_biometrics), false);
         }
     }
     public static void setBiometricsEnabled(Context context, boolean enabled) {
