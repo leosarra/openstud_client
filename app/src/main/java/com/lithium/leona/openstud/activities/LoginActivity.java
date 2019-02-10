@@ -187,8 +187,8 @@ public class LoginActivity extends AppCompatActivity {
             os.login();
             InfoManager.getInfoStudent(this, os);
             InfoManager.getIsee(this, os);
-            if(!rememberFlag || (InfoManager.hasLogin(this) && !InfoManager.getStudentId(this).equals(id)))
-                PreferenceManager.setBiometricsEnabled(this,false);
+            if (!rememberFlag || (InfoManager.hasLogin(this) && !InfoManager.getStudentId(this).equals(id)))
+                PreferenceManager.setBiometricsEnabled(this, false);
             InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
@@ -230,20 +230,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void handleBiometrics(){
+    private void handleBiometrics() {
         ExecutorService exe = Executors.newSingleThreadExecutor();
         BiometricPrompt prompt = new BiometricPrompt(this, exe, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS ) {
-                    PreferenceManager.setBiometricsEnabled(LoginActivity.this,false);
+                if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS) {
+                    PreferenceManager.setBiometricsEnabled(LoginActivity.this, false);
                     h.sendEmptyMessage(ClientHelper.Status.NO_BIOMETRICS.getValue());
                 } else if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT) {
-                    PreferenceManager.setBiometricsEnabled(LoginActivity.this,false);
+                    PreferenceManager.setBiometricsEnabled(LoginActivity.this, false);
                     h.sendEmptyMessage(ClientHelper.Status.NO_BIOMETRIC_HW.getValue());
-                }
-                else if (errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT || errorCode == BiometricPrompt.ERROR_LOCKOUT )
+                } else if (errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT || errorCode == BiometricPrompt.ERROR_LOCKOUT)
                     h.sendEmptyMessage(ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue());
             }
 

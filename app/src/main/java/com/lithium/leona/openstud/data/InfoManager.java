@@ -201,7 +201,7 @@ public class InfoManager {
 
     public static synchronized void saveTemporaryFakeExams(List<ExamDone> exams) {
         fakeExams.clear();
-        if (exams!=null) fakeExams.addAll(exams);
+        if (exams != null) fakeExams.addAll(exams);
     }
 
     public static synchronized List<ExamDone> getTemporaryFakeExams() {

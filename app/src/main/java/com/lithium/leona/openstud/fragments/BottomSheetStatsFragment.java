@@ -48,22 +48,24 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     Button add;
 
     private List<ExamDoable> examsDoable = new LinkedList<>();
+
     public BottomSheetStatsFragment() {
         // Required empty public constructor
     }
 
     public static BottomSheetStatsFragment newInstance(List<ExamDoable> exams) {
         BottomSheetStatsFragment myFragment = new BottomSheetStatsFragment();
-        if (exams!=null) {
+        if (exams != null) {
             Bundle args = new Bundle();
             Gson gson = new Gson();
             Type listType = new TypeToken<List<ExamDoable>>() {
             }.getType();
-            args.putString("doable", gson.toJson(exams,listType));
+            args.putString("doable", gson.toJson(exams, listType));
             myFragment.setArguments(args);
         }
         return myFragment;
     }
+
     @OnClick(R.id.abort)
     public void hide() {
         dismiss();
@@ -84,11 +86,11 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         Bundle bdl = getArguments();
         if (bdl != null) {
             String examsJson = bdl.getString("doable", null);
-            if (examsJson!=null) {
+            if (examsJson != null) {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<ExamDoable>>() {
                 }.getType();
-                examsDoable.addAll(gson.fromJson(examsJson,listType));
+                examsDoable.addAll(gson.fromJson(examsJson, listType));
             }
         }
     }
@@ -108,13 +110,13 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         int tintColorEnabled = LayoutHelper.getColorByAttr(context, R.attr.colorButtonNav, R.color.redSapienza);
         add.setEnabled(false);
         add.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
-        DropdownExamAdapter adapter = new DropdownExamAdapter(context, (List<Exam>)(Object)examsDoable);
+        DropdownExamAdapter adapter = new DropdownExamAdapter(context, (List<Exam>) (Object) examsDoable);
         filterExamsDoable();
         examName.setThreshold(2);
         examName.setAdapter(adapter);
         examName.setOnItemClickListener((parent, view, position, id) -> {
             Exam exam = adapter.getItem(position);
-            if (exam!=null) {
+            if (exam != null) {
                 examName.setText(exam.getDescription());
                 cfu.setProgress(exam.getCfu());
             }
@@ -152,7 +154,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         return null;
     }
 
-    private void filterExamsDoable(){
+    private void filterExamsDoable() {
         List<ExamDone> fakeExams = InfoManager.getTemporaryFakeExams();
         System.out.println(fakeExams);
         List<ExamDoable> remove = new LinkedList<>();

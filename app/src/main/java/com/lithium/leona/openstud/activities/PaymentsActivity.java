@@ -55,8 +55,7 @@ public class PaymentsActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt("tabSelected", -1);
             tabFrag = (TabFragment) getSupportFragmentManager().getFragment(savedInstanceState, "tab");
-        }
-        else tabFrag = TabFragment.newInstance(selectedItem);
+        } else tabFrag = TabFragment.newInstance(selectedItem);
         fragmentManager.beginTransaction().replace(R.id.content_frame, tabFrag).commit();
 
     }

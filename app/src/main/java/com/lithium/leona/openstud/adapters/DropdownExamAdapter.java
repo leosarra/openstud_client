@@ -24,12 +24,12 @@ public class DropdownExamAdapter extends ArrayAdapter<Exam> {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
-            LinkedList<Exam> tempList= new LinkedList<>();
-            if(constraint != null && all!=null) {
-                int length=all.size();
-                int i=0;
-                while(i<length){
-                    Exam item=all.get(i);
+            LinkedList<Exam> tempList = new LinkedList<>();
+            if (constraint != null && all != null) {
+                int length = all.size();
+                int i = 0;
+                while (i < length) {
+                    Exam item = all.get(i);
                     String title = item.getDescription().toLowerCase().trim();
                     String filterText = constraint.toString().toLowerCase().trim();
                     if (title.startsWith(filterText)) tempList.addFirst(item);
@@ -46,7 +46,7 @@ public class DropdownExamAdapter extends ArrayAdapter<Exam> {
         @Override
         protected void publishResults(CharSequence contraint, FilterResults results) {
             exams.clear();
-            if(results.values !=null) exams.addAll((Collection<? extends Exam>) results.values);
+            if (results.values != null) exams.addAll((Collection<? extends Exam>) results.values);
             if (results.count > 0) {
                 notifyDataSetChanged();
             } else {
@@ -57,7 +57,7 @@ public class DropdownExamAdapter extends ArrayAdapter<Exam> {
 
 
     public DropdownExamAdapter(Context context, List<Exam> examsDoable) {
-        super(context,0,examsDoable);
+        super(context, 0, examsDoable);
         exams = examsDoable;
         all = new LinkedList<>(exams);
     }
@@ -79,7 +79,7 @@ public class DropdownExamAdapter extends ArrayAdapter<Exam> {
         }
 
         Exam item = getItem(position);
-        if (item!= null) {
+        if (item != null) {
             viewHolder.itemView.setText(item.getDescription());
         }
 

@@ -333,7 +333,7 @@ public class StatsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_exam:
-                BottomSheetStatsFragment bottomSheetStatsFragment = BottomSheetStatsFragment.newInstance(InfoManager.getExamsDoableCached(this,os));
+                BottomSheetStatsFragment bottomSheetStatsFragment = BottomSheetStatsFragment.newInstance(InfoManager.getExamsDoableCached(this, os));
                 bottomSheetStatsFragment.show(getSupportFragmentManager(), bottomSheetStatsFragment.getTag());
                 return true;
         }

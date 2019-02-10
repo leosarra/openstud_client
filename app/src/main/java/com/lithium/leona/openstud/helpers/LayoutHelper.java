@@ -177,7 +177,8 @@ public class LayoutHelper {
         else if (activity instanceof ExamsActivity) return Selection.EXAMS.getValue();
         else if (activity instanceof StatsActivity) return Selection.STATS.getValue();
         else if (activity instanceof CalendarActivity) return Selection.CALENDAR.getValue();
-        else if (activity instanceof SearchClassroomActivity) return Selection.CLASSROOMS.getValue();
+        else if (activity instanceof SearchClassroomActivity)
+            return Selection.CLASSROOMS.getValue();
         else if (activity instanceof PaymentsActivity) return Selection.TAX.getValue();
         else if (activity instanceof NewsActivity) return Selection.NEWS.getValue();
         else if (activity instanceof EventsActivity) return Selection.EVENTS.getValue();

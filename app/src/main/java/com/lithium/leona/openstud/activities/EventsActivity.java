@@ -129,25 +129,25 @@ public class EventsActivity extends AppCompatActivity {
 
     private void refreshEvents(Calendar date, boolean refresh) {
         new Thread(() -> {
-                synchronized (this){
-                    try {
-                        if (refresh) {
-                            setRefreshing(true);
-                            List<Event> newEvents = InfoManager.getEventsUniversity(this, os);
-                            if (newEvents != null && !newEvents.equals(events)) {
-                                events.clear();
-                            }
-                            setRefreshing(false);
+            synchronized (this) {
+                try {
+                    if (refresh) {
+                        setRefreshing(true);
+                        List<Event> newEvents = InfoManager.getEventsUniversity(this, os);
+                        if (newEvents != null && !newEvents.equals(events)) {
+                            events.clear();
                         }
-                    } catch (OpenstudConnectionException e) {
-                        e.printStackTrace();
-                        h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-                    } catch (OpenstudInvalidResponseException e) {
-                        e.printStackTrace();
-                        h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                        setRefreshing(false);
                     }
-                    applyEvents(date);
+                } catch (OpenstudConnectionException e) {
+                    e.printStackTrace();
+                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+                } catch (OpenstudInvalidResponseException e) {
+                    e.printStackTrace();
+                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 }
+                applyEvents(date);
+            }
         }).start();
     }
 

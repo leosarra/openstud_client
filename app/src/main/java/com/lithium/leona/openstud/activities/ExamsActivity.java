@@ -213,7 +213,7 @@ public class ExamsActivity extends AppCompatActivity {
         if (error == -1) return;
         if (error == ClientHelper.Status.NO_BIOMETRICS.getValue())
             LayoutHelper.createTextSnackBar(mainLayout, R.string.login_no_biometrics_found, Snackbar.LENGTH_LONG);
-        else if (error == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()){
+        else if (error == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()) {
             LayoutHelper.createTextSnackBar(mainLayout, R.string.login_no_biometric_hw_found, Snackbar.LENGTH_LONG);
         }
     }

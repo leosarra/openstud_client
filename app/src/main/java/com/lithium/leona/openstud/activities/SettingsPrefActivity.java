@@ -40,6 +40,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
     @BindView(R.id.main_layout)
     ConstraintLayout mainLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
         for (int i = 0; i < toolbar.getChildCount(); ++i) {
             View child = toolbar.getChildAt(i);
             if (child instanceof TextView) {
-                TextView toolbarTitle = (TextView)child;
+                TextView toolbarTitle = (TextView) child;
                 toolbarTitle.setBackgroundColor(Color.TRANSPARENT);
                 break;
             }
@@ -88,9 +89,12 @@ public class SettingsPrefActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT) LayoutHelper.createTextSnackBar(mainLayout,R.string.no_biometric_hw_found,Snackbar.LENGTH_LONG);
-                else if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS) LayoutHelper.createTextSnackBar(mainLayout,R.string.no_biometrics_found,Snackbar.LENGTH_LONG);
-                else if (errorCode == BiometricPrompt.ERROR_LOCKOUT || errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT) LayoutHelper.createTextSnackBar(mainLayout,R.string.biometric_lockout,Snackbar.LENGTH_LONG);
+                if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT)
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.no_biometric_hw_found, Snackbar.LENGTH_LONG);
+                else if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS)
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.no_biometrics_found, Snackbar.LENGTH_LONG);
+                else if (errorCode == BiometricPrompt.ERROR_LOCKOUT || errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT)
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
                 runOnUiThread(() -> preference.setChecked(false));
             }
 
