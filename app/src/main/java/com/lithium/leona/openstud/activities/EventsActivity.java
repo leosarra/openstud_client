@@ -70,6 +70,7 @@ public class EventsActivity extends AppCompatActivity {
     private List<Event> events = new LinkedList<>();
     private EventTheatreAdapter adapter;
     private EventHandler h = new EventHandler(this);
+    private boolean test = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,46 +113,46 @@ public class EventsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.events);
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(() -> refreshEvents(horizontalCalendar.getSelectedDate(), true));
+        swipeRefreshLayout.setOnRefreshListener(() -> refreshEvents(true));
         emptyButton.setOnClickListener(v -> {
             if (!swipeRefreshLayout.isRefreshing())
-                refreshEvents(horizontalCalendar.getSelectedDate(), true);
+                refreshEvents(true);
         });
         List<Event> cached_events = InfoManager.getEventsUniversityCached(this, os);
         swapViews(true);
         if (cached_events != null && !cached_events.isEmpty()) {
             events.clear();
             events.addAll(cached_events);
-            refreshEvents(defaultDate, false);
+            refreshEvents(false);
         }
-        if (savedInstanceState == null) refreshEvents(defaultDate, true);
+        if (savedInstanceState == null) refreshEvents(true);
     }
 
-    private void refreshEvents(Calendar date, boolean refresh) {
+    private void refreshEvents(boolean refresh) {
         new Thread(() -> {
-            synchronized (this) {
-                try {
-                    if (refresh) {
-                        setRefreshing(true);
-                        List<Event> newEvents = InfoManager.getEventsUniversity(this, os);
-                        if (newEvents != null && !newEvents.equals(events)) {
-                            events.clear();
-                        }
-                        setRefreshing(false);
+            try {
+                if (refresh) {
+                    setRefreshing(true);
+                    List<Event> newEvents = InfoManager.getEventsUniversity(this, os);
+                    if (newEvents != null && !newEvents.equals(events)) {
+                        events.clear();
+                        events.addAll(newEvents);
                     }
-                } catch (OpenstudConnectionException e) {
-                    e.printStackTrace();
-                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-                } catch (OpenstudInvalidResponseException e) {
-                    e.printStackTrace();
-                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                    setRefreshing(false);
                 }
-                applyEvents(date);
+            } catch (OpenstudConnectionException e) {
+                e.printStackTrace();
+                h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+            } catch (OpenstudInvalidResponseException e) {
+                e.printStackTrace();
+                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             }
+            applyEvents(horizontalCalendar.getSelectedDate());
         }).start();
     }
 
-    private void applyEvents(Calendar date) {
+    private synchronized void applyEvents(Calendar date) {
+        if (date==null) date=defaultDate;
         List<Event> eventDate = new LinkedList<>();
         for (Event ev : events) {
             if (ev.getStart() != null && date.getTimeInMillis() == ev.getStart().toLocalDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
@@ -217,7 +218,7 @@ public class EventsActivity extends AppCompatActivity {
             horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
                 @Override
                 public void onDateSelected(Calendar date, int position) {
-                    refreshEvents(date, false);
+                    refreshEvents(false);
                 }
             });
         });
@@ -234,7 +235,7 @@ public class EventsActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             final EventsActivity activity = this.activity.get();
             if (activity == null) return;
-            View.OnClickListener ocl = v -> activity.refreshEvents(activity.horizontalCalendar.getSelectedDate(), true);
+            View.OnClickListener ocl = v -> activity.refreshEvents(true);
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                 LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
