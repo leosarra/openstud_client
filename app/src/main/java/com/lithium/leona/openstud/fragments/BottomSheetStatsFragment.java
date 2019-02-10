@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.StatsActivity;
@@ -60,8 +61,12 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<ExamDoable>>() {
             }.getType();
-            args.putString("doable", gson.toJson(exams, listType));
-            myFragment.setArguments(args);
+            try {
+                args.putString("doable", gson.toJson(exams, listType));
+                myFragment.setArguments(args);
+            } catch (JsonParseException e) {
+                e.printStackTrace();
+            }
         }
         return myFragment;
     }
@@ -90,7 +95,11 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<List<ExamDoable>>() {
                 }.getType();
-                examsDoable.addAll(gson.fromJson(examsJson, listType));
+                try {
+                    examsDoable.addAll(gson.fromJson(examsJson, listType));
+                } catch (JsonParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
