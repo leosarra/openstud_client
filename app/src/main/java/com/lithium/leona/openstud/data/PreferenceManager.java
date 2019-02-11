@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PreferenceManager {
     private static SharedPreferences pref;
-
+    public final static boolean BIOMETRIC_FEATURE_AVAIABLE = true;
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
         pref = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context);
@@ -33,6 +33,7 @@ public class PreferenceManager {
     }
 
     public static boolean isBiometricsEnabled(Context context) {
+        if (!BIOMETRIC_FEATURE_AVAIABLE) return false;
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
             return pref.getBoolean(context.getResources().getString(R.string.key_biometrics), false);
