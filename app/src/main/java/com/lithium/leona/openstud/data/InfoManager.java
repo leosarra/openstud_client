@@ -160,7 +160,7 @@ public class InfoManager {
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (events != null) return events;
+            if (events != null) return new LinkedList<>(events);
             oldObj = pref.getString("events", "null");
         }
         Type listType = new TypeToken<List<Event>>() {
@@ -275,7 +275,7 @@ public class InfoManager {
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (paidTaxes != null) return paidTaxes;
+            if (paidTaxes != null) return new LinkedList<>(paidTaxes);
             oldObj = pref.getString("paidTaxes", "null");
         }
         Type listType = new TypeToken<List<Tax>>() {
@@ -332,7 +332,7 @@ public class InfoManager {
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (examsDoable != null) return examsDoable;
+            if (examsDoable != null) return new LinkedList<>(examsDoable);
             oldObj = pref.getString("examsDoable", "null");
         }
         Type listType = new TypeToken<List<ExamDoable>>() {
@@ -371,7 +371,7 @@ public class InfoManager {
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (reservations != null) return reservations;
+            if (reservations != null) return new LinkedList<>(reservations);
             oldObj = pref.getString("reservations", "null");
         }
         Type listType = new TypeToken<List<ExamReservation>>() {
@@ -425,7 +425,7 @@ public class InfoManager {
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (unpaidTaxes != null) return unpaidTaxes;
+            if (unpaidTaxes != null) return new LinkedList<>(unpaidTaxes);
             oldObj = pref.getString("unpaidTaxes", "null");
         }
         Type listType = new TypeToken<List<Tax>>() {
@@ -481,7 +481,7 @@ public class InfoManager {
         synchronized (InfoManager.class) {
             if (news != null) {
                 if (!news.isEmpty() && !news.get(0).getLocale().equals(locale)) return null;
-                return news;
+                return new LinkedList<>(news);
             }
             oldObj = pref.getString("news", "null");
         }
@@ -522,7 +522,7 @@ public class InfoManager {
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
             if (theatre_events != null) {
-                return theatre_events;
+                return new LinkedList<>(theatre_events);
             }
             oldObj = pref.getString("eventsUniversity", "null");
         }
