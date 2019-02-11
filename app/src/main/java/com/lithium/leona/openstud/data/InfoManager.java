@@ -689,7 +689,7 @@ public class InfoManager {
         if (fake != null && done != null) {
             for (ExamDone ex : fake) {
                 for (ExamDone ex2 : done) {
-                    if (ex.getDescription().toLowerCase().equals(ex2.getDescription().toLowerCase())) {
+                    if (ex.getDescription().toLowerCase().trim().equals(ex2.getDescription().toLowerCase().trim())) {
                         remove.add(ex);
                         break;
                     }
