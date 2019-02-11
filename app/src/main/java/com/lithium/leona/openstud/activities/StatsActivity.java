@@ -125,10 +125,13 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     public void addFakeExam(ExamDone exam) {
-        examsFake.add(exam);
+        synchronized (this) {
+            examsFake.add(exam);
+            InfoManager.saveFakeExams(this,examsFake);
+            adapter.notifyDataSetChanged();
+        }
         updateStats();
-        adapter.notifyDataSetChanged();
-        InfoManager.saveTemporaryFakeExams(examsFake);
+        ClientHelper.updateGradesWidget(this,true);
     }
 
     public void onResume() {
@@ -348,11 +351,13 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     private void createRecyclerView(List<ExamDone> exams_cached) {
-        examsFake = InfoManager.getTemporaryFakeExams();
+        examsFake = InfoManager.getTemporaryFakeExams(this, os);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new FakeExamAdapter(this, examsFake);
+        adapter = new FakeExamAdapter(this, examsFake, (exam, position) -> {
+            removeFakeExam(position);
+        });
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
@@ -373,10 +378,10 @@ public class StatsActivity extends AppCompatActivity {
             exams.remove(examsFake.get(position));
             examsFake.remove(position);
             adapter.notifyItemRemoved(position);
+            InfoManager.saveFakeExams(this,examsFake);
         }
-        adapter.notifyDataSetChanged();
         updateStats();
-
+        ClientHelper.updateGradesWidget(this,true);
     }
 
     @Override

@@ -176,7 +176,10 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 } catch (NumberFormatException e) {
                     valid = false;
                 }
-                if (valid) PreferenceManager.setStatsNotificationEnabled(getContext(), false);
+                if (valid) {
+                    PreferenceManager.setStatsNotificationEnabled(getContext(), false);
+                    ClientHelper.updateGradesWidget(activity,true);
+                }
                 return valid;
             });
             CheckBoxPreference enableBiometricLogin = findPreference(getString(R.string.key_biometrics));
@@ -186,11 +189,16 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 return true;
             });
             enableBiometricLogin.setOnPreferenceChangeListener((preference, newValue) -> false);
+            disableUnavailablePreferences();
         }
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
+        }
+
+        private void disableUnavailablePreferences(){
+            if (!PreferenceManager.BIOMETRIC_FEATURE_AVAIABLE) findPreference(getString(R.string.key_security_category)).setVisible(false);
         }
     }
 

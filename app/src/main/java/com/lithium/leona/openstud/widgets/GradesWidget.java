@@ -49,9 +49,10 @@ public class GradesWidget extends AppWidgetProvider {
     }
 
     private static void updateStats(Context context, AppWidgetManager appWidgetManager, int appWidgetId, RemoteViews views, Openstud os) {
-        List<ExamDone> ret;
-        ret = InfoManager.getExamsDoneCached(context, os);
-        updateView(context, appWidgetManager, appWidgetId, views, ret);
+        List<ExamDone> exams = InfoManager.getExamsDoneCached(context, os);
+        List<ExamDone> fake = InfoManager.getTemporaryFakeExams(context, os);
+        if (exams != null && fake != null) exams.addAll(fake);
+        updateView(context, appWidgetManager, appWidgetId, views, exams);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
