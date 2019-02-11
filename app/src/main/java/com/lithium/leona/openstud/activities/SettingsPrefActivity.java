@@ -198,7 +198,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
         }
 
         private void disableUnavailablePreferences(){
-            if (!PreferenceManager.BIOMETRIC_FEATURE_AVAIABLE) findPreference(getString(R.string.key_security_category)).setVisible(false);
+            if (!PreferenceManager.BIOMETRIC_FEATURE_AVAILABLE) findPreference(getString(R.string.key_security_category)).setVisible(false);
         }
     }
 
