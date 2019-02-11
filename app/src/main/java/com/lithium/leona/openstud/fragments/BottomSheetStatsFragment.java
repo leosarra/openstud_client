@@ -120,7 +120,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         add.setEnabled(false);
         add.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
         DropdownExamAdapter adapter = new DropdownExamAdapter(context, (List<Exam>) (Object) examsDoable);
-        filterExamsDoable();
+        filterExamsDoable(getContext());
         examName.setThreshold(2);
         examName.setAdapter(adapter);
         examName.setOnItemClickListener((parent, view, position, id) -> {
@@ -163,9 +163,9 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         return null;
     }
 
-    private void filterExamsDoable() {
-        List<ExamDone> fakeExams = InfoManager.getTemporaryFakeExams();
-        System.out.println(fakeExams);
+    private void filterExamsDoable(Context context) {
+        List<ExamDone> fakeExams = InfoManager.getTemporaryFakeExams(context, InfoManager.getOpenStud(context));
+        if (fakeExams == null) return;
         List<ExamDoable> remove = new LinkedList<>();
         for (ExamDone fake : fakeExams) {
             for (ExamDoable doable : examsDoable) {

@@ -41,7 +41,7 @@ public class InfoManager {
     private static List<ExamDoable> examsDoable;
     private static List<ExamReservation> reservations;
     private static List<News> news;
-    private static List<ExamDone> fakeExams = new LinkedList<>();
+    private static List<ExamDone> fakeExams;
     private static List<Event> events;
     private static List<String> filter;
     private static List<Event> theatre_events;
@@ -199,13 +199,41 @@ public class InfoManager {
     }
 
 
-    public static synchronized void saveTemporaryFakeExams(List<ExamDone> exams) {
-        fakeExams.clear();
-        if (exams != null) fakeExams.addAll(exams);
+    public static void saveFakeExams(Context context, List<ExamDone> exams) {
+        setupSharedPreferences(context);
+        Gson gson = new Gson();
+        String obj;
+        synchronized (InfoManager.class) {
+            if (exams != null) fakeExams = new LinkedList<>(exams);
+            else fakeExams = new LinkedList<>();
+            Type listType = new TypeToken<List<ExamDone>>() {
+            }.getType();
+            obj = gson.toJson(fakeExams,listType);
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            prefsEditor.putString("fakeExams", obj);
+            prefsEditor.commit();
+        }
     }
 
-    public static synchronized List<ExamDone> getTemporaryFakeExams() {
-        return new LinkedList<>(fakeExams);
+    public static synchronized List<ExamDone> getTemporaryFakeExams(Context context, Openstud os) {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (fakeExams != null) return new LinkedList<>(fakeExams);
+            oldObj = pref.getString("fakeExams", null);
+        }
+        Type listType = new TypeToken<List<ExamDone>>() {
+        }.getType();
+        List<ExamDone> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        if (ret == null) return new LinkedList<>();
+        return ret;
     }
 
     public static Isee getIseeCached(Context context, Openstud os) {
@@ -267,7 +295,7 @@ public class InfoManager {
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (examsDone != null) return examsDone;
+            if (examsDone != null) return new LinkedList<>(examsDone);
             oldObj = pref.getString("examsDone", "null");
         }
         Type listType = new TypeToken<List<ExamDone>>() {
