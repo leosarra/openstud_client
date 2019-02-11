@@ -164,7 +164,7 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     }
 
     private void filterExamsDoable(Context context) {
-        List<ExamDone> fakeExams = InfoManager.getTemporaryFakeExams(context, InfoManager.getOpenStud(context));
+        List<ExamDone> fakeExams = InfoManager.getFakeExams(context, InfoManager.getOpenStud(context));
         if (fakeExams == null) return;
         List<ExamDoable> remove = new LinkedList<>();
         for (ExamDone fake : fakeExams) {

@@ -281,7 +281,9 @@ public class StatsActivity extends AppCompatActivity {
                         exams.clear();
                         exams.addAll(update);
                         updateStats();
+                        refreshFakeExams();
                         exams.addAll(examsFake);
+                        ClientHelper.updateGradesWidget(this,true);
                     }
                 }
                 updateTimer();
@@ -292,6 +294,16 @@ public class StatsActivity extends AppCompatActivity {
                 setRefreshing(false);
             }
         }).start();
+    }
+
+
+    private void refreshFakeExams(){
+        List<ExamDone> newFake = InfoManager.getFakeExams(this,os);
+        if (newFake!=null && !newFake.equals(examsFake)) {
+            examsFake.clear();
+            examsFake.addAll(newFake);
+            runOnUiThread(() -> adapter.notifyDataSetChanged());
+        }
     }
 
     private void setRefreshing(final boolean bool) {
@@ -351,7 +363,7 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     private void createRecyclerView(List<ExamDone> exams_cached) {
-        examsFake = InfoManager.getTemporaryFakeExams(this, os);
+        examsFake = InfoManager.getFakeExams(this, os);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);

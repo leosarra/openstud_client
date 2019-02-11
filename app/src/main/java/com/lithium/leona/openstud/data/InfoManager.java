@@ -215,9 +215,14 @@ public class InfoManager {
         }
     }
 
-    public static synchronized List<ExamDone> getTemporaryFakeExams(Context context, Openstud os) {
+    public static List<ExamDone> getFakeExams(Context context, Openstud os) {
+        return _getFakeExams(context,os,true);
+    }
+
+    private static synchronized List<ExamDone> _getFakeExams(Context context, Openstud os, boolean removeDuplicates) {
         setupSharedPreferences(context);
         if (os == null) return null;
+        if (removeDuplicates) InfoManager.removeDuplicatesFakeExams(context,os);
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -235,6 +240,8 @@ public class InfoManager {
         if (ret == null) return new LinkedList<>();
         return ret;
     }
+
+
 
     public static Isee getIseeCached(Context context, Openstud os) {
         setupSharedPreferences(context);
@@ -672,6 +679,24 @@ public class InfoManager {
                 editor.putString("filter_calendar", toJson);
                 editor.apply();
             } else filter = gson.fromJson(json, listType);
+        }
+    }
+
+    private static void removeDuplicatesFakeExams(Context context, Openstud os) {
+        List<ExamDone> fake = InfoManager._getFakeExams(context,os,false);
+        List<ExamDone> done = InfoManager.getExamsDoneCached(context,os);
+        List<ExamDone> remove = new LinkedList<>();
+        if (fake != null && done != null) {
+            for (ExamDone ex : fake) {
+                for (ExamDone ex2 : done) {
+                    if (ex.getDescription().toLowerCase().equals(ex2.getDescription().toLowerCase())) {
+                        remove.add(ex);
+                        break;
+                    }
+                }
+            }
+            fake.removeAll(remove);
+            InfoManager.saveFakeExams(context,fake);
         }
     }
 }
