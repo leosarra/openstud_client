@@ -54,6 +54,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_security"
+        android:key="@string/key_security_category"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:title="@string/enable_biometric_login"

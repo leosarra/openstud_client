@@ -195,8 +195,8 @@
     <string name="no_biometrics_found">Impossibile attivare la funzionalità perché non é presente un input registrato</string>
     <string name="no_biometric_hw_found">Impossibile attivare la funzionalità perché il telefono non risulta compatibile</string>
     <string name="pref_title_security">Sicurezza</string>
-    <string name="enable_biometric_login">Utilizza login biometrico</string>
-    <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico (come impronta e iride).</string>
+    <string name="enable_biometric_login">Utilizza login biometrico (Beta)</string>
+    <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico.</string>
     <string name="warning">Avviso</string>
     <string name="biometric_warning">Dal prossimo avvio l\'applicazione utilizzerà in fase di login gli input biometrici configurati dal proprietario nel telefono.\n\nSe nessun input é disponibile la funzionalitá verrá automaticamente disattivata.</string>
     <string name="biometric_login">Login biometrico</string>
