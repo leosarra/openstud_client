@@ -45,13 +45,11 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="match_parent"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
-        android:textColor="?attr/secondaryTextColor"
-        android:text="@string/grade" />
+        android:text="@string/grade"
+        android:textColor="?attr/secondaryTextColor" />
 
     <com.warkiz.widget.IndicatorSeekBar
         android:id="@+id/grade"
@@ -79,13 +77,11 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="match_parent"
+        android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
-        android:textColor="?attr/secondaryTextColor"
-        android:text="@string/ects" />
+        android:text="@string/ects"
+        android:textColor="?attr/secondaryTextColor" />
 
     <com.warkiz.widget.IndicatorSeekBar
         android:id="@+id/cfu"
