@@ -2,11 +2,14 @@ package com.lithium.leona.openstud.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
@@ -17,9 +20,15 @@ import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -29,6 +38,8 @@ import butterknife.ButterKnife;
 public class SettingsPrefActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     androidx.appcompat.widget.Toolbar toolbar;
+    @BindView(R.id.main_layout)
+    ConstraintLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +49,16 @@ public class SettingsPrefActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.settings);
-        // load settings fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new MainPreferenceFragment()).commit();
+        for (int i = 0; i < toolbar.getChildCount(); ++i) {
+            View child = toolbar.getChildAt(i);
+            if (child instanceof TextView) {
+                TextView toolbarTitle = (TextView) child;
+                toolbarTitle.setBackgroundColor(Color.TRANSPARENT);
+                break;
+            }
+        }
+
     }
 
     @Override
@@ -64,6 +83,39 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void createBiometricDialog(CheckBoxPreference preference) {
+        ExecutorService exe = Executors.newSingleThreadExecutor();
+        BiometricPrompt prompt = new BiometricPrompt(this, exe, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT)
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.no_biometric_hw_found, Snackbar.LENGTH_LONG);
+                else if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS)
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.no_biometrics_found, Snackbar.LENGTH_LONG);
+                else if (errorCode == BiometricPrompt.ERROR_LOCKOUT || errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT)
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
+                runOnUiThread(() -> preference.setChecked(false));
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                runOnUiThread(() -> preference.setChecked(true));
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(this.getResources().getString(R.string.biometric_login_enable))
+                .setNegativeButtonText(this.getResources().getString(R.string.delete_abort))
+                .build();
+        prompt.authenticate(promptInfo);
+    }
+
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {
         ThemeEngine.Theme oldTheme;
         private int alertDialogTheme;
@@ -72,6 +124,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             SettingsPrefActivity activity = (SettingsPrefActivity) getActivity();
+            if (activity == null) return;
             addPreferencesFromResource(R.xml.pref_main);
             alertDialogTheme = ThemeEngine.getAlertDialogTheme(activity);
             oldTheme = ThemeEngine.getTheme(activity);
@@ -89,7 +142,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             Preference delete = findPreference(getString(R.string.key_delete));
             delete.setOnPreferenceClickListener(preference -> {
-                if (activity == null) return false;
                 boolean result = ClientHelper.requestReadWritePermissions(activity);
                 if (!result) return false;
                 String directory = Environment.getExternalStorageDirectory() + "/OpenStud";
@@ -112,7 +164,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             EditTextPreference laude = findPreference(getString(R.string.key_default_laude));
             laude.setOnBindEditTextListener(editText -> {
-                if (activity == null) return;
                 editText.setTextColor(ThemeEngine.getPrimaryTextColor(activity));
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
             });
@@ -125,14 +176,29 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 } catch (NumberFormatException e) {
                     valid = false;
                 }
-                if (valid) PreferenceManager.setStatsNotificationEnabled(getContext(), false);
+                if (valid) {
+                    PreferenceManager.setStatsNotificationEnabled(getContext(), false);
+                    ClientHelper.updateGradesWidget(activity,true);
+                }
                 return valid;
             });
+            CheckBoxPreference enableBiometricLogin = findPreference(getString(R.string.key_biometrics));
+            enableBiometricLogin.setOnPreferenceClickListener(preference -> {
+                if (enableBiometricLogin.isChecked()) enableBiometricLogin.setChecked(false);
+                else activity.createBiometricDialog(enableBiometricLogin);
+                return true;
+            });
+            enableBiometricLogin.setOnPreferenceChangeListener((preference, newValue) -> false);
+            disableUnavailablePreferences();
         }
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
+        }
+
+        private void disableUnavailablePreferences(){
+            if (!PreferenceManager.BIOMETRIC_FEATURE_AVAILABLE) findPreference(getString(R.string.key_security_category)).setVisible(false);
         }
     }
 

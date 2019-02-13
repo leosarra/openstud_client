@@ -13,13 +13,18 @@ import android.widget.EditText;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.fragments.BottomSheetRecoveryFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricPrompt;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,6 +85,13 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         analyzeExtras(getIntent().getExtras());
         ClientHelper.updateGradesWidget(this, false);
+        if (InfoManager.hasLogin(this)) {
+            username.setText(InfoManager.getStudentId(this));
+            rememberFlag.setChecked(true);
+            if (savedInstanceState == null && PreferenceManager.isBiometricsEnabled(this)) {
+                handleBiometrics();
+            }
+        }
     }
 
     public void sendRecoveryRequest(String answer, String studentID) {
@@ -173,9 +185,11 @@ public class LoginActivity extends AppCompatActivity {
         }
         try {
             os.login();
-            InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             InfoManager.getInfoStudent(this, os);
             InfoManager.getIsee(this, os);
+            if (!rememberFlag || (InfoManager.hasLogin(this) && !InfoManager.getStudentId(this).equals(id)))
+                PreferenceManager.setBiometricsEnabled(this, false);
+            InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
             if (e.isPasswordExpired())
@@ -203,6 +217,8 @@ public class LoginActivity extends AppCompatActivity {
             LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
         else if (error == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue())
             LayoutHelper.createTextSnackBar(layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
+        else if (error == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue())
+            LayoutHelper.createTextSnackBar(layout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
     }
 
     private void setElementsEnabled(boolean enabled) {
@@ -212,6 +228,42 @@ public class LoginActivity extends AppCompatActivity {
         username.setEnabled(enabled);
         password.setEnabled(enabled);
     }
+
+
+    private void handleBiometrics() {
+        ExecutorService exe = Executors.newSingleThreadExecutor();
+        BiometricPrompt prompt = new BiometricPrompt(this, exe, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS) {
+                    PreferenceManager.setBiometricsEnabled(LoginActivity.this, false);
+                    h.sendEmptyMessage(ClientHelper.Status.NO_BIOMETRICS.getValue());
+                } else if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT) {
+                    PreferenceManager.setBiometricsEnabled(LoginActivity.this, false);
+                    h.sendEmptyMessage(ClientHelper.Status.NO_BIOMETRIC_HW.getValue());
+                } else if (errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT || errorCode == BiometricPrompt.ERROR_LOCKOUT)
+                    h.sendEmptyMessage(ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue());
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle(this.getResources().getString(R.string.biometric_login))
+                .setNegativeButtonText(this.getResources().getString(R.string.delete_abort))
+                .build();
+        prompt.authenticate(promptInfo);
+    }
+
 
     private static class LoginEventHandler extends Handler {
         private final WeakReference<LoginActivity> mActivity;
@@ -227,7 +279,7 @@ public class LoginActivity extends AppCompatActivity {
                 View.OnClickListener listener = v -> new Thread(activity::login).start();
                 View.OnClickListener listener2 = v -> new Thread(activity::recovery).start();
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
-                    if (activity.rememberFlag.isChecked())
+                    if (activity.rememberFlag.isChecked() && !PreferenceManager.isBiometricsEnabled(activity))
                         ClientHelper.updateGradesWidget(activity, true);
                     Intent intent = new Intent(activity, ExamsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -256,6 +308,13 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_answer, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.NO_RECOVERY.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
+                } else if (msg.what == ClientHelper.Status.NO_BIOMETRICS.getValue() || msg.what == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()) {
+                    Intent intent = new Intent(activity, ExamsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("error", msg.what);
+                    activity.startActivity(intent);
                 }
                 if (msg.what != ClientHelper.Status.OK.getValue()) {
                     activity.runOnUiThread(() -> activity.setElementsEnabled(true));

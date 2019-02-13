@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -91,13 +90,7 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
         student = InfoManager.getInfoStudentCached(this, os);
         Bundle bundle = this.getIntent().getExtras();
         roomId = bundle.getInt("roomId", -1);
-        if (os == null || student == null || roomId == -1) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(ClassroomTimetableActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         cachedLessons = new HashMap<>();
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);

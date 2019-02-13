@@ -109,13 +109,7 @@ public class StatsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(StatsActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -131,17 +125,18 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     public void addFakeExam(ExamDone exam) {
-        examsFake.add(exam);
+        synchronized (this) {
+            examsFake.add(exam);
+            InfoManager.saveFakeExams(this,examsFake);
+            adapter.notifyDataSetChanged();
+        }
         updateStats();
-        adapter.notifyDataSetChanged();
+        ClientHelper.updateGradesWidget(this,true);
     }
 
     public void onResume() {
         super.onResume();
         LocalDateTime time = getTimer();
-        if (!firstStart) {
-            if (examsFake != null) InfoManager.saveTemporaryFakeExams(examsFake);
-        }
         if (firstStart) firstStart = false;
         else if (PreferenceManager.getLaudeValue(this) != laude || time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30)
             refreshExamsDone();
@@ -286,7 +281,9 @@ public class StatsActivity extends AppCompatActivity {
                         exams.clear();
                         exams.addAll(update);
                         updateStats();
+                        refreshFakeExams();
                         exams.addAll(examsFake);
+                        ClientHelper.updateGradesWidget(this,true);
                     }
                 }
                 updateTimer();
@@ -297,6 +294,16 @@ public class StatsActivity extends AppCompatActivity {
                 setRefreshing(false);
             }
         }).start();
+    }
+
+
+    private void refreshFakeExams(){
+        List<ExamDone> newFake = InfoManager.getFakeExams(this,os);
+        if (newFake!=null && !newFake.equals(examsFake)) {
+            examsFake.clear();
+            examsFake.addAll(newFake);
+            runOnUiThread(() -> adapter.notifyDataSetChanged());
+        }
     }
 
     private void setRefreshing(final boolean bool) {
@@ -341,7 +348,7 @@ public class StatsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_exam:
-                BottomSheetStatsFragment bottomSheetStatsFragment = new BottomSheetStatsFragment();
+                BottomSheetStatsFragment bottomSheetStatsFragment = BottomSheetStatsFragment.newInstance(InfoManager.getExamsDoableCached(this, os));
                 bottomSheetStatsFragment.show(getSupportFragmentManager(), bottomSheetStatsFragment.getTag());
                 return true;
         }
@@ -356,11 +363,13 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     private void createRecyclerView(List<ExamDone> exams_cached) {
-        examsFake = InfoManager.getTemporaryFakeExams();
+        examsFake = InfoManager.getFakeExams(this, os);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new FakeExamAdapter(this, examsFake);
+        adapter = new FakeExamAdapter(this, examsFake, (exam, position) -> {
+            removeFakeExam(position);
+        });
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
@@ -381,10 +390,10 @@ public class StatsActivity extends AppCompatActivity {
             exams.remove(examsFake.get(position));
             examsFake.remove(position);
             adapter.notifyItemRemoved(position);
+            InfoManager.saveFakeExams(this,examsFake);
         }
-        adapter.notifyDataSetChanged();
         updateStats();
-
+        ClientHelper.updateGradesWidget(this,true);
     }
 
     @Override

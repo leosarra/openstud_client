@@ -166,7 +166,7 @@ public class ExamsDoneFragment extends Fragment {
         }).start();
     }
 
-    public synchronized void refreshDataSet(List<ExamDone> update) {
+    private synchronized void refreshDataSet(List<ExamDone> update) {
         boolean flag = false;
         if (update != null && !exams.equals(update)) {
             flag = true;

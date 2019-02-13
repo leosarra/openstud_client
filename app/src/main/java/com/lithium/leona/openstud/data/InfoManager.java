@@ -86,7 +86,6 @@ public class InfoManager {
     public static Student getInfoStudentCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -106,7 +105,6 @@ public class InfoManager {
     public static Student getInfoStudent(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         Student newStudent = os.getInfoStudent();
         synchronized (InfoManager.class) {
@@ -159,11 +157,10 @@ public class InfoManager {
     public static List<Event> getEventsCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (events != null) return events;
+            if (events != null) return new LinkedList<>(events);
             oldObj = pref.getString("events", "null");
         }
         Type listType = new TypeToken<List<Event>>() {
@@ -181,7 +178,6 @@ public class InfoManager {
     public static List<Event> getEvents(Context context, Openstud os, Student student) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         Map<String, List<Lesson>> newTimetable = new HashMap<>();
         if (PreferenceManager.isLessonEnabled(context))
@@ -203,19 +199,53 @@ public class InfoManager {
     }
 
 
-    public static void saveTemporaryFakeExams(List<ExamDone> exams) {
-        fakeExams = exams;
+    public static void saveFakeExams(Context context, List<ExamDone> exams) {
+        setupSharedPreferences(context);
+        Gson gson = new Gson();
+        String obj;
+        synchronized (InfoManager.class) {
+            if (exams != null) fakeExams = new LinkedList<>(exams);
+            else fakeExams = new LinkedList<>();
+            Type listType = new TypeToken<List<ExamDone>>() {
+            }.getType();
+            obj = gson.toJson(fakeExams,listType);
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            prefsEditor.putString("fakeExams", obj);
+            prefsEditor.commit();
+        }
     }
 
-    public static List<ExamDone> getTemporaryFakeExams() {
-        if (fakeExams == null) fakeExams = new LinkedList<>();
-        return fakeExams;
+    public static List<ExamDone> getFakeExams(Context context, Openstud os) {
+        return _getFakeExams(context,os,true);
     }
+
+    private static synchronized List<ExamDone> _getFakeExams(Context context, Openstud os, boolean removeDuplicates) {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        if (removeDuplicates) InfoManager.removeDuplicatesFakeExams(context,os);
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (fakeExams != null) return new LinkedList<>(fakeExams);
+            oldObj = pref.getString("fakeExams", null);
+        }
+        Type listType = new TypeToken<List<ExamDone>>() {
+        }.getType();
+        List<ExamDone> ret = null;
+        try {
+            ret = gson.fromJson(oldObj, listType);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        if (ret == null) return new LinkedList<>();
+        return ret;
+    }
+
+
 
     public static Isee getIseeCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -234,7 +264,6 @@ public class InfoManager {
     public static Isee getIsee(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         Isee newIsee = os.getCurrentIsee();
         synchronized (InfoManager.class) {
@@ -250,11 +279,10 @@ public class InfoManager {
     public static List<Tax> getPaidTaxesCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (paidTaxes != null) return paidTaxes;
+            if (paidTaxes != null) return new LinkedList<>(paidTaxes);
             oldObj = pref.getString("paidTaxes", "null");
         }
         Type listType = new TypeToken<List<Tax>>() {
@@ -271,11 +299,10 @@ public class InfoManager {
     public static List<ExamDone> getExamsDoneCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (examsDone != null) return examsDone;
+            if (examsDone != null) return new LinkedList<>(examsDone);
             oldObj = pref.getString("examsDone", "null");
         }
         Type listType = new TypeToken<List<ExamDone>>() {
@@ -292,7 +319,6 @@ public class InfoManager {
     public static List<ExamDone> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<ExamDone> newExamsDone = os.getExamsDone();
         synchronized (InfoManager.class) {
@@ -310,11 +336,10 @@ public class InfoManager {
     public static List<ExamDoable> getExamsDoableCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (examsDoable != null) return examsDoable;
+            if (examsDoable != null) return new LinkedList<>(examsDoable);
             oldObj = pref.getString("examsDoable", "null");
         }
         Type listType = new TypeToken<List<ExamDoable>>() {
@@ -332,7 +357,6 @@ public class InfoManager {
     public static List<ExamDoable> getExamsDoable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<ExamDoable> newExamsDoable = os.getExamsDoable();
         synchronized (InfoManager.class) {
@@ -351,11 +375,10 @@ public class InfoManager {
     public static List<ExamReservation> getActiveReservationsCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (reservations != null) return reservations;
+            if (reservations != null) return new LinkedList<>(reservations);
             oldObj = pref.getString("reservations", "null");
         }
         Type listType = new TypeToken<List<ExamReservation>>() {
@@ -372,7 +395,6 @@ public class InfoManager {
     public static List<ExamReservation> getActiveReservations(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<ExamReservation> newExamsDone = os.getActiveReservations();
         synchronized (InfoManager.class) {
@@ -390,7 +412,6 @@ public class InfoManager {
     public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<Tax> newPaidTaxes = os.getPaidTaxes();
         synchronized (InfoManager.class) {
@@ -408,11 +429,10 @@ public class InfoManager {
     public static List<Tax> getUnpaidTaxesCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
-            if (unpaidTaxes != null) return unpaidTaxes;
+            if (unpaidTaxes != null) return new LinkedList<>(unpaidTaxes);
             oldObj = pref.getString("unpaidTaxes", "null");
         }
         Type listType = new TypeToken<List<Tax>>() {
@@ -429,7 +449,6 @@ public class InfoManager {
     public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<Tax> newUnpaidTaxes = os.getUnpaidTaxes();
         synchronized (InfoManager.class) {
@@ -447,7 +466,6 @@ public class InfoManager {
     public static List<News> getNews(Context context, Openstud os, String locale) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<News> newNews = os.getNews(locale, true, null, 0, null, null);
         synchronized (InfoManager.class) {
@@ -465,13 +483,12 @@ public class InfoManager {
     public static List<News> getNewsCached(Context context, Openstud os, String locale) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
             if (news != null) {
                 if (!news.isEmpty() && !news.get(0).getLocale().equals(locale)) return null;
-                return news;
+                return new LinkedList<>(news);
             }
             oldObj = pref.getString("news", "null");
         }
@@ -491,7 +508,6 @@ public class InfoManager {
     public static List<Event> getEventsUniversity(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         Gson gson = new Gson();
         List<Event> newEvents = os.getNewsletterEvents();
         synchronized (InfoManager.class) {
@@ -509,12 +525,11 @@ public class InfoManager {
     public static List<Event> getEventsUniversityCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (!hasLogin(context)) return null;
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
             if (theatre_events != null) {
-                return theatre_events;
+                return new LinkedList<>(theatre_events);
             }
             oldObj = pref.getString("eventsUniversity", "null");
         }
@@ -551,7 +566,7 @@ public class InfoManager {
         theatre_events = null;
     }
 
-    private static synchronized String getStudentId(Context context) {
+    public static synchronized String getStudentId(Context context) {
         setupSharedPreferences(context);
         String id = null;
         try {
@@ -664,6 +679,24 @@ public class InfoManager {
                 editor.putString("filter_calendar", toJson);
                 editor.apply();
             } else filter = gson.fromJson(json, listType);
+        }
+    }
+
+    private static void removeDuplicatesFakeExams(Context context, Openstud os) {
+        List<ExamDone> fake = InfoManager._getFakeExams(context,os,false);
+        List<ExamDone> done = InfoManager.getExamsDoneCached(context,os);
+        List<ExamDone> remove = new LinkedList<>();
+        if (fake != null && done != null) {
+            for (ExamDone ex : fake) {
+                for (ExamDone ex2 : done) {
+                    if (ex.getDescription().toLowerCase().trim().equals(ex2.getDescription().toLowerCase().trim())) {
+                        remove.add(ex);
+                        break;
+                    }
+                }
+            }
+            fake.removeAll(remove);
+            InfoManager.saveFakeExams(context,fake);
         }
     }
 }

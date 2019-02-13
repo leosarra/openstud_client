@@ -1,7 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.ExamDoableFragment;
@@ -78,13 +78,7 @@ public class ExamsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Openstud os = InfoManager.getOpenStud(getApplication());
         Student student = InfoManager.getInfoStudentCached(getApplication(), os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(ExamsActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.exams);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
@@ -110,8 +104,8 @@ public class ExamsActivity extends AppCompatActivity {
             fm.beginTransaction().add(R.id.content_frame, fragDoable, "doable").hide(fragDoable).commit();
             fm.beginTransaction().add(R.id.content_frame, fragDone, "completed").commit();
             active = fragDone;
+            analyzeExtras(getIntent().getExtras());
         }
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -211,5 +205,16 @@ public class ExamsActivity extends AppCompatActivity {
         getSupportFragmentManager().putFragment(outState, "reservations", fragRes);
         getSupportFragmentManager().putFragment(outState, "doable", fragDoable);
         if (active != null) getSupportFragmentManager().putFragment(outState, "active", active);
+    }
+
+    private void analyzeExtras(Bundle bdl) {
+        if (bdl == null) return;
+        int error = bdl.getInt("error", -1);
+        if (error == -1) return;
+        if (error == ClientHelper.Status.NO_BIOMETRICS.getValue())
+            LayoutHelper.createTextSnackBar(mainLayout, R.string.login_no_biometrics_found, Snackbar.LENGTH_LONG);
+        else if (error == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()) {
+            LayoutHelper.createTextSnackBar(mainLayout, R.string.login_no_biometric_hw_found, Snackbar.LENGTH_LONG);
+        }
     }
 }

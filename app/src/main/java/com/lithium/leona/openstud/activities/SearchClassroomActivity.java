@@ -97,13 +97,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         os = InfoManager.getOpenStud(getApplication());
         emptyText.setText(getResources().getString(R.string.no_classrooms_found));
         student = InfoManager.getInfoStudentCached(getApplication(), os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(SearchClassroomActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);

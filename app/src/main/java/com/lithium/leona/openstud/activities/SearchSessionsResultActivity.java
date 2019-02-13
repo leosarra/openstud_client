@@ -90,13 +90,7 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
             jsonObject = extras.getString("exam", null);
             exam = new Gson().fromJson(jsonObject, ExamDoable.class);
         }
-        if (os == null || student == null || exam == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(SearchSessionsResultActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
+        if (os == null || student == null) ClientHelper.rebirthApp(this);
         activeReservations = new LinkedList<>();
         List<ExamReservation> cache = InfoManager.getActiveReservationsCached(this, os);
         if (cache != null) {
