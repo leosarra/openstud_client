@@ -165,10 +165,12 @@ public class LayoutHelper {
             return true;
         });
         View headerLayout = result.getHeader();
-        TextView navTitle = headerLayout.findViewById(R.id.nav_title);
-        navTitle.setText(activity.getString(R.string.fullname, student.getFirstName(), student.getLastName()));
-        TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
-        navSubtitle.setText(student.getStudentID());
+        if (student != null) {
+            TextView navTitle = headerLayout.findViewById(R.id.nav_title);
+            navTitle.setText(activity.getString(R.string.fullname, student.getFirstName(), student.getLastName()));
+            TextView navSubtitle = headerLayout.findViewById(R.id.nav_subtitle);
+            navSubtitle.setText(student.getStudentID());
+        }
         return result;
     }
 
