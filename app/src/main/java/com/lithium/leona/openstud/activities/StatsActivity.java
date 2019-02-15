@@ -44,7 +44,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -56,15 +55,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
 import lithium.openstud.driver.core.models.ExamDone;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class StatsActivity extends AppCompatActivity {
+public class StatsActivity extends BaseDataActivity {
 
     @BindView(R.id.main_layout)
     LinearLayout mainLayout;
@@ -88,14 +85,12 @@ public class StatsActivity extends AppCompatActivity {
     CardView graphCard2;
     @BindView(R.id.recyclerView)
     RecyclerView rv;
-    private Openstud os;
     private Drawer drawer;
     private StatsHandler h = new StatsHandler(this);
     private List<ExamDone> exams = new LinkedList<>();
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private int laude;
-    private Student student;
     private List<ExamDone> examsFake;
     private FakeExamAdapter adapter;
     private boolean showIcon = false;
@@ -103,13 +98,11 @@ public class StatsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyStatsTheme(this);
         setContentView(R.layout.activity_stats);
         ThemeEngine.applyPaymentsTheme(this);
         ButterKnife.bind(this);
-        os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -127,11 +120,11 @@ public class StatsActivity extends AppCompatActivity {
     public void addFakeExam(ExamDone exam) {
         synchronized (this) {
             examsFake.add(exam);
-            InfoManager.saveFakeExams(this,examsFake);
+            InfoManager.saveFakeExams(this, examsFake);
             adapter.notifyDataSetChanged();
         }
         updateStats();
-        ClientHelper.updateGradesWidget(this,true);
+        ClientHelper.updateGradesWidget(this, true);
     }
 
     public void onResume() {
@@ -283,7 +276,7 @@ public class StatsActivity extends AppCompatActivity {
                         updateStats();
                         refreshFakeExams();
                         exams.addAll(examsFake);
-                        ClientHelper.updateGradesWidget(this,true);
+                        ClientHelper.updateGradesWidget(this, true);
                     }
                 }
                 updateTimer();
@@ -297,9 +290,9 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
-    private void refreshFakeExams(){
-        List<ExamDone> newFake = InfoManager.getFakeExams(this,os);
-        if (newFake!=null && !newFake.equals(examsFake)) {
+    private void refreshFakeExams() {
+        List<ExamDone> newFake = InfoManager.getFakeExams(this, os);
+        if (newFake != null && !newFake.equals(examsFake)) {
             examsFake.clear();
             examsFake.addAll(newFake);
             runOnUiThread(() -> adapter.notifyDataSetChanged());
@@ -390,19 +383,17 @@ public class StatsActivity extends AppCompatActivity {
             exams.remove(examsFake.get(position));
             examsFake.remove(position);
             adapter.notifyItemRemoved(position);
-            InfoManager.saveFakeExams(this,examsFake);
+            InfoManager.saveFakeExams(this, examsFake);
         }
         updateStats();
-        ClientHelper.updateGradesWidget(this,true);
+        ClientHelper.updateGradesWidget(this, true);
     }
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+
     }
 
     private static class StatsHandler extends Handler {

@@ -7,31 +7,24 @@ import android.widget.LinearLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
-import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.TabFragment;
-import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.Objects;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.Openstud;
-import lithium.openstud.driver.core.models.Student;
 
 
-public class PaymentsActivity extends AppCompatActivity {
+public class PaymentsActivity extends BaseDataActivity {
     @BindView(R.id.main_layout)
     LinearLayout mainLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    private Openstud os;
-    private Student student;
     private Drawer drawer;
     private SparseArray<Snackbar> snackBarMap = new SparseArray<>();
     private int selectedItem = -1;
@@ -41,12 +34,10 @@ public class PaymentsActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyPaymentsTheme(this);
         setContentView(R.layout.activity_payments);
         ButterKnife.bind(this);
-        os = InfoManager.getOpenStud(this);
-        student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -62,11 +53,9 @@ public class PaymentsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+
     }
 
 

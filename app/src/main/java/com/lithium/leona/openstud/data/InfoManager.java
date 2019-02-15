@@ -208,7 +208,7 @@ public class InfoManager {
             else fakeExams = new LinkedList<>();
             Type listType = new TypeToken<List<ExamDone>>() {
             }.getType();
-            obj = gson.toJson(fakeExams,listType);
+            obj = gson.toJson(fakeExams, listType);
             SharedPreferences.Editor prefsEditor = pref.edit();
             prefsEditor.putString("fakeExams", obj);
             prefsEditor.commit();
@@ -216,13 +216,13 @@ public class InfoManager {
     }
 
     public static List<ExamDone> getFakeExams(Context context, Openstud os) {
-        return _getFakeExams(context,os,true);
+        return _getFakeExams(context, os, true);
     }
 
     private static synchronized List<ExamDone> _getFakeExams(Context context, Openstud os, boolean removeDuplicates) {
         setupSharedPreferences(context);
         if (os == null) return null;
-        if (removeDuplicates) InfoManager.removeDuplicatesFakeExams(context,os);
+        if (removeDuplicates) InfoManager.removeDuplicatesFakeExams(context, os);
         String oldObj;
         Gson gson = new Gson();
         synchronized (InfoManager.class) {
@@ -240,7 +240,6 @@ public class InfoManager {
         if (ret == null) return new LinkedList<>();
         return ret;
     }
-
 
 
     public static Isee getIseeCached(Context context, Openstud os) {
@@ -683,8 +682,8 @@ public class InfoManager {
     }
 
     private static void removeDuplicatesFakeExams(Context context, Openstud os) {
-        List<ExamDone> fake = InfoManager._getFakeExams(context,os,false);
-        List<ExamDone> done = InfoManager.getExamsDoneCached(context,os);
+        List<ExamDone> fake = InfoManager._getFakeExams(context, os, false);
+        List<ExamDone> done = InfoManager.getExamsDoneCached(context, os);
         List<ExamDone> remove = new LinkedList<>();
         if (fake != null && done != null) {
             for (ExamDone ex : fake) {
@@ -696,7 +695,7 @@ public class InfoManager {
                 }
             }
             fake.removeAll(remove);
-            InfoManager.saveFakeExams(context,fake);
+            InfoManager.saveFakeExams(context, fake);
         }
     }
 }

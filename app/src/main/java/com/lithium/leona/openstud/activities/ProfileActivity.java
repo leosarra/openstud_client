@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -20,7 +19,6 @@ import com.lithium.leona.openstud.fragments.BottomSheetPersonalIdentifier;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
-import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 import com.mikepenz.materialdrawer.Drawer;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +29,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
@@ -46,7 +43,7 @@ import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseDataActivity {
 
     @BindView(R.id.main_layout)
     CoordinatorLayout mainLayout;
@@ -74,13 +71,8 @@ public class ProfileActivity extends AppCompatActivity {
     TextView studentStatus;
     @BindView(R.id.cfu)
     TextView cfu;
-    private DelayedDrawerListener ddl;
-    private View headerLayout;
     private Drawer drawer;
-    private NavigationView nv;
-    private Student student;
     private Isee isee;
-    private Openstud os;
     private ProfileEventHandler h = new ProfileEventHandler(this);
     private LocalDateTime lastUpdate;
     private String personalId;
@@ -88,13 +80,11 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyProfileTheme(this);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
-        os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(getApplication(), os);
         isee = InfoManager.getIseeCached(getApplication(), os);
-        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -176,9 +166,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else super.onBackPressed();
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+
     }
 
     @Override

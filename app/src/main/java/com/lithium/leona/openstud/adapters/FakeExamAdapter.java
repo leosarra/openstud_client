@@ -25,10 +25,11 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
     private List<ExamDone> exams;
     private StatsActivity activity;
     private FakeExamListener ocl;
+
     public FakeExamAdapter(StatsActivity activity, List<ExamDone> exams, FakeExamListener listener) {
         this.exams = exams;
         this.activity = activity;
-        ocl=listener;
+        ocl = listener;
     }
 
     @NonNull
@@ -81,6 +82,7 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
         ImageButton delete;
         private Context context;
         private FakeExamListener ocl;
+
         ExamDoneHolder(View itemView, FakeExamListener ocl) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -97,7 +99,7 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
             String cfu = String.valueOf(exam.getCfu());
             txtResult.setText(context.getResources().getString(R.string.grade_stats, result));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, cfu));
-            delete.setOnClickListener(v -> ocl.deleteFakeExamAdapter(exam,getAdapterPosition()));
+            delete.setOnClickListener(v -> ocl.deleteFakeExamAdapter(exam, getAdapterPosition()));
         }
 
         @Override

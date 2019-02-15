@@ -11,8 +11,9 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class PreferenceManager {
-    private static SharedPreferences pref;
     public final static boolean BIOMETRIC_FEATURE_AVAILABLE = false;
+    private static SharedPreferences pref;
+
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
         pref = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context);

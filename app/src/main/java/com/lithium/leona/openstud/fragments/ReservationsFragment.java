@@ -35,20 +35,18 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.ExamReservation;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class ReservationsFragment extends Fragment {
+public class ReservationsFragment extends BaseDataFragment {
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -61,12 +59,10 @@ public class ReservationsFragment extends Fragment {
     @BindView(R.id.empty_text)
     TextView emptyText;
     private List<ExamReservation> reservations;
-    private Openstud os;
     private ActiveReservationsAdapter adapter;
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private ReservationsHandler h = new ReservationsHandler(this);
-    private Handler handler = new Handler();
 
     @OnClick(R.id.empty_button_reload)
     public void OnClick(View v) {
@@ -77,19 +73,11 @@ public class ReservationsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment, null);
+        Activity activity = getActivity();
+        if (!initData() || activity == null) return v;
         ButterKnife.bind(this, v);
         reservations = new LinkedList<>();
-        os = InfoManager.getOpenStud(getActivity());
-        final Activity activity = getActivity();
-        if (activity == null) return v;
-        if (os == null) {
-            InfoManager.clearSharedPreferences(getActivity().getApplication());
-            Intent i = new Intent(getActivity(), LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            return v;
-        }
         emptyText.setText(getResources().getString(R.string.no_reservations_found));
-
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
@@ -125,10 +113,10 @@ public class ReservationsFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::refreshReservations);
         swipeRefreshLayout.setEnabled(false);
         new Thread(() -> {
-            List<ExamReservation> reservations_cached = InfoManager.getActiveReservationsCached(getActivity().getApplication(), os);
+            List<ExamReservation> reservations_cached = InfoManager.getActiveReservationsCached(activity, os);
             if (reservations_cached != null && !reservations_cached.isEmpty()) {
                 reservations.addAll(reservations_cached);
-            }
+            } else swapViews(reservations_cached);
             activity.runOnUiThread(() -> {
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setEnabled(true);

@@ -30,20 +30,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.ExamDoable;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class ExamDoableFragment extends Fragment {
+public class ExamDoableFragment extends BaseDataFragment {
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -56,7 +54,6 @@ public class ExamDoableFragment extends Fragment {
     @BindView(R.id.empty_text)
     TextView emptyText;
     private List<ExamDoable> examsDoable;
-    private Openstud os;
     private ExamDoableAdapter adapter;
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
@@ -71,32 +68,21 @@ public class ExamDoableFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment, null);
+        Activity activity = getActivity();
+        if (!initData() || activity == null) return v;
         ButterKnife.bind(this, v);
         examsDoable = new LinkedList<>();
-        final Activity activity = getActivity();
-        if (activity == null) return v;
-        os = InfoManager.getOpenStud(getActivity().getApplication());
-
-        if (os == null) {
-            InfoManager.clearSharedPreferences(getActivity().getApplication());
-            Intent i = new Intent(getActivity(), LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            return v;
-        }
         emptyText.setText(getResources().getString(R.string.no_exams_doable_found));
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
-        adapter = new ExamDoableAdapter(activity, examsDoable, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int itemPosition = rv.getChildLayoutPosition(v);
-                if (itemPosition < examsDoable.size()) {
-                    ExamDoable exam = examsDoable.get(itemPosition);
-                    Intent intent = new Intent(activity, SearchSessionsResultActivity.class);
-                    intent.putExtra("exam", new Gson().toJson(exam, ExamDoable.class));
-                    activity.startActivity(intent);
-                }
+        adapter = new ExamDoableAdapter(activity, examsDoable, v1 -> {
+            int itemPosition = rv.getChildLayoutPosition(v1);
+            if (itemPosition < examsDoable.size()) {
+                ExamDoable exam = examsDoable.get(itemPosition);
+                Intent intent = new Intent(activity, SearchSessionsResultActivity.class);
+                intent.putExtra("exam", new Gson().toJson(exam, ExamDoable.class));
+                activity.startActivity(intent);
             }
         });
         rv.setAdapter(adapter);
@@ -104,10 +90,10 @@ public class ExamDoableFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDoable);
         swipeRefreshLayout.setEnabled(false);
         new Thread(() -> {
-            List<ExamDoable> exams_cached = InfoManager.getExamsDoableCached(getActivity().getApplication(), os);
+            List<ExamDoable> exams_cached = InfoManager.getExamsDoableCached(activity, os);
             if (exams_cached != null && !exams_cached.isEmpty()) {
                 examsDoable.addAll(exams_cached);
-            }
+            } else swapViews(exams_cached);
             activity.runOnUiThread(() -> {
                 swipeRefreshLayout.setEnabled(true);
                 adapter.notifyDataSetChanged();
@@ -173,7 +159,7 @@ public class ExamDoableFragment extends Fragment {
         }).start();
     }
 
-    public synchronized void refreshDataSet(List<ExamDoable> update) {
+    private synchronized void refreshDataSet(List<ExamDoable> update) {
         boolean flag = false;
         if (update != null && !examsDoable.equals(update)) {
             flag = true;

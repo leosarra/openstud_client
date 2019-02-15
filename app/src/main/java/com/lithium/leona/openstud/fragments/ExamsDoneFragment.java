@@ -29,21 +29,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
 import lithium.openstud.driver.core.models.ExamDone;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class ExamsDoneFragment extends Fragment {
+public class ExamsDoneFragment extends BaseDataFragment {
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -56,7 +54,6 @@ public class ExamsDoneFragment extends Fragment {
     @BindView(R.id.empty_text)
     TextView emptyText;
     private List<ExamDone> exams;
-    private Openstud os;
     private ExamDoneAdapter adapter;
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
@@ -73,20 +70,13 @@ public class ExamsDoneFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment, null);
-        ButterKnife.bind(this, v);
         Activity activity = getActivity();
-        if (activity == null) return v;
+        if (!initData() || activity == null) return v;
+        ButterKnife.bind(this, v);
         exams = new LinkedList<>();
-        os = InfoManager.getOpenStud(activity.getApplication());
-        if (os == null) {
-            InfoManager.clearSharedPreferences(getActivity().getApplication());
-            Intent i = new Intent(getActivity(), LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            return v;
-        }
         showExamDate = PreferenceManager.isExamDateEnabled(activity);
         emptyText.setText(getResources().getString(R.string.no_exams_done_found));
-        List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(getActivity().getApplication(), os);
+        List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(activity, os);
         rv.setHasFixedSize(true);
         llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
@@ -95,7 +85,7 @@ public class ExamsDoneFragment extends Fragment {
         if (exams_cached != null && !exams_cached.isEmpty()) {
             exams.addAll(exams_cached);
             sortList(ClientHelper.Sort.getSort(InfoManager.getSortType(activity)));
-        }
+        } else swapViews(exams_cached);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
