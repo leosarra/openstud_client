@@ -11,11 +11,12 @@ import lithium.openstud.driver.core.Openstud;
 
 public abstract class BaseDataFragment extends Fragment {
     Openstud os;
-    public BaseDataFragment(){
+
+    public BaseDataFragment() {
         super();
     }
 
-    public boolean initData(){
+    public boolean initData() {
         Activity activity = getActivity();
         if (activity == null) return false;
         os = InfoManager.getOpenStud(activity);

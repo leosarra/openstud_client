@@ -144,7 +144,7 @@ public class EventsActivity extends BaseDataActivity {
     }
 
     private synchronized void applyEvents(Calendar date) {
-        if (date==null) date=defaultDate;
+        if (date == null) date = defaultDate;
         List<Event> eventDate = new LinkedList<>();
         for (Event ev : events) {
             if (ev.getStart() != null && date.getTimeInMillis() == ev.getStart().toLocalDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
@@ -192,7 +192,7 @@ public class EventsActivity extends BaseDataActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawer!= null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
         else super.onBackPressed();
 
     }

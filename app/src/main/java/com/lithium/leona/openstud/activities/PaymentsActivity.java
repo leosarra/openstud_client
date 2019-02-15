@@ -53,7 +53,7 @@ public class PaymentsActivity extends BaseDataActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawer!= null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
         else super.onBackPressed();
 
     }

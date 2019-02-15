@@ -69,7 +69,7 @@ public class ExamDoableFragment extends BaseDataFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment, null);
         Activity activity = getActivity();
-        if (!initData() || activity==null) return v;
+        if (!initData() || activity == null) return v;
         ButterKnife.bind(this, v);
         examsDoable = new LinkedList<>();
         emptyText.setText(getResources().getString(R.string.no_exams_doable_found));

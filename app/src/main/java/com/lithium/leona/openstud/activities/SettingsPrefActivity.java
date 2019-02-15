@@ -178,7 +178,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 }
                 if (valid) {
                     PreferenceManager.setStatsNotificationEnabled(getContext(), false);
-                    ClientHelper.updateGradesWidget(activity,true);
+                    ClientHelper.updateGradesWidget(activity, true);
                 }
                 return valid;
             });
@@ -197,8 +197,9 @@ public class SettingsPrefActivity extends AppCompatActivity {
 
         }
 
-        private void disableUnavailablePreferences(){
-            if (!PreferenceManager.BIOMETRIC_FEATURE_AVAILABLE) findPreference(getString(R.string.key_security_category)).setVisible(false);
+        private void disableUnavailablePreferences() {
+            if (!PreferenceManager.BIOMETRIC_FEATURE_AVAILABLE)
+                findPreference(getString(R.string.key_security_category)).setVisible(false);
         }
     }
 

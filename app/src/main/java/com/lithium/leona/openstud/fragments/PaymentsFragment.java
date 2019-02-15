@@ -77,7 +77,7 @@ public class PaymentsFragment extends BaseDataFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment, null);
         Activity activity = getActivity();
-        if (!initData() || activity==null) return v;
+        if (!initData() || activity == null) return v;
         ButterKnife.bind(this, v);
         Bundle bundle = getArguments();
         mode = bundle.getInt("mode");

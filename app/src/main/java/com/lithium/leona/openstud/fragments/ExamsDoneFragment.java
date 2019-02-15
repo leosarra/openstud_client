@@ -71,7 +71,7 @@ public class ExamsDoneFragment extends BaseDataFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment, null);
         Activity activity = getActivity();
-        if (!initData() || activity==null) return v;
+        if (!initData() || activity == null) return v;
         ButterKnife.bind(this, v);
         exams = new LinkedList<>();
         showExamDate = PreferenceManager.isExamDateEnabled(activity);

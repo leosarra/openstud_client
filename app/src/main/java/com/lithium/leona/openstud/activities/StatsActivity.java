@@ -120,11 +120,11 @@ public class StatsActivity extends BaseDataActivity {
     public void addFakeExam(ExamDone exam) {
         synchronized (this) {
             examsFake.add(exam);
-            InfoManager.saveFakeExams(this,examsFake);
+            InfoManager.saveFakeExams(this, examsFake);
             adapter.notifyDataSetChanged();
         }
         updateStats();
-        ClientHelper.updateGradesWidget(this,true);
+        ClientHelper.updateGradesWidget(this, true);
     }
 
     public void onResume() {
@@ -276,7 +276,7 @@ public class StatsActivity extends BaseDataActivity {
                         updateStats();
                         refreshFakeExams();
                         exams.addAll(examsFake);
-                        ClientHelper.updateGradesWidget(this,true);
+                        ClientHelper.updateGradesWidget(this, true);
                     }
                 }
                 updateTimer();
@@ -290,9 +290,9 @@ public class StatsActivity extends BaseDataActivity {
     }
 
 
-    private void refreshFakeExams(){
-        List<ExamDone> newFake = InfoManager.getFakeExams(this,os);
-        if (newFake!=null && !newFake.equals(examsFake)) {
+    private void refreshFakeExams() {
+        List<ExamDone> newFake = InfoManager.getFakeExams(this, os);
+        if (newFake != null && !newFake.equals(examsFake)) {
             examsFake.clear();
             examsFake.addAll(newFake);
             runOnUiThread(() -> adapter.notifyDataSetChanged());
@@ -383,15 +383,15 @@ public class StatsActivity extends BaseDataActivity {
             exams.remove(examsFake.get(position));
             examsFake.remove(position);
             adapter.notifyItemRemoved(position);
-            InfoManager.saveFakeExams(this,examsFake);
+            InfoManager.saveFakeExams(this, examsFake);
         }
         updateStats();
-        ClientHelper.updateGradesWidget(this,true);
+        ClientHelper.updateGradesWidget(this, true);
     }
 
     @Override
     public void onBackPressed() {
-        if (drawer!= null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
         else super.onBackPressed();
 
     }

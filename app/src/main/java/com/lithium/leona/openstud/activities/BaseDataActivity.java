@@ -11,11 +11,11 @@ abstract class BaseDataActivity extends AppCompatActivity {
     Student student;
     Openstud os;
 
-    public BaseDataActivity(){
+    public BaseDataActivity() {
         super();
     }
 
-    public boolean initData(){
+    public boolean initData() {
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
         if (os == null || student == null) {

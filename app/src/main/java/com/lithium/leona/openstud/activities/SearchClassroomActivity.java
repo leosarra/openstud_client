@@ -202,7 +202,7 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
 
     @Override
     public void onBackPressed() {
-        if (drawer!= null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
         else super.onBackPressed();
 
     }
