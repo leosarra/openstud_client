@@ -190,6 +190,13 @@ public class EventsActivity extends BaseDataActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawer!= null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+
+    }
+
     public void onSaveInstanceState(Bundle savedInstance) {
         Gson gson = new Gson();
         Type typeCalendar = new TypeToken<Calendar>() {

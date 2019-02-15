@@ -363,11 +363,9 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
+        if (drawer!= null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+
     }
 
     @Override
