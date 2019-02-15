@@ -61,7 +61,6 @@ public class ExamsDoneFragment extends Fragment {
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private ExamsDoneHandler h = new ExamsDoneHandler(this);
-    private LinearLayoutManager llm;
     private boolean showExamDate;
 
     @OnClick(R.id.empty_button_reload)
@@ -88,7 +87,7 @@ public class ExamsDoneFragment extends Fragment {
         emptyText.setText(getResources().getString(R.string.no_exams_done_found));
         List<ExamDone> exams_cached = InfoManager.getExamsDoneCached(getActivity().getApplication(), os);
         rv.setHasFixedSize(true);
-        llm = new LinearLayoutManager(activity);
+        LinearLayoutManager llm = new LinearLayoutManager(activity);
         rv.setLayoutManager(llm);
         adapter = new ExamDoneAdapter(activity, exams, 0);
         rv.setAdapter(adapter);
@@ -168,16 +167,15 @@ public class ExamsDoneFragment extends Fragment {
 
     public synchronized void refreshDataSet(List<ExamDone> update) {
         boolean flag = false;
+        Activity activity = getActivity();
+        if (activity == null) return;
         if (update != null && !exams.equals(update)) {
             flag = true;
             exams.clear();
             exams.addAll(update);
-            Activity activity = getActivity();
-            if (activity != null) ClientHelper.updateGradesWidget(activity, true);
+            ClientHelper.updateGradesWidget(activity, true);
         }
         final boolean finalFlag = flag;
-        Activity activity = getActivity();
-        if (activity == null) return;
         activity.runOnUiThread(() -> {
             if (finalFlag) {
                 int sort = InfoManager.getSortType(activity);
