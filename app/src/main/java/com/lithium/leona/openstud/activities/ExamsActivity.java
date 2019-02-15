@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -33,10 +32,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import lithium.openstud.driver.core.Openstud;
-import lithium.openstud.driver.core.models.Student;
 
-public class ExamsActivity extends AppCompatActivity {
+public class ExamsActivity extends BaseDataActivity {
     @BindView(R.id.container)
     ConstraintLayout mainLayout;
     @BindView(R.id.toolbar)
@@ -73,12 +70,10 @@ public class ExamsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyExamTheme(this);
         setContentView(R.layout.activity_exams);
         ButterKnife.bind(this);
-        Openstud os = InfoManager.getOpenStud(getApplication());
-        Student student = InfoManager.getInfoStudentCached(getApplication(), os);
-        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_menu);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.exams);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);

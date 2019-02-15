@@ -29,7 +29,6 @@ import com.lithium.leona.openstud.fragments.BottomSheetFilterEventFragment;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
-import com.lithium.leona.openstud.listeners.DelayedDrawerListener;
 import com.mikepenz.materialdrawer.Drawer;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -47,7 +46,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -58,15 +56,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.EventType;
 import lithium.openstud.driver.core.models.ExamReservation;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class CalendarActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, DialogInterface.OnDismissListener {
+public class CalendarActivity extends BaseDataActivity implements AppBarLayout.OnOffsetChangedListener, DialogInterface.OnDismissListener {
 
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
@@ -97,11 +93,8 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     LinearLayout emptyContainer;
     @BindView(R.id.empty_button_reload)
     Button emptyButton;
-    private DelayedDrawerListener ddl;
     private boolean isExpanded = false;
     private CalendarEventHandler h = new CalendarEventHandler(this);
-    private Openstud os;
-    private Student student;
     private Drawer drawer;
     private EventAdapter adapter_lessons;
     private EventAdapter adapter_exams;
@@ -125,13 +118,11 @@ public class CalendarActivity extends AppCompatActivity implements AppBarLayout.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyCalendarTheme(this);
         setContentView(R.layout.activity_calendar);
         ButterKnife.bind(this);
         setTitle(getResources().getString(R.string.calendar));
-        os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) ClientHelper.rebirthApp(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());

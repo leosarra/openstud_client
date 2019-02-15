@@ -29,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,13 +38,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.Event;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventsActivity extends BaseDataActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -64,23 +61,18 @@ public class EventsActivity extends AppCompatActivity {
     private Drawer drawer;
     private HorizontalCalendar horizontalCalendar;
     private Calendar defaultDate;
-    private Openstud os;
-    private Student student;
     private List<Event> selectedDateEvents = new LinkedList<>();
     private List<Event> events = new LinkedList<>();
     private EventTheatreAdapter adapter;
     private EventHandler h = new EventHandler(this);
-    private boolean test = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyClassroomTimetableTheme(this);
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
-        os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) ClientHelper.rebirthApp(this);
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_YEAR, 7);

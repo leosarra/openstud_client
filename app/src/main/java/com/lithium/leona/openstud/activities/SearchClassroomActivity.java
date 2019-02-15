@@ -35,7 +35,6 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,14 +42,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.Classroom;
 import lithium.openstud.driver.core.models.Lesson;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class SearchClassroomActivity extends AppCompatActivity implements MaterialSearchBar.OnSearchActionListener, MaterialSearchBar.OnClickListener {
+public class SearchClassroomActivity extends BaseDataActivity implements MaterialSearchBar.OnSearchActionListener, MaterialSearchBar.OnClickListener {
 
 
     @BindView(R.id.searchBar)
@@ -69,8 +66,6 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     LinearLayout emptyLayout;
     @BindView(R.id.frame)
     FrameLayout contentFrame;
-    private Openstud os;
-    private Student student;
     private Drawer drawer;
     private List<Classroom> classes = new LinkedList<>();
     private ClassroomAdapter adapter;
@@ -85,6 +80,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applySearchClassroomTheme(this);
         setContentView(R.layout.activity_search_classroom);
         ButterKnife.bind(this);
@@ -94,10 +90,7 @@ public class SearchClassroomActivity extends AppCompatActivity implements Materi
         //restore last queries from disk
         List oldSuggestions = PreferenceManager.getSuggestions(this);
         if (oldSuggestions != null) searchBar.setLastSuggestions(oldSuggestions);
-        os = InfoManager.getOpenStud(getApplication());
         emptyText.setText(getResources().getString(R.string.no_classrooms_found));
-        student = InfoManager.getInfoStudentCached(getApplication(), os);
-        if (os == null || student == null) ClientHelper.rebirthApp(this);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
