@@ -29,20 +29,18 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class PaymentsFragment extends Fragment {
+public class PaymentsFragment extends BaseDataFragment {
 
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -57,7 +55,6 @@ public class PaymentsFragment extends Fragment {
     private List<Tax> taxes;
     private TaxAdapter adapter;
     private int mode;
-    private Openstud os;
     private PaymentsHandler h = new PaymentsHandler(this);
     private boolean firstStart = true;
     private LocalDateTime lastUpdate;
@@ -79,17 +76,12 @@ public class PaymentsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.base_swipe_fragment, null);
+        Activity activity = getActivity();
+        if (!initData() || activity==null) return v;
         ButterKnife.bind(this, v);
         Bundle bundle = getArguments();
         mode = bundle.getInt("mode");
         emptyView.setVisibility(View.GONE);
-        os = InfoManager.getOpenStud(getActivity());
-        if (os == null) {
-            InfoManager.clearSharedPreferences(getActivity());
-            Intent i = new Intent(getActivity(), LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-            return v;
-        }
         taxes = new LinkedList<>();
         List<Tax> taxes_cached = null;
         if (mode == TaxAdapter.Mode.PAID.getValue()) {
@@ -103,7 +95,7 @@ public class PaymentsFragment extends Fragment {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        adapter = new TaxAdapter(getActivity(), taxes, mode);
+        adapter = new TaxAdapter(activity, taxes, mode);
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
@@ -131,9 +123,9 @@ public class PaymentsFragment extends Fragment {
             List<Tax> update = null;
             try {
                 if (mode == TaxAdapter.Mode.PAID.getValue())
-                    update = InfoManager.getPaidTaxes(activity.getApplication(), os);
+                    update = InfoManager.getPaidTaxes(activity, os);
                 else if (mode == TaxAdapter.Mode.UNPAID.getValue())
-                    update = InfoManager.getUnpaidTaxes(activity.getApplication(), os);
+                    update = InfoManager.getUnpaidTaxes(activity, os);
 
                 if (update == null)
                     h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
