@@ -202,4 +202,5 @@
     <string name="biometric_login">Login biometrico</string>
     <string name="biometric_login_enable">Enable biometric login</string>
     <string name="biometric_lockout">Biometric login is disabled because of too many consecutives fails. Try again later.</string>
+    <string name="send_message">Invia un messaggio</string>
 </resources>

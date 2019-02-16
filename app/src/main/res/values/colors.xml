@@ -18,6 +18,7 @@
     <color name="refresh2">#6e0918</color>
     <color name="refresh3">#6e0918</color>
     <color name="transparent">#00000000</color>
+    <color name="lightBackgroundCardLayout">#f4f4f4</color>
     <!-- card colors -->
     <color name="card_background">#ffffff</color>
     <color name="card_shadow_1">#d4d4d4</color>
