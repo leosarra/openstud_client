@@ -1,6 +1,5 @@
 package com.lithium.leona.openstud.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,13 +33,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.News;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends BaseDataActivity {
     @BindView(R.id.main_layout)
     LinearLayout mainLayout;
     @BindView(R.id.swipe_refresh)
@@ -56,7 +52,6 @@ public class NewsActivity extends AppCompatActivity {
     TextView emptyText;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    private Openstud os;
     private Drawer drawer;
     private LocalDateTime lastUpdate;
     private String locale;
@@ -72,18 +67,10 @@ public class NewsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyNewsTheme(this);
         setContentView(R.layout.activity_news);
         ButterKnife.bind(this);
-        os = InfoManager.getOpenStud(this);
-        Student student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(NewsActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -162,11 +149,9 @@ public class NewsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen()) {
-            drawer.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+
     }
 
     private String getLocale() {

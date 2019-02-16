@@ -37,6 +37,7 @@ import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.widgets.GradesWidget;
 
 import org.threeten.bp.LocalDate;
@@ -250,6 +251,14 @@ public class ClientHelper {
         }
     }
 
+    public static void rebirthApp(Activity activity) {
+        InfoManager.clearSharedPreferences(activity);
+        PreferenceManager.setBiometricsEnabled(activity, false);
+        Intent i = new Intent(activity, LauncherActivity.class);
+        activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        activity.finish();
+    }
+
     public static void addEventToCalendar(Activity activity, final Event ev) {
         switch (ev.getEventType()) {
             case THEATRE:
@@ -367,7 +376,7 @@ public class ClientHelper {
         OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5),
         EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
         PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15), FAIL_LOGIN(16), ENABLE_BUTTONS(17), RECOVERY_OK(18), INVALID_ANSWER(19),
-        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23), MAINTENANCE(24);
+        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23), MAINTENANCE(24), NO_BIOMETRICS(25), LOCKOUT_BIOMETRICS(26), NO_BIOMETRIC_HW(27);
         private final int value;
 
         Status(int value) {

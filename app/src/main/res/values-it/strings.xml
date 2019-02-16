@@ -19,6 +19,7 @@
     <string name="exit">Esci</string>
     <string name="paid">Pagate</string>
     <string name="unpaid">Non pagate</string>
+    <string name="ects">CFU</string>
     <string name="payment_number">Bollettino n. %1$s</string>
     <string name="payment_number_ext">Numero bollettino: %1$s</string>
     <string name="course_code_pay">Codice corso: %1$s</string>
@@ -189,4 +190,17 @@
     <string name="events">Eventi</string>
     <string name="event_theatre_when">Inizio alle ore %1$s</string>
     <string name="event_theatre_where">Presso: %1$s</string>
+    <string name="login_no_biometrics_found">Login biometrico disattivato perché nessun input valido è disponibile</string>
+    <string name="login_no_biometric_hw_found">Login biometrico disattivato perché il telefono non risulta compatibile</string>
+    <string name="no_biometrics_found">Impossibile attivare la funzionalità perché non é presente un input registrato</string>
+    <string name="no_biometric_hw_found">Impossibile attivare la funzionalità perché il telefono non risulta compatibile</string>
+    <string name="pref_title_security">Sicurezza</string>
+    <string name="enable_biometric_login">Utilizza login biometrico (Beta)</string>
+    <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico.</string>
+    <string name="warning">Avviso</string>
+    <string name="biometric_warning">Dal prossimo avvio l\'applicazione utilizzerà in fase di login gli input biometrici configurati dal proprietario nel telefono.\n\nSe nessun input é disponibile la funzionalitá verrá automaticamente disattivata.</string>
+    <string name="biometric_login">Login biometrico</string>
+    <string name="biometric_login_enable">Enable biometric login</string>
+    <string name="biometric_lockout">Biometric login is disabled because of too many consecutives fails. Try again later.</string>
+    <string name="send_message">Invia un messaggio</string>
 </resources>

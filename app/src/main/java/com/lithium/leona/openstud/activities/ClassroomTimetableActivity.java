@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.EventAdapter;
-import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -33,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,16 +40,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.OpenstudHelper;
 import lithium.openstud.driver.core.models.Event;
 import lithium.openstud.driver.core.models.ExamReservation;
 import lithium.openstud.driver.core.models.Lesson;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class ClassroomTimetableActivity extends AppCompatActivity {
+public class ClassroomTimetableActivity extends BaseDataActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -70,8 +65,6 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     ConstraintLayout constraintLayout;
     private HorizontalCalendar horizontalCalendar;
     private Calendar defaultDate;
-    private Openstud os;
-    private Student student;
     private List<Event> lessons;
     private Map<Long, List<Lesson>> cachedLessons;
     private EventAdapter adapter;
@@ -82,22 +75,14 @@ public class ClassroomTimetableActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyClassroomTimetableTheme(this);
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
         Activity activity = this;
         /* starts before 1 month from now */
-        os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(this, os);
         Bundle bundle = this.getIntent().getExtras();
         roomId = bundle.getInt("roomId", -1);
-        if (os == null || student == null || roomId == -1) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(ClassroomTimetableActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
         cachedLessons = new HashMap<>();
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);

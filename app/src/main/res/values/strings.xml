@@ -13,7 +13,7 @@
     <string name="birthDate">Birth date</string>
     <string name="birthPlace">Birth place</string>
     <string name="year_corse_profile">%1$s year</string>
-    <string name="cfu" translatable="false">CFU</string>
+    <string name="ects">ECTS</string>
     <string name="isee" translatable="false">ISEE</string>
     <string name="profile">Profile</string>
     <string name="about">About</string>
@@ -209,4 +209,19 @@
     <string name="events">Events</string>
     <string name="event_theatre_when">Starts at %1$s</string>
     <string name="event_theatre_where">Location: %1$s</string>
+    <string name="key_biometrics" translatable="false">key_biometrics</string>
+    <string name="login_no_biometrics_found">Biometric login disabled because no available biometric inputs were found</string>
+    <string name="login_no_biometric_hw_found">Biometric login disabled because the hardware isn\'t compatible</string>
+    <string name="no_biometrics_found">Can\'t enable the feature because no registered biometric inputs were found</string>
+    <string name="no_biometric_hw_found">Can\'t enable the feature because the hardware isn\'t compatible</string>
+    <string name="pref_title_security">Security</string>
+    <string name="enable_biometric_login">Enable biometric login (Experimental)</string>
+    <string name="enable_biometric_login_description">Force the user to login using a biometric input (e.g: fingerprint).</string>
+    <string name="warning">Warning</string>
+    <string name="biometric_warning">From the next start the app will request a biometric input already configured in the phone settings .\n\nIf no method of input is available this feature will be automatically disabled.</string>
+    <string name="biometric_login">Biometric login</string>
+    <string name="biometric_login_enable">Enable biometric login</string>
+    <string name="biometric_lockout">Biometric login is disabled because of too many consecutives fails. Try again later.</string>
+    <string name="key_security_category" translatable="false">key_security_category</string>
+    <string name="send_message">Send a message</string>
 </resources>

@@ -29,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,16 +37,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.ExamDoable;
 import lithium.openstud.driver.core.models.ExamReservation;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 
-public class SearchSessionsResultActivity extends AppCompatActivity {
+public class SearchSessionsResultActivity extends BaseDataActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.swipe_refresh)
@@ -62,10 +59,8 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
     TextView emptyText;
     @BindView(R.id.searchLayout)
     ConstraintLayout layout;
-    private Openstud os;
     private AvaiableReservationsAdapter adapter;
     private LocalDateTime lastUpdate;
-    private Student student;
     private ExamDoable exam;
     private List<ExamReservation> reservations;
     private SearchEventHandler h = new SearchEventHandler(this);
@@ -79,23 +74,15 @@ public class SearchSessionsResultActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applySearchTheme(this);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
-        os = InfoManager.getOpenStud(this);
-        student = InfoManager.getInfoStudentCached(this, os);
         String jsonObject;
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             jsonObject = extras.getString("exam", null);
             exam = new Gson().fromJson(jsonObject, ExamDoable.class);
-        }
-        if (os == null || student == null || exam == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(SearchSessionsResultActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
         }
         activeReservations = new LinkedList<>();
         List<ExamReservation> cache = InfoManager.getActiveReservationsCached(this, os);

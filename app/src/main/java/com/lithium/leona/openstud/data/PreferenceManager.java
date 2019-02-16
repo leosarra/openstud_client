@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class PreferenceManager {
+    public final static boolean BIOMETRIC_FEATURE_AVAILABLE = false;
     private static SharedPreferences pref;
 
     private static synchronized void setupSharedPreferences(Context context) {
@@ -29,6 +30,21 @@ public class PreferenceManager {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
             return pref.getBoolean(context.getResources().getString(R.string.key_enable_lesson), false);
+        }
+    }
+
+    public static boolean isBiometricsEnabled(Context context) {
+        if (!BIOMETRIC_FEATURE_AVAILABLE) return false;
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean(context.getResources().getString(R.string.key_biometrics), false);
+        }
+    }
+
+    public static void setBiometricsEnabled(Context context, boolean enabled) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            pref.edit().putBoolean(context.getResources().getString(R.string.key_biometrics), enabled).apply();
         }
     }
 

@@ -1,7 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,13 +38,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
-import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.Event;
-import lithium.openstud.driver.core.models.Student;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventsActivity extends BaseDataActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -65,8 +61,6 @@ public class EventsActivity extends AppCompatActivity {
     private Drawer drawer;
     private HorizontalCalendar horizontalCalendar;
     private Calendar defaultDate;
-    private Openstud os;
-    private Student student;
     private List<Event> selectedDateEvents = new LinkedList<>();
     private List<Event> events = new LinkedList<>();
     private EventTheatreAdapter adapter;
@@ -75,18 +69,10 @@ public class EventsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!initData()) return;
         ThemeEngine.applyClassroomTimetableTheme(this);
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
-        os = InfoManager.getOpenStud(getApplication());
-        student = InfoManager.getInfoStudentCached(this, os);
-        if (os == null || student == null) {
-            InfoManager.clearSharedPreferences(getApplication());
-            Intent i = new Intent(EventsActivity.this, LauncherActivity.class);
-            startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            finish();
-            return;
-        }
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_YEAR, 7);
@@ -119,22 +105,22 @@ public class EventsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.events);
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        swipeRefreshLayout.setOnRefreshListener(() -> refreshEvents(horizontalCalendar.getSelectedDate(), true));
+        swipeRefreshLayout.setOnRefreshListener(() -> refreshEvents(true));
         emptyButton.setOnClickListener(v -> {
             if (!swipeRefreshLayout.isRefreshing())
-                refreshEvents(horizontalCalendar.getSelectedDate(), true);
+                refreshEvents(true);
         });
         List<Event> cached_events = InfoManager.getEventsUniversityCached(this, os);
         swapViews(true);
         if (cached_events != null && !cached_events.isEmpty()) {
             events.clear();
             events.addAll(cached_events);
-            refreshEvents(defaultDate, false);
+            refreshEvents(false);
         }
-        if (savedInstanceState == null) refreshEvents(defaultDate, true);
+        if (savedInstanceState == null) refreshEvents(true);
     }
 
-    private synchronized void refreshEvents(Calendar date, boolean refresh) {
+    private void refreshEvents(boolean refresh) {
         new Thread(() -> {
             try {
                 if (refresh) {
@@ -153,11 +139,12 @@ public class EventsActivity extends AppCompatActivity {
                 e.printStackTrace();
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             }
-            applyEvents(date);
+            applyEvents(horizontalCalendar.getSelectedDate());
         }).start();
     }
 
-    private void applyEvents(Calendar date) {
+    private synchronized void applyEvents(Calendar date) {
+        if (date == null) date = defaultDate;
         List<Event> eventDate = new LinkedList<>();
         for (Event ev : events) {
             if (ev.getStart() != null && date.getTimeInMillis() == ev.getStart().toLocalDate().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli())
@@ -203,6 +190,13 @@ public class EventsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawer != null && drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
+
+    }
+
     public void onSaveInstanceState(Bundle savedInstance) {
         Gson gson = new Gson();
         Type typeCalendar = new TypeToken<Calendar>() {
@@ -223,7 +217,7 @@ public class EventsActivity extends AppCompatActivity {
             horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
                 @Override
                 public void onDateSelected(Calendar date, int position) {
-                    refreshEvents(date, false);
+                    refreshEvents(false);
                 }
             });
         });
@@ -240,7 +234,7 @@ public class EventsActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             final EventsActivity activity = this.activity.get();
             if (activity == null) return;
-            View.OnClickListener ocl = v -> activity.refreshEvents(activity.horizontalCalendar.getSelectedDate(), true);
+            View.OnClickListener ocl = v -> activity.refreshEvents(true);
             if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                 LayoutHelper.createActionSnackBar(activity.constraintLayout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {

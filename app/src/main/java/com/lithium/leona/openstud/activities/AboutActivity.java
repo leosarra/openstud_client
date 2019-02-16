@@ -1,9 +1,11 @@
 package com.lithium.leona.openstud.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder;
@@ -66,6 +68,10 @@ public class AboutActivity extends MaterialAboutActivity {
         int tintColor = ThemeEngine.getPrimaryTextColor(this);
         Drawable person = ContextCompat.getDrawable(context, R.drawable.ic_person_outline_black);
         Drawable email = ContextCompat.getDrawable(context, R.drawable.ic_email_black);
+        Drawable telegram = new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_telegram)
+                .color(tintColor)
+                .sizeDp(22);
         Objects.requireNonNull(email).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         Objects.requireNonNull(person).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         authorCardBuilder.title(R.string.author);
@@ -74,7 +80,19 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(person)
                 .build())
                 .addItem(ConvenienceBuilder.createEmailItem(context, email,
-                        getString(R.string.send_email), true, getString(R.string.email_address), getString(R.string.question_concerning_openstud)));
+                        getString(R.string.send_email), true, getString(R.string.email_address), getString(R.string.question_concerning_openstud)))
+                .addItem(new MaterialAboutActionItem.Builder()
+                        .text(R.string.send_message)
+                        .icon(telegram)
+                        .setOnClickAction(() -> {
+                            try {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tg://resolve?domain=Lithium_3"));
+                                startActivity(intent);
+                            } catch (ActivityNotFoundException e) {
+                                e.printStackTrace();
+                                ClientHelper.createCustomTab(context,"https://t.me/lithium_3");
+                            }
+                        }).build()).build();
     }
 
     private void buildMisc(Context context, MaterialAboutCard.Builder miscCardBuilder) {
@@ -83,11 +101,11 @@ public class AboutActivity extends MaterialAboutActivity {
         Drawable github = new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_github)
                 .color(tintColor)
-                .sizeDp(18);
+                .sizeDp(20);
         Drawable heart = new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_heart)
                 .color(tintColor)
-                .sizeDp(18);
+                .sizeDp(20);
         Objects.requireNonNull(heart).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         Objects.requireNonNull(github).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         Objects.requireNonNull(libraries).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);

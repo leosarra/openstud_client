@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
@@ -23,17 +24,19 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
 
     private List<ExamDone> exams;
     private StatsActivity activity;
+    private FakeExamListener ocl;
 
-    public FakeExamAdapter(StatsActivity activity, List<ExamDone> exams) {
+    public FakeExamAdapter(StatsActivity activity, List<ExamDone> exams, FakeExamListener listener) {
         this.exams = exams;
         this.activity = activity;
+        ocl = listener;
     }
 
     @NonNull
     @Override
     public ExamDoneHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(activity).inflate(R.layout.item_row_exam_fake, parent, false);
-        ExamDoneHolder holder = new ExamDoneHolder(view);
+        ExamDoneHolder holder = new ExamDoneHolder(view, ocl);
         holder.setContext(activity);
         return holder;
     }
@@ -64,6 +67,10 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
 
     }
 
+    public interface FakeExamListener {
+        void deleteFakeExamAdapter(ExamDone exam, int position);
+    }
+
     static class ExamDoneHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         @BindView(R.id.examName)
         TextView txtName;
@@ -71,11 +78,15 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
         TextView txtCFU;
         @BindView(R.id.resultExam)
         TextView txtResult;
+        @BindView(R.id.delete)
+        ImageButton delete;
         private Context context;
+        private FakeExamListener ocl;
 
-        ExamDoneHolder(View itemView) {
+        ExamDoneHolder(View itemView, FakeExamListener ocl) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.ocl = ocl;
         }
 
         private void setContext(Context context) {
@@ -88,6 +99,7 @@ public class FakeExamAdapter extends RecyclerView.Adapter<FakeExamAdapter.ExamDo
             String cfu = String.valueOf(exam.getCfu());
             txtResult.setText(context.getResources().getString(R.string.grade_stats, result));
             txtCFU.setText(context.getResources().getString(R.string.cfu_exams, cfu));
+            delete.setOnClickListener(v -> ocl.deleteFakeExamAdapter(exam, getAdapterPosition()));
         }
 
         @Override
