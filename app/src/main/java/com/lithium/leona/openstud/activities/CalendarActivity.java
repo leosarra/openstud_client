@@ -513,7 +513,6 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
     private void showCalendarNotification() {
         if (com.lithium.leona.openstud.data.PreferenceManager.getCalendarNotificationEnabled(this)) {
             LayoutHelper.createActionSnackBar(mainLayout, R.string.lesson_notification, R.string.edit, 4000, v -> {
-                InfoManager.clearSharedPreferences(getApplication());
                 Intent i = new Intent(CalendarActivity.this, SettingsPrefActivity.class);
                 startActivity(i);
             });
