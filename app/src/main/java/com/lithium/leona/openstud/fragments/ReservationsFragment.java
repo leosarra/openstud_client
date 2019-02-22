@@ -26,7 +26,6 @@ import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
-import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
@@ -108,7 +107,8 @@ public class ReservationsFragment extends BaseDataFragment {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
-
+                        ExamsActivity snackbarActivity = (ExamsActivity) activity;
+                        snackbarActivity.createTextSnackBar(R.string.no_write_permission_pdf, Snackbar.LENGTH_LONG);
                     }
 
                     @Override
@@ -190,7 +190,8 @@ public class ReservationsFragment extends BaseDataFragment {
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (intent.resolveActivity(activity.getPackageManager()) != null) startActivity(intent);
         else {
-            activity.runOnUiThread(() -> LayoutHelper.createTextSnackBar(swipeRefreshLayout, R.string.no_pdf_app, Snackbar.LENGTH_LONG));
+            ExamsActivity examsActivity = (ExamsActivity) activity;
+            examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
         }
     }
 

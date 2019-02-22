@@ -200,7 +200,9 @@
     <string name="warning">Avviso</string>
     <string name="biometric_warning">Dal prossimo avvio l\'applicazione utilizzerà in fase di login gli input biometrici configurati dal proprietario nel telefono.\n\nSe nessun input é disponibile la funzionalitá verrá automaticamente disattivata.</string>
     <string name="biometric_login">Login biometrico</string>
-    <string name="biometric_login_enable">Enable biometric login</string>
-    <string name="biometric_lockout">Biometric login is disabled because of too many consecutives fails. Try again later.</string>
+    <string name="biometric_login_enable">Abilita login biometrico</string>
+    <string name="biometric_lockout">Login biometrico disattivato a causa di troppi tentativi falliti. Riprova piú tardi</string>
     <string name="send_message">Invia un messaggio</string>
+    <string name="no_write_permission_pdf">Impossibile scaricare la ricevuta senza i permessi di scrittura</string>
+    <string name="no_write_permission_pdf_delete">Impossibile eliminare i PDF senza i permessi di scrittura</string>
 </resources>

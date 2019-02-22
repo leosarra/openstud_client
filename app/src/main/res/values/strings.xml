@@ -224,4 +224,6 @@
     <string name="biometric_lockout">Biometric login is disabled because of too many consecutives fails. Try again later.</string>
     <string name="key_security_category" translatable="false">key_security_category</string>
     <string name="send_message">Send a message</string>
+    <string name="no_write_permission_pdf">Can\'t show the PDF without write permission</string>
+    <string name="no_write_permission_pdf_delete">Can\'t delete PDF files without write permission</string>
 </resources>
