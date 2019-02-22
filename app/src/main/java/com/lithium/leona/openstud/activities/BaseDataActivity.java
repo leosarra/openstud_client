@@ -19,7 +19,7 @@ abstract class BaseDataActivity extends AppCompatActivity {
         os = InfoManager.getOpenStud(getApplication());
         student = InfoManager.getInfoStudentCached(this, os);
         if (os == null || student == null) {
-            ClientHelper.rebirthApp(this);
+            ClientHelper.rebirthApp(this, null);
             return false;
         }
         return true;

@@ -560,10 +560,7 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
                 } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    Intent i = new Intent(activity, LauncherActivity.class);
-                    i.putExtra("error", msg.what);
-                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    activity.finish();
+                    ClientHelper.rebirthApp(activity,msg.what);
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.reservation_ok, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {

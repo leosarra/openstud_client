@@ -16,7 +16,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
-import com.lithium.leona.openstud.activities.LauncherActivity;
 import com.lithium.leona.openstud.activities.SearchSessionsResultActivity;
 import com.lithium.leona.openstud.adapters.ExamDoableAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -234,10 +233,7 @@ public class ExamDoableFragment extends BaseDataFragment {
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    InfoManager.clearSharedPreferences(activity.getApplication());
-                    Intent i = new Intent(activity, LauncherActivity.class);
-                    activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    activity.finish();
+                    ClientHelper.rebirthApp(activity,msg.what);
                 } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }

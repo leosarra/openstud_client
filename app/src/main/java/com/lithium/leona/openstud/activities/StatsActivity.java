@@ -329,7 +329,6 @@ public class StatsActivity extends BaseDataActivity {
     private void showLaudeNotification() {
         if (com.lithium.leona.openstud.data.PreferenceManager.getStatsNotificationEnabled(this)) {
             LayoutHelper.createActionSnackBar(mainLayout, R.string.no_value_laude, R.string.edit, 4000, v -> {
-                InfoManager.clearSharedPreferences(getApplication());
                 Intent i = new Intent(StatsActivity.this, SettingsPrefActivity.class);
                 startActivity(i);
             });
@@ -417,11 +416,7 @@ public class StatsActivity extends BaseDataActivity {
             } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
             } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                InfoManager.clearSharedPreferences(activity.getApplication());
-                Intent i = new Intent(activity, LauncherActivity.class);
-                i.putExtra("error", msg.what);
-                activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                activity.finish();
+                ClientHelper.rebirthApp(activity,msg.what);
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             }
