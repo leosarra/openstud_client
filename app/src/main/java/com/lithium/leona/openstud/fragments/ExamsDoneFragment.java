@@ -231,7 +231,7 @@ public class ExamsDoneFragment extends BaseDataFragment {
                 if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_RESPONSE.getValue()) {
-                    activity.createRetrySnackBar(R.string.connection_error, Snackbar.LENGTH_LONG, listener);
+                    activity.createRetrySnackBar(R.string.invalid_answer, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.MAINTENANCE.getValue()) {
                     activity.createRetrySnackBar(R.string.infostud_maintenance, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
