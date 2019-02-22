@@ -94,7 +94,7 @@
     <string name="pref_ringtone_silent" tools:ignore="MissingTranslation">Silent</string>
     <string name="pref_title_themes">Appearance</string>
     <string name="pref_header_other">Other</string>
-    <string name="delete_pdf">Delete cached PDF</string>
+    <string name="delete_pdf">Delete cached PDF files</string>
     <string name="pref_title_stats">Stats</string>
     <string name="summary_theme">Choose OpenStud theme</string>
     <string name="key_theme" translatable="false">key_theme_select</string>
