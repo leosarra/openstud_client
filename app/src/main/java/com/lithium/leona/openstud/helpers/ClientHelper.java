@@ -251,10 +251,11 @@ public class ClientHelper {
         }
     }
 
-    public static void rebirthApp(Activity activity) {
+    public static void rebirthApp(Activity activity, Integer errorCode) {
         InfoManager.clearSharedPreferences(activity);
         PreferenceManager.setBiometricsEnabled(activity, false);
         Intent i = new Intent(activity, LauncherActivity.class);
+        if (errorCode!=null) i.putExtra("error",errorCode);
         activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
         activity.finish();
     }
