@@ -168,7 +168,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
+                        token.continuePermissionRequest();
                     }
                 });
                 return true;
