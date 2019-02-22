@@ -113,7 +113,7 @@ public class ReservationsFragment extends BaseDataFragment {
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
+                        token.continuePermissionRequest();
                     }
                 });
             }
