@@ -15,6 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.LauncherActivity;
@@ -95,11 +100,22 @@ public class ReservationsFragment extends BaseDataFragment {
             public void downloadReservationOnClick(final ExamReservation res) {
                 if (!ClientHelper.isExternalStorageAvailable() && ClientHelper.isExternalStorageReadOnly())
                     return;
-                boolean result = ClientHelper.requestReadWritePermissions(activity);
-                if (!result) {
-                    return;
-                }
-                new Thread(() -> getFile(activity, res)).start();
+                ClientHelper.requestReadWritePermissions(activity, new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        new Thread(() -> getFile(activity, res)).start();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                });
             }
 
             @Override

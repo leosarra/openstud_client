@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -142,17 +147,30 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             Preference delete = findPreference(getString(R.string.key_delete));
             delete.setOnPreferenceClickListener(preference -> {
-                boolean result = ClientHelper.requestReadWritePermissions(activity);
-                if (!result) return false;
-                String directory = Environment.getExternalStorageDirectory() + "/OpenStud";
-                File dir = new File(directory);
-                try {
-                    ClientHelper.deleteRecursive(dir);
-                    LayoutHelper.createTextSnackBar(getView(), R.string.success_delete_pdf, Snackbar.LENGTH_LONG);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    LayoutHelper.createTextSnackBar(getView(), R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
-                }
+                ClientHelper.requestReadWritePermissions(activity, new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        String directory = Environment.getExternalStorageDirectory() + "/OpenStud";
+                        File dir = new File(directory);
+                        try {
+                            ClientHelper.deleteRecursive(dir);
+                            LayoutHelper.createTextSnackBar(getView(), R.string.success_delete_pdf, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            LayoutHelper.createTextSnackBar(getView(), R.string.failed_delete_pdf, Snackbar.LENGTH_LONG);
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                });
                 return true;
             });
             Preference enableLesson = findPreference(getString(R.string.key_enable_lesson));
