@@ -208,6 +208,12 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             enableBiometricLogin.setOnPreferenceChangeListener((preference, newValue) -> false);
             disableUnavailablePreferences();
+            Preference addCustomLesson = findPreference(getString(R.string.key_add_custom_lesson));
+            addCustomLesson.setOnPreferenceClickListener(preference -> {
+                Intent i = new Intent(getActivity(), CustomCourseListActivity.class);
+                startActivity(i);
+                return true;
+            });
         }
 
         @Override
