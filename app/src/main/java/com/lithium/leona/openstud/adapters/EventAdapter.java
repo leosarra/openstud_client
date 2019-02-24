@@ -132,6 +132,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
 
         @SuppressLint("ResourceType")
         void setDetails(final Event ev) {
+            txtWhere.setVisibility(View.VISIBLE);
             if (ev.getEventType() == EventType.LESSON) {
                 if (ev.getWhere() == null || ev.getWhere().trim().isEmpty()) txtWhere.setVisibility(View.GONE);
                 txtWhere.setText(context.getResources().getString(R.string.where_event, ev.getWhere()));
