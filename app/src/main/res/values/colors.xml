@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#5c0916</color>
     <color name="colorAccent">#FF4081</color>
     <color name="redSapienza">#6e0918</color>
+    <color name="redSapienzaLight">#A31427</color>
     <color name="redSapienzaDark">#5c0916</color>
     <color name="accent">#6e0918</color>
     <color name="accentLight">#6e0918</color>
@@ -18,6 +19,7 @@
     <color name="refresh2">#6e0918</color>
     <color name="refresh3">#6e0918</color>
     <color name="transparent">#00000000</color>
+    <color name="darkBackground">#212121</color>
     <color name="lightBackgroundCardLayout">#f4f4f4</color>
     <!-- card colors -->
     <color name="card_background">#ffffff</color>

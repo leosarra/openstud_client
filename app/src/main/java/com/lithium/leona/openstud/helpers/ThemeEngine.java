@@ -271,7 +271,33 @@ public class ThemeEngine {
         }
     }
 
+    public static int getDatePickerTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                return R.style.DatePickerLightTheme;
+            case DARK:
+                return R.style.DatePickerDarkTheme;
+            case BLACK:
+                return R.style.DatePickerDarkTheme;
+            default:
+                return R.style.DatePickerLightTheme;
+        }
+    }
 
+    public static int getTimePickerTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                return R.style.TimePickerDialogLightTheme;
+            case DARK:
+                return R.style.TimePickerDialogDarkTheme;
+            case BLACK:
+                return R.style.TimePickerDialogDarkTheme;
+            default:
+                return R.style.TimePickerDialogLightTheme;
+        }
+    }
 
     private static int getPrimaryTextColor(Context context) {
         int tintColor;

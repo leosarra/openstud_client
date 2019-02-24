@@ -469,9 +469,45 @@
         <item name="material_drawer_legacy_style">false</item> <!-- Enables legacy Material 1 style -->
     </style>
 
-    <style name="DateTimePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+    <style name="DatePickerDarkTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorAccent">@color/redSapienzaLight</item>
+        <item name="colorAccent">@color/redSapienzaLight</item>
+        <item name="colorControlNormal">@color/redSapienzaLight</item>
+        <item name="colorPrimary">@color/redSapienzaLight</item>
+        <item name="colorPrimaryDark">@color/redSapienzaLight</item>
+        <item name="android:windowBackground">@color/darkBackground</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+    </style>
+
+    <style name="DatePickerLightTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorAccent">@color/redSapienza</item>
         <item name="colorAccent">@color/redSapienza</item>
         <item name="colorControlNormal">@color/redSapienza</item>
+        <item name="colorPrimary">@color/redSapienza</item>
+        <item name="colorPrimaryDark">@color/redSapienza</item>
+    </style>
+
+    <style name="TimePickerDialogDarkTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorAccent">@color/redSapienzaLight</item>
+        <item name="colorAccent">@color/redSapienzaLight</item>
+        <item name="colorControlNormal">@color/redSapienzaLight</item>
+        <item name="colorControlActivated">@color/redSapienzaLight</item>
+        <item name="colorPrimary">@color/redSapienzaLight</item>
+        <item name="colorPrimaryDark">@color/redSapienzaLight</item>
+        <item name="android:headerBackground">@color/redSapienzaLight</item>
+        <item name="android:windowBackground">@color/darkBackground</item>
+        <item name="android:numbersBackgroundColor">@color/yellow</item>
+        <item name="android:textColorPrimary">@android:color/darker_gray</item>
+        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+        <item name="android:textColorTertiary">@android:color/darker_gray</item>
+    </style>
+
+    <style name="TimePickerDialogLightTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorAccent">@color/redSapienzaLight</item>
+        <item name="colorAccent">@color/redSapienzaLight</item>
+        <item name="colorControlNormal">@color/redSapienzaLight</item>
+        <item name="colorControlActivated">@color/redSapienzaLight</item>
     </style>
 
     <style name="SpinnerLight" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
