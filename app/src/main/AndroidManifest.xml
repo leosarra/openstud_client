@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <meta-data
         android:name="google_analytics_adid_collection_enabled"
@@ -23,6 +23,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeLight">
+        <activity
+            android:name=".activities.AddCustomCourseActivity" />
+        <activity
+            android:name=".activities.CustomCourseListActivity" />
         <activity
             android:name=".activities.LauncherActivity"
             android:noHistory="true"
@@ -102,10 +106,12 @@
                 android:resource="@xml/event_widget_info" />
         </receiver>
         -->
-        <activity android:name=".activities.NewsActivity"
-            android:theme="@style/NoActionBarAppLightTheme"/>
-        <activity android:name=".activities.EventsActivity"
-            android:theme="@style/NoActionBarAppLightTheme"/>
+        <activity
+            android:name=".activities.NewsActivity"
+            android:theme="@style/NoActionBarAppLightTheme" />
+        <activity
+            android:name=".activities.EventsActivity"
+            android:theme="@style/NoActionBarAppLightTheme" />
     </application>
 
 </manifest>
