@@ -144,8 +144,8 @@
     <string name="close">Chiudi</string>
     <string name="filter_calendar_description">Scegli le lezioni che vuoi siano visualizzate nel calendario</string>
     <string name="filter_lessons">Filtro lezioni</string>
-    <string name="enable_lessons">Mostra le lezioni nel calendario</string>
-    <string name="enable_lessons_description">Abilita la visualizzazione delle lezioni per gli esami non ancora superati nel calendario</string>
+    <string name="enable_lessons">Aggiungi le lezioni automaticamente</string>
+    <string name="enable_lessons_description">Abilita la visualizzazione, nel calendario, delle lezioni per gli esami non ancora superati prendendo i dati dal database della Sapienza</string>
     <string name="lesson_notification">La visualizzazione delle lezioni può essere abilitata dalle impostazioni</string>
     <string name="experimental_feature">Funzionalità sperimentale!</string>
     <string name="calendar_feature_description">Il supporto alle lezione per il calendario è una funzionalità sperimentale.\nA causa dei dati \"esotici\" del database della Sapienza le lezioni che verranno mostrate potrebbero essere incomplete o errate.</string>
@@ -211,6 +211,7 @@
     <string name="end_course">End course</string>
     <string name="start_course">Inizio corso</string>
     <string name="add_lesson_day">Add lesson</string>
+    <string name="add_course">Aggiungi corso</string>
     <string name="courses_added">Corsi aggiunti</string>
     <string name="no_course_added">Nessun corso aggiunto</string>
     <string name="end_lesson_label">Fine lezione</string>

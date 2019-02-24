@@ -86,7 +86,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_custom_lesson);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_course);
         addLesson.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(this, R.drawable.ic_add_black_24dp, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
         lessons = new LinkedList<>();
         rv.setHasFixedSize(true);
