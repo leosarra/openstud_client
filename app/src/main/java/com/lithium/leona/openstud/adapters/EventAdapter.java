@@ -132,11 +132,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
 
         @SuppressLint("ResourceType")
         void setDetails(final Event ev) {
-            if (ev.getEventType() == EventType.LESSON)
+            if (ev.getEventType() == EventType.LESSON) {
+                if (ev.getWhere() == null || ev.getWhere().trim().isEmpty()) txtWhere.setVisibility(View.GONE);
                 txtWhere.setText(context.getResources().getString(R.string.where_event, ev.getWhere()));
-            else
+            }
+            else {
+                if (ev.getReservation() == null || ev.getReservation().getNote().trim().isEmpty()) txtWhere.setVisibility(View.GONE);
                 txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getReservation().getNote()));
-            if (txtWhere.getText().toString().isEmpty()) txtWhere.setVisibility(View.GONE);
+            }
             txtTeacher.setText(context.getResources().getString(R.string.teacher_event, StringUtils.capitalize(ev.getTeacher())));
             if (ev.getTeacher() == null) txtTeacher.setVisibility(View.GONE);
             if (ev.getEventType() == EventType.LESSON && !PreferenceManager.isLessonOptionEnabled(context)) {
