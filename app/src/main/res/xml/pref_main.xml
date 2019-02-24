@@ -40,6 +40,7 @@
         <Preference
             android:title="@string/add_custom_lesson"
             android:key="@string/key_add_custom_lesson"
+            android:summary="@string/add_custom_lesson_summary"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
