@@ -23,5 +23,6 @@
         <attr name="emptyViewColor" format="color" />
         <attr name="searchBarTheme" format="reference" />
         <attr name="ToolBarStyle" format="reference" />
+        <attr name="SpinnerTheme" format="reference" />
     </declare-styleable>
 </resources>

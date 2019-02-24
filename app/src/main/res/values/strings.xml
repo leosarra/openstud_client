@@ -226,4 +226,18 @@
     <string name="send_message">Send a message</string>
     <string name="no_write_permission_pdf">Can\'t show the PDF without write permission</string>
     <string name="no_write_permission_pdf_delete">Can\'t delete PDF files without write permission</string>
+    <string name="add_custom_lesson">Add custom lesson</string>
+    <string name="key_add_custom_lesson" translatable="false">key_add_custom_lesson</string>
+    <string name="teacher">Teacher</string>
+    <string name="lesson_name">Course name</string>
+    <string name="classroom">Classroom</string>
+    <string name="add_one_lesson_day">Add at least one lesson!</string>
+    <string name="missing_parameters">You have to fill all the fields!</string>
+    <string name="end_course">End course</string>
+    <string name="start_course">Start course</string>
+    <string name="add_lesson_day">Add lesson</string>
+    <string name="courses_added">Added courses</string>
+    <string name="no_course_added">No custom course was added</string>
+    <string name="end_lesson_label">End lesson</string>
+    <string name="start_lesson_label">Start lesson</string>
 </resources>

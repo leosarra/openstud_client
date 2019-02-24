@@ -41,6 +41,7 @@
         <item name="emptyViewColor">?attr/secondaryTextColor</item>
         <item name="searchBarTheme">@style/LightSearchBar</item>
         <item name="ToolBarStyle">@style/ToolBarStyleDefault</item>
+        <item name="SpinnerTheme">@style/SpinnerLight</item>
     </style>
 
     <style name="AppThemeDark" parent="MaterialDrawerTheme.Light.DarkToolbar">
@@ -83,6 +84,7 @@
         <item name="material_drawer_header_selection_text">#F4F4F6</item>
         <item name="material_drawer_header_selection_subtext">#96F4F4F6</item>
         <item name="material_drawer_legacy_style">false</item>
+        <item name="SpinnerTheme">@style/SpinnerDark</item>
     </style>
 
     <style name="AppThemeBlack" parent="MaterialDrawerTheme.Light.DarkToolbar">
@@ -125,6 +127,7 @@
         <item name="material_drawer_header_selection_text">#F4F4F6</item>
         <item name="material_drawer_header_selection_subtext">#96F4F4F6</item>
         <item name="material_drawer_legacy_style">false</item>
+        <item name="SpinnerTheme">@style/SpinnerDark</item>
 
     </style>
 
@@ -466,5 +469,22 @@
         <item name="material_drawer_legacy_style">false</item> <!-- Enables legacy Material 1 style -->
     </style>
 
+    <style name="DateTimePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/redLight</item>
+        <item name="colorControlNormal">@color/redSapienza</item>
+        <item name="android:dayOfWeekBackground">@color/colorPrimaryDark</item>
+    </style>
 
+    <style name="SpinnerLight" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="SpinnerDark" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

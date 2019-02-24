@@ -205,4 +205,17 @@
     <string name="send_message">Invia un messaggio</string>
     <string name="no_write_permission_pdf">Impossibile scaricare la ricevuta senza i permessi di scrittura</string>
     <string name="no_write_permission_pdf_delete">Impossibile eliminare i PDF senza i permessi di scrittura</string>
+    <string name="add_custom_lesson">Aggiungi corso personalizzato</string>
+    <string name="teacher">Docente</string>
+    <string name="lesson_name">Nome corso</string>
+    <string name="classroom">Aula</string>
+    <string name="add_one_lesson_day">Devi aggiungere almeno una lezione!</string>
+    <string name="missing_parameters">Devi compilare tutti i campi</string>
+    <string name="end_course">End course</string>
+    <string name="start_course">Inizio corso</string>
+    <string name="add_lesson_day">Add lesson</string>
+    <string name="courses_added">Corsi aggiunti</string>
+    <string name="no_course_added">Nessun corso aggiunto</string>
+    <string name="end_lesson_label">Fine lezione</string>
+    <string name="start_lesson_label">Inizio lezione</string>
 </resources>

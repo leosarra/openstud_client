@@ -37,6 +37,10 @@
             android:key="@string/key_options_lesson"
             android:defaultValue="false"
             app:iconSpaceReserved="false"/>
+        <Preference
+            android:title="@string/add_custom_lesson"
+            android:key="@string/key_add_custom_lesson"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 
