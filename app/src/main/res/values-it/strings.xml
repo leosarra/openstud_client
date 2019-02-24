@@ -205,7 +205,7 @@
     <string name="send_message">Invia un messaggio</string>
     <string name="no_write_permission_pdf">Impossibile scaricare la ricevuta senza i permessi di scrittura</string>
     <string name="no_write_permission_pdf_delete">Impossibile eliminare i PDF senza i permessi di scrittura</string>
-    <string name="add_custom_lesson">Aggiungi corso personalizzato</string>
+    <string name="add_custom_lesson">Aggiungi corso</string>
     <string name="teacher">Docente</string>
     <string name="lesson_name">Nome corso</string>
     <string name="classroom">Aula</string>

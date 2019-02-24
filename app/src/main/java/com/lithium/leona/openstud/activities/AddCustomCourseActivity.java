@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -63,6 +64,8 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     TextView startCourseTxt;
     @BindView(R.id.endCourseTxt)
     TextView endCourseTxt;
+    @BindView(R.id.addLesson)
+    Button addLesson;
     private CustomLessonAdapter adapter;
     @OnClick(R.id.addLesson) void onClick(){
        addNewLesson();
@@ -81,7 +84,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_custom_lesson);
-
+        addLesson.setCompoundDrawablesWithIntrinsicBounds(LayoutHelper.getDrawableWithColorAttr(this, R.drawable.ic_add_black_24dp, R.attr.colorButtonNav, android.R.color.darker_gray), null, null, null);
         lessons = new LinkedList<>();
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
