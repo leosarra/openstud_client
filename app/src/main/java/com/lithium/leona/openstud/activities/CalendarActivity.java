@@ -285,8 +285,10 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
             Instant instant = Instant.ofEpochMilli(date.getTime());
             instant.atZone(zoneId);
             long eventDateInMilli;
-            if (event.getEventType() == EventType.LESSON) eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
-            else eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
+            if (event.getEventType() == EventType.LESSON)
+                eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
+            else
+                eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
             if (instant.toEpochMilli() != eventDateInMilli)
                 continue;
             if (event.getEventType() == EventType.DOABLE) {
@@ -563,7 +565,7 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
                 } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    ClientHelper.rebirthApp(activity,msg.what);
+                    ClientHelper.rebirthApp(activity, msg.what);
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.reservation_ok, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_INVALID_RESPONSE.getValue() || msg.what == ClientHelper.Status.PLACE_RESERVATION_CONNECTION.getValue()) {

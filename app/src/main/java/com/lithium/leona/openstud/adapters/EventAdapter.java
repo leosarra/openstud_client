@@ -135,11 +135,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
             txtWhere.setVisibility(View.VISIBLE);
             options.setVisibility(View.VISIBLE);
             if (ev.getEventType() == EventType.LESSON) {
-                if (ev.getWhere() == null || ev.getWhere().trim().isEmpty()) txtWhere.setVisibility(View.GONE);
+                if (ev.getWhere() == null || ev.getWhere().trim().isEmpty())
+                    txtWhere.setVisibility(View.GONE);
                 txtWhere.setText(context.getResources().getString(R.string.where_event, ev.getWhere()));
-            }
-            else {
-                if (ev.getReservation() == null || ev.getReservation().getNote().trim().isEmpty()) txtWhere.setVisibility(View.GONE);
+            } else {
+                if (ev.getReservation() == null || ev.getReservation().getNote().trim().isEmpty())
+                    txtWhere.setVisibility(View.GONE);
                 txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getReservation().getNote()));
             }
             txtTeacher.setText(context.getResources().getString(R.string.teacher_event, StringUtils.capitalize(ev.getTeacher())));

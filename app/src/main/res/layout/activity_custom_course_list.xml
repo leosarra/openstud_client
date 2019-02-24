@@ -8,28 +8,31 @@
     android:background="?attr/backgroundColor"
     android:orientation="vertical"
     tools:context=".activities.CustomCourseListActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:theme="?attr/ToolBarStyle"
+        android:elevation="10dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:elevation="10dp"/>
+        app:theme="?attr/ToolBarStyle" />
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </androidx.recyclerview.widget.RecyclerView>
-            <include
-                layout="@layout/empty_view"/>
+                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+
+            <include layout="@layout/empty_view" />
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

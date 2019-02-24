@@ -163,7 +163,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
-                        LayoutHelper.createTextSnackBar(activity.mainLayout,R.string.no_write_permission_pdf_delete,Snackbar.LENGTH_LONG);
+                        LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.no_write_permission_pdf_delete, Snackbar.LENGTH_LONG);
                     }
 
                     @Override

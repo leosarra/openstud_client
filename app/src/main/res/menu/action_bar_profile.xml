@@ -5,8 +5,8 @@
     <item
         android:id="@+id/barcode"
         android:icon="@drawable/ic_credit_card_black_24dp"
+        android:orderInCategory="0"
         android:title="@string/personal_identifier"
-        app:showAsAction="always"
-        android:orderInCategory="0"/>
+        app:showAsAction="always" />
 
 </menu>

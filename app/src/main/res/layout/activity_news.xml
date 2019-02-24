@@ -9,15 +9,16 @@
     android:background="?attr/backgroundColor"
     android:orientation="vertical"
     tools:context=".activities.StatsActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:theme="?attr/ToolBarStyle"
+        android:elevation="10dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:elevation="10dp"/>
-    <include
-        layout="@layout/base_swipe_fragment"/>
+        app:theme="?attr/ToolBarStyle" />
+
+    <include layout="@layout/base_swipe_fragment" />
 </LinearLayout>
 

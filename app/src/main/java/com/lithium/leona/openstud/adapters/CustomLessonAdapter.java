@@ -40,7 +40,7 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
     public CustomLessonAdapter(Context context, List<CustomCourse.CustomLesson> lessons, int timePickerTheme, CustomLessonListener listener) {
         this.lessons = lessons;
         ocl = listener;
-        this.context=context;
+        this.context = context;
         this.timePickerTheme = timePickerTheme;
     }
 
@@ -95,15 +95,17 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.ocl = ocl;
-            this.context=context;
+            this.context = context;
             this.timePickerTheme = timePickerTheme;
         }
+
         private void setContext(Context context) {
             this.context = context;
         }
+
         void setDetails(CustomCourse.CustomLesson lesson) {
-            dayWeek.getBackground().setColorFilter(LayoutHelper.getColorByAttr(context,R.attr.primaryTextColor,android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
-            dayWeek.setSelection(lesson.getDayOfWeek().getValue()-1);
+            dayWeek.getBackground().setColorFilter(LayoutHelper.getColorByAttr(context, R.attr.primaryTextColor, android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
+            dayWeek.setSelection(lesson.getDayOfWeek().getValue() - 1);
             startLessonTime.setText(String.format("%02d:%02d", lesson.getStart().getHour(), lesson.getStart().getMinute()));
             endLessonTime.setText(String.format("%02d:%02d", lesson.getEnd().getHour(), lesson.getEnd().getMinute()));
             where.setText(lesson.getWhere());
@@ -111,7 +113,7 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
             dayWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    lesson.setDayOfWeek(DayOfWeek.of(position+1));
+                    lesson.setDayOfWeek(DayOfWeek.of(position + 1));
                 }
 
                 @Override
@@ -139,7 +141,7 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
                 TimePickerDialog dialog =
                         new TimePickerDialog(context, timePickerTheme, (view, hourOfDay, minute) -> {
                             startLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
-                            lesson.setStart(LocalTime.of(hourOfDay,minute,0));
+                            lesson.setStart(LocalTime.of(hourOfDay, minute, 0));
                         }, 0, 0, DateFormat.is24HourFormat(context));
                 dialog.show();
             });
@@ -147,8 +149,8 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
                 TimePickerDialog dialog =
                         new TimePickerDialog(context, timePickerTheme, (view, hourOfDay, minute) -> {
                             endLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
-                            lesson.setEnd(LocalTime.of(hourOfDay,minute,0));
-                            }, 0, 0, DateFormat.is24HourFormat(context));
+                            lesson.setEnd(LocalTime.of(hourOfDay, minute, 0));
+                        }, 0, 0, DateFormat.is24HourFormat(context));
                 dialog.show();
             });
         }

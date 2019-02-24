@@ -16,6 +16,7 @@ public class PreferenceManager {
     public final static boolean BIOMETRIC_FEATURE_AVAILABLE = false;
     private static SharedPreferences pref;
     private static List<CustomCourse> courses;
+
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
         pref = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context);
@@ -97,7 +98,7 @@ public class PreferenceManager {
         synchronized (PreferenceManager.class) {
             Type listType = new TypeToken<List<CustomCourse>>() {
             }.getType();
-            pref.edit().putString("customCourses", gson.toJson(newCourses,listType)).apply();
+            pref.edit().putString("customCourses", gson.toJson(newCourses, listType)).apply();
             if (courses == null) courses = new LinkedList<>();
             courses.clear();
             courses.addAll(newCourses);
@@ -109,7 +110,7 @@ public class PreferenceManager {
         Gson gson = new Gson();
         String json;
         synchronized (PreferenceManager.class) {
-            if (courses!=null) return new LinkedList<>(courses);
+            if (courses != null) return new LinkedList<>(courses);
             json = pref.getString("suggestion", "null");
         }
         if (json == null) return null;
@@ -118,7 +119,7 @@ public class PreferenceManager {
         List<CustomCourse> ret = null;
         try {
             ret = gson.fromJson(json, listType);
-            if (courses == null && ret!=null) courses = new LinkedList<>(ret);
+            if (courses == null && ret != null) courses = new LinkedList<>(ret);
         } catch (JsonParseException e) {
             e.printStackTrace();
         }

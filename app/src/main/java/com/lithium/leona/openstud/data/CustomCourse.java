@@ -8,50 +8,6 @@ import java.util.List;
 
 public class CustomCourse {
 
-    public static class CustomLesson{
-        private DayOfWeek dayOfWeek;
-        private String where;
-        private LocalTime start;
-        private LocalTime end;
-
-
-        public CustomLesson() {
-
-        }
-
-        public DayOfWeek getDayOfWeek() {
-            return dayOfWeek;
-        }
-
-        public void setDayOfWeek(DayOfWeek dayOfWeek) {
-            this.dayOfWeek = dayOfWeek;
-        }
-
-        public String getWhere() {
-            return where;
-        }
-
-        public void setWhere(String where) {
-            this.where = where;
-        }
-
-        public LocalTime getStart() {
-            return start;
-        }
-
-        public void setStart(LocalTime start) {
-            this.start = start;
-        }
-
-        public LocalTime getEnd() {
-            return end;
-        }
-
-        public void setEnd(LocalTime end) {
-            this.end = end;
-        }
-    }
-
     private String title;
     private String teacher;
     private LocalDate startCourse;
@@ -96,5 +52,49 @@ public class CustomCourse {
 
     public void setEndCourse(LocalDate endCourse) {
         this.endCourse = endCourse;
+    }
+
+    public static class CustomLesson {
+        private DayOfWeek dayOfWeek;
+        private String where;
+        private LocalTime start;
+        private LocalTime end;
+
+
+        public CustomLesson() {
+
+        }
+
+        public DayOfWeek getDayOfWeek() {
+            return dayOfWeek;
+        }
+
+        public void setDayOfWeek(DayOfWeek dayOfWeek) {
+            this.dayOfWeek = dayOfWeek;
+        }
+
+        public String getWhere() {
+            return where;
+        }
+
+        public void setWhere(String where) {
+            this.where = where;
+        }
+
+        public LocalTime getStart() {
+            return start;
+        }
+
+        public void setStart(LocalTime start) {
+            this.start = start;
+        }
+
+        public LocalTime getEnd() {
+            return end;
+        }
+
+        public void setEnd(LocalTime end) {
+            this.end = end;
+        }
     }
 }

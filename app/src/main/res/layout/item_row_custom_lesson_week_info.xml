@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:layout_margin="3dp"
     app:cardBackgroundColor="?attr/backgroundCardColor"
     app:cardCornerRadius="4dp">
@@ -24,12 +23,12 @@
             android:layout_marginStart="5dp"
             android:layout_marginBottom="8dp"
             android:entries="@array/dayOfWeek"
+            android:popupBackground="?attr/backgroundCardColor"
+            android:theme="?attr/SpinnerTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.207"
-            android:theme="?attr/SpinnerTheme"
-            android:popupBackground="?attr/backgroundCardColor"/>
+            app:layout_constraintVertical_bias="0.207" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/where"
@@ -69,8 +68,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.488"
-            />
+            app:layout_constraintVertical_bias="0.488" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/endLessonLayout"
@@ -156,7 +154,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.942"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

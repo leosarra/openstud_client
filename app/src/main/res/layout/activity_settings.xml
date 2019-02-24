@@ -7,18 +7,21 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
     tools:context=".activities.SettingsPrefActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:theme="?attr/ToolBarStyle"
+            android:elevation="10dp"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="10dp"/>
+            app:theme="?attr/ToolBarStyle" />
+
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"

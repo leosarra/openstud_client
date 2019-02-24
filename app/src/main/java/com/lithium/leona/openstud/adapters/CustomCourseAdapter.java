@@ -28,7 +28,7 @@ public class CustomCourseAdapter extends RecyclerView.Adapter<CustomCourseAdapte
     public CustomCourseAdapter(Context context, List<CustomCourse> lessons, CustomCourseListener listener) {
         this.lessons = lessons;
         ccl = listener;
-        this.context=context;
+        this.context = context;
     }
 
     @NonNull
@@ -56,6 +56,7 @@ public class CustomCourseAdapter extends RecyclerView.Adapter<CustomCourseAdapte
 
     public interface CustomCourseListener {
         void onDeleteClick(CustomCourse course, int position);
+
         void onClick(View v);
     }
 
@@ -73,7 +74,7 @@ public class CustomCourseAdapter extends RecyclerView.Adapter<CustomCourseAdapte
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.ccl = ccl;
-            this.context=context;
+            this.context = context;
         }
 
         private void setContext(Context context) {

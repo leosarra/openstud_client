@@ -7,7 +7,7 @@
         <item name="colorAccent">@android:color/holo_red_light</item>
     </style>
 
-    <style name="LauncherTheme" parent = "AppThemeLight">
+    <style name="LauncherTheme" parent="AppThemeLight">
         <item name="colorPrimary">#FFFFFF</item>
         <item name="colorPrimaryDark">#FFFFFF</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
@@ -147,8 +147,8 @@
     </style>
 
     <style name="ExamDarkTheme" parent="NoActionBarAppDarkTheme">
-    <item name="android:navigationBarColor">#303030</item>
-</style>
+        <item name="android:navigationBarColor">#303030</item>
+    </style>
 
     <style name="ExamBlackTheme" parent="NoActionBarAppBlackTheme">
         <item name="android:navigationBarColor">#000000</item>
@@ -351,7 +351,8 @@
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackground">@android:color/black</item>
         <!-- AboutLibraries specific values -->
-        <item name="about_libraries_window_background">@color/about_libraries_window_background</item>
+        <item name="about_libraries_window_background">@color/about_libraries_window_background
+        </item>
         <item name="about_libraries_card">@color/lesserBlack</item>
         <item name="about_libraries_title_openSource">#F4F4F6</item>
         <item name="about_libraries_text_openSource">#B6B6B6</item>
@@ -371,13 +372,20 @@
         <item name="android:windowBackground">@color/about_libraries_window_background</item>
         <item name="android:colorBackground">@color/about_libraries_window_background</item>
         <!-- AboutLibraries specific values -->
-        <item name="about_libraries_window_background">@color/about_libraries_window_background</item>
+        <item name="about_libraries_window_background">@color/about_libraries_window_background
+        </item>
         <item name="about_libraries_card">@color/about_libraries_card</item>
         <item name="about_libraries_title_openSource">@color/about_libraries_title_openSource</item>
         <item name="about_libraries_text_openSource">@color/about_libraries_text_openSource</item>
-        <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
-        <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
-        <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
+        <item name="about_libraries_special_button_openSource">
+            @color/about_libraries_special_button_openSource
+        </item>
+        <item name="about_libraries_dividerDark_openSource">
+            @color/about_libraries_dividerDark_openSource
+        </item>
+        <item name="about_libraries_dividerLight_openSource">
+            @color/about_libraries_dividerLight_openSource
+        </item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -398,9 +406,15 @@
         <item name="mt_leftTextSelectorTint">@color/red</item>
         <item name="mt_middleTextSelectorTint">@color/red</item>
         <item name="mt_rightTextSelectorTint">@color/red</item>
-        <item name="mt_leftTextSelectorDrawable">@drawable/text_select_handle_left_mtrl_alpha_mtrlsearch</item>
-        <item name="mt_middleTextSelectorDrawable">@drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch</item>
-        <item name="mt_rightTextSelectorDrawable">@drawable/text_select_handle_right_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_leftTextSelectorDrawable">
+            @drawable/text_select_handle_left_mtrl_alpha_mtrlsearch
+        </item>
+        <item name="mt_middleTextSelectorDrawable">
+            @drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch
+        </item>
+        <item name="mt_rightTextSelectorDrawable">
+            @drawable/text_select_handle_right_mtrl_alpha_mtrlsearch
+        </item>
         <item name="mt_handlesTintEnabled">true</item>
     </style>
 
@@ -420,9 +434,15 @@
         <item name="mt_leftTextSelectorTint">@color/red</item>
         <item name="mt_middleTextSelectorTint">@color/red</item>
         <item name="mt_rightTextSelectorTint">@color/red</item>
-        <item name="mt_leftTextSelectorDrawable">@drawable/text_select_handle_left_mtrl_alpha_mtrlsearch</item>
-        <item name="mt_middleTextSelectorDrawable">@drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch</item>
-        <item name="mt_rightTextSelectorDrawable">@drawable/text_select_handle_right_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_leftTextSelectorDrawable">
+            @drawable/text_select_handle_left_mtrl_alpha_mtrlsearch
+        </item>
+        <item name="mt_middleTextSelectorDrawable">
+            @drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch
+        </item>
+        <item name="mt_rightTextSelectorDrawable">
+            @drawable/text_select_handle_right_mtrl_alpha_mtrlsearch
+        </item>
         <item name="mt_handlesTintEnabled">true</item>
     </style>
 
@@ -442,9 +462,15 @@
         <item name="mt_leftTextSelectorTint">@color/red</item>
         <item name="mt_middleTextSelectorTint">@color/red</item>
         <item name="mt_rightTextSelectorTint">@color/red</item>
-        <item name="mt_leftTextSelectorDrawable">@drawable/text_select_handle_left_mtrl_alpha_mtrlsearch</item>
-        <item name="mt_middleTextSelectorDrawable">@drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch</item>
-        <item name="mt_rightTextSelectorDrawable">@drawable/text_select_handle_right_mtrl_alpha_mtrlsearch</item>
+        <item name="mt_leftTextSelectorDrawable">
+            @drawable/text_select_handle_left_mtrl_alpha_mtrlsearch
+        </item>
+        <item name="mt_middleTextSelectorDrawable">
+            @drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch
+        </item>
+        <item name="mt_rightTextSelectorDrawable">
+            @drawable/text_select_handle_right_mtrl_alpha_mtrlsearch
+        </item>
         <item name="mt_handlesTintEnabled">true</item>
     </style>
 
@@ -461,12 +487,19 @@
         <item name="material_drawer_secondary_text">@color/material_drawer_secondary_text</item>
         <item name="material_drawer_hint_text">@color/material_drawer_hint_text</item>
         <item name="material_drawer_divider">@color/material_drawer_divider</item>
-        <item name="material_drawer_selected">@color/material_drawer_selected</item> <!-- Material 2 defines 12% alpha, primary color -->
-        <item name="material_drawer_selected_legacy">@color/material_drawer_selected</item> <!-- Defines the color if legacy style (Material 1, is enabled) -->
+        <item name="material_drawer_selected">@color/material_drawer_selected
+        </item> <!-- Material 2 defines 12% alpha, primary color -->
+        <item name="material_drawer_selected_legacy">@color/material_drawer_selected
+        </item> <!-- Defines the color if legacy style (Material 1, is enabled) -->
         <item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>
-        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
-        <item name="material_drawer_header_selection_subtext">@color/material_drawer_dark_header_selection_subtext</item>
-        <item name="material_drawer_legacy_style">false</item> <!-- Enables legacy Material 1 style -->
+        <item name="material_drawer_header_selection_text">
+            @color/material_drawer_header_selection_text
+        </item>
+        <item name="material_drawer_header_selection_subtext">
+            @color/material_drawer_dark_header_selection_subtext
+        </item>
+        <item name="material_drawer_legacy_style">false
+        </item> <!-- Enables legacy Material 1 style -->
     </style>
 
     <style name="DatePickerDarkTheme" parent="Theme.AppCompat.Light.Dialog">
@@ -516,6 +549,7 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">16sp</item>
     </style>
+
     <style name="SpinnerDark" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
         <item name="android:paddingStart">0dp</item>
         <item name="android:paddingEnd">0dp</item>

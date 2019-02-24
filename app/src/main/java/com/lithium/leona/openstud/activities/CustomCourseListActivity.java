@@ -71,9 +71,10 @@ public class CustomCourseListActivity extends AppCompatActivity {
             public void onDeleteClick(CustomCourse lesson, int position) {
                 courses.remove(lesson);
                 adapter.notifyItemRemoved(position);
-                PreferenceManager.setCustomCourses(CustomCourseListActivity.this,courses);
+                PreferenceManager.setCustomCourses(CustomCourseListActivity.this, courses);
                 swapViews(courses);
             }
+
             public void onClick(View v) {
                 int itemPosition = rv.getChildLayoutPosition(v);
                 if (itemPosition < courses.size()) {
@@ -114,7 +115,7 @@ public class CustomCourseListActivity extends AppCompatActivity {
                 Type listType = new TypeToken<List<CustomCourse>>() {
                 }.getType();
                 synchronized (this) {
-                    i.putExtra("list",gson.toJson(courses,listType));
+                    i.putExtra("list", gson.toJson(courses, listType));
                 }
                 startActivity(i);
                 return true;
@@ -127,7 +128,7 @@ public class CustomCourseListActivity extends AppCompatActivity {
         if (firstStart) firstStart = false;
         else {
             List<CustomCourse> saved = PreferenceManager.getCustomCourses(this);
-            if (saved!=null && !saved.equals(courses)) {
+            if (saved != null && !saved.equals(courses)) {
                 courses.clear();
                 courses.addAll(saved);
                 adapter.notifyDataSetChanged();

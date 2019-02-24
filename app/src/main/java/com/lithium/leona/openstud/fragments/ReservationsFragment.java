@@ -337,7 +337,7 @@ public class ReservationsFragment extends BaseDataFragment {
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                    ClientHelper.rebirthApp(activity,msg.what);
+                    ClientHelper.rebirthApp(activity, msg.what);
                 } else if (msg.what == (ClientHelper.Status.FAILED_DELETE).getValue()) {
                     activity.createTextSnackBar(R.string.failed_delete, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.OK_DELETE).getValue()) {

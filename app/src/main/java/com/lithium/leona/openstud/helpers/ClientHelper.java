@@ -257,7 +257,7 @@ public class ClientHelper {
         InfoManager.clearSharedPreferences(activity);
         PreferenceManager.setBiometricsEnabled(activity, false);
         Intent i = new Intent(activity, LauncherActivity.class);
-        if (errorCode!=null) i.putExtra("error",errorCode);
+        if (errorCode != null) i.putExtra("error", errorCode);
         activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
         activity.finish();
     }
@@ -289,7 +289,7 @@ public class ClientHelper {
             case DOABLE:
             case RESERVED: {
                 ZoneId zoneId = ZoneId.systemDefault();
-                Timestamp timestamp =  ev.getTimestamp(zoneId);
+                Timestamp timestamp = ev.getTimestamp(zoneId);
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title;
@@ -306,12 +306,12 @@ public class ClientHelper {
 
     }
 
-    public static List<Lesson> generateLessonsForCustomCourses(List<CustomCourse> courses){
+    public static List<Lesson> generateLessonsForCustomCourses(List<CustomCourse> courses) {
         List<Lesson> lessons = new LinkedList<>();
         if (courses == null) return lessons;
         LocalDate maxDate = null;
         LocalDate minDate = null;
-        for (CustomCourse course: courses) {
+        for (CustomCourse course : courses) {
             if (maxDate == null) maxDate = course.getEndCourse();
             else if (course.getEndCourse().isAfter(maxDate)) maxDate = course.getEndCourse();
             if (minDate == null) minDate = course.getStartCourse();
@@ -331,8 +331,8 @@ public class ClientHelper {
                         newLesson.setName(course.getTitle());
                         newLesson.setTeacher(course.getTeacher());
                         newLesson.setWhere(lesson.getWhere());
-                        newLesson.setStart(LocalDateTime.of(date,lesson.getStart()));
-                        newLesson.setEnd(LocalDateTime.of(date,lesson.getEnd()));
+                        newLesson.setStart(LocalDateTime.of(date, lesson.getStart()));
+                        newLesson.setEnd(LocalDateTime.of(date, lesson.getEnd()));
                         lessons.add(newLesson);
                     }
                 }

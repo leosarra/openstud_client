@@ -67,15 +67,18 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     @BindView(R.id.addLesson)
     Button addLesson;
     private CustomLessonAdapter adapter;
-    @OnClick(R.id.addLesson) void onClick(){
-       addNewLesson();
-    }
     private LocalDate startCourse;
     private LocalDate endCourse;
     private List<CustomCourse.CustomLesson> lessons;
     private List<CustomCourse> courses;
     private int position = -1;
     private boolean end;
+
+    @OnClick(R.id.addLesson)
+    void onClick() {
+        addNewLesson();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeEngine.applyCustomCourseTheme(this);
@@ -92,7 +95,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         adapter = new CustomLessonAdapter(this, lessons, ThemeEngine.getTimePickerTheme(this), (lesson, position) -> {
             lessons.remove(lesson);
             adapter.notifyItemRemoved(position);
-            new Handler().postDelayed(() -> adapter.notifyDataSetChanged(),250);
+            new Handler().postDelayed(() -> adapter.notifyDataSetChanged(), 250);
         });
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -101,7 +104,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     }
 
 
-    private void loadValues(){
+    private void loadValues() {
         Intent intent = getIntent();
         String jsonList = intent.getStringExtra("list");
         Gson gson = new Gson();
@@ -109,13 +112,13 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         }.getType();
         courses = gson.fromJson(jsonList, listType);
         position = intent.getIntExtra("position", -1);
-        if (position !=-1) {
+        if (position != -1) {
             CustomCourse course = courses.get(position);
             startCourse = course.getStartCourse();
             endCourse = course.getEndCourse();
             teacherTxt.setText(course.getTeacher());
             titleTxt.setText(course.getTitle());
-            if (course.getLessons()!=null) {
+            if (course.getLessons() != null) {
                 lessons.addAll(course.getLessons());
                 adapter.notifyDataSetChanged();
             }
@@ -129,10 +132,10 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         endCourseTxt.setText(endCourse.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
 
-    private void setListeners(){
+    private void setListeners() {
         startCourseLayout.setOnClickListener(v -> {
             createDatePickerDialog((view, year, month, dayOfMonth) -> {
-                startCourse = LocalDate.of(year,month+1,dayOfMonth);
+                startCourse = LocalDate.of(year, month + 1, dayOfMonth);
                 startCourseTxt.setText(startCourse.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 if (startCourse.isAfter(endCourse)) {
                     endCourse = startCourse;
@@ -141,23 +144,25 @@ public class AddCustomCourseActivity extends AppCompatActivity {
             }, startCourse).show();
         });
         endCourseLayout.setOnClickListener(v -> createDatePickerDialog((view, year, month, dayOfMonth) -> {
-            endCourse = LocalDate.of(year,month+1,dayOfMonth);
+            endCourse = LocalDate.of(year, month + 1, dayOfMonth);
             endCourseTxt.setText(endCourse.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             if (endCourse.isBefore(startCourse)) {
                 startCourse = endCourse;
                 startCourseTxt.setText(startCourse.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
-        },endCourse).show());
+        }, endCourse).show());
     }
 
-    private DatePickerDialog createDatePickerDialog(DatePickerDialog.OnDateSetListener listener, LocalDate startDate){
+    private DatePickerDialog createDatePickerDialog(DatePickerDialog.OnDateSetListener listener, LocalDate startDate) {
         Calendar cal = Calendar.getInstance();
         DatePickerDialog dialog;
-        if (startDate !=null) dialog = new DatePickerDialog(AddCustomCourseActivity.this, ThemeEngine.getDatePickerTheme(this), listener, startDate.getYear(), startDate.getMonthValue()-1, startDate.getDayOfMonth());
-        else dialog = new DatePickerDialog(AddCustomCourseActivity.this, ThemeEngine.getDatePickerTheme(this), listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        if (startDate != null)
+            dialog = new DatePickerDialog(AddCustomCourseActivity.this, ThemeEngine.getDatePickerTheme(this), listener, startDate.getYear(), startDate.getMonthValue() - 1, startDate.getDayOfMonth());
+        else
+            dialog = new DatePickerDialog(AddCustomCourseActivity.this, ThemeEngine.getDatePickerTheme(this), listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         Calendar maxDate = Calendar.getInstance();
-        maxDate.add(Calendar.YEAR,1);
-        maxDate.add(Calendar.MONTH,6);
+        maxDate.add(Calendar.YEAR, 1);
+        maxDate.add(Calendar.MONTH, 6);
         dialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
         dialog.getDatePicker().setMinDate(cal.getTimeInMillis());
         return dialog;
@@ -179,27 +184,29 @@ public class AddCustomCourseActivity extends AppCompatActivity {
             case R.id.confirm:
                 if (end) return false;
                 if (lessons.isEmpty()) {
-                    LayoutHelper.createTextSnackBar(mainLayout,R.string.add_one_lesson_day, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.add_one_lesson_day, Snackbar.LENGTH_LONG);
                     return false;
                 }
                 if (TextUtils.isEmpty(teacherTxt.getText()) || TextUtils.isEmpty(titleTxt.getText())) {
-                    LayoutHelper.createTextSnackBar(mainLayout,R.string.missing_parameters, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.missing_parameters, Snackbar.LENGTH_LONG);
                     return false;
                 }
                 CustomCourse course;
                 if (position == -1) course = new CustomCourse();
                 else course = courses.get(position);
-                if (!TextUtils.isEmpty(teacherTxt.getText())) course.setTeacher(Objects.requireNonNull(teacherTxt.getText()).toString());
-                if (!TextUtils.isEmpty(titleTxt.getText())) course.setTitle(Objects.requireNonNull(titleTxt.getText()).toString());
+                if (!TextUtils.isEmpty(teacherTxt.getText()))
+                    course.setTeacher(Objects.requireNonNull(teacherTxt.getText()).toString());
+                if (!TextUtils.isEmpty(titleTxt.getText()))
+                    course.setTitle(Objects.requireNonNull(titleTxt.getText()).toString());
                 course.setStartCourse(startCourse);
                 course.setEndCourse(endCourse);
                 course.setLessons(lessons);
                 if (position == -1) courses.add(course);
                 else {
                     courses.remove(position);
-                    courses.add(position,course);
+                    courses.add(position, course);
                 }
-                PreferenceManager.setCustomCourses(this,courses);
+                PreferenceManager.setCustomCourses(this, courses);
                 end = true;
                 finish();
                 return true;
@@ -207,11 +214,11 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewLesson(){
+    private void addNewLesson() {
         CustomCourse.CustomLesson lesson = new CustomCourse.CustomLesson();
         lesson.setDayOfWeek(DayOfWeek.MONDAY);
-        lesson.setStart(LocalTime.of(8,0));
-        lesson.setEnd(LocalTime.of(10,0));
+        lesson.setStart(LocalTime.of(8, 0));
+        lesson.setEnd(LocalTime.of(10, 0));
         lessons.add(lesson);
         adapter.notifyDataSetChanged();
     }

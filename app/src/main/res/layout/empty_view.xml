@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/empty_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center|center_vertical"
     android:visibility="gone">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center|center_vertical">
+            android:gravity="center|center_vertical"
+            android:orientation="vertical">
 
             <!--
             <ImageView
@@ -28,10 +30,9 @@
                 android:id="@+id/empty_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/emptyViewColor"
-                android:textSize="18sp"
                 android:gravity="center|center_vertical"
-                />
+                android:textColor="?attr/emptyViewColor"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/empty_emoji"
@@ -51,10 +52,10 @@
                     style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="41dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/reload"
                     android:textColor="?attr/colorButtonNav"
                     app:layout_constraintBottom_toBottomOf="parent"

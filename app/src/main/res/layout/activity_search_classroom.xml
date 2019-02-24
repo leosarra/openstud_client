@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
             <com.mancj.materialsearchbar.MaterialSearchBar
-                android:padding="10dp"
+                android:id="@+id/searchBar"
                 style="?attr/searchBarTheme"
-                app:mt_hint="Aula 32 San Pietro in Vincoli"
-                app:mt_maxSuggestionsCount="3"
-                app:mt_navIconEnabled="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/searchBar"
-                android:elevation="25dp"/>
+                android:elevation="25dp"
+                android:padding="10dp"
+                app:mt_hint="Aula 32 San Pietro in Vincoli"
+                app:mt_maxSuggestionsCount="3"
+                app:mt_navIconEnabled="true" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,20 +34,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/backgroundColor">
+
             <ProgressBar
                 android:id="@+id/progress_bar"
                 style="?android:progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
+                android:layout_gravity="center" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </androidx.recyclerview.widget.RecyclerView>
-            <include
-                layout="@layout/empty_view" />
+                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+
+            <include layout="@layout/empty_view" />
         </FrameLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
