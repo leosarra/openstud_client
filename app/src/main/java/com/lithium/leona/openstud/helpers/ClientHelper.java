@@ -37,6 +37,7 @@ import com.lithium.leona.openstud.activities.ProfileActivity;
 import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.data.CustomCourse;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.widgets.GradesWidget;
@@ -68,6 +69,7 @@ import lithium.openstud.driver.core.models.Event;
 import lithium.openstud.driver.core.models.EventType;
 import lithium.openstud.driver.core.models.ExamDone;
 import lithium.openstud.driver.core.models.ExamReservation;
+import lithium.openstud.driver.core.models.Lesson;
 
 public class ClientHelper {
 
@@ -302,6 +304,41 @@ public class ClientHelper {
             }
         }
 
+    }
+
+    public static List<Lesson> generateLessonsForCustomCourses(List<CustomCourse> courses){
+        List<Lesson> lessons = new LinkedList<>();
+        if (courses == null) return lessons;
+        LocalDate maxDate = null;
+        LocalDate minDate = null;
+        for (CustomCourse course: courses) {
+            if (maxDate == null) maxDate = course.getEndCourse();
+            else if (course.getEndCourse().isAfter(maxDate)) maxDate = course.getEndCourse();
+            if (minDate == null) minDate = course.getStartCourse();
+            else if (course.getStartCourse().isBefore(minDate)) minDate = course.getStartCourse();
+        }
+        if (minDate == null || maxDate == null) return lessons;
+        List<LocalDate> totalDates = new LinkedList<>();
+        while (!minDate.isAfter(maxDate)) {
+            totalDates.add(minDate);
+            minDate = minDate.plusDays(1);
+        }
+        for (LocalDate date : totalDates) {
+            for (CustomCourse course : courses) {
+                for (CustomCourse.CustomLesson lesson : course.getLessons()) {
+                    if (lesson.getDayOfWeek() == date.getDayOfWeek()) {
+                        Lesson newLesson = new Lesson();
+                        newLesson.setName(course.getTitle());
+                        newLesson.setTeacher(course.getTeacher());
+                        newLesson.setWhere(lesson.getWhere());
+                        newLesson.setStart(LocalDateTime.of(date,lesson.getStart()));
+                        newLesson.setEnd(LocalDateTime.of(date,lesson.getEnd()));
+                        lessons.add(newLesson);
+                    }
+                }
+            }
+        }
+        return lessons;
     }
 
     public static void setDialogView(View v, Dialog dialog, int state) {
