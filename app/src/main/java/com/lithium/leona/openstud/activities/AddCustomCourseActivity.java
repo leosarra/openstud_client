@@ -89,7 +89,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new CustomLessonAdapter(this, lessons, (lesson, position) -> {
+        adapter = new CustomLessonAdapter(this, lessons, ThemeEngine.getTimePickerTheme(this), (lesson, position) -> {
             lessons.remove(lesson);
             adapter.notifyItemRemoved(position);
             new Handler().postDelayed(() -> adapter.notifyDataSetChanged(),250);
@@ -153,8 +153,8 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     private DatePickerDialog createDatePickerDialog(DatePickerDialog.OnDateSetListener listener, LocalDate startDate){
         Calendar cal = Calendar.getInstance();
         DatePickerDialog dialog;
-        if (startDate !=null) dialog = new DatePickerDialog(AddCustomCourseActivity.this, listener, startDate.getYear(), startDate.getMonthValue()-1, startDate.getDayOfMonth());
-        else dialog = new DatePickerDialog(AddCustomCourseActivity.this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        if (startDate !=null) dialog = new DatePickerDialog(AddCustomCourseActivity.this, ThemeEngine.getDatePickerTheme(this), listener, startDate.getYear(), startDate.getMonthValue()-1, startDate.getDayOfMonth());
+        else dialog = new DatePickerDialog(AddCustomCourseActivity.this, ThemeEngine.getDatePickerTheme(this), listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         Calendar maxDate = Calendar.getInstance();
         maxDate.add(Calendar.YEAR,1);
         maxDate.add(Calendar.MONTH,6);

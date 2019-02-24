@@ -35,18 +35,20 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
     private List<CustomCourse.CustomLesson> lessons;
     private CustomLessonListener ocl;
     private Context context;
+    private int timePickerTheme;
 
-    public CustomLessonAdapter(Context context, List<CustomCourse.CustomLesson> lessons, CustomLessonListener listener) {
+    public CustomLessonAdapter(Context context, List<CustomCourse.CustomLesson> lessons, int timePickerTheme, CustomLessonListener listener) {
         this.lessons = lessons;
         ocl = listener;
         this.context=context;
+        this.timePickerTheme = timePickerTheme;
     }
 
     @NonNull
     @Override
     public CustomLessonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_row_custom_lesson_week_info, parent, false);
-        CustomLessonHolder holder = new CustomLessonHolder(context, view, ocl);
+        CustomLessonHolder holder = new CustomLessonHolder(context, view, ocl, timePickerTheme);
         holder.setContext(context);
         return holder;
     }
@@ -87,12 +89,14 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
         ImageButton delete;
         private Context context;
         private CustomLessonListener ocl;
+        private int timePickerTheme;
 
-        CustomLessonHolder(Context context, View itemView, CustomLessonListener ocl) {
+        CustomLessonHolder(Context context, View itemView, CustomLessonListener ocl, int timePickerTheme) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.ocl = ocl;
             this.context=context;
+            this.timePickerTheme = timePickerTheme;
         }
         private void setContext(Context context) {
             this.context = context;
@@ -133,7 +137,7 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
             });
             layoutStartTime.setOnClickListener(v -> {
                 TimePickerDialog dialog =
-                        new TimePickerDialog(context, R.style.DateTimePickerDialogTheme, (view, hourOfDay, minute) -> {
+                        new TimePickerDialog(context, timePickerTheme, (view, hourOfDay, minute) -> {
                             startLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
                             lesson.setStart(LocalTime.of(hourOfDay,minute,0));
                         }, 0, 0, DateFormat.is24HourFormat(context));
@@ -141,7 +145,7 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
             });
             layoutEndTime.setOnClickListener(v -> {
                 TimePickerDialog dialog =
-                        new TimePickerDialog(context, R.style.DateTimePickerDialogTheme, (view, hourOfDay, minute) -> {
+                        new TimePickerDialog(context, timePickerTheme, (view, hourOfDay, minute) -> {
                             endLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
                             lesson.setEnd(LocalTime.of(hourOfDay,minute,0));
                             }, 0, 0, DateFormat.is24HourFormat(context));
