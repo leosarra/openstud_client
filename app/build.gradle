@@ -46,7 +46,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation group: 'androidx.core', name: 'core', version: '1.0.1'
-    implementation 'com.github.LithiumSR:openstud_driver:0.51.5'
+    implementation 'com.github.LithiumSR:openstud_driver:0.52.3'
     implementation 'com.jakewharton:butterknife:10.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
@@ -75,6 +75,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation "androidx.annotation:annotation:1.0.1"
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
