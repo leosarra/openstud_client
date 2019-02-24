@@ -132,12 +132,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
 
         @SuppressLint("ResourceType")
         void setDetails(final Event ev) {
-            if (ev.getWhere() == null || ev.getWhere().trim().isEmpty())
-                txtWhere.setVisibility(View.GONE);
-            else if (ev.getEventType() == EventType.LESSON)
+            if (ev.getEventType() == EventType.LESSON)
                 txtWhere.setText(context.getResources().getString(R.string.where_event, ev.getWhere()));
             else
-                txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getWhere()));
+                txtWhere.setText(context.getResources().getString(R.string.info_extra_reservation_format, ev.getReservation().getNote()));
+            if (txtWhere.getText().toString().isEmpty()) txtWhere.setVisibility(View.GONE);
             txtTeacher.setText(context.getResources().getString(R.string.teacher_event, StringUtils.capitalize(ev.getTeacher())));
             if (ev.getTeacher() == null) txtTeacher.setVisibility(View.GONE);
             if (ev.getEventType() == EventType.LESSON && !PreferenceManager.isLessonOptionEnabled(context)) {
@@ -147,12 +146,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
                 setupMenu(ev, options);
             }
             if (ev.getEventType() == EventType.DOABLE || ev.getEventType() == EventType.RESERVED) {
-                txtName.setText(ev.getDescription());
+                txtName.setText(ev.getTitle());
                 txtStartDate.setVisibility(View.GONE);
                 txtEndDate.setVisibility(View.GONE);
             } else {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-                txtName.setText(ev.getDescription());
+                txtName.setText(ev.getTitle());
                 txtStartDate.setText(context.getResources().getString(R.string.start_lesson, ev.getStart().format(formatter)));
                 txtEndDate.setText(context.getResources().getString(R.string.end_lesson, ev.getEnd().format(formatter)));
             }

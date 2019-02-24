@@ -248,10 +248,10 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
         List<Event> calendarEvents = new LinkedList<>();
         List<Long> withLesson = new LinkedList<>();
         for (lithium.openstud.driver.core.models.Event event : events) {
-            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription()))
+            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getTitle()))
                 continue;
             ZoneId zoneId = ZoneId.systemDefault();
-            Timestamp timestamp = new Timestamp(event.getStart().toLocalDate().atStartOfDay(zoneId).toInstant().toEpochMilli());
+            Timestamp timestamp = event.getTimestamp(zoneId);
             Event ev;
             if (event.getEventType() == EventType.DOABLE) {
                 ev = new Event(Color.YELLOW, timestamp.getTime());
@@ -280,11 +280,14 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
         List<lithium.openstud.driver.core.models.Event> newDoable = new LinkedList<>();
         ZoneId zoneId = ZoneId.systemDefault();
         for (lithium.openstud.driver.core.models.Event event : events) {
-            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getDescription()))
+            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getTitle()))
                 continue;
             Instant instant = Instant.ofEpochMilli(date.getTime());
             instant.atZone(zoneId);
-            if (instant.toEpochMilli() != event.getStart().toLocalDate().atStartOfDay(zoneId).toInstant().toEpochMilli())
+            long eventDateInMilli;
+            if (event.getEventType() == EventType.LESSON) eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
+            else eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
+            if (instant.toEpochMilli() != eventDateInMilli)
                 continue;
             if (event.getEventType() == EventType.DOABLE) {
                 newDoable.add(event);
@@ -462,8 +465,8 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
     private synchronized List<String> generateListLessonsNames() {
         List<String> names = new LinkedList<>();
         for (lithium.openstud.driver.core.models.Event event : events) {
-            if (!names.contains(event.getDescription()) && event.getEventType() == EventType.LESSON)
-                names.add(event.getDescription());
+            if (!names.contains(event.getTitle()) && event.getEventType() == EventType.LESSON)
+                names.add(event.getTitle());
         }
         return names;
     }
