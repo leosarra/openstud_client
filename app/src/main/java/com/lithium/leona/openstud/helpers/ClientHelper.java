@@ -268,7 +268,7 @@ public class ClientHelper {
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title;
-                if (ev.getEventType() == EventType.LESSON) title = ev.getDescription();
+                if (ev.getEventType() == EventType.LESSON) title = ev.getTitle();
                 else title = ev.getTitle();
                 intent.putExtra(CalendarContract.Events.TITLE, title);
                 Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
@@ -278,9 +278,8 @@ public class ClientHelper {
                     Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
                     intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
                             timestampEnd.getTime() * 1000L);
-                } else {
-                    intent.putExtra(CalendarContract.Events.EVENT_LOCATION, ev.getWhere());
                 }
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, ev.getWhere());
                 intent.putExtra(CalendarContract.Events.ALL_DAY, false);
                 activity.startActivity(intent);
                 break;
@@ -288,7 +287,7 @@ public class ClientHelper {
             case DOABLE:
             case RESERVED: {
                 ZoneId zoneId = ZoneId.systemDefault();
-                Timestamp timestamp = new Timestamp(ev.getExamDate().atStartOfDay(zoneId).toEpochSecond());
+                Timestamp timestamp =  ev.getTimestamp(zoneId);
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title;
