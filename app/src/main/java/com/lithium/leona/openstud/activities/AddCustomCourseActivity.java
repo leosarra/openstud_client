@@ -93,9 +93,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         adapter = new CustomLessonAdapter(this, lessons, ThemeEngine.getTimePickerTheme(this), (lesson, position) -> {
-            lessons.remove(lesson);
-            adapter.notifyItemRemoved(position);
-            new Handler().postDelayed(() -> adapter.notifyDataSetChanged(), 250);
+           removeLesson(lesson,position);
         });
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -187,7 +185,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(mainLayout, R.string.add_one_lesson_day, Snackbar.LENGTH_LONG);
                     return false;
                 }
-                if (TextUtils.getTrimmedLength(teacherTxt.getText()) == 0 || TextUtils.getTrimmedLength(titleTxt.getText()) == 0) {
+                if (TextUtils.getTrimmedLength(teacherTxt.getText()) == 0 || TextUtils.getTrimmedLength(titleTxt.getText()) == 0 || areClassroomsEmpty()) {
                     LayoutHelper.createTextSnackBar(mainLayout, R.string.missing_parameters, Snackbar.LENGTH_LONG);
                     return false;
                 }
@@ -212,7 +210,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewLesson() {
+    private synchronized void addNewLesson() {
         CustomCourse.CustomLesson lesson = new CustomCourse.CustomLesson();
         lesson.setDayOfWeek(DayOfWeek.MONDAY);
         lesson.setStart(LocalTime.of(8, 0));
@@ -221,4 +219,17 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+        private synchronized void removeLesson(CustomCourse.CustomLesson int position) {
+        lessons.remove(lesson);
+        adapter.notifyItemRemoved(position);
+        new Handler().postDelayed(() -> adapter.notifyDataSetChanged(), 250);
+    }
+
+
+    private synchronized boolean areClassroomsEmpty(){
+        for (CustomCourse.CustomLesson lesson : lessons) {
+            if (lesson.getWhere() == null || lesson.getWhere().trim().isEmpty()) return true;
+        }
+        return false;
+    }
 }
