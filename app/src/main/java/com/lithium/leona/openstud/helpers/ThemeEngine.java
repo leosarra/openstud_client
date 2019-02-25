@@ -271,8 +271,8 @@ public class ThemeEngine {
         }
     }
 
-    public static int getDatePickerTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+    public static int getDatePickerTheme(Context context) {
+        Theme theme = getTheme(context);
         switch (theme) {
             case LIGHT:
                 return R.style.DatePickerLightTheme;
@@ -285,8 +285,8 @@ public class ThemeEngine {
         }
     }
 
-    public static int getTimePickerTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+    public static int getTimePickerTheme(Context context) {
+        Theme theme = getTheme(context);
         switch (theme) {
             case LIGHT:
                 return R.style.TimePickerDialogLightTheme;
@@ -299,8 +299,8 @@ public class ThemeEngine {
         }
     }
 
-    public static boolean isLightTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+    public static boolean isLightTheme(Context context) {
+        Theme theme = getTheme(context);
         switch (theme) {
             case LIGHT:
                 return true;
