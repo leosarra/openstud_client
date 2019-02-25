@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -88,6 +89,7 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
             CheckBox ckb = new CheckBox(context);
             ckb.setId(i++);
             ckb.setText(name);
+            if (!ThemeEngine.isLightTheme(context)) ckb.setButtonTintList(ContextCompat.getColorStateList(context,R.color.redLight));
             ckb.setTextColor(ThemeEngine.getPrimaryTextColor(activity));
             ckb.setPadding(0, 0, 0, 10);
             ckb.setChecked(!InfoManager.filterContains(context, name));
