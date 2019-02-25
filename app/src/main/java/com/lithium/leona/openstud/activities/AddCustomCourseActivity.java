@@ -187,17 +187,15 @@ public class AddCustomCourseActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(mainLayout, R.string.add_one_lesson_day, Snackbar.LENGTH_LONG);
                     return false;
                 }
-                if (TextUtils.isEmpty(teacherTxt.getText()) || TextUtils.isEmpty(titleTxt.getText())) {
+                if (TextUtils.getTrimmedLength(teacherTxt.getText()) == 0 || TextUtils.getTrimmedLength(titleTxt.getText()) == 0) {
                     LayoutHelper.createTextSnackBar(mainLayout, R.string.missing_parameters, Snackbar.LENGTH_LONG);
                     return false;
                 }
                 CustomCourse course;
                 if (position == -1) course = new CustomCourse();
                 else course = courses.get(position);
-                if (!TextUtils.isEmpty(teacherTxt.getText()))
-                    course.setTeacher(Objects.requireNonNull(teacherTxt.getText()).toString());
-                if (!TextUtils.isEmpty(titleTxt.getText()))
-                    course.setTitle(Objects.requireNonNull(titleTxt.getText()).toString());
+                course.setTeacher(Objects.requireNonNull(teacherTxt.getText()).toString().trim());
+                course.setTitle(Objects.requireNonNull(titleTxt.getText()).toString().trim());
                 course.setStartCourse(startCourse);
                 course.setEndCourse(endCourse);
                 course.setLessons(lessons);
