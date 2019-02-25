@@ -137,20 +137,28 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
 
                 }
             });
+
+
+
+            TimePickerDialog.OnTimeSetListener endSetListener = (view, hourOfDay, minute) -> {
+                endLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
+                lesson.setEnd(LocalTime.of(hourOfDay, minute, 0));
+            };
+
+            TimePickerDialog.OnTimeSetListener startSetListener = (view, hourOfDay, minute) -> {
+                startLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
+                lesson.setStart(LocalTime.of(hourOfDay, minute, 0));
+                if (lesson.getStart().isAfter(lesson.getEnd())) endSetListener.onTimeSet(null, hourOfDay+1, minute);
+            };
+
             layoutStartTime.setOnClickListener(v -> {
                 TimePickerDialog dialog =
-                        new TimePickerDialog(context, timePickerTheme, (view, hourOfDay, minute) -> {
-                            startLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
-                            lesson.setStart(LocalTime.of(hourOfDay, minute, 0));
-                        }, 0, 0, DateFormat.is24HourFormat(context));
+                        new TimePickerDialog(context, timePickerTheme,startSetListener, 0, 0, DateFormat.is24HourFormat(context));
                 dialog.show();
             });
             layoutEndTime.setOnClickListener(v -> {
                 TimePickerDialog dialog =
-                        new TimePickerDialog(context, timePickerTheme, (view, hourOfDay, minute) -> {
-                            endLessonTime.setText(String.format("%02d:%02d", hourOfDay, minute));
-                            lesson.setEnd(LocalTime.of(hourOfDay, minute, 0));
-                        }, 0, 0, DateFormat.is24HourFormat(context));
+                        new TimePickerDialog(context, timePickerTheme, endSetListener, 0, 0, DateFormat.is24HourFormat(context));
                 dialog.show();
             });
         }
