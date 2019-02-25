@@ -217,14 +217,14 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-        private synchronized void removeLesson(CustomCourse.CustomLesson lesson, int position) {
+    private synchronized void removeLesson(CustomCourse.CustomLesson lesson, int position) {
         lessons.remove(lesson);
         adapter.notifyItemRemoved(position);
         new Handler().postDelayed(() -> adapter.notifyDataSetChanged(), 250);
     }
 
 
-    private synchronized boolean areClassroomsEmpty(){
+    private synchronized boolean areClassroomsEmpty() {
         for (CustomCourse.CustomLesson lesson : lessons) {
             if (lesson.getWhere() == null || lesson.getWhere().trim().isEmpty()) return true;
         }

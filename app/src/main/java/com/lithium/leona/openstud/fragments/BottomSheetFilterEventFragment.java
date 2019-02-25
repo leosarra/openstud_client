@@ -94,14 +94,14 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
                 ColorStateList colorStateList = new ColorStateList(
                         new int[][]{
                                 new int[]{-android.R.attr.state_checked}, // unchecked
-                                new int[]{android.R.attr.state_checked} , // checked
+                                new int[]{android.R.attr.state_checked}, // checked
                         },
                         new int[]{
                                 context.getColor(android.R.color.darker_gray),
                                 context.getColor(R.color.redLight),
                         }
                 );
-                CompoundButtonCompat.setButtonTintList(ckb,colorStateList);
+                CompoundButtonCompat.setButtonTintList(ckb, colorStateList);
             }
             ckb.setTextColor(ThemeEngine.getPrimaryTextColor(activity));
             ckb.setPadding(0, 0, 0, 10);
