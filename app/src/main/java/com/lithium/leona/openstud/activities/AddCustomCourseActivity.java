@@ -92,9 +92,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new CustomLessonAdapter(this, lessons, ThemeEngine.getTimePickerTheme(this), (lesson, position) -> {
-           removeLesson(lesson,position);
-        });
+        adapter = new CustomLessonAdapter(this, lessons, this::removeLesson);
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         loadValues();

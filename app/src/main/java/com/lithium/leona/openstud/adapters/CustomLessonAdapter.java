@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.CustomCourse;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalTime;
@@ -35,20 +36,18 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
     private List<CustomCourse.CustomLesson> lessons;
     private CustomLessonListener ocl;
     private Context context;
-    private int timePickerTheme;
 
-    public CustomLessonAdapter(Context context, List<CustomCourse.CustomLesson> lessons, int timePickerTheme, CustomLessonListener listener) {
+    public CustomLessonAdapter(Context context, List<CustomCourse.CustomLesson> lessons, CustomLessonListener listener) {
         this.lessons = lessons;
         ocl = listener;
         this.context = context;
-        this.timePickerTheme = timePickerTheme;
     }
 
     @NonNull
     @Override
     public CustomLessonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_row_custom_lesson_week_info, parent, false);
-        CustomLessonHolder holder = new CustomLessonHolder(context, view, ocl, timePickerTheme);
+        CustomLessonHolder holder = new CustomLessonHolder(context, view, ocl);
         holder.setContext(context);
         return holder;
     }
@@ -89,14 +88,12 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
         ImageButton delete;
         private Context context;
         private CustomLessonListener ocl;
-        private int timePickerTheme;
 
-        CustomLessonHolder(Context context, View itemView, CustomLessonListener ocl, int timePickerTheme) {
+        CustomLessonHolder(Context context, View itemView, CustomLessonListener ocl) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.ocl = ocl;
             this.context = context;
-            this.timePickerTheme = timePickerTheme;
         }
 
         private void setContext(Context context) {
@@ -153,12 +150,12 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
 
             layoutStartTime.setOnClickListener(v -> {
                 TimePickerDialog dialog =
-                        new TimePickerDialog(context, timePickerTheme,startSetListener, 0, 0, DateFormat.is24HourFormat(context));
+                        new TimePickerDialog(context, ThemeEngine.getTimePickerTheme(context),startSetListener, 0, 0, DateFormat.is24HourFormat(context));
                 dialog.show();
             });
             layoutEndTime.setOnClickListener(v -> {
                 TimePickerDialog dialog =
-                        new TimePickerDialog(context, timePickerTheme, endSetListener, 0, 0, DateFormat.is24HourFormat(context));
+                        new TimePickerDialog(context, ThemeEngine.getTimePickerTheme(context), endSetListener, 0, 0, DateFormat.is24HourFormat(context));
                 dialog.show();
             });
         }
