@@ -3,6 +3,7 @@ package com.lithium.leona.openstud.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.CompoundButtonCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -88,6 +90,19 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
             CheckBox ckb = new CheckBox(context);
             ckb.setId(i++);
             ckb.setText(name);
+            if (!ThemeEngine.isLightTheme(context)) {
+                ColorStateList colorStateList = new ColorStateList(
+                        new int[][]{
+                                new int[]{-android.R.attr.state_checked}, // unchecked
+                                new int[]{android.R.attr.state_checked}, // checked
+                        },
+                        new int[]{
+                                context.getColor(android.R.color.darker_gray),
+                                context.getColor(R.color.redLight),
+                        }
+                );
+                CompoundButtonCompat.setButtonTintList(ckb, colorStateList);
+            }
             ckb.setTextColor(ThemeEngine.getPrimaryTextColor(activity));
             ckb.setPadding(0, 0, 0, 10);
             ckb.setChecked(!InfoManager.filterContains(context, name));

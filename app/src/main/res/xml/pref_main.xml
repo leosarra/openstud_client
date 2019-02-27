@@ -2,45 +2,53 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:iconSpaceReserved="false">
-    <PreferenceCategory android:title="@string/pref_title_general"
+    <PreferenceCategory
+        android:title="@string/pref_title_general"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
-            android:title="@string/show_exam_date"
-            android:summary="@string/show_exam_date_description"
-            android:key="@string/key_exam_date"
             android:defaultValue="false"
-            app:iconSpaceReserved="false"/>
+            android:key="@string/key_exam_date"
+            android:summary="@string/show_exam_date_description"
+            android:title="@string/show_exam_date"
+            app:iconSpaceReserved="false" />
         <EditTextPreference
-            android:title="@string/default_laude"
             android:defaultValue="30"
+            android:inputType="number"
             android:key="@string/key_default_laude"
             android:numeric="integer"
-            android:inputType="number"
-            app:iconSpaceReserved="false"/>
+            android:title="@string/default_laude"
+            app:iconSpaceReserved="false" />
         <Preference
-            android:title="@string/delete_pdf"
             android:key="@string/key_delete"
+            android:title="@string/delete_pdf"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_title_lessons"
+    <PreferenceCategory
+        android:title="@string/pref_title_lessons"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
-            android:title="@string/enable_lessons"
-            android:summary="@string/enable_lessons_description"
+            android:defaultValue="false"
             android:key="@string/key_enable_lesson"
-            android:defaultValue="false"
-            app:iconSpaceReserved="false"/>
+            android:summary="@string/enable_lessons_description"
+            android:title="@string/enable_lessons"
+            app:iconSpaceReserved="false" />
         <CheckBoxPreference
-            android:title="@string/show_options_lesson"
-            android:summary="@string/show_options_lesson_description"
-            android:key="@string/key_options_lesson"
             android:defaultValue="false"
-            app:iconSpaceReserved="false"/>
+            android:key="@string/key_options_lesson"
+            android:summary="@string/show_options_lesson_description"
+            android:title="@string/show_options_lesson"
+            app:iconSpaceReserved="false" />
+        <Preference
+            android:key="@string/key_add_custom_lesson"
+            android:summary="@string/add_custom_lesson_summary"
+            android:title="@string/add_custom_lesson"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="@string/pref_title_themes"
+    <PreferenceCategory
+        android:title="@string/pref_title_themes"
         app:iconSpaceReserved="false">
         <ListPreference
             android:defaultValue="0"
@@ -50,19 +58,20 @@
             android:key="@string/key_theme"
             android:summary="@string/summary_theme"
             android:title="@string/title_theme"
-            app:iconSpaceReserved="false"/>
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_title_security"
+    <PreferenceCategory
         android:key="@string/key_security_category"
+        android:title="@string/pref_title_security"
         app:iconSpaceReserved="false">
         <CheckBoxPreference
-            android:title="@string/enable_biometric_login"
-            android:summary="@string/enable_biometric_login_description"
-            android:key="@string/key_biometrics"
-            android:defaultValue="false"
             android:clickable="false"
-            app:iconSpaceReserved="false"/>
+            android:defaultValue="false"
+            android:key="@string/key_biometrics"
+            android:summary="@string/enable_biometric_login_description"
+            android:title="@string/enable_biometric_login"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
 </PreferenceScreen>

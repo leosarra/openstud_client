@@ -20,7 +20,7 @@ public abstract class BaseDataFragment extends Fragment {
         if (activity == null) return false;
         os = InfoManager.getOpenStud(activity);
         if (os == null) {
-            ClientHelper.rebirthApp(activity,null);
+            ClientHelper.rebirthApp(activity, null);
             return false;
         }
         return true;

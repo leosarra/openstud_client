@@ -5,8 +5,8 @@
     <item
         android:id="@+id/filter"
         android:icon="@drawable/ic_filter_list_black_24dp"
+        android:orderInCategory="0"
         android:title="@string/filter_lessons"
-        app:showAsAction="always"
-        android:orderInCategory="0"/>
+        app:showAsAction="always" />
 
 </menu>

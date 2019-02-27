@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:layout_margin="6dp"
     card_view:cardBackgroundColor="?attr/backgroundCardColor"
     card_view:cardCornerRadius="4dp">
@@ -33,8 +32,8 @@
             android:id="@+id/whereClassroom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp"
             android:layout_marginStart="8dp"
+            android:padding="1dp"
             android:textColor="?attr/primaryTextColor" />
 
 
@@ -42,25 +41,26 @@
             android:id="@+id/statusClassroom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp"
             android:layout_marginStart="8dp"
+            android:padding="1dp"
             android:textColor="?attr/primaryTextColor" />
 
         <TextView
             android:id="@+id/lesson"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp"
             android:layout_marginStart="8dp"
+            android:padding="1dp"
             android:textColor="?attr/primaryTextColor" />
 
         <TextView
             android:id="@+id/nextLesson"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp"
             android:layout_marginStart="8dp"
+            android:padding="1dp"
             android:textColor="?attr/primaryTextColor" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -109,6 +109,6 @@
                 card_view:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

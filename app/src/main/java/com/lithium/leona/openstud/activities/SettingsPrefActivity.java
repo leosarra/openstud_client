@@ -2,14 +2,11 @@ package com.lithium.leona.openstud.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.PermissionToken;
@@ -55,14 +52,6 @@ public class SettingsPrefActivity extends AppCompatActivity {
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.settings);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new MainPreferenceFragment()).commit();
-        for (int i = 0; i < toolbar.getChildCount(); ++i) {
-            View child = toolbar.getChildAt(i);
-            if (child instanceof TextView) {
-                TextView toolbarTitle = (TextView) child;
-                toolbarTitle.setBackgroundColor(Color.TRANSPARENT);
-                break;
-            }
-        }
 
     }
 
@@ -163,7 +152,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionDenied(PermissionDeniedResponse response) {
-                        LayoutHelper.createTextSnackBar(activity.mainLayout,R.string.no_write_permission_pdf_delete,Snackbar.LENGTH_LONG);
+                        LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.no_write_permission_pdf_delete, Snackbar.LENGTH_LONG);
                     }
 
                     @Override
@@ -208,6 +197,12 @@ public class SettingsPrefActivity extends AppCompatActivity {
             });
             enableBiometricLogin.setOnPreferenceChangeListener((preference, newValue) -> false);
             disableUnavailablePreferences();
+            Preference addCustomLesson = findPreference(getString(R.string.key_add_custom_lesson));
+            addCustomLesson.setOnPreferenceClickListener(preference -> {
+                Intent i = new Intent(getActivity(), CustomCourseListActivity.class);
+                startActivity(i);
+                return true;
+            });
         }
 
         @Override

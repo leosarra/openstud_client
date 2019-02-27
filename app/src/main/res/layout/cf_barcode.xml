@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:gravity="center_horizontal"
+    android:background="?attr/backgroundColor"
     android:focusableInTouchMode="true"
-    android:background="?attr/backgroundColor">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <!-- NOTE: This list should be displayed in a list
     instead of nested layouts -->
@@ -48,6 +47,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <Button
             android:id="@+id/close"
             style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"

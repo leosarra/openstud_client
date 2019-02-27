@@ -90,7 +90,7 @@ public class AboutActivity extends MaterialAboutActivity {
                                 startActivity(intent);
                             } catch (ActivityNotFoundException e) {
                                 e.printStackTrace();
-                                ClientHelper.createCustomTab(context,"https://t.me/lithium_3");
+                                ClientHelper.createCustomTab(context, "https://t.me/lithium_3");
                             }
                         }).build()).build();
     }

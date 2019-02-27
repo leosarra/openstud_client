@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-	<string name="define_int_openstud_driver"></string>
-	<!-- Author section -->
-	<string name="library_openstud_driver_author">Leonardo Sarra</string>
-	<string name="library_openstud_driver_authorWebsite">https://github.com/lithiumsr</string>
-	<!-- Library section -->
-	<string name="library_openstud_driver_libraryName">OpenStud Driver</string>
-	<string name="library_openstud_driver_libraryDescription">A Java library that provides an easy way to obtain infos from Sapienza University\'s Infostud</string>
-	<string name="library_openstud_driver_libraryWebsite">https://github.com/lithiumsr/openstud_driver</string>
-	<string name="library_openstud_driver_respositoryLink">https://github.com/lithiumsr/openstud_driver</string>
-	<string name="library_openstud_driver_libraryVersion">0.13</string>
-	<!-- OpenSource section -->
-	<string name="library_openstud_driver_isOpenSource">true</string>
-	<string name="library_openstud_driver_repositoryLink"></string>
-	<!-- ClassPath for autoDetect section -->
-	<string name="library_openstud_driver_classPath">lithium.openstud.driver.core.Openstud</string>
-	<!-- License section -->
-	<!-- Custom variables section -->
+    <string name="define_int_openstud_driver"></string>
+    <!-- Author section -->
+    <string name="library_openstud_driver_author">Leonardo Sarra</string>
+    <string name="library_openstud_driver_authorWebsite">https://github.com/lithiumsr</string>
+    <!-- Library section -->
+    <string name="library_openstud_driver_libraryName">OpenStud Driver</string>
+    <string name="library_openstud_driver_libraryDescription">A Java library that provides an easy way to obtain infos from Sapienza University\'s Infostud</string>
+    <string name="library_openstud_driver_libraryWebsite">https://github.com/lithiumsr/openstud_driver</string>
+    <string name="library_openstud_driver_respositoryLink">https://github.com/lithiumsr/openstud_driver</string>
+    <string name="library_openstud_driver_libraryVersion">0.13</string>
+    <!-- OpenSource section -->
+    <string name="library_openstud_driver_isOpenSource">true</string>
+    <string name="library_openstud_driver_repositoryLink"></string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_openstud_driver_classPath">lithium.openstud.driver.core.Openstud</string>
+    <!-- License section -->
+    <!-- Custom variables section -->
 </resources>

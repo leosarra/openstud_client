@@ -85,9 +85,6 @@
     <string name="info_extra_reservation_format">Info: %1$s</string>
 
 
-
-
-
     <string name="action_settings">Impostazioni</string>
     <string name="title_activity_settings">Impostazioni</string>
     <string name="pref_title_themes">Aspetto</string>
@@ -147,8 +144,8 @@
     <string name="close">Chiudi</string>
     <string name="filter_calendar_description">Scegli le lezioni che vuoi siano visualizzate nel calendario</string>
     <string name="filter_lessons">Filtro lezioni</string>
-    <string name="enable_lessons">Mostra le lezioni nel calendario</string>
-    <string name="enable_lessons_description">Abilita la visualizzazione delle lezioni per gli esami non ancora superati nel calendario</string>
+    <string name="enable_lessons">Aggiungi le lezioni automaticamente</string>
+    <string name="enable_lessons_description">Abilita la visualizzazione, nel calendario, delle lezioni per gli esami non ancora superati prendendo i dati dal database della Sapienza</string>
     <string name="lesson_notification">La visualizzazione delle lezioni può essere abilitata dalle impostazioni</string>
     <string name="experimental_feature">Funzionalità sperimentale!</string>
     <string name="calendar_feature_description">Il supporto alle lezione per il calendario è una funzionalità sperimentale.\nA causa dei dati \"esotici\" del database della Sapienza le lezioni che verranno mostrate potrebbero essere incomplete o errate.</string>
@@ -196,7 +193,7 @@
     <string name="no_biometric_hw_found">Impossibile attivare la funzionalità perché il telefono non risulta compatibile</string>
     <string name="pref_title_security">Sicurezza</string>
     <string name="enable_biometric_login">Utilizza login biometrico (Beta)</string>
-    <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico.</string>
+    <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico (es: impronta, iride).</string>
     <string name="warning">Avviso</string>
     <string name="biometric_warning">Dal prossimo avvio l\'applicazione utilizzerà in fase di login gli input biometrici configurati dal proprietario nel telefono.\n\nSe nessun input é disponibile la funzionalitá verrá automaticamente disattivata.</string>
     <string name="biometric_login">Login biometrico</string>
@@ -205,4 +202,19 @@
     <string name="send_message">Invia un messaggio</string>
     <string name="no_write_permission_pdf">Impossibile scaricare la ricevuta senza i permessi di scrittura</string>
     <string name="no_write_permission_pdf_delete">Impossibile eliminare i PDF senza i permessi di scrittura</string>
+    <string name="add_custom_lesson">Configura lezioni manualmente</string>
+    <string name="teacher">Docente</string>
+    <string name="lesson_name">Nome corso</string>
+    <string name="classroom">Aula</string>
+    <string name="add_one_lesson_day">Devi aggiungere almeno una lezione!</string>
+    <string name="missing_parameters">Devi compilare tutti i campi</string>
+    <string name="end_course">End course</string>
+    <string name="start_course">Inizio corso</string>
+    <string name="add_lesson_day">Add lesson</string>
+    <string name="add_course">Aggiungi corso</string>
+    <string name="courses_added">Corsi aggiunti</string>
+    <string name="no_course_added">Nessun corso aggiunto</string>
+    <string name="end_lesson_label">Fine lezione</string>
+    <string name="start_lesson_label">Inizio lezione</string>
+    <string name="add_custom_lesson_summary">Aggiungi manualmente le lezioni in modo da visualizzarle nel calendario</string>
 </resources>

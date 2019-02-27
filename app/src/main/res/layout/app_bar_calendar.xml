@@ -11,9 +11,9 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:expanded="false"
+        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        app:expanded="false">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayout"
@@ -44,17 +44,17 @@
                     app:compactCalendarCurrentSelectedDayBackgroundColor="#baf25358"
                     app:compactCalendarTextColor="#fff"
                     app:compactCalendarTextSize="12sp"
-                    app:compactCalendarUppercaseWeekDaysHeader="true"/>
+                    app:compactCalendarUppercaseWeekDaysHeader="true" />
             </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                app:theme="?attr/ToolBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:elevation="10dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:elevation="10dp">
+                app:theme="?attr/ToolBarStyle">
 
                 <RelativeLayout
                     android:id="@+id/date_picker_button"
@@ -62,8 +62,8 @@
                     android:layout_height="?attr/actionBarSize"
                     android:background="?android:selectableItemBackground"
                     android:clickable="true"
-                    android:orientation="vertical"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:orientation="vertical">
 
                     <View
                         android:id="@+id/centerInParent"
@@ -97,8 +97,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@id/date_picker_text_view"
                         android:layout_toRightOf="@id/date_picker_text_view"
-                        app:srcCompat="@drawable/ic_arrow_drop_down"
                         android:tint="@android:color/white"
+                        app:srcCompat="@drawable/ic_arrow_drop_down"
                         tools:ignore="ContentDescription,RtlHardcoded" />
 
                 </RelativeLayout>

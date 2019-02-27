@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CTAppTheme">
-        <attr name='primaryTextColor' format='color'/>
-        <attr name='secondaryTextColor' format='color'/>
+        <attr name='primaryTextColor' format='color' />
+        <attr name='secondaryTextColor' format='color' />
         <attr name="colorNavText" format="color" />
         <attr name="colorHeader" format="color" />
-        <attr name='dividerColor' format='color'/>
-        <attr name='backgroundCardColor' format='color'/>
-        <attr name='iconPlaceholder' format='integer'/>
-        <attr name='backgroundColor' format='color'/>
-        <attr name='bottomNavColor' format='color'/>
+        <attr name='dividerColor' format='color' />
+        <attr name='backgroundCardColor' format='color' />
+        <attr name='iconPlaceholder' format='integer' />
+        <attr name='backgroundColor' format='color' />
+        <attr name='bottomNavColor' format='color' />
         <attr name="colorSecondary" format="color" />
         <attr name="colorButtonNav" format="color" />
-        <attr name="defaultTextNav" format="color"/>
+        <attr name="defaultTextNav" format="color" />
         <attr name="certifiedExamColor" format="color" />
         <attr name="nonPassedExamColor" format="color" />
         <attr name="nonCertifiedExamColor" format="color" />
         <!--<attr name="popupOverlayStyle" format="reference"/> -->
-        <attr name="popupTextColor" format="color"/>
-        <attr name="popupBackgroundColor" format="color"/>
-        <attr name="redSlider" format="color"/>
+        <attr name="popupTextColor" format="color" />
+        <attr name="popupBackgroundColor" format="color" />
+        <attr name="redSlider" format="color" />
         <attr name="emptyViewColor" format="color" />
         <attr name="searchBarTheme" format="reference" />
         <attr name="ToolBarStyle" format="reference" />
+        <attr name="SpinnerTheme" format="reference" />
     </declare-styleable>
 </resources>

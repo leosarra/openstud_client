@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
-        <group
-            android:id="@+id/groupFeatures">
+        <group android:id="@+id/groupFeatures">
             <item
                 android:id="@+id/profile_menu"
                 android:icon="@drawable/ic_baseline_account_circle"
@@ -27,10 +26,9 @@
                 android:id="@+id/payments_menu"
                 android:icon="@drawable/ic_baseline_payment"
                 android:title="@string/payments" />
-       </group>
+        </group>
 
-        <group
-            android:id="@+id/groupExtra">
+        <group android:id="@+id/groupExtra">
             <item
                 android:id="@+id/settings_menu"
                 android:icon="@drawable/ic_baseline_settings"

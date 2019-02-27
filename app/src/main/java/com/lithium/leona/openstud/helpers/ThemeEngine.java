@@ -256,19 +256,51 @@ public class ThemeEngine {
         }
     }
 
-
-    private static int getPrimaryTextColor(Context context) {
-        int tintColor;
-        TypedValue tV = new TypedValue();
-        Resources.Theme theme = context.getTheme();
-        boolean success = theme.resolveAttribute(R.attr.primaryTextColor, tV, true);
-        if (success) tintColor = tV.data;
-        else tintColor = ContextCompat.getColor(context, android.R.color.black);
-        return tintColor;
+    public static void applyCustomCourseTheme(Activity activity) {
+        Theme theme = getTheme(activity);
+        switch (theme) {
+            case LIGHT:
+                activity.setTheme(R.style.NoActionBarAppLightTheme);
+                break;
+            case DARK:
+                activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
+            case BLACK:
+                activity.setTheme(R.style.NoActionBarAppBlackTheme);
+                break;
+        }
     }
 
-    public static boolean isLightTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+    public static int getDatePickerTheme(Context context) {
+        Theme theme = getTheme(context);
+        switch (theme) {
+            case LIGHT:
+                return R.style.DatePickerLightTheme;
+            case DARK:
+                return R.style.DatePickerDarkTheme;
+            case BLACK:
+                return R.style.DatePickerDarkTheme;
+            default:
+                return R.style.DatePickerLightTheme;
+        }
+    }
+
+    public static int getTimePickerTheme(Context context) {
+        Theme theme = getTheme(context);
+        switch (theme) {
+            case LIGHT:
+                return R.style.TimePickerDialogLightTheme;
+            case DARK:
+                return R.style.TimePickerDialogDarkTheme;
+            case BLACK:
+                return R.style.TimePickerDialogDarkTheme;
+            default:
+                return R.style.TimePickerDialogLightTheme;
+        }
+    }
+
+    public static boolean isLightTheme(Context context) {
+        Theme theme = getTheme(context);
         switch (theme) {
             case LIGHT:
                 return true;

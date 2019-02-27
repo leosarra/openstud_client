@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -186,6 +187,7 @@ public class InfoManager {
         if (newEvents == null) return null;
         if (newTimetable != null && !newTimetable.isEmpty())
             newEvents.addAll(OpenstudHelper.generateEventsFromTimetable(newTimetable));
+        newEvents.addAll(OpenstudHelper.generateEventsFromTimetable(ClientHelper.generateLessonsForCustomCourses(PreferenceManager.getCustomCourses(context))));
         synchronized (InfoManager.class) {
             events = newEvents;
             SharedPreferences.Editor prefsEditor = pref.edit();

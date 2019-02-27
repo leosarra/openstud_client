@@ -37,6 +37,8 @@ import com.lithium.leona.openstud.activities.ProfileActivity;
 import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.data.CustomCourse;
+import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.widgets.GradesWidget;
@@ -68,6 +70,7 @@ import lithium.openstud.driver.core.models.Event;
 import lithium.openstud.driver.core.models.EventType;
 import lithium.openstud.driver.core.models.ExamDone;
 import lithium.openstud.driver.core.models.ExamReservation;
+import lithium.openstud.driver.core.models.Lesson;
 
 public class ClientHelper {
 
@@ -255,7 +258,7 @@ public class ClientHelper {
         InfoManager.clearSharedPreferences(activity);
         PreferenceManager.setBiometricsEnabled(activity, false);
         Intent i = new Intent(activity, LauncherActivity.class);
-        if (errorCode!=null) i.putExtra("error",errorCode);
+        if (errorCode != null) i.putExtra("error", errorCode);
         activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
         activity.finish();
     }
@@ -268,7 +271,7 @@ public class ClientHelper {
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title;
-                if (ev.getEventType() == EventType.LESSON) title = ev.getDescription();
+                if (ev.getEventType() == EventType.LESSON) title = ev.getTitle();
                 else title = ev.getTitle();
                 intent.putExtra(CalendarContract.Events.TITLE, title);
                 Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
@@ -278,9 +281,8 @@ public class ClientHelper {
                     Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
                     intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
                             timestampEnd.getTime() * 1000L);
-                } else {
-                    intent.putExtra(CalendarContract.Events.EVENT_LOCATION, ev.getWhere());
                 }
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, ev.getWhere());
                 intent.putExtra(CalendarContract.Events.ALL_DAY, false);
                 activity.startActivity(intent);
                 break;
@@ -288,7 +290,7 @@ public class ClientHelper {
             case DOABLE:
             case RESERVED: {
                 ZoneId zoneId = ZoneId.systemDefault();
-                Timestamp timestamp = new Timestamp(ev.getExamDate().atStartOfDay(zoneId).toEpochSecond());
+                Timestamp timestamp = ev.getTimestamp(zoneId);
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title;
@@ -303,6 +305,41 @@ public class ClientHelper {
             }
         }
 
+    }
+
+    public static List<Lesson> generateLessonsForCustomCourses(List<CustomCourse> courses) {
+        List<Lesson> lessons = new LinkedList<>();
+        if (courses == null) return lessons;
+        LocalDate maxDate = null;
+        LocalDate minDate = null;
+        for (CustomCourse course : courses) {
+            if (maxDate == null) maxDate = course.getEndCourse();
+            else if (course.getEndCourse().isAfter(maxDate)) maxDate = course.getEndCourse();
+            if (minDate == null) minDate = course.getStartCourse();
+            else if (course.getStartCourse().isBefore(minDate)) minDate = course.getStartCourse();
+        }
+        if (minDate == null || maxDate == null) return lessons;
+        List<LocalDate> totalDates = new LinkedList<>();
+        while (!minDate.isAfter(maxDate)) {
+            totalDates.add(minDate);
+            minDate = minDate.plusDays(1);
+        }
+        for (LocalDate date : totalDates) {
+            for (CustomCourse course : courses) {
+                for (CustomLesson lesson : course.getLessons()) {
+                    if (lesson.getDayOfWeek() == date.getDayOfWeek()) {
+                        Lesson newLesson = new Lesson();
+                        newLesson.setName(course.getTitle());
+                        newLesson.setTeacher(course.getTeacher());
+                        newLesson.setWhere(lesson.getWhere());
+                        newLesson.setStart(LocalDateTime.of(date, lesson.getStart()));
+                        newLesson.setEnd(LocalDateTime.of(date, lesson.getEnd()));
+                        lessons.add(newLesson);
+                    }
+                }
+            }
+        }
+        return lessons;
     }
 
     public static void setDialogView(View v, Dialog dialog, int state) {
