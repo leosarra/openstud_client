@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.CustomLessonAdapter;
 import com.lithium.leona.openstud.data.CustomCourse;
+import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -69,7 +70,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     private CustomLessonAdapter adapter;
     private LocalDate startCourse;
     private LocalDate endCourse;
-    private List<CustomCourse.CustomLesson> lessons;
+    private List<CustomLesson> lessons;
     private List<CustomCourse> courses;
     private int position = -1;
     private boolean end;
@@ -209,7 +210,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     }
 
     private synchronized void addNewLesson() {
-        CustomCourse.CustomLesson lesson = new CustomCourse.CustomLesson();
+        CustomLesson lesson = new CustomLesson();
         lesson.setDayOfWeek(DayOfWeek.MONDAY);
         lesson.setStart(LocalTime.of(8, 0));
         lesson.setEnd(LocalTime.of(10, 0));
@@ -217,7 +218,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private synchronized void removeLesson(CustomCourse.CustomLesson lesson, int position) {
+    private synchronized void removeLesson(CustomLesson lesson, int position) {
         lessons.remove(lesson);
         adapter.notifyItemRemoved(position);
         new Handler().postDelayed(() -> adapter.notifyDataSetChanged(), 250);
@@ -225,7 +226,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
 
 
     private synchronized boolean areClassroomsEmpty() {
-        for (CustomCourse.CustomLesson lesson : lessons) {
+        for (CustomLesson lesson : lessons) {
             if (lesson.getWhere() == null || lesson.getWhere().trim().isEmpty()) return true;
         }
         return false;

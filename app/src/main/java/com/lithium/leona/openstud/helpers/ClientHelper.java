@@ -38,6 +38,7 @@ import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.data.CustomCourse;
+import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.widgets.GradesWidget;
@@ -325,7 +326,7 @@ public class ClientHelper {
         }
         for (LocalDate date : totalDates) {
             for (CustomCourse course : courses) {
-                for (CustomCourse.CustomLesson lesson : course.getLessons()) {
+                for (CustomLesson lesson : course.getLessons()) {
                     if (lesson.getDayOfWeek() == date.getDayOfWeek()) {
                         Lesson newLesson = new Lesson();
                         newLesson.setName(course.getTitle());

@@ -15,7 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lithium.leona.openstud.R;
-import com.lithium.leona.openstud.data.CustomCourse;
+import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 
@@ -33,11 +33,11 @@ import butterknife.ButterKnife;
 
 public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapter.CustomLessonHolder> {
 
-    private List<CustomCourse.CustomLesson> lessons;
+    private List<CustomLesson> lessons;
     private CustomLessonListener ocl;
     private Context context;
 
-    public CustomLessonAdapter(Context context, List<CustomCourse.CustomLesson> lessons, CustomLessonListener listener) {
+    public CustomLessonAdapter(Context context, List<CustomLesson> lessons, CustomLessonListener listener) {
         this.lessons = lessons;
         ocl = listener;
         this.context = context;
@@ -60,13 +60,13 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
 
     @Override
     public void onBindViewHolder(@NonNull CustomLessonHolder holder, int position) {
-        CustomCourse.CustomLesson lesson = lessons.get(position);
+        CustomLesson lesson = lessons.get(position);
         holder.setDetails(lesson);
     }
 
 
     public interface CustomLessonListener {
-        void delete(CustomCourse.CustomLesson lesson, int position);
+        void delete(CustomLesson lesson, int position);
     }
 
     static class CustomLessonHolder extends RecyclerView.ViewHolder {
@@ -100,7 +100,7 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
             this.context = context;
         }
 
-        void setDetails(CustomCourse.CustomLesson lesson) {
+        void setDetails(CustomLesson lesson) {
             dayWeek.getBackground().setColorFilter(LayoutHelper.getColorByAttr(context, R.attr.primaryTextColor, android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
             dayWeek.setSelection(lesson.getDayOfWeek().getValue() - 1);
             startLessonTime.setText(String.format("%02d:%02d", lesson.getStart().getHour(), lesson.getStart().getMinute()));
