@@ -48,7 +48,7 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
         Type listType = new TypeToken<List<String>>() {
         }.getType();
         String json = gson.toJson(names, listType);
-        args.putSerializable("elements", json);
+        args.putSerializable("filter_elements", json);
         myFragment.setArguments(args);
         return myFragment;
     }
@@ -66,7 +66,7 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>() {
             }.getType();
-            String json = bdl.getString("elements", null);
+            String json = bdl.getString("filter_elements", null);
             if (json != null) {
                 List<String> passedElements = gson.fromJson(json, listType);
                 elements.clear();
@@ -83,7 +83,7 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
         ClientHelper.setDialogView(v, getDialog(), BottomSheetBehavior.STATE_EXPANDED);
         Context context = getContext();
         Activity activity = getActivity();
-        InfoManager.removeOldEntriesFilter(context, elements);
+        InfoManager.removeOldEntriesFilter(context, new LinkedList<>(elements));
         if (context == null || activity == null) return null;
         int i = 0;
         for (String name : elements) {
