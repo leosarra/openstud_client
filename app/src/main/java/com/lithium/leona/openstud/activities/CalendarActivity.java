@@ -252,6 +252,7 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
                 continue;
             ZoneId zoneId = ZoneId.systemDefault();
             Timestamp timestamp = event.getTimestamp(zoneId);
+            if (timestamp == null) continue;
             Event ev;
             if (event.getEventType() == EventType.DOABLE) {
                 ev = new Event(Color.YELLOW, timestamp.getTime());
@@ -280,15 +281,13 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
         List<lithium.openstud.driver.core.models.Event> newDoable = new LinkedList<>();
         ZoneId zoneId = ZoneId.systemDefault();
         for (lithium.openstud.driver.core.models.Event event : events) {
-            if (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getTitle()))
+            if (event.getEventDate() == null || (event.getEventType() == EventType.LESSON && InfoManager.filterContains(this, event.getTitle())))
                 continue;
             Instant instant = Instant.ofEpochMilli(date.getTime());
             instant.atZone(zoneId);
             long eventDateInMilli;
-            if (event.getEventType() == EventType.LESSON)
-                eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
-            else
-                eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
+            eventDateInMilli = event.getEventDate().atStartOfDay(zoneId).toInstant().toEpochMilli();
+
             if (instant.toEpochMilli() != eventDateInMilli)
                 continue;
             if (event.getEventType() == EventType.DOABLE) {
