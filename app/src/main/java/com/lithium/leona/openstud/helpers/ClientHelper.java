@@ -274,13 +274,11 @@ public class ClientHelper {
                 if (ev.getEventType() == EventType.LESSON) title = ev.getTitle();
                 else title = ev.getTitle();
                 intent.putExtra(CalendarContract.Events.TITLE, title);
-                Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toEpochSecond());
-                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                        timestampStart.getTime() * 1000L);
+                Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toInstant().toEpochMilli());
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, timestampStart.getTime());
                 if (ev.getEventType() == EventType.LESSON) {
-                    Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toEpochSecond());
-                    intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                            timestampEnd.getTime() * 1000L);
+                    Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toInstant().toEpochMilli());
+                    intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, timestampEnd.getTime());
                 }
                 intent.putExtra(CalendarContract.Events.EVENT_LOCATION, ev.getWhere());
                 intent.putExtra(CalendarContract.Events.ALL_DAY, false);
@@ -291,6 +289,7 @@ public class ClientHelper {
             case RESERVED: {
                 ZoneId zoneId = ZoneId.systemDefault();
                 Timestamp timestamp = ev.getTimestamp(zoneId);
+                if (timestamp == null) return;
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title;
@@ -298,8 +297,7 @@ public class ClientHelper {
                     title = "Esame: " + ev.getReservation().getExamSubject();
                 else title = "Exam: " + ev.getReservation().getExamSubject();
                 intent.putExtra(CalendarContract.Events.TITLE, title);
-                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                        timestamp.getTime() * 1000L);
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, timestamp.getTime());
                 intent.putExtra(CalendarContract.Events.ALL_DAY, true);
                 activity.startActivity(intent);
             }
