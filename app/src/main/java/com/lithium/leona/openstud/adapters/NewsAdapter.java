@@ -105,8 +105,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
         void setDetails(News news) {
-            txtName.setText(news.getTitle());
-            txtDescription.setText(news.getDescription());
+            txtDescription.setVisibility(View.VISIBLE);
+            txtName.setText(news.getTitle().trim());
+            if (news.getDescription() == null || news.getDescription().trim().isEmpty()) txtDescription.setVisibility(View.GONE);
+            else txtDescription.setText(news.getDescription());
             if (news.getImageUrl() != null && !news.getImageUrl().trim().isEmpty())
                 Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15, 0)).into(imageView);
             else imageView.setVisibility(View.GONE);
