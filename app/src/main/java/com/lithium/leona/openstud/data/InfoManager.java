@@ -630,44 +630,46 @@ public class InfoManager {
 
 
     public static synchronized boolean filterContains(Context context, String name) {
-        setupExceptionFilter(context);
-        return filter.contains(name);
+        List<String> tmp_filter = getExceptionFilter(context);
+        return tmp_filter.contains(name);
     }
 
     public static synchronized void addExceptionToFilter(Context context, String name) {
-        setupExceptionFilter(context);
-        if (!filter.contains(name)) filter.add(name);
-        updateFilter();
+        List<String> tmp_filter = getExceptionFilter(context);
+        if (!tmp_filter.contains(name)) tmp_filter.add(name);
+        updateFilter(tmp_filter);
     }
 
     public static synchronized void removeExceptionFromFilter(Context context, String name) {
-        setupExceptionFilter(context);
-        filter.remove(name);
-        updateFilter();
+        List<String> tmp_filter = getExceptionFilter(context);
+        tmp_filter.remove(name);
+        updateFilter(new LinkedList<>(tmp_filter));
     }
 
     public static synchronized void removeOldEntriesFilter(Context context, List<String> names) {
-        setupExceptionFilter(context);
-        for (String exception : filter) {
-            if (!names.contains(exception)) filter.remove(exception);
+        List<String> tmp_filter = getExceptionFilter(context);
+        for (String exception : tmp_filter) {
+            if (!names.contains(exception)) tmp_filter.remove(exception);
         }
-        updateFilter();
+        updateFilter(tmp_filter);
     }
 
-    private static void updateFilter() {
-        if (filter == null) return;
+    private static void updateFilter(List<String> update_filter) {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<String>>() {
         }.getType();
         SharedPreferences.Editor editor = pref.edit();
-        String toJson = gson.toJson(filter, listType);
+        String toJson = gson.toJson(update_filter, listType);
         editor.putString("filter_calendar", toJson);
         editor.apply();
+        if (filter == null) filter = new LinkedList<>();
+        filter.clear();
+        filter.addAll(update_filter);
     }
 
-    private static void setupExceptionFilter(Context context) {
+    private static LinkedList<String> getExceptionFilter(Context context) {
         setupSharedPreferences(context);
-        if (filter != null) return;
+        if (filter != null) return new LinkedList<>(filter);
         synchronized (InfoManager.class) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>() {
@@ -680,6 +682,7 @@ public class InfoManager {
                 editor.putString("filter_calendar", toJson);
                 editor.apply();
             } else filter = gson.fromJson(json, listType);
+            return new LinkedList<>(filter);
         }
     }
 
