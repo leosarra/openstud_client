@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 
@@ -110,20 +109,12 @@ public class PreferenceManager {
         Gson gson = new Gson();
         String json;
         synchronized (PreferenceManager.class) {
-            if (courses != null) return new LinkedList<>(courses);
             json = pref.getString("suggestion", "null");
         }
         if (json == null) return null;
         Type listType = new TypeToken<List>() {
         }.getType();
-        List<CustomCourse> ret = null;
-        try {
-            ret = gson.fromJson(json, listType);
-            if (courses == null && ret != null) courses = new LinkedList<>(ret);
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        }
-        return ret;
+        return gson.fromJson(json, listType);
     }
 
 
