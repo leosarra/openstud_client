@@ -648,9 +648,11 @@ public class InfoManager {
 
     public static synchronized void removeOldEntriesFilter(Context context, List<String> names) {
         List<String> tmp_filter = getExceptionFilter(context);
+        List<String> to_remove = new LinkedList<>();
         for (String exception : tmp_filter) {
-            if (!names.contains(exception)) tmp_filter.remove(exception);
+            if (!names.contains(exception)) to_remove.add(exception);
         }
+        tmp_filter.removeAll(to_remove);
         updateFilter(tmp_filter);
     }
 
