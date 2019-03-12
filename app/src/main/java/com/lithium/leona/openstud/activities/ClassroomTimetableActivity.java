@@ -167,6 +167,7 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
             if (newEvents != null && !cachedLessons.containsKey(date.getTimeInMillis()))
                 cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
             swapViews(true);
+            return;
         } else if (!lessons.equals(newEvents)) {
             lessons.clear();
             lessons.addAll(newEvents);
@@ -174,8 +175,8 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
                 cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
             }
             runOnUiThread(() -> adapter.notifyDataSetChanged());
-            swapViews(false);
         }
+        swapViews(false);
     }
 
     private void setRefreshing(final boolean bool) {
