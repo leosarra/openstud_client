@@ -163,20 +163,12 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
 
     private synchronized void applyLessons(Calendar date, List<Lesson> lessonsUpdate) {
         List<Event> newEvents = OpenstudHelper.generateEventsFromTimetable(lessonsUpdate);
-        if (newEvents == null || newEvents.isEmpty()) {
-            if (newEvents != null && !cachedLessons.containsKey(date.getTimeInMillis()))
+        if (newEvents != null && !cachedLessons.containsKey(date.getTimeInMillis()))
                 cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
-            swapViews(true);
-            return;
-        } else if (!lessons.equals(newEvents)) {
-            lessons.clear();
-            lessons.addAll(newEvents);
-            if (!cachedLessons.containsKey(date.getTimeInMillis())) {
-                cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
-            }
-            runOnUiThread(() -> adapter.notifyDataSetChanged());
-        }
-        swapViews(false);
+        lessons.clear();
+        if (newEvents != null) lessons.addAll(newEvents);
+        runOnUiThread(() -> adapter.notifyDataSetChanged());
+        swapViews(newEvents == null || newEvents.isEmpty());
     }
 
     private void setRefreshing(final boolean bool) {
