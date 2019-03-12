@@ -46,6 +46,7 @@ import com.lithium.leona.openstud.widgets.GradesWidget;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.temporal.ChronoUnit;
 
@@ -268,17 +269,16 @@ public class ClientHelper {
         switch (ev.getEventType()) {
             case THEATRE:
             case LESSON: {
-                ZoneId zoneId = ZoneId.systemDefault();
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 String title;
                 if (ev.getEventType() == EventType.LESSON) title = ev.getTitle();
                 else title = ev.getTitle();
                 intent.putExtra(CalendarContract.Events.TITLE, title);
-                Timestamp timestampStart = new Timestamp(ev.getStart().atZone(zoneId).toInstant().toEpochMilli());
+                Timestamp timestampStart = new Timestamp(ev.getStart().toInstant().toEpochMilli());
                 intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, timestampStart.getTime());
                 if (ev.getEventType() == EventType.LESSON) {
-                    Timestamp timestampEnd = new Timestamp(ev.getEnd().atZone(zoneId).toInstant().toEpochMilli());
+                    Timestamp timestampEnd = new Timestamp(ev.getEnd().toInstant().toEpochMilli());
                     intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, timestampEnd.getTime());
                 }
                 intent.putExtra(CalendarContract.Events.EVENT_LOCATION, ev.getWhere());
@@ -331,8 +331,8 @@ public class ClientHelper {
                         newLesson.setName(course.getTitle());
                         newLesson.setTeacher(course.getTeacher());
                         newLesson.setWhere(lesson.getWhere());
-                        newLesson.setStart(LocalDateTime.of(date, lesson.getStart()));
-                        newLesson.setEnd(LocalDateTime.of(date, lesson.getEnd()));
+                        newLesson.setStart(LocalDateTime.of(date, lesson.getStart()).atOffset(ZoneOffset.UTC).atZoneSameInstant(ZoneId.of("Europe/Rome")));
+                        newLesson.setEnd(LocalDateTime.of(date, lesson.getEnd()).atOffset(ZoneOffset.UTC).atZoneSameInstant(ZoneId.of("Europe/Rome")));
                         lessons.add(newLesson);
                     }
                 }

@@ -80,12 +80,10 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
         Activity activity = this;
-        /* starts before 1 month from now */
         Bundle bundle = this.getIntent().getExtras();
         roomId = bundle.getInt("roomId", -1);
         cachedLessons = new HashMap<>();
         Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, -1);
         /* ends after 1 month from now */
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
@@ -163,12 +161,12 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
 
     private synchronized void applyLessons(Calendar date, List<Lesson> lessonsUpdate) {
         List<Event> newEvents = OpenstudHelper.generateEventsFromTimetable(lessonsUpdate);
-        if (newEvents != null && !cachedLessons.containsKey(date.getTimeInMillis()))
+        if (!cachedLessons.containsKey(date.getTimeInMillis()))
                 cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
         lessons.clear();
-        if (newEvents != null) lessons.addAll(newEvents);
+        lessons.addAll(newEvents);
         runOnUiThread(() -> adapter.notifyDataSetChanged());
-        swapViews(newEvents == null || newEvents.isEmpty());
+        swapViews(newEvents.isEmpty());
     }
 
     private void setRefreshing(final boolean bool) {
