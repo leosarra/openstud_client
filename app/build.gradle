@@ -34,6 +34,11 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    buildTypes.each{
+        it.buildConfigField 'String', 'DEC_SECRET', DEC_SECRET
+        it.buildConfigField 'String', 'TIMETABLE_KEY_HEX', TIMETABLE_KEY_HEX
+    }
 }
 
 
@@ -46,7 +51,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation group: 'androidx.core', name: 'core', version: '1.0.1'
-    implementation 'com.github.LithiumSR:openstud_driver:0.52.8'
+    implementation 'com.github.LithiumSR:openstud_driver:0.52.10'
     implementation 'com.jakewharton:butterknife:10.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
