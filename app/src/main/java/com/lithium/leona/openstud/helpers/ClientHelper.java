@@ -46,7 +46,7 @@ import com.lithium.leona.openstud.widgets.GradesWidget;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import java.io.File;
@@ -367,16 +367,14 @@ public class ClientHelper {
     }
 
     public static boolean canPlaceReservation(ExamReservation res) {
-        ZonedDateTime now = LocalDateTime.now(ZoneId.of("UTC")).atZone(ZoneId.systemDefault());
-        now = now.withZoneSameInstant(ZoneId.of("Europe/Rome"));
-        LocalDate zonedDate = LocalDate.from(now);
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDate zonedDate = now.atOffset(ZoneOffset.UTC).withOffsetSameInstant(ZoneOffset.of("+1")).toLocalDate();
         return (ChronoUnit.DAYS.between(res.getStartDate(), zonedDate)) >= 0 && (ChronoUnit.DAYS.between(res.getEndDate(), zonedDate) <= 0);
     }
 
     public static boolean canDeleteReservation(ExamReservation res) {
-        ZonedDateTime now = LocalDateTime.now(ZoneId.of("UTC")).atZone(ZoneId.systemDefault());
-        now = now.withZoneSameInstant(ZoneId.of("Europe/Rome"));
-        LocalDate zonedDate = LocalDate.from(now);
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDate zonedDate = now.atOffset(ZoneOffset.UTC).withOffsetSameInstant(ZoneOffset.of("+1")).toLocalDate();
         return !(ChronoUnit.DAYS.between(res.getEndDate(), zonedDate) >= 1);
     }
 
