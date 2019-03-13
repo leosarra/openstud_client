@@ -57,7 +57,7 @@ public class InfoManager {
         if (getStudentId(context) == null || getPassword(context) == null) return null;
         synchronized (InfoManager.class) {
             if (os != null) return os;
-            os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(3).setKeys(ClientHelper.generateKeyMap()).forceReadyState().setLogger(Logger.getLogger("OpenStud_client")).build();
+            os = new OpenstudBuilder().setStudentID(getStudentId(context)).setPassword(getPassword(context)).setRetryCounter(3).forceReadyState().setLogger(Logger.getLogger("OpenStud_client")).build();
             return os;
         }
     }
@@ -72,7 +72,7 @@ public class InfoManager {
     public static Openstud getOpenStud(Context context, String studentId, String password) {
         setupSharedPreferences(context);
         if (studentId == null || password == null || password.isEmpty()) return null;
-        return new OpenstudBuilder().setStudentID(studentId).setPassword(password).setRetryCounter(3).setKeys(ClientHelper.generateKeyMap()).setLogger(Logger.getLogger("OpenStud_client")).build();
+        return new OpenstudBuilder().setStudentID(studentId).setPassword(password).setRetryCounter(3).setLogger(Logger.getLogger("OpenStud_client")).build();
     }
 
     public static void saveOpenStud(Context context, Openstud openstud, String studentId, String password, boolean save) {
