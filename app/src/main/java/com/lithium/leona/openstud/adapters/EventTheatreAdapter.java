@@ -105,10 +105,14 @@ public class EventTheatreAdapter extends RecyclerView.Adapter<EventTheatreAdapte
             txtWhere.setVisibility(View.VISIBLE);
             txtName.setText(ev.getTitle());
             txtDescription.setText(ev.getDescription());
-            if ((ev.getRoom()== null || ev.getRoom().trim().isEmpty()) && (ev.getWhere() == null || ev.getWhere().trim().isEmpty())) txtWhere.setVisibility(View.GONE);
-            else if (ev.getRoom()== null || ev.getRoom().trim().isEmpty()) txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, ev.getWhere()));
-            else if (ev.getWhere() == null || ev.getWhere().trim().isEmpty()) txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, ev.getRoom()));
-            else txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, String.format("%s, %s", ev.getRoom(), ev.getWhere())));
+            if ((ev.getRoom() == null || ev.getRoom().trim().isEmpty()) && (ev.getWhere() == null || ev.getWhere().trim().isEmpty()))
+                txtWhere.setVisibility(View.GONE);
+            else if (ev.getRoom() == null || ev.getRoom().trim().isEmpty())
+                txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, ev.getWhere()));
+            else if (ev.getWhere() == null || ev.getWhere().trim().isEmpty())
+                txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, ev.getRoom()));
+            else
+                txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, String.format("%s, %s", ev.getRoom(), ev.getWhere())));
             txtWhen.setText(context.getResources().getString(R.string.event_theatre_when, String.format("%02d:%02d", ev.getStart().getHour(), ev.getStart().getMinute())));
         }
     }

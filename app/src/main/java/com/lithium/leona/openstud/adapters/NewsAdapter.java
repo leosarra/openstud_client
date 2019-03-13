@@ -79,7 +79,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setDetails(News news) {
             txtName.setText(news.getTitle());
             txtDescription.setText(news.getDescription());
-            if (news.getSmallImageUrl() != null && !news.getSmallImageUrl().trim().isEmpty() )
+            if (news.getSmallImageUrl() != null && !news.getSmallImageUrl().trim().isEmpty())
                 Picasso.get().load(news.getSmallImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15, 0)).into(imageView);
             else if (news.getImageUrl() != null && !news.getImageUrl().trim().isEmpty())
                 Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15, 0)).into(imageView);
@@ -107,7 +107,8 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setDetails(News news) {
             txtDescription.setVisibility(View.VISIBLE);
             txtName.setText(news.getTitle().trim());
-            if (news.getDescription() == null || news.getDescription().trim().isEmpty()) txtDescription.setVisibility(View.GONE);
+            if (news.getDescription() == null || news.getDescription().trim().isEmpty())
+                txtDescription.setVisibility(View.GONE);
             else txtDescription.setText(news.getDescription());
             if (news.getImageUrl() != null && !news.getImageUrl().trim().isEmpty())
                 Picasso.get().load(news.getImageUrl()).fit().centerCrop().transform(new RoundedTransformation(15, 0)).into(imageView);

@@ -164,7 +164,7 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
     private synchronized void applyLessons(Calendar date, List<Lesson> lessonsUpdate) {
         List<Event> newEvents = OpenstudHelper.generateEventsFromTimetable(lessonsUpdate);
         if (newEvents != null && !cachedLessons.containsKey(date.getTimeInMillis()))
-                cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
+            cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
         lessons.clear();
         if (newEvents != null) lessons.addAll(newEvents);
         runOnUiThread(() -> adapter.notifyDataSetChanged());
