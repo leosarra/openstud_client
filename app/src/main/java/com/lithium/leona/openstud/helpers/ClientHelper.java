@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.lithium.leona.openstud.BuildConfig;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.AboutActivity;
 import com.lithium.leona.openstud.activities.CalendarActivity;
@@ -50,6 +51,7 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -395,6 +397,36 @@ public class ClientHelper {
 
     public static void requestReadWritePermissions(Activity activity, PermissionListener listener) {
         Dexter.withActivity(activity).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(listener).check();
+    }
+
+    private static String simpleStringXOR(String input, String key) {
+        if (key == null || key.isEmpty()) return input;
+        char[] k = key.toCharArray();
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            output.append((char) (input.charAt(i) ^ k[i % k.length]));
+        }
+        return output.toString();
+    }
+
+    private static String fromHexToString(String hex) {
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < hex.length(); i += 2) {
+            String str = hex.substring(i, i + 2);
+            output.append((char) Integer.parseInt(str, 16));
+        }
+        return output.toString();
+    }
+
+    private static String fromStringToHex(String text) {
+        return String.format("%040x", new BigInteger(1, text.getBytes()));
+    }
+
+    public static Map<String, String> generateKeyMap() {
+        Map<String, String> map = new HashMap<>();
+        if (!BuildConfig.TIMETABLE_KEY_HEX.isEmpty())
+            map.put("gomp", ClientHelper.simpleStringXOR(ClientHelper.fromHexToString(BuildConfig.TIMETABLE_KEY_HEX), BuildConfig.DEC_SECRET));
+        return map;
     }
 
     public enum Status {

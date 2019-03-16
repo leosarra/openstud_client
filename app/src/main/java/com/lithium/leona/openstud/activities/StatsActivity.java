@@ -379,6 +379,7 @@ public class StatsActivity extends BaseDataActivity {
 
     public void removeFakeExam(int position) {
         synchronized (this) {
+            if (position == -1 || position >= examsFake.size()) return;
             exams.remove(examsFake.get(position));
             examsFake.remove(position);
             adapter.notifyItemRemoved(position);
