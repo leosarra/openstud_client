@@ -8,6 +8,7 @@ import android.os.Message;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -130,6 +131,7 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
             }
             String text = gson.fromJson(savedInstanceState.getString("text", ""), String.class);
             if (text != null && !text.trim().isEmpty()) searchBar.setText(text);
+            if (!classes.isEmpty()) this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
     }
 
