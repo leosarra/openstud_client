@@ -149,7 +149,7 @@
     <string name="invalid_student_id">Student ID does not exist</string>
     <string name="recovery_ok">Password has been sent to your email</string>
     <string name="recover_password_details">Answer the security question to receive a new password on your recovery email address</string>
-    <string name="forgot_password">Forgot password</string>
+    <string name="forgot_password">Forgot password?</string>
     <string name="no_recovery">Unable to recover your password. Contact the Student Office</string>
     <string name="calendar">Calendar</string>
     <string name="no_events">No events found</string>

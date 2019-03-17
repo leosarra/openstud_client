@@ -145,7 +145,7 @@
             style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:text="@string/forgot_password"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
