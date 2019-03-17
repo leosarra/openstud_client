@@ -130,7 +130,6 @@ public class EventsActivity extends BaseDataActivity {
                         events.clear();
                         events.addAll(newEvents);
                     }
-                    setRefreshing(false);
                 }
             } catch (OpenstudConnectionException e) {
                 e.printStackTrace();
@@ -140,6 +139,7 @@ public class EventsActivity extends BaseDataActivity {
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             }
             applyEvents(horizontalCalendar.getSelectedDate());
+            setRefreshing(false);
         }).start();
     }
 
