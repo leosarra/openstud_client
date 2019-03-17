@@ -116,11 +116,24 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
             LayoutHelper.createSearchClassroomNotification(this, ThemeEngine.getAlertDialogTheme(this));
             PreferenceManager.setClassroomNotificationEnabled(this, false);
         }
-        searchBar.requestFocus();
-        searchBar.enableSearch();
+        if (savedInstanceState == null) {
+            searchBar.requestFocus();
+            searchBar.enableSearch();
+        }
+        else {
+            Gson gson = new Gson();
+            List<Classroom> saved = gson.fromJson(savedInstanceState.getString("classes", "null"), new TypeToken<List<Classroom>>(){}.getType());
+            if (saved!=null) {
+                classes.clear();
+                classes.addAll(saved);
+                adapter.notifyDataSetChanged();
+            }
+            String text = gson.fromJson(savedInstanceState.getString("text", ""), String.class);
+            if (text != null && !text.trim().isEmpty()) searchBar.setText(text);
+        }
     }
 
-    public synchronized void searchClassrooms(String text) {
+    public void searchClassrooms(String text) {
         new Thread(() -> {
             setLoadingEnabled(true, false);
             List<Classroom> update = null;
@@ -141,7 +154,7 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         }).start();
     }
 
-    private void updateView(List<Classroom> update) {
+    private synchronized void updateView(List<Classroom> update) {
         if (update == null || update.isEmpty()) {
             setLoadingEnabled(false, true);
         } else if (update.equals(classes)) {
@@ -245,6 +258,16 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         PreferenceManager.saveSuggestions(this, searchBar.getLastSuggestions());
     }
 
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        synchronized (this) {
+            Gson gson = new Gson();
+            String json = gson.toJson(classes,new TypeToken<List<Classroom>>() {}.getType());
+            outState.putString("classes", json);
+            outState.putString("search", searchBar.getText());
+        }
+    }
 
     private synchronized boolean handleTouchEvent(View view, MotionEvent event, GestureDetector gd) {
         ClientHelper.hideKeyboard(view, this);
