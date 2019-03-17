@@ -391,6 +391,7 @@
     </style>
 
     <style name="DarkSearchBar" parent="MaterialSearchBarDark">
+        <item name="android:colorAccent">@color/redSapienzaLight</item>
         <item name="mt_searchBarColor">@color/searchBarPrimaryColorDark</item>
         <item name="mt_dividerColor">@color/searchBarDividerColorDark</item>
         <item name="mt_navIconTint">@color/white</item>
@@ -398,27 +399,14 @@
         <item name="mt_clearIconTint">@color/white</item>
         <item name="mt_menuIconTint">@color/white</item>
         <item name="mt_backIconTint">@color/white</item>
-        <item name="mt_textCursorTint">@color/redSapienza</item>
         <item name="mt_textColor">@color/searchBarTextColorDark</item>
         <item name="mt_hintColor">@color/searchBarHintColorDark</item>
         <item name="mt_placeholderColor">@color/searchBarPlaceholderColorDark</item>
-        <item name="mt_highlightedTextColor">@color/red</item>
-        <item name="mt_leftTextSelectorTint">@color/red</item>
-        <item name="mt_middleTextSelectorTint">@color/red</item>
-        <item name="mt_rightTextSelectorTint">@color/red</item>
-        <item name="mt_leftTextSelectorDrawable">
-            @drawable/text_select_handle_left_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_middleTextSelectorDrawable">
-            @drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_rightTextSelectorDrawable">
-            @drawable/text_select_handle_right_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_handlesTintEnabled">true</item>
+        <item name="mt_highlightedTextColor">@color/highlight_text_searchbar_dark</item>
     </style>
 
     <style name="BlackSearchBar" parent="MaterialSearchBarDark">
+        <item name="android:colorAccent">@color/redSapienzaLight</item>
         <item name="mt_searchBarColor">@color/lesserBlack</item>
         <item name="mt_dividerColor">@color/searchBarDividerColorDark</item>
         <item name="mt_navIconTint">@color/white</item>
@@ -426,52 +414,15 @@
         <item name="mt_clearIconTint">@color/white</item>
         <item name="mt_menuIconTint">@color/white</item>
         <item name="mt_backIconTint">@color/white</item>
-        <item name="mt_textCursorTint">@color/redSapienza</item>
         <item name="mt_textColor">@color/searchBarTextColorDark</item>
         <item name="mt_hintColor">@color/searchBarHintColorDark</item>
         <item name="mt_placeholderColor">@color/searchBarPlaceholderColorDark</item>
-        <item name="mt_highlightedTextColor">@color/red</item>
-        <item name="mt_leftTextSelectorTint">@color/red</item>
-        <item name="mt_middleTextSelectorTint">@color/red</item>
-        <item name="mt_rightTextSelectorTint">@color/red</item>
-        <item name="mt_leftTextSelectorDrawable">
-            @drawable/text_select_handle_left_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_middleTextSelectorDrawable">
-            @drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_rightTextSelectorDrawable">
-            @drawable/text_select_handle_right_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_handlesTintEnabled">true</item>
+        <item name="mt_highlightedTextColor">@color/highlight_text_searchbar_dark</item>
     </style>
 
     <style name="LightSearchBar" parent="MaterialSearchBarLight">
-        <item name="mt_searchBarColor">@color/searchBarPrimaryColor</item>
-        <item name="mt_dividerColor">@color/searchBarDividerColor</item>
-        <item name="mt_navIconTint">@color/searchBarNavIconTintColor</item>
-        <item name="mt_searchIconTint">@color/searchBarSearchIconTintColor</item>
-        <item name="mt_clearIconTint">@color/searchBarClearIconTintColor</item>
-        <item name="mt_menuIconTint">@color/searchBarMenuIconTintColor</item>
-        <item name="mt_backIconTint">@color/searchBarBackIconTintColor</item>
-        <item name="mt_textCursorTint">@color/redSapienza</item>
-        <item name="mt_textColor">@color/searchBarTextColor</item>
-        <item name="mt_hintColor">@color/searchBarHintColor</item>
-        <item name="mt_placeholderColor">@color/searchBarPlaceholderColor</item>
-        <item name="mt_highlightedTextColor">@color/red</item>
-        <item name="mt_leftTextSelectorTint">@color/red</item>
-        <item name="mt_middleTextSelectorTint">@color/red</item>
-        <item name="mt_rightTextSelectorTint">@color/red</item>
-        <item name="mt_leftTextSelectorDrawable">
-            @drawable/text_select_handle_left_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_middleTextSelectorDrawable">
-            @drawable/text_select_handle_middle_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_rightTextSelectorDrawable">
-            @drawable/text_select_handle_right_mtrl_alpha_mtrlsearch
-        </item>
-        <item name="mt_handlesTintEnabled">true</item>
+        <item name="android:colorAccent">@color/redSapienzaLight</item>
+        <item name="mt_highlightedTextColor">@color/highlight_text_searchbar_light</item>
     </style>
 
     <style name="DrawerDark" parent="MaterialDrawerTheme">

@@ -28,8 +28,8 @@
     <color name="card_detailing">#eee</color>
     <color name="primaryTextColorLight">#33343B</color>
     <color name="secondaryTextColorLight">#d3696969</color>
-
-
+    <color name="highlight_text_searchbar_light">#EB7F8A</color>
+    <color name="highlight_text_searchbar_dark">#c12a40</color>
     <color name="material_drawer_primary">#9e0f24</color>
     <color name="material_drawer_primary_dark">#9e0f24</color>
     <color name="material_drawer_primary_light">#C44857</color>
