@@ -2,6 +2,9 @@
 
 ![GitHub tag](https://img.shields.io/github/tag/lithiumsr/openstud_client.svg)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=23)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+      alt="Download from Google Play"
+      height="80">](https://play.google.com/store/apps/details?id=com.lithium.leona.openstud)
 
 OpenStud is an unofficial client for Sapienza's Infostud.\
 It was written with Java 8 in mind and it supports Android 6.0+ (API Level 23+), at the time of writing it targets Android Pie (API Level 28).
