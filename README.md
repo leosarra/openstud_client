@@ -2,6 +2,8 @@
 
 ![GitHub tag](https://img.shields.io/github/tag/lithiumsr/openstud_client.svg)
 [![API](https://img.shields.io/badge/API-23%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=23)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
       alt="Download from Google Play"
       height="80">](https://play.google.com/store/apps/details?id=com.lithium.leona.openstud)
