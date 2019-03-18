@@ -87,7 +87,6 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         searchBar.setPlaceHolder(getResources().getString(R.string.search_classroom));
-        //restore last queries from disk
         List oldSuggestions = PreferenceManager.getSuggestions(this);
         if (oldSuggestions != null) searchBar.setLastSuggestions(oldSuggestions);
         emptyText.setText(getResources().getString(R.string.no_classrooms_found));
@@ -117,21 +116,26 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
             LayoutHelper.createSearchClassroomNotification(this, ThemeEngine.getAlertDialogTheme(this));
             PreferenceManager.setClassroomNotificationEnabled(this, false);
         }
+
         if (savedInstanceState == null) {
             searchBar.requestFocus();
             searchBar.enableSearch();
-        }
-        else {
+        } else {
             Gson gson = new Gson();
-            List<Classroom> saved = gson.fromJson(savedInstanceState.getString("classes", "null"), new TypeToken<List<Classroom>>(){}.getType());
-            if (saved!=null) {
+            List<Classroom> saved = gson.fromJson(savedInstanceState.getString("classes", "null"), new TypeToken<List<Classroom>>() {
+            }.getType());
+            if (saved != null) {
                 classes.clear();
                 classes.addAll(saved);
                 adapter.notifyDataSetChanged();
             }
-            String text = gson.fromJson(savedInstanceState.getString("text", ""), String.class);
-            if (text != null && !text.trim().isEmpty()) searchBar.setText(text);
-            if (!classes.isEmpty()) this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            if (!classes.isEmpty())
+                this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+            String text = savedInstanceState.getString("search", null);
+            if (text != null && !text.trim().isEmpty()) {
+                searchBar.setText(text);
+                searchBar.enableSearch(false);
+            } else searchBar.enableSearch(true);
         }
     }
 
@@ -265,7 +269,8 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         super.onSaveInstanceState(outState);
         synchronized (this) {
             Gson gson = new Gson();
-            String json = gson.toJson(classes,new TypeToken<List<Classroom>>() {}.getType());
+            String json = gson.toJson(classes, new TypeToken<List<Classroom>>() {
+            }.getType());
             outState.putString("classes", json);
             outState.putString("search", searchBar.getText());
         }

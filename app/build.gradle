@@ -65,7 +65,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.0-alpha03'
     implementation 'com.google.firebase:firebase-perf:16.2.3'
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
-    implementation 'com.github.LithiumSR:MaterialSearchBar:0.9.6'
+    implementation 'com.github.LithiumSR:MaterialSearchBar:0.9.8'
     implementation 'com.github.LithiumSR:Horizontal-Calendar:1.3.7'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "com.mikepenz:materialdrawer:6.1.2"
