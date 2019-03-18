@@ -7,7 +7,7 @@ android {
         applicationId "com.lithium.leona.openstud"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 118
+        versionCode 119
         versionName "1.18.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation group: 'androidx.legacy', name: 'legacy-preference-v14', version: '1.0.0'
-    implementation "com.mikepenz:aboutlibraries:6.2.0"
+    implementation "com.mikepenz:aboutlibraries:6.2.3"
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
