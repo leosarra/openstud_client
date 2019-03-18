@@ -84,6 +84,7 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
         roomId = bundle.getInt("roomId", -1);
         cachedLessons = new HashMap<>();
         Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.DAY_OF_MONTH, -2);
         /* ends after 1 month from now */
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
@@ -162,7 +163,7 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
     private synchronized void applyLessons(Calendar date, List<Lesson> lessonsUpdate) {
         List<Event> newEvents = OpenstudHelper.generateEventsFromTimetable(lessonsUpdate);
         if (!cachedLessons.containsKey(date.getTimeInMillis()))
-                cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
+            cachedLessons.put(date.getTimeInMillis(), lessonsUpdate);
         lessons.clear();
         lessons.addAll(newEvents);
         runOnUiThread(() -> adapter.notifyDataSetChanged());
