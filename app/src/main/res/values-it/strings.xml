@@ -208,9 +208,9 @@
     <string name="classroom">Aula</string>
     <string name="add_one_lesson_day">Devi aggiungere almeno una lezione!</string>
     <string name="missing_parameters">Devi compilare tutti i campi</string>
-    <string name="end_course">End course</string>
+    <string name="end_course">Fine corso</string>
     <string name="start_course">Inizio corso</string>
-    <string name="add_lesson_day">Add lesson</string>
+    <string name="add_lesson_day">Aggiungi lezione</string>
     <string name="add_course">Aggiungi corso</string>
     <string name="courses_added">Corsi aggiunti</string>
     <string name="no_course_added">Nessun corso aggiunto</string>
