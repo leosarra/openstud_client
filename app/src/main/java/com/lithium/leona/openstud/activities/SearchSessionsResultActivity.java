@@ -88,9 +88,12 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         if (cache != null) {
             activeReservations.addAll(cache);
         }
+
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.search_sessions);
+        if (exam!=null && !exam.getDescription().trim().isEmpty()) Objects.requireNonNull(getSupportActionBar()).setTitle(exam.getDescription());
+        else Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.search_sessions);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
         reservations = new LinkedList<>();
         emptyText.setText(getResources().getString(R.string.no_sessions_found));
         rv.setHasFixedSize(true);
