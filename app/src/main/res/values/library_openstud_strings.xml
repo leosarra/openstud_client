@@ -10,7 +10,7 @@
     <string name="library_openstud_driver_libraryDescription">A Java library that provides an easy way to obtain infos from Sapienza University\'s Infostud</string>
     <string name="library_openstud_driver_libraryWebsite">https://github.com/lithiumsr/openstud_driver</string>
     <string name="library_openstud_driver_respositoryLink">https://github.com/lithiumsr/openstud_driver</string>
-    <string name="library_openstud_driver_libraryVersion">0.13</string>
+    <string name="library_openstud_driver_libraryVersion">0.55.0</string>
     <!-- OpenSource section -->
     <string name="library_openstud_driver_isOpenSource">true</string>
     <string name="library_openstud_driver_repositoryLink"></string>
