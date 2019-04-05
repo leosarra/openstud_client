@@ -220,6 +220,6 @@
     <string name="compile_opis">Compila OPIS</string>
     <string name="code">Codice</string>
     <string name="compile_opis_extended">Compila questionario OPIS</string>
-    <string name="compile_opis_description">Inserisci il codice OPIS in modo da iniziare a compilare il questionario ed esprire la tua opinion riguardo ad uno specifico corso</string>
+    <string name="compile_opis_description">Inserisci il codice OPIS in modo da iniziare a compilare il questionario ed esprire la tua opinione riguardo ad uno specifico corso</string>
     <string name="invalid_opis_code">Codice OPIS non valido!</string>
 </resources>
