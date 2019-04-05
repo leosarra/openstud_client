@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.fragments.BottomSheetOpisFragment;
 import com.lithium.leona.openstud.fragments.ExamDoableFragment;
 import com.lithium.leona.openstud.fragments.ExamsDoneFragment;
 import com.lithium.leona.openstud.fragments.ReservationsFragment;
@@ -138,6 +139,9 @@ public class ExamsActivity extends BaseDataActivity {
             case R.id.sort:
                 showSortDialog();
                 return true;
+            case R.id.opis:
+                showOpisDialog();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -160,6 +164,11 @@ public class ExamsActivity extends BaseDataActivity {
             dialogInterface.dismiss();
         });
         builder.show();
+    }
+
+    private void showOpisDialog() {
+        BottomSheetOpisFragment opisFrag = BottomSheetOpisFragment.newInstance();
+        opisFrag.show(getSupportFragmentManager(), opisFrag.getTag());
     }
 
 
