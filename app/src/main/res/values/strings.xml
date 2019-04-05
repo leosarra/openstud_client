@@ -243,4 +243,8 @@
     <string name="start_lesson_label">Start lesson</string>
     <string name="add_custom_lesson_summary">Setup custom lessons and show them in the calendar</string>
     <string name="compile_opis">Compile OPIS</string>
+    <string name="code">Code</string>
+    <string name="compile_opis_extended">Fill out the OPIS questionnaire</string>
+    <string name="compile_opis_description">Insert the OPIS code in order to open the questionnaire and express your opinion about a specific course.</string>
+    <string name="invalid_opis_code">Invalid OPIS code!</string>
 </resources>
