@@ -242,4 +242,5 @@
     <string name="end_lesson_label">End lesson</string>
     <string name="start_lesson_label">Start lesson</string>
     <string name="add_custom_lesson_summary">Setup custom lessons and show them in the calendar</string>
+    <string name="compile_opis">Compile OPIS</string>
 </resources>

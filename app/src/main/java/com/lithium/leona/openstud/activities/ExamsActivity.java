@@ -104,22 +104,29 @@ public class ExamsActivity extends BaseDataActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_bar, menu);
-        Drawable drawable = menu.findItem(R.id.sort).getIcon();
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
-        menu.findItem(R.id.sort).setIcon(drawable);
+        getMenuInflater().inflate(R.menu.action_bar_exam, menu);
+        Drawable drawableSort = menu.findItem(R.id.sort).getIcon();
+        drawableSort = DrawableCompat.wrap(drawableSort);
+        DrawableCompat.setTint(drawableSort, ContextCompat.getColor(this, android.R.color.white));
+        menu.findItem(R.id.sort).setIcon(drawableSort);
+        Drawable drawableOpis = menu.findItem(R.id.opis).getIcon();
+        drawableOpis = DrawableCompat.wrap(drawableOpis);
+        DrawableCompat.setTint(drawableOpis, ContextCompat.getColor(this, android.R.color.white));
+        menu.findItem(R.id.opis).setIcon(drawableOpis);
         return true;
     }
 
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (active == null) return true;
-        if (active != fragDone) {
-            MenuItem item = menu.findItem(R.id.sort);
-            item.setVisible(false);
+        if (active == fragDoable) {
+            menu.findItem(R.id.sort).setVisible(false);
+            menu.findItem(R.id.opis).setVisible(true);
+        } else if (active == fragDone) {
+            menu.findItem(R.id.sort).setVisible(true);
+            menu.findItem(R.id.opis).setVisible(false);
         } else {
-            MenuItem item = menu.findItem(R.id.sort);
-            item.setVisible(true);
+            menu.findItem(R.id.sort).setVisible(false);
+            menu.findItem(R.id.opis).setVisible(false);
         }
         return true;
     }

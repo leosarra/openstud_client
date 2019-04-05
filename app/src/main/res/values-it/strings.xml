@@ -217,4 +217,5 @@
     <string name="end_lesson_label">Fine lezione</string>
     <string name="start_lesson_label">Inizio lezione</string>
     <string name="add_custom_lesson_summary">Aggiungi manualmente le lezioni in modo da visualizzarle nel calendario</string>
+    <string name="compile_opis">Compile OPIS</string>
 </resources>

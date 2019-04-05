@@ -9,4 +9,11 @@
         android:title="@string/sort_by"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/opis"
+        android:icon="@drawable/ic_create_black_24dp"
+        android:orderInCategory="0"
+        android:title="@string/compile_opis"
+        app:showAsAction="always" />
+
 </menu>
