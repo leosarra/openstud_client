@@ -10,12 +10,12 @@
     <string name="library_kapitalize_libraryDescription">A Kotlin library to automatically capitalize people\'s names </string>
     <string name="library_kapitalize_libraryWebsite">https://github.com/lithiumsr/kapitalize</string>
     <string name="library_kapitalize_respositoryLink">https://github.com/lithiumsr/kapitalize</string>
-    <string name="library_kapitalize_libraryVersion">1.5</string>
+    <string name="library_kapitalize_libraryVersion">1.5.3</string>
     <!-- OpenSource section -->
     <string name="library_kapitalize_isOpenSource">true</string>
     <string name="library_kapitalize_repositoryLink"></string>
     <!-- ClassPath for autoDetect section -->
-    <string name="library_kapitalize_classPath">lithium.kapitalize.Kapitalize</string>
+    <string name="library_kapitalize_classPath">com.lithium.kapitalize.Kapitalize</string>
     <!-- License section -->
     <!-- Custom variables section -->
 </resources>
