@@ -1,8 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+
+    <!-- Dexter section -->
+    <string name="define_int_dexter" />
+    <string name="library_dexter_author">Karumi</string>
+    <string name="library_dexter_authorWebsite">https://github.com/Karumi</string>
+    <string name="library_dexter_libraryName">Dexter</string>
+    <string name="library_dexter_libraryDescription">An Android library that simplifies the process of requesting permissions at runtime</string>
+    <string name="library_dexter_libraryWebsite">https://github.com/Karumi/Dexter</string>
+    <string name="library_dexter_respositoryLink">https://github.com/Karumi/Dexter</string>
+    <string name="library_dexter_libraryVersion">5.0.0</string>
+    <string name="library_dexter_isOpenSource">true</string>
+    <string name="library_dexter_classPath">com.karumi.dexter.Dexter</string>
+
+
+    <!-- Toasty section -->
+    <string name="define_int_toasty" />
+    <string name="library_toasty_author">GrenderG</string>
+    <string name="library_toasty_authorWebsite">https://github.com/GrenderG/</string>
+    <string name="library_toasty_libraryName">Toasty</string>
+    <string name="library_toasty_libraryDescription">A library to create beautiful and colorful toast notifications</string>
+    <string name="library_toasty_libraryWebsite">https://github.com/GrenderG/Toasty</string>
+    <string name="library_toasty_respositoryLink">https://github.com/GrenderG/Toasty</string>
+    <string name="library_toasty_libraryVersion">1.4.2</string>
+    <string name="library_toasty_isOpenSource">true</string>
+    <string name="library_toasty_classPath">es.dmoral.toasty.Toasty</string>
+
     <!-- CompactCalendarView section -->
-    <string name="define_int_compactcalendar"></string>
+    <string name="define_int_compactcalendar" />
     <string name="library_compactcalendar_author">Leonardo Sarra</string>
     <string name="library_compactcalendar_authorWebsite">https://github.com/lithiumsr</string>
     <string name="library_compactcalendar_libraryName">CompactCalendarView</string>
@@ -13,7 +39,7 @@
     <string name="library_compactcalendar_isOpenSource">true</string>
     <string name="library_compactcalendar_classPath">devs.mulham.horizontalcalendar.HorizontalCalendar</string>
     <!-- HorizontalCalendar section -->
-    <string name="define_int_horizontalcalendar"></string>
+    <string name="define_int_horizontalcalendar" />
     <string name="library_horizontalcalendar_author">Leonardo Sarra</string>
     <string name="library_horizontalcalendar_authorWebsite">https://github.com/lithiumsr</string>
     <string name="library_horizontalcalendar_libraryName">Horizontal-Calendar</string>
@@ -25,7 +51,7 @@
     <string name="library_horizontalcalendar_classPath">devs.mulham.horizontalcalendar.HorizontalCalendar</string>
 
     <!-- Kapitalize section -->
-    <string name="define_int_kapitalize"></string>
+    <string name="define_int_kapitalize" />
     <string name="library_kapitalize_author">Leonardo Sarra</string>
     <string name="library_kapitalize_authorWebsite">https://github.com/lithiumsr</string>
     <string name="library_kapitalize_libraryName">Kapitalize</string>
@@ -34,11 +60,10 @@
     <string name="library_kapitalize_respositoryLink">https://github.com/lithiumsr/kapitalize</string>
     <string name="library_kapitalize_libraryVersion">1.5.3</string>
     <string name="library_kapitalize_isOpenSource">true</string>
-    <string name="library_kapitalize_repositoryLink"></string>
     <string name="library_kapitalize_classPath">com.lithium.kapitalize.Kapitalize</string>
 
     <!-- OpenStud Driver section -->
-    <string name="define_int_openstud_driver"></string>
+    <string name="define_int_openstud_driver" />
     <string name="library_openstud_driver_author">Leonardo Sarra</string>
     <string name="library_openstud_driver_authorWebsite">https://github.com/lithiumsr</string>
     <string name="library_openstud_driver_libraryName">OpenStud Driver</string>
@@ -47,11 +72,10 @@
     <string name="library_openstud_driver_respositoryLink">https://github.com/lithiumsr/openstud_driver</string>
     <string name="library_openstud_driver_libraryVersion">0.55.0</string>
     <string name="library_openstud_driver_isOpenSource">true</string>
-    <string name="library_openstud_driver_repositoryLink"></string>
     <string name="library_openstud_driver_classPath">lithium.openstud.driver.core.Openstud</string>
 
     <!-- MaterialSearchBar section -->
-    <string name="define_int_searchbar"></string>
+    <string name="define_int_searchbar" />
     <string name="library_searchbar_author">Leonardo Sarra</string>
     <string name="library_searchbar_authorWebsite">https://github.com/lithiumsr</string>
     <string name="library_searchbar_libraryName">MaterialSearchBar</string>
