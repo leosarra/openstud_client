@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import androidx.core.content.ContextCompat;
+
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
-import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.WidgetHelper;
 
 import org.threeten.bp.format.DateTimeFormatter;
@@ -19,7 +20,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.Event;
 
@@ -43,7 +43,7 @@ public class ExamsFactory implements RemoteViewsService.RemoteViewsFactory {
         if (os == null) return;
         List<Event> newEvents = InfoManager.getEventsCached(context, os);
         if (newEvents == null) return;
-        events.addAll(ClientHelper.orderEventByDate(WidgetHelper.filterValidExamsEvents(newEvents, includeDoable), true));
+        events.addAll(WidgetHelper.mergeExamEvents(WidgetHelper.filterValidExamsEvents(newEvents, includeDoable)));
     }
 
 

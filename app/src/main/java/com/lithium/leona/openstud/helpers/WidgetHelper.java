@@ -40,4 +40,51 @@ public class WidgetHelper {
         return newEvents;
     }
 
+    public static List<Event> mergeExamEvents(List<Event> events) {
+        LinkedList<Event> output = new LinkedList<>();
+        for (Event event:events) {
+            boolean added = false;
+            LinkedList<Event> doableCollisions = new LinkedList<>();
+            for (Event event2:events) {
+                if (event!=event2 && event.getTitle().equals(event2.getTitle()) && event.getReservation().getCourseCode()==event2.getReservation().getCourseCode()) {
+                    if (event.getEventType() == EventType.DOABLE && event2.getEventType()== EventType.RESERVED) {
+                        output.add(event2);
+                        added=true;
+                    }
+                    else if (event2.getEventType() == EventType.DOABLE && event.getEventType()== EventType.RESERVED) {
+                        output.add(event);
+                        added=true;
+                    }
+                    else if (!added) {
+                        doableCollisions.add(event2);
+                    }
+                }
+            }
+            if (doableCollisions.isEmpty()) output.add(event);
+            else {
+                boolean alreadyInOutput = false;
+                for (Event eventOutput: output) {
+                    if (eventOutput.getTitle().equals(event.getTitle()) && eventOutput.getReservation().getCourseCode() == event.getReservation().getCourseCode()) alreadyInOutput = true;
+                }
+
+                if (!alreadyInOutput) {
+                    StringBuilder sb = new StringBuilder();
+                    for (Event collision : doableCollisions){
+                        boolean skipTeacher = sb.toString().contains(collision.getTeacher());
+                        if (sb.length() != 0) {
+                            if (!skipTeacher) sb.append(", ");
+                        }
+                        if (!skipTeacher) sb.append(collision.getTeacher());
+                    }
+                    Event newEvent = new Event(EventType.DOABLE);
+                    newEvent.setTeacher(sb.toString().trim());
+                    newEvent.setTitle(event.getTitle());
+                    newEvent.setReservation(event.getReservation());
+                    output.add(newEvent);
+                }
+            }
+        }
+        return ClientHelper.orderEventByDate(output,true);
+    }
+
 }
