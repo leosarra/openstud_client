@@ -257,7 +257,10 @@ public class ReservationsFragment extends BaseDataFragment {
         Activity activity = getActivity();
         if (activity == null) return;
         activity.runOnUiThread(() -> {
-            if (finalFlag) adapter.notifyDataSetChanged();
+            if (finalFlag) {
+                adapter.notifyDataSetChanged();
+                ClientHelper.updateGradesWidget(activity, false);
+            }
             swapViews(reservations);
             swipeRefreshLayout.setRefreshing(false);
             emptyButton.setEnabled(true);
