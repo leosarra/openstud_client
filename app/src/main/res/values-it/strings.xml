@@ -227,7 +227,7 @@
     <string name="add_widget">Aggiungi widget</string>
     <string name="upcoming_exams_widget">Prossimi esami</string>
     <string name="cfu_date_widget">%1$s CFU • %2$s</string>
-    <string name="show_countdown">Visualizza giorni mancanti all\'esame</string>
+    <string name="show_countdown">Visualizza giorni rimanenti all\'esame</string>
     <string name="widget_no_exams">Non ci sono esami in vista!</string>
     <string name="exam_widget">Prossimi esami</string>
     <string name="stats_widget">Statistiche</string>
