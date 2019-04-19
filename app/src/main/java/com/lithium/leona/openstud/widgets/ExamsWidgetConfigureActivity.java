@@ -44,25 +44,25 @@ public class ExamsWidgetConfigureActivity extends Activity {
 
     static void saveAvailableExamSwitchStatus(Context context, int appWidgetId, boolean enabled) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putBoolean("includeDoable"+ appWidgetId, enabled);
+        prefs.putBoolean("includeDoable" + appWidgetId, enabled);
         prefs.apply();
     }
 
     static void saveCountdownSwitchStatus(Context context, int appWidgetId, boolean enabled) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putBoolean("showCountdown"+appWidgetId, enabled);
+        prefs.putBoolean("showCountdown" + appWidgetId, enabled);
         prefs.apply();
     }
 
     static boolean getAvaialableExamSwitchStatus(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getBoolean("includeDoable"+appWidgetId, true);
+        return prefs.getBoolean("includeDoable" + appWidgetId, true);
 
     }
 
     static boolean getCountdownSwitchStatus(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getBoolean("showCountdown"+appWidgetId, true);
+        return prefs.getBoolean("showCountdown" + appWidgetId, true);
     }
 
     static void deletePref(Context context, int appWidgetId) {

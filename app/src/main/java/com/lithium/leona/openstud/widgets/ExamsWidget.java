@@ -40,18 +40,16 @@ public class ExamsWidget extends AppWidgetProvider {
 
         Openstud os = InfoManager.getOpenStud(context);
         if (os != null) {
-            if (hasAtLeastOneEvent(os,context,includeDoable)) {
+            if (hasAtLeastOneEvent(os, context, includeDoable)) {
                 views.setViewVisibility(R.id.content_layout, View.VISIBLE);
                 views.setViewVisibility(R.id.no_results_layout, View.GONE);
-            }
-            else {
+            } else {
                 views.setViewVisibility(R.id.content_layout, View.GONE);
                 views.setViewVisibility(R.id.no_results_layout, View.VISIBLE);
             }
             views.setViewVisibility(R.id.empty_layout, View.GONE);
             updateView(context, views, appWidgetId, includeDoable, showCountdown);
-        }
-        else {
+        } else {
             views.setViewVisibility(R.id.content_layout, View.GONE);
             views.setViewVisibility(R.id.empty_layout, View.VISIBLE);
             views.setViewVisibility(R.id.no_results_layout, View.GONE);
@@ -60,48 +58,20 @@ public class ExamsWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    private static boolean hasAtLeastOneEvent(Openstud os, Context context, boolean includeDoable){
+    private static boolean hasAtLeastOneEvent(Openstud os, Context context, boolean includeDoable) {
         List<Event> newEvents = InfoManager.getEventsCached(context, os);
         if (newEvents == null) return true;
-        System.out.println("filter "+WidgetHelper.filterValidExamsEvents(newEvents, includeDoable));
+        System.out.println("filter " + WidgetHelper.filterValidExamsEvents(newEvents, includeDoable));
         return !WidgetHelper.filterValidExamsEvents(newEvents, includeDoable).isEmpty();
     }
 
     private static void updateView(Context context, RemoteViews views, int appWidgetId, boolean includeDoable, boolean showCountdown) {
-        Intent intent = new Intent(context,  ExamsService.class);
+        Intent intent = new Intent(context, ExamsService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.putExtra("includeDoable", includeDoable);
         intent.putExtra("showCountdown", showCountdown);
         views.setRemoteAdapter(R.id.list_view, intent);
     }
-
-    @Override
-    public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        Handler mHandler = new Handler();
-        new Thread(() -> {
-            Openstud os = InfoManager.getOpenStud(context);
-            if (os != null) {
-                Student student = InfoManager.getInfoStudentCached(context,os);
-                if (student!=null) {
-                    try {
-                        InfoManager.getEvents(context, os, student);
-                    } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
-                        e.printStackTrace();
-                    } catch (OpenstudInvalidCredentialsException e) {
-                        InfoManager.clearSharedPreferences(context);
-                        e.printStackTrace();
-                    }
-                }
-            }
-            mHandler.post(() -> {
-                for (int appWidgetId : appWidgetIds) {
-                    updateAppWidget(context, appWidgetManager, appWidgetId);
-                }
-            });
-        }).start();
-    }
-
 
     private static void scheduleNextUpdate(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -119,6 +89,33 @@ public class ExamsWidget extends AppWidgetProvider {
         midnight.set(Calendar.MILLISECOND, 0);
         midnight.add(Calendar.DAY_OF_YEAR, 1);
         alarmManager.set(AlarmManager.RTC, midnight.getTimeInMillis(), pendingIntent);
+    }
+
+    @Override
+    public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        // There may be multiple widgets active, so update all of them
+        Handler mHandler = new Handler();
+        new Thread(() -> {
+            Openstud os = InfoManager.getOpenStud(context);
+            if (os != null) {
+                Student student = InfoManager.getInfoStudentCached(context, os);
+                if (student != null) {
+                    try {
+                        InfoManager.getEvents(context, os, student);
+                    } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
+                        e.printStackTrace();
+                    } catch (OpenstudInvalidCredentialsException e) {
+                        InfoManager.clearSharedPreferences(context);
+                        e.printStackTrace();
+                    }
+                }
+            }
+            mHandler.post(() -> {
+                for (int appWidgetId : appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId);
+                }
+            });
+        }).start();
     }
 
     @Override
@@ -142,10 +139,10 @@ public class ExamsWidget extends AppWidgetProvider {
     public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, boolean cached) {
         // There may be multiple widgets active, so update all of them
         if (!cached) {
-            onUpdate(context,appWidgetManager, appWidgetIds);
+            onUpdate(context, appWidgetManager, appWidgetIds);
             return;
         }
-        if (appWidgetIds.length>0) scheduleNextUpdate(context);
+        if (appWidgetIds.length > 0) scheduleNextUpdate(context);
 
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);

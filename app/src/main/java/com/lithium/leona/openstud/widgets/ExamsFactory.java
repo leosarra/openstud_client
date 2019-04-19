@@ -37,28 +37,28 @@ public class ExamsFactory implements RemoteViewsService.RemoteViewsFactory {
         populateListItems();
     }
 
-    private void populateListItems(){
+    private void populateListItems() {
         events.clear();
         Openstud os = InfoManager.getOpenStud(context);
         if (os == null) return;
         List<Event> newEvents = InfoManager.getEventsCached(context, os);
         if (newEvents == null) return;
-        events.addAll(ClientHelper.orderEventByDate(WidgetHelper.filterValidExamsEvents(newEvents, includeDoable),true));
+        events.addAll(ClientHelper.orderEventByDate(WidgetHelper.filterValidExamsEvents(newEvents, includeDoable), true));
     }
 
 
     @Override
     public RemoteViews getViewAt(int position) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.item_exam_widget);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.item_exam_widget);
         Event event = events.get(position);
         remoteViews.setTextViewText(R.id.title, event.getTitle());
-        remoteViews.setTextViewText(R.id.countdown, "-"+WidgetHelper.getRemainingDays(event));
+        remoteViews.setTextViewText(R.id.countdown, "-" + WidgetHelper.getRemainingDays(event));
         remoteViews.setTextViewText(R.id.teacherName, event.getTeacher());
-        String finalString = context.getResources().getString(R.string.cfu_date_widget,String.valueOf(event.getReservation().getCfu()), event.getEventDate().format(formatter));
+        String finalString = context.getResources().getString(R.string.cfu_date_widget, String.valueOf(event.getReservation().getCfu()), event.getEventDate().format(formatter));
         SpannableString sb = new SpannableString(finalString);
-        sb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.redSapienzaLight)), 0, finalString.indexOf("•"),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.gray)),finalString.indexOf("•")+1,finalString.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.redSapienzaLight)), 0, finalString.indexOf("•"), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.gray)), finalString.indexOf("•") + 1, finalString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         remoteViews.setTextViewText(R.id.cfu_date, sb);
         if (!showCountdown) remoteViews.setViewVisibility(R.id.countdown, View.GONE);
         else remoteViews.setViewVisibility(R.id.countdown, View.VISIBLE);
@@ -79,7 +79,6 @@ public class ExamsFactory implements RemoteViewsService.RemoteViewsFactory {
     public int getViewTypeCount() {
         return 1;
     }
-
 
 
     @Override

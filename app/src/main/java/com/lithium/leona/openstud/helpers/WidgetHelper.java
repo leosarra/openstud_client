@@ -14,7 +14,7 @@ import lithium.openstud.driver.core.models.EventType;
 public class WidgetHelper {
 
 
-    private static boolean isOldEvent(Event event){
+    private static boolean isOldEvent(Event event) {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
         LocalDate zonedDate = now.atOffset(ZoneOffset.UTC).withOffsetSameInstant(ZoneOffset.of("+1")).toLocalDate();
         return zonedDate.isBefore(event.getEventDate());
@@ -28,9 +28,10 @@ public class WidgetHelper {
 
     public static List<Event> filterValidExamsEvents(List<Event> events, boolean includeDoable) {
         List<Event> ignored = new LinkedList<>();
-        for (Event event: events) {
-            if (getRemainingDays(event)>95) ignored.add(event);
-            else if (event.getEventType() != EventType.RESERVED && event.getEventType() != EventType.DOABLE) ignored.add(event);
+        for (Event event : events) {
+            if (getRemainingDays(event) > 95) ignored.add(event);
+            else if (event.getEventType() != EventType.RESERVED && event.getEventType() != EventType.DOABLE)
+                ignored.add(event);
             else if (!includeDoable && event.getEventType() == EventType.DOABLE) ignored.add(event);
             else if (!WidgetHelper.isOldEvent(event)) ignored.add(event);
         }

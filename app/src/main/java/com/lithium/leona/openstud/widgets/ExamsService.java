@@ -7,6 +7,6 @@ public class ExamsService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ExamsFactory(this.getApplicationContext(),intent);
+        return new ExamsFactory(this.getApplicationContext(), intent);
     }
 }

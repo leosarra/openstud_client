@@ -26,7 +26,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.lithium.leona.openstud.BuildConfig;
-import com.lithium.leona.openstud.widgets.ExamsWidget;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.AboutActivity;
 import com.lithium.leona.openstud.activities.CalendarActivity;
@@ -43,6 +42,7 @@ import com.lithium.leona.openstud.data.CustomCourse;
 import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
+import com.lithium.leona.openstud.widgets.ExamsWidget;
 import com.lithium.leona.openstud.widgets.GradesWidget;
 
 import org.threeten.bp.LocalDate;

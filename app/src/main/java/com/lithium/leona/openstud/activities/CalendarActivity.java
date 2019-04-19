@@ -482,7 +482,7 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
             events.clear();
             events.addAll(newEvents);
             updateCalendar(events);
-            ClientHelper.updateExamWidget(this,true);
+            ClientHelper.updateExamWidget(this, true);
         }
     }
 
