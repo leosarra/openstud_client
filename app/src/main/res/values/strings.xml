@@ -197,7 +197,7 @@
     <string name="average">Average</string>
     <string name="widget_login_error">You have to save the credentials in order to enable the widget!</string>
     <string name="appwidget_text" translatable="false">EXAMPLE</string>
-    <string name="add_widget" translatable="false">Add widget</string>
+    <string name="add_widget" >Add widget</string>
     <string name="rate_limit">Reached rate limit on SapienzaApps\' API</string>
     <string name="already_placed_button">Reservation placed</string>
     <string name="no_pdf_app">No application found that can handle PDF files!</string>
@@ -247,4 +247,12 @@
     <string name="compile_opis_extended">Fill out the OPIS questionnaire</string>
     <string name="compile_opis_description">Insert the OPIS code in order to open the questionnaire and express your opinion about a specific course</string>
     <string name="invalid_opis_code">Invalid OPIS code!</string>
+    <string name="configure_event_widget">Configure upcoming exams widget</string>
+    <string name="include_available_exams_widget">Include available exams</string>
+    <string name="upcoming_exams_widget">Upcoming exams</string>
+    <string name="cfu_date_widget">%1$s ECTS • %2$s</string>
+    <string name="show_countdown">Show remaining days to the exam</string>
+    <string name="widget_no_exams">There are no exams in the near future.\nHave fun!</string>
+    <string name="exam_widget">Upcoming exams</string>
+    <string name="stats_widget">Stats</string>
 </resources>

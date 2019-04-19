@@ -222,4 +222,13 @@
     <string name="compile_opis_extended">Compila questionario OPIS</string>
     <string name="compile_opis_description">Inserisci il codice OPIS in modo da iniziare a compilare il questionario ed esprire la tua opinione riguardo ad uno specifico corso</string>
     <string name="invalid_opis_code">Codice OPIS non valido!</string>
+    <string name="configure_event_widget">Configura widget esami</string>
+    <string name="include_available_exams_widget">Mostra anche gli esami non prenotati</string>
+    <string name="add_widget" >Aggiungi widget</string>
+    <string name="upcoming_exams_widget">Prossimi esami</string>
+    <string name="cfu_date_widget">%1$s CFU • %2$s</string>
+    <string name="show_countdown">Visualizza giorni mancanti all\'esame</string>
+    <string name="widget_no_exams">Non ci sono esami in vista!</string>
+    <string name="exam_widget">Prossimi esami</string>
+    <string name="stats_widget">Statistiche</string>
 </resources>
