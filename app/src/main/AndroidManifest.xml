@@ -23,10 +23,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeLight">
-        <activity
-            android:name=".activities.AddCustomCourseActivity" />
-        <activity
-            android:name=".activities.CustomCourseListActivity" />
+        <receiver android:name=".widgets.ExamsWidget"
+            android:label="@string/exam_widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/events_widget_info" />
+        </receiver>
+
+        <activity android:name=".widgets.ExamsWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.AddCustomCourseActivity" />
+        <activity android:name=".activities.CustomCourseListActivity" />
         <activity
             android:name=".activities.LauncherActivity"
             android:noHistory="true"
@@ -86,7 +100,8 @@
             android:name=".activities.ClassroomTimetableActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
 
-        <receiver android:name=".widgets.GradesWidget">
+        <receiver android:name=".widgets.GradesWidget"
+            android:label="@string/stats_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -95,23 +110,16 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/grades_widget_info" />
         </receiver>
-        <!--
-        <receiver android:name=".widgets.EventWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/event_widget_info" />
-        </receiver>
-        -->
         <activity
             android:name=".activities.NewsActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
         <activity
             android:name=".activities.EventsActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
+
+        <service
+            android:name=".widgets.ExamsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>
