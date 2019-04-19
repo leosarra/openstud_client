@@ -95,6 +95,7 @@ public class ExamsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
+        populateListItems();
     }
 
     @Override

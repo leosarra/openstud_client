@@ -49,6 +49,7 @@ public class ExamsWidget extends AppWidgetProvider {
             }
             views.setViewVisibility(R.id.empty_layout, View.GONE);
             updateView(context, views, appWidgetId, includeDoable, showCountdown);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.list_view);
         } else {
             views.setViewVisibility(R.id.content_layout, View.GONE);
             views.setViewVisibility(R.id.empty_layout, View.VISIBLE);
@@ -61,7 +62,6 @@ public class ExamsWidget extends AppWidgetProvider {
     private static boolean hasAtLeastOneEvent(Openstud os, Context context, boolean includeDoable) {
         List<Event> newEvents = InfoManager.getEventsCached(context, os);
         if (newEvents == null) return true;
-        System.out.println("filter " + WidgetHelper.filterValidExamsEvents(newEvents, includeDoable));
         return !WidgetHelper.filterValidExamsEvents(newEvents, includeDoable).isEmpty();
     }
 
@@ -101,7 +101,7 @@ public class ExamsWidget extends AppWidgetProvider {
                 Student student = InfoManager.getInfoStudentCached(context, os);
                 if (student != null) {
                     try {
-                        InfoManager.getEvents(context, os, student);
+                        System.out.println("EVENTS UPDATE:"+InfoManager.getEvents(context, os, student));
                     } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
                         e.printStackTrace();
                     } catch (OpenstudInvalidCredentialsException e) {
