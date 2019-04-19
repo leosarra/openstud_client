@@ -25,7 +25,8 @@
                 android:id="@+id/show_countdown_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_countdown" />
+                android:text="@string/show_countdown"
+                android:textSize="16dp"/>
 
             <Switch
                 android:id="@+id/include_exam_available_switch"
@@ -33,7 +34,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:paddingBottom="5dp"
-                android:text="@string/include_available_exams_widget" />
+                android:text="@string/include_available_exams_widget"
+                android:textSize="16dp"/>
 
             <Button
                 android:id="@+id/add_button"
