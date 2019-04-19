@@ -204,7 +204,7 @@ public class InfoManager {
             prefsEditor.putString("events", json);
             prefsEditor.apply();
         }
-        return newEvents;
+        return new LinkedList<>(newEvents);
     }
 
 
@@ -338,7 +338,7 @@ public class InfoManager {
             prefsEditor.putString("examsDone", json);
             prefsEditor.apply();
         }
-        return newExamsDone;
+        return new LinkedList<>(newExamsDone);
     }
 
     public static List<ExamDoable> getExamsDoableCached(Context context, Openstud os) {
@@ -376,7 +376,7 @@ public class InfoManager {
             prefsEditor.putString("examsDoable", json);
             prefsEditor.apply();
         }
-        return newExamsDoable;
+        return new LinkedList<>(newExamsDoable);
     }
 
 
@@ -414,7 +414,7 @@ public class InfoManager {
             prefsEditor.putString("reservations", json);
             prefsEditor.apply();
         }
-        return newExamsDone;
+        return new LinkedList<>(newExamsDone);
     }
 
     public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
@@ -431,7 +431,7 @@ public class InfoManager {
             prefsEditor.putString("paidTaxes", json);
             prefsEditor.apply();
         }
-        return newPaidTaxes;
+        return new LinkedList<>(newPaidTaxes);
     }
 
     public static List<Tax> getUnpaidTaxesCached(Context context, Openstud os) {
@@ -468,7 +468,7 @@ public class InfoManager {
             prefsEditor.putString("unpaidTaxes", json);
             prefsEditor.apply();
         }
-        return newUnpaidTaxes;
+        return new LinkedList<>(newUnpaidTaxes);
     }
 
     public static List<News> getNews(Context context, Openstud os, String locale) throws OpenstudConnectionException, OpenstudInvalidResponseException {
@@ -485,7 +485,7 @@ public class InfoManager {
             prefsEditor.putString("news", json);
             prefsEditor.apply();
         }
-        return newNews;
+        return new LinkedList<>(newNews);
     }
 
     public static List<News> getNewsCached(Context context, Openstud os, String locale) {
@@ -527,7 +527,7 @@ public class InfoManager {
             prefsEditor.putString("eventsUniversity", json);
             prefsEditor.apply();
         }
-        return newEvents;
+        return new LinkedList<>(newEvents);
     }
 
     public static List<Event> getEventsUniversityCached(Context context, Openstud os) {
