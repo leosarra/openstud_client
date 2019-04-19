@@ -44,19 +44,27 @@ public class WidgetHelper {
         LinkedList<Event> output = new LinkedList<>();
         for (Event event : events) {
             LinkedList<Event> doableCollisions = new LinkedList<>();
+            boolean addedToOutput = false;
             for (Event event2 : events) {
                 if (event != event2 && event.getTitle().equals(event2.getTitle()) && event.getReservation().getCourseCode() == event2.getReservation().getCourseCode()
                         && event.getEventDate().equals(event2.getEventDate())) {
-                    if (event.getEventType() == EventType.DOABLE && event2.getEventType() == EventType.RESERVED)
-                        output.add(event2);
-                    else if (event2.getEventType() == EventType.DOABLE && event.getEventType() == EventType.RESERVED)
-                        output.add(event);
-                    else if (!doableCollisions.contains(event2)) {
+                    if (event.getEventType() == EventType.DOABLE && event2.getEventType() == EventType.RESERVED){
+                        if (!output.contains(event2)) output.add(event2);
+                        addedToOutput = true;
+                    }
+
+                    else if (event2.getEventType() == EventType.DOABLE && event.getEventType() == EventType.RESERVED) {
+                        if (!output.contains(event)) output.add(event);
+                        addedToOutput = true;
+                    }
+                    else if (!addedToOutput && !doableCollisions.contains(event2)) {
                         doableCollisions.add(event2);
                     }
                 }
             }
-            if (doableCollisions.isEmpty()) output.add(event);
+            if (doableCollisions.isEmpty()) {
+                if (!addedToOutput) output.add(event);
+            }
             else {
                 boolean alreadyInOutput = false;
                 for (Event eventOutput : output) {
@@ -69,7 +77,7 @@ public class WidgetHelper {
                 if (!alreadyInOutput) {
                     StringBuilder sb = new StringBuilder();
                     for (Event collision : doableCollisions) {
-                        boolean skipTeacher = sb.toString().contains(collision.getTeacher());
+                        boolean skipTeacher = collision.getTeacher() == null || sb.toString().contains(collision.getTeacher());
                         if (sb.length() != 0) {
                             if (!skipTeacher) sb.append(", ");
                         }
