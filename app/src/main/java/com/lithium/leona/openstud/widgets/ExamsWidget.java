@@ -145,7 +145,7 @@ public class ExamsWidget extends AppWidgetProvider {
             onUpdate(context,appWidgetManager, appWidgetIds);
             return;
         }
-        scheduleNextUpdate(context);
+        if (appWidgetIds.length>0) scheduleNextUpdate(context);
 
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
