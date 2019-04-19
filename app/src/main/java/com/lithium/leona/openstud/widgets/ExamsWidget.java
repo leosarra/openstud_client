@@ -138,12 +138,13 @@ public class ExamsWidget extends AppWidgetProvider {
 
     public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, boolean cached) {
         // There may be multiple widgets active, so update all of them
-        if (!cached) {
-            onUpdate(context, appWidgetManager, appWidgetIds);
-            return;
+        if (appWidgetIds.length > 0) {
+            if (!cached) {
+                onUpdate(context, appWidgetManager, appWidgetIds);
+                return;
+            }
+            scheduleNextUpdate(context);
         }
-        if (appWidgetIds.length > 0) scheduleNextUpdate(context);
-
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
