@@ -88,7 +88,7 @@ public class ExamsWidget extends AppWidgetProvider {
         midnight.set(Calendar.SECOND, 1);
         midnight.set(Calendar.MILLISECOND, 0);
         midnight.add(Calendar.DAY_OF_YEAR, 1);
-        alarmManager.set(AlarmManager.RTC, midnight.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, midnight.getTimeInMillis(), pendingIntent);
     }
 
     @Override
@@ -139,14 +139,14 @@ public class ExamsWidget extends AppWidgetProvider {
     public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, boolean cached) {
         // There may be multiple widgets active, so update all of them
         if (appWidgetIds.length > 0) {
+            scheduleNextUpdate(context);
             if (!cached) {
                 onUpdate(context, appWidgetManager, appWidgetIds);
-                return;
+            } else {
+                for (int appWidgetId : appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId);
+                }
             }
-            scheduleNextUpdate(context);
-        }
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
