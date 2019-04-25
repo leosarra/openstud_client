@@ -37,7 +37,6 @@ public class ExamsWidget extends AppWidgetProvider {
         boolean showCountdown = ExamsWidgetConfigureActivity.getCountdownSwitchStatus(context, appWidgetId);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.exams_events_widget);
-
         Openstud os = InfoManager.getOpenStud(context);
         if (os != null) {
             if (hasAtLeastOneEvent(os, context, includeDoable)) {
@@ -80,7 +79,7 @@ public class ExamsWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         // Get a calendar instance for midnight tomorrow.
         Calendar midnight = Calendar.getInstance();
-        midnight.set(Calendar.HOUR_OF_DAY, 0);
+        midnight.set(Calendar.HOUR_OF_DAY, 23);
         midnight.set(Calendar.MINUTE, 0);
         // Schedule one second after midnight, to be sure we are in the right day next time this
         // method is called.  Otherwise, we risk calling onUpdate multiple times within a few
@@ -101,7 +100,7 @@ public class ExamsWidget extends AppWidgetProvider {
                 Student student = InfoManager.getInfoStudentCached(context, os);
                 if (student != null) {
                     try {
-                        System.out.println("EVENTS UPDATE:"+InfoManager.getEvents(context, os, student));
+                        InfoManager.getEvents(context, os, student);
                     } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
                         e.printStackTrace();
                     } catch (OpenstudInvalidCredentialsException e) {
@@ -139,7 +138,6 @@ public class ExamsWidget extends AppWidgetProvider {
     public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, boolean cached) {
         // There may be multiple widgets active, so update all of them
         if (appWidgetIds.length > 0) {
-            scheduleNextUpdate(context);
             if (!cached) {
                 onUpdate(context, appWidgetManager, appWidgetIds);
             } else {
@@ -158,6 +156,7 @@ public class ExamsWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), ExamsWidget.class.getName());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
+            if (appWidgetIds.length>0)  scheduleNextUpdate(context);
             if (Objects.equals(intent.getAction(), "MANUAL_UPDATE"))
                 onUpdateCustom(context, appWidgetManager, appWidgetIds, extras.getBoolean("cached", true));
             if (Objects.equals(intent.getAction(), "ACTION_SCHEDULED_UPDATE"))
