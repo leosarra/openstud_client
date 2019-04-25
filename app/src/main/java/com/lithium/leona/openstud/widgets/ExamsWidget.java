@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -92,7 +93,8 @@ public class ExamsWidget extends AppWidgetProvider {
     @Override
     public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        Thread t = new Thread(() -> {
+        Handler mHandler = new Handler();
+        new Thread(() -> {
             Openstud os = InfoManager.getOpenStud(context);
             if (os != null) {
                 Student student = InfoManager.getInfoStudentCached(context, os);
@@ -107,18 +109,12 @@ public class ExamsWidget extends AppWidgetProvider {
                     }
                 }
             }
-        });
-
-        t.start();
-        try {
-            t.wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            for (int appWidgetId : appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId);
-            }
-        }
+            mHandler.post(() -> {
+                for (int appWidgetId : appWidgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId);
+                }
+            });
+        }).start();
     }
 
     @Override
@@ -163,7 +159,7 @@ public class ExamsWidget extends AppWidgetProvider {
             if (appWidgetIds.length>0)  scheduleNextUpdate(context);
             if (Objects.equals(intent.getAction(), "MANUAL_UPDATE"))
                 onUpdateCustom(context, appWidgetManager, appWidgetIds, extras.getBoolean("cached", true));
-            else if (Objects.equals(intent.getAction(), "ACTION_SCHEDULED_UPDATE"))
+            if (Objects.equals(intent.getAction(), "ACTION_SCHEDULED_UPDATE"))
                 onUpdateCustom(context, appWidgetManager, appWidgetIds, false);
         }
     }
