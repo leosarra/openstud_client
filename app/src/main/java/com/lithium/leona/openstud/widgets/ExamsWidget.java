@@ -16,7 +16,10 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.WidgetHelper;
 
-import java.util.Calendar;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -77,17 +80,11 @@ public class ExamsWidget extends AppWidgetProvider {
         Intent intent = new Intent(context, ExamsWidget.class);
         intent.setAction("ACTION_SCHEDULED_UPDATE");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        // Get a calendar instance for midnight tomorrow.
-        Calendar midnight = Calendar.getInstance();
-        midnight.set(Calendar.HOUR_OF_DAY, 23);
-        midnight.set(Calendar.MINUTE, 0);
-        // Schedule one second after midnight, to be sure we are in the right day next time this
-        // method is called.  Otherwise, we risk calling onUpdate multiple times within a few
-        // milliseconds
-        midnight.set(Calendar.SECOND, 1);
-        midnight.set(Calendar.MILLISECOND, 0);
-        midnight.add(Calendar.DAY_OF_YEAR, 1);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, midnight.getTimeInMillis(), pendingIntent);
+        // Get a ZonedDateTime instance for midnight tomorrow.
+        ZonedDateTime ldtZoned = LocalDateTime.now().atZone(ZoneId.systemDefault());
+        ldtZoned = ldtZoned.withHour(0).withMinute(1).plusDays(1).withNano(0);
+        ZonedDateTime ldtUtc = ldtZoned.withZoneSameInstant(ZoneId.of("UTC"));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, ldtUtc.toInstant().toEpochMilli(), pendingIntent);
     }
 
     @Override
