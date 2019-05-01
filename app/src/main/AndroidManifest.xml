@@ -31,7 +31,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/events_widget_info" />
+                android:resource="@xml/exams_widget_info" />
         </receiver>
 
         <activity android:name=".widgets.ExamsWidgetConfigureActivity">
