@@ -87,7 +87,7 @@ public class WidgetHelper {
                     newEvent.setTeacher(sb.toString().trim());
                     newEvent.setTitle(event.getTitle());
                     newEvent.setReservation(event.getReservation());
-                    output.add(newEvent);
+                    if (!output.contains(newEvent)) output.add(newEvent);
                 }
             }
         }

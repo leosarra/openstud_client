@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -19,6 +20,7 @@ import com.lithium.leona.openstud.helpers.WidgetHelper;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.temporal.ChronoUnit;
 
 import java.util.List;
 import java.util.Objects;
@@ -87,31 +89,48 @@ public class ExamsWidget extends AppWidgetProvider {
         alarmManager.set(AlarmManager.RTC_WAKEUP, ldtUtc.toInstant().toEpochMilli(), pendingIntent);
     }
 
-    @Override
-    public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        Handler mHandler = new Handler();
-        new Thread(() -> {
-            Openstud os = InfoManager.getOpenStud(context);
-            if (os != null) {
-                Student student = InfoManager.getInfoStudentCached(context, os);
-                if (student != null) {
-                    try {
-                        InfoManager.getEvents(context, os, student);
-                    } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
-                        e.printStackTrace();
-                    } catch (OpenstudInvalidCredentialsException e) {
-                        InfoManager.clearSharedPreferences(context);
-                        e.printStackTrace();
+    private void getUpdates(Context context, boolean cached,  AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        LocalDateTime lastUpdateTime = InfoManager.getLastExamsWidgetUpdateTime(context);
+        ZonedDateTime ldtZoned = LocalDateTime.now().atZone(ZoneId.systemDefault());
+        LocalDateTime ldtUtc = ldtZoned.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
+        if (!cached && (lastUpdateTime == null || ChronoUnit.HOURS.between(lastUpdateTime,ldtUtc) >= 24)) {
+            Handler mHandler = new Handler(Looper.getMainLooper());
+            new Thread(() -> {
+                Openstud os = InfoManager.getOpenStud(context);
+                if (os != null) {
+                    Student student = InfoManager.getInfoStudentCached(context, os);
+                    if (student != null) {
+                        try {
+                            InfoManager.getEvents(context, os, student);
+                            InfoManager.setLastExamsWidgetUpdateTime(context,ldtUtc);
+                        } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
+                            e.printStackTrace();
+                        } catch (OpenstudInvalidCredentialsException e) {
+                            InfoManager.clearSharedPreferences(context);
+                            e.printStackTrace();
+                        }
                     }
                 }
+                mHandler.post(() -> {
+                    synchronized (this) {
+                        for (int appWidgetId : appWidgetIds) {
+                            updateAppWidget(context, appWidgetManager, appWidgetId);
+                        }
+                    }
+                });
+            }).start();
+        }
+
+        synchronized (this) {
+            for (int appWidgetId : appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId);
             }
-            mHandler.post(() -> {
-                for (int appWidgetId : appWidgetIds) {
-                    updateAppWidget(context, appWidgetManager, appWidgetId);
-                }
-            });
-        }).start();
+        }
+    }
+
+    @Override
+    public synchronized void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        getUpdates(context, false, appWidgetManager, appWidgetIds);
     }
 
     @Override
@@ -135,13 +154,7 @@ public class ExamsWidget extends AppWidgetProvider {
     public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, boolean cached) {
         // There may be multiple widgets active, so update all of them
         if (appWidgetIds.length > 0) {
-            if (!cached) {
-                onUpdate(context, appWidgetManager, appWidgetIds);
-            } else {
-                for (int appWidgetId : appWidgetIds) {
-                    updateAppWidget(context, appWidgetManager, appWidgetId);
-                }
-            }
+            getUpdates(context, cached, appWidgetManager, appWidgetIds);
         }
     }
 
