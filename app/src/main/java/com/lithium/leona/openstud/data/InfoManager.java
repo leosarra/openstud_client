@@ -9,6 +9,8 @@ import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.BuildConfig;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -550,6 +552,32 @@ public class InfoManager {
             e.printStackTrace();
         }
         return ret;
+    }
+
+    public static LocalDateTime getLastExamsWidgetUpdateTime(Context context) {
+        setupSharedPreferences(context);
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            oldObj = pref.getString("lastUpdateWidget", "null");
+        }
+        LocalDateTime ret = null;
+        try {
+            ret = gson.fromJson(oldObj, org.threeten.bp.LocalDateTime.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public static void setLastExamsWidgetUpdateTime(Context context, LocalDateTime time) {
+        setupSharedPreferences(context);
+        if (time == null) return;
+        Gson gson = new Gson();
+        String json = gson.toJson(time, LocalDateTime.class);
+        synchronized (InfoManager.class) {
+            pref.edit().putString("lastUpdateWidget", json).apply();
+        }
     }
 
     public static boolean hasLogin(Context context) {
