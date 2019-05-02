@@ -90,7 +90,8 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         }
 
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        if (exam!=null && !exam.getDescription().trim().isEmpty()) Objects.requireNonNull(getSupportActionBar()).setTitle(exam.getDescription());
+        if (exam != null && !exam.getDescription().trim().isEmpty())
+            Objects.requireNonNull(getSupportActionBar()).setTitle(exam.getDescription());
         else Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.search_sessions);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
 

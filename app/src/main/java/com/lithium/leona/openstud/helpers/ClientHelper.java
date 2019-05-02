@@ -42,6 +42,7 @@ import com.lithium.leona.openstud.data.CustomCourse;
 import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.data.PreferenceManager;
+import com.lithium.leona.openstud.widgets.ExamsWidget;
 import com.lithium.leona.openstud.widgets.GradesWidget;
 
 import org.threeten.bp.LocalDate;
@@ -102,6 +103,22 @@ public class ClientHelper {
         return events;
     }
 
+    public static List<Event> orderEventByDate(List<Event> events, boolean ascending) {
+        Collections.sort(events, (o1, o2) -> {
+            if (o1.getEventDate() == null && o2.getEventDate() == null) return 0;
+            if (ascending)
+                if (o1.getEventDate() == null) return 1;
+                else if (o2.getEventDate() == null) return -1;
+                else return o1.getEventDate().compareTo(o2.getEventDate());
+            else {
+                if (o1.getEventDate() == null) return -1;
+                else if (o2.getEventDate() == null) return 1;
+                else return o2.getEventDate().compareTo(o1.getEventDate());
+            }
+        });
+        return events;
+    }
+
     public static ArrayList<Entry> generateMarksPoints(List<ExamDone> exams, int laude) {
         LinkedList<ExamDone> temp = new LinkedList<>(exams);
         Collections.reverse(temp);
@@ -140,6 +157,15 @@ public class ClientHelper {
         intent.setAction("MANUAL_UPDATE");
         intent.putExtra("cached", cached);
         int[] ids = AppWidgetManager.getInstance(activity.getApplication()).getAppWidgetIds(new ComponentName(activity.getApplication(), GradesWidget.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        activity.sendBroadcast(intent);
+    }
+
+    public static void updateExamWidget(Activity activity, boolean cached) {
+        Intent intent = new Intent(activity, ExamsWidget.class);
+        intent.setAction("MANUAL_UPDATE");
+        intent.putExtra("cached", cached);
+        int[] ids = AppWidgetManager.getInstance(activity.getApplication()).getAppWidgetIds(new ComponentName(activity.getApplication(), ExamsWidget.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         activity.sendBroadcast(intent);
     }

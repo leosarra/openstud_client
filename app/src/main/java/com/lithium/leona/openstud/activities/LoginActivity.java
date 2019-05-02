@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         analyzeExtras(getIntent().getExtras());
         ClientHelper.updateGradesWidget(this, false);
+        ClientHelper.updateExamWidget(this, false);
         if (InfoManager.hasLogin(this)) {
             username.setText(InfoManager.getStudentId(this));
             rememberFlag.setChecked(true);
@@ -279,8 +280,10 @@ public class LoginActivity extends AppCompatActivity {
                 View.OnClickListener listener = v -> new Thread(activity::login).start();
                 View.OnClickListener listener2 = v -> new Thread(activity::recovery).start();
                 if (msg.what == ClientHelper.Status.OK.getValue()) {
-                    if (activity.rememberFlag.isChecked() && !PreferenceManager.isBiometricsEnabled(activity))
-                        ClientHelper.updateGradesWidget(activity, true);
+                    if (activity.rememberFlag.isChecked()) {
+                        ClientHelper.updateGradesWidget(activity, false);
+                        ClientHelper.updateExamWidget(activity, false);
+                    }
                     Intent intent = new Intent(activity, ExamsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);

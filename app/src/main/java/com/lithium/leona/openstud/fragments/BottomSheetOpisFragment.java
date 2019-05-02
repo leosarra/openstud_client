@@ -41,6 +41,7 @@ public class BottomSheetOpisFragment extends BottomSheetDialogFragment {
     @BindView(R.id.main_layout)
     LinearLayout mainLayout;
     private Openstud os;
+
     public BottomSheetOpisFragment() {
         // Required empty public constructor
     }
@@ -65,18 +66,17 @@ public class BottomSheetOpisFragment extends BottomSheetDialogFragment {
                     String link = os.getCourseSurvey(surveyCode.getText().toString().trim());
                     if (link == null) {
                         invalidTokenReceived = true;
-                        activity.runOnUiThread(() -> Toasty.error(activity,R.string.invalid_opis_code).show());
-                    }
-                    else ClientHelper.createCustomTab(activity,link);
+                        activity.runOnUiThread(() -> Toasty.error(activity, R.string.invalid_opis_code).show());
+                    } else ClientHelper.createCustomTab(activity, link);
                 } catch (OpenstudConnectionException e) {
                     e.printStackTrace();
-                    activity.runOnUiThread(() -> Toasty.error(activity,R.string.connection_error).show());
+                    activity.runOnUiThread(() -> Toasty.error(activity, R.string.connection_error).show());
                 } catch (OpenstudInvalidResponseException e) {
                     e.printStackTrace();
-                    activity.runOnUiThread(() -> Toasty.error(activity,R.string.connection_error).show());
+                    activity.runOnUiThread(() -> Toasty.error(activity, R.string.connection_error).show());
                 } catch (OpenstudInvalidCredentialsException e) {
                     e.printStackTrace();
-                    ClientHelper.rebirthApp(activity,ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                    ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 } finally {
                     boolean finalInvalidTokenReceived = invalidTokenReceived;
                     activity.runOnUiThread(() -> {
@@ -88,7 +88,6 @@ public class BottomSheetOpisFragment extends BottomSheetDialogFragment {
             }
         }).start();
     }
-
 
 
     @Override

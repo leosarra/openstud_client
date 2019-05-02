@@ -98,7 +98,7 @@ public class GradesWidget extends AppWidgetProvider {
 
     }
 
-    public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, boolean cached) {
+    public void onUpdateCustom(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -125,7 +125,7 @@ public class GradesWidget extends AppWidgetProvider {
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), GradesWidget.class.getName());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
             if (Objects.equals(intent.getAction(), "MANUAL_UPDATE"))
-                onUpdateCustom(context, appWidgetManager, appWidgetIds, extras.getBoolean("cached", true));
+                onUpdateCustom(context, appWidgetManager, appWidgetIds);
         }
     }
 }

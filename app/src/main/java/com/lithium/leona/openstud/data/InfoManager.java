@@ -9,6 +9,8 @@ import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.BuildConfig;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -204,7 +206,7 @@ public class InfoManager {
             prefsEditor.putString("events", json);
             prefsEditor.apply();
         }
-        return newEvents;
+        return new LinkedList<>(newEvents);
     }
 
 
@@ -338,7 +340,7 @@ public class InfoManager {
             prefsEditor.putString("examsDone", json);
             prefsEditor.apply();
         }
-        return newExamsDone;
+        return new LinkedList<>(newExamsDone);
     }
 
     public static List<ExamDoable> getExamsDoableCached(Context context, Openstud os) {
@@ -376,7 +378,7 @@ public class InfoManager {
             prefsEditor.putString("examsDoable", json);
             prefsEditor.apply();
         }
-        return newExamsDoable;
+        return new LinkedList<>(newExamsDoable);
     }
 
 
@@ -414,7 +416,7 @@ public class InfoManager {
             prefsEditor.putString("reservations", json);
             prefsEditor.apply();
         }
-        return newExamsDone;
+        return new LinkedList<>(newExamsDone);
     }
 
     public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
@@ -431,7 +433,7 @@ public class InfoManager {
             prefsEditor.putString("paidTaxes", json);
             prefsEditor.apply();
         }
-        return newPaidTaxes;
+        return new LinkedList<>(newPaidTaxes);
     }
 
     public static List<Tax> getUnpaidTaxesCached(Context context, Openstud os) {
@@ -468,7 +470,7 @@ public class InfoManager {
             prefsEditor.putString("unpaidTaxes", json);
             prefsEditor.apply();
         }
-        return newUnpaidTaxes;
+        return new LinkedList<>(newUnpaidTaxes);
     }
 
     public static List<News> getNews(Context context, Openstud os, String locale) throws OpenstudConnectionException, OpenstudInvalidResponseException {
@@ -485,7 +487,7 @@ public class InfoManager {
             prefsEditor.putString("news", json);
             prefsEditor.apply();
         }
-        return newNews;
+        return new LinkedList<>(newNews);
     }
 
     public static List<News> getNewsCached(Context context, Openstud os, String locale) {
@@ -527,7 +529,7 @@ public class InfoManager {
             prefsEditor.putString("eventsUniversity", json);
             prefsEditor.apply();
         }
-        return newEvents;
+        return new LinkedList<>(newEvents);
     }
 
     public static List<Event> getEventsUniversityCached(Context context, Openstud os) {
@@ -550,6 +552,32 @@ public class InfoManager {
             e.printStackTrace();
         }
         return ret;
+    }
+
+    public static LocalDateTime getLastExamsWidgetUpdateTime(Context context) {
+        setupSharedPreferences(context);
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            oldObj = pref.getString("lastUpdateWidget", "null");
+        }
+        LocalDateTime ret = null;
+        try {
+            ret = gson.fromJson(oldObj, org.threeten.bp.LocalDateTime.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public static void setLastExamsWidgetUpdateTime(Context context, LocalDateTime time) {
+        setupSharedPreferences(context);
+        if (time == null) return;
+        Gson gson = new Gson();
+        String json = gson.toJson(time, LocalDateTime.class);
+        synchronized (InfoManager.class) {
+            pref.edit().putString("lastUpdateWidget", json).apply();
+        }
     }
 
     public static boolean hasLogin(Context context) {
