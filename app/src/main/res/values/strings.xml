@@ -255,4 +255,14 @@
     <string name="widget_no_exams">There are no exams in the near future.\nHave fun!</string>
     <string name="exam_widget">Upcoming exams</string>
     <string name="stats_widget">Stats</string>
+    <string name="certificates">Certificati</string>
+    <string name="registration">Registration</string>
+    <string name="exams_taken">Exams taken</string>
+    <string name="degree_with_thesis">Degree with thesis</string>
+    <string name="degree_with_exams">Degree with exams</string>
+    <string name="degree_ransom">Degree for ransom academic years</string>
+    <string name="degree_with_evaluation">Degree with evaluation</string>
+    <string name="degree_with_evaluation_eng">Degree with evaluation (English)</string>
+    <string name="degree_with_thesis_eng">Degree with thesis (English)</string>
+    <string name="degree_with_exams_eng">Degree with exams (English)</string>
 </resources>
