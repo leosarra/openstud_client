@@ -20,9 +20,16 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.lithium.leona.openstud.BuildConfig;
@@ -65,10 +72,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
+import es.dmoral.toasty.Toasty;
 import lithium.openstud.driver.core.OpenstudHelper;
 import lithium.openstud.driver.core.models.Event;
 import lithium.openstud.driver.core.models.EventType;
@@ -423,6 +427,21 @@ public class ClientHelper {
 
     public static void requestReadWritePermissions(Activity activity, PermissionListener listener) {
         Dexter.withActivity(activity).withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE).withListener(listener).check();
+    }
+
+    public static void openActionViewPDF(Activity activity, File pdfFile) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (intent.resolveActivity(activity.getPackageManager()) != null) activity.startActivity(intent);
+        else {
+            if (activity instanceof ExamsActivity) {
+                ExamsActivity examsActivity = (ExamsActivity) activity;
+                examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
+            }
+            else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
+        }
     }
 
     private static String simpleStringXOR(String input, String key) {
