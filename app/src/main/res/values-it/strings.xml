@@ -232,13 +232,16 @@
     <string name="exam_widget">Prossimi esami</string>
     <string name="stats_widget">Statistiche</string>
     <string name="certificates">Certificati</string>
-    <string name="registration">Registration</string>
-    <string name="exams_taken">Exams taken</string>
-    <string name="degree_with_thesis">Degree with thesis</string>
-    <string name="degree_with_exams">Degree with exams</string>
-    <string name="degree_ransom">Degree for ransom academic years</string>
-    <string name="degree_with_evaluation">Degree with evaluation</string>
-    <string name="degree_with_evaluation_eng">Degree with evaluation (English)</string>
-    <string name="degree_with_thesis_eng">Degree with thesis (English)</string>
-    <string name="degree_with_exams_eng">Graduate with exams (English)</string>
+    <string name="registration">Iscrizione</string>
+    <string name="exams_taken">Esami superati</string>
+    <string name="degree_with_thesis">Laurea con tesi</string>
+    <string name="degree_with_exams">Laurea con esami</string>
+    <string name="degree_ransom">Laurea per riscatto anni accademici</string>
+    <string name="degree_with_evaluation">Laurea con voto</string>
+    <string name="degree_with_evaluation_eng">Laurea con voto (Inglese)</string>
+    <string name="degree_with_thesis_eng">Laurea con tesi (Inglese)</string>
+    <string name="degree_with_exams_eng">Laurea con esami (Inglese)</string>
+    <string name="no_certificate">Certificato non trovato</string>
+    <string name="select_careers">Seleziona carriera</string>
+    <string name="storage_error">Impossibile salvare il certificato</string>
 </resources>

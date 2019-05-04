@@ -60,7 +60,7 @@
     <string name="no_unpaid_tax_found">No unpaid tax was found</string>
     <string name="ok_delete">Reservation successfully deleted</string>
     <string name="failed_delete">Can\'t delete reservation! Try again later.</string>
-    <string name="failed_get_io">Receipt can\'t be saved.</string>
+    <string name="failed_get_io">PDF file can\'t be saved.</string>
     <string name="failed_get_network">Connection error. File cannot be downloaded!</string>
     <string name="delete_res_dialog_title">Delete reservation?</string>
     <string name="delete_res_dialog_description">Reservation for %1$s will be deleted. Are you sure?</string>
@@ -265,4 +265,7 @@
     <string name="degree_with_evaluation_eng">Degree with evaluation (English)</string>
     <string name="degree_with_thesis_eng">Degree with thesis (English)</string>
     <string name="degree_with_exams_eng">Degree with exams (English)</string>
+    <string name="no_certificate">No certificate of this type was found</string>
+    <string name="select_careers">Select career</string>
+    <string name="storage_error">Storage error</string>
 </resources>
