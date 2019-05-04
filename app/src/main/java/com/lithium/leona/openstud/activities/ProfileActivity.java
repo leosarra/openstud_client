@@ -192,11 +192,10 @@ public class ProfileActivity extends BaseDataActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.barcode:
-                BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(personalId);
-                identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
-                return true;
+        if (item.getItemId() == R.id.barcode) {
+            BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(personalId);
+            identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

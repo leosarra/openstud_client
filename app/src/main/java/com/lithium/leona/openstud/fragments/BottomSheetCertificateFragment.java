@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -21,6 +23,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -120,19 +123,8 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
                 new Thread(() -> {
-                    try {
-                        setButtonsState(false);
-                        selectCareer(activity, certificate);
-                    } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
-                        activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network).show());
-                        e.printStackTrace();
-                    } catch (OpenstudInvalidCredentialsException e) {
-                        InfoManager.clearSharedPreferences(activity);
-                        ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
-                        e.printStackTrace();
-                    } finally {
-                        setButtonsState(true);
-                    }
+                    setButtonsState(false);
+                    selectCareer(activity, certificate);
                 }).start();
             }
 
@@ -150,17 +142,50 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
 
 
 
-    private void selectCareer(Activity activity, CertificateType cert) throws OpenstudInvalidCredentialsException, OpenstudConnectionException, OpenstudInvalidResponseException {
-        List<Career> careers = os.getCareersChoichesForCertificate(student,cert);
+    private void selectCareer(Activity activity, CertificateType cert) {
+        List<Career> careers = null;
+        try {
+            careers = os.getCareersChoicesForCertificate(student,cert);
+        } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
+            activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network).show());
+            e.printStackTrace();
+        } catch (OpenstudInvalidCredentialsException e) {
+            InfoManager.clearSharedPreferences(activity);
+            if (e.isPasswordExpired()) ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            else ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            e.printStackTrace();
+        }
+        if (careers == null) {
+            setButtonsState(true);
+            return;
+        }
+
         if (careers.isEmpty()) {
-            activity.runOnUiThread(() -> Toasty.error(activity, R.string.connection_error).show());
+            activity.runOnUiThread(() -> Toasty.warning(activity, R.string.no_certificate).show());
+            setButtonsState(true);
         }
-        else {
-            getFile(activity,cert, careers.get(0));
-        }
+        else if (careers.size() == 1) getFile(activity,cert,careers.get(0));
+        else createChoiceCareerDialog(activity,careers,cert);
     }
 
-    private void getFile(Activity activity, CertificateType cert, Career career) throws OpenstudInvalidCredentialsException, OpenstudConnectionException, OpenstudInvalidResponseException {
+    private void createChoiceCareerDialog(Activity activity, List<Career> careers, CertificateType cert){
+        CharSequence[] items = new CharSequence[careers.size()];
+        for (Career career : careers) {
+            items[career.getIndex()] = career.getDescription();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, ThemeEngine.getAlertDialogTheme(activity)));
+        builder.setTitle(activity.getString(R.string.select_careers));
+        builder.setSingleChoiceItems(items, -1, (dialog, item) -> {
+            dialog.dismiss();
+            new Thread(() -> getFile(activity,cert, careers.get(item))).start();
+        });
+        activity.runOnUiThread(() -> {
+            AlertDialog alert = builder.create();
+            alert.show();
+        });
+    }
+
+    private void getFile(Activity activity, CertificateType cert, Career career){
         boolean check = false;
         String directory = Environment.getExternalStorageDirectory() + "/OpenStud/pdf/certs/";
         File dirs = new File(directory);
@@ -175,8 +200,18 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
             fos.close();
             check = true;
         } catch (IOException e) {
-            activity.runOnUiThread(() -> Toasty.error(activity, R.string.connection_error).show());
+            activity.runOnUiThread(() -> Toasty.error(activity, R.string.storage_error).show());
             e.printStackTrace();
+        } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
+            activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network).show());
+            e.printStackTrace();
+        } catch (OpenstudInvalidCredentialsException e) {
+            InfoManager.clearSharedPreferences(activity);
+            if (e.isPasswordExpired()) ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            else ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            e.printStackTrace();
+        } finally {
+            setButtonsState(true);
         }
         if (!check) {
             pdfFile.delete();
