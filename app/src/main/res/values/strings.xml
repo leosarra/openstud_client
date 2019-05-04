@@ -255,7 +255,7 @@
     <string name="widget_no_exams">There are no exams in the near future.\nHave fun!</string>
     <string name="exam_widget">Upcoming exams</string>
     <string name="stats_widget">Stats</string>
-    <string name="certificates">Certificati</string>
+    <string name="certificates">Certificates</string>
     <string name="registration">Registration</string>
     <string name="exams_taken">Exams taken</string>
     <string name="degree_with_thesis">Degree with thesis</string>
