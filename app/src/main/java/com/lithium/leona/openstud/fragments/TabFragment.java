@@ -5,22 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.tabs.TabLayout;
-import com.lithium.leona.openstud.R;
-import com.lithium.leona.openstud.activities.PaymentsActivity;
-import com.lithium.leona.openstud.adapters.TaxAdapter;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
+import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.activities.PaymentsActivity;
+import com.lithium.leona.openstud.adapters.TaxAdapter;
+
 public class TabFragment extends Fragment {
 
-    public TabLayout tabLayout;
-    public ViewPager viewPager;
-    public int int_items = 2;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private int int_items = 2;
     private int selectedTab = -1;
 
 
