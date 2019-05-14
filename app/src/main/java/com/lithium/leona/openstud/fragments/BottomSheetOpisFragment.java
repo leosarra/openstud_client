@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.lithium.leona.openstud.R;
@@ -20,8 +23,6 @@ import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,6 +63,7 @@ public class BottomSheetOpisFragment extends BottomSheetDialogFragment {
             ExamsActivity activity = (ExamsActivity) getActivity();
             boolean invalidTokenReceived = false;
             if (activity != null) {
+                final Runnable notification = () -> Toasty.error(activity, R.string.connection_error).show();
                 try {
                     String link = os.getCourseSurvey(surveyCode.getText().toString().trim());
                     if (link == null) {
@@ -70,13 +72,14 @@ public class BottomSheetOpisFragment extends BottomSheetDialogFragment {
                     } else ClientHelper.createCustomTab(activity, link);
                 } catch (OpenstudConnectionException e) {
                     e.printStackTrace();
-                    activity.runOnUiThread(() -> Toasty.error(activity, R.string.connection_error).show());
+                    activity.runOnUiThread(notification);
                 } catch (OpenstudInvalidResponseException e) {
                     e.printStackTrace();
-                    activity.runOnUiThread(() -> Toasty.error(activity, R.string.connection_error).show());
+                    activity.runOnUiThread(notification);
                 } catch (OpenstudInvalidCredentialsException e) {
                     e.printStackTrace();
-                    ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                    if (e.isPasswordExpired()) ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                    else ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 } finally {
                     boolean finalInvalidTokenReceived = invalidTokenReceived;
                     activity.runOnUiThread(() -> {

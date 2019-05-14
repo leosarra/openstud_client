@@ -8,12 +8,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.fragments.BottomSheetCertificateFragment;
 import com.lithium.leona.openstud.fragments.BottomSheetPersonalIdentifier;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
@@ -28,11 +36,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.Openstud;
@@ -70,6 +73,8 @@ public class ProfileActivity extends BaseDataActivity {
     TextView studentStatus;
     @BindView(R.id.cfu)
     TextView cfu;
+    @BindView(R.id.certificateLayout)
+    RelativeLayout certificatesButton;
     private Drawer drawer;
     private Isee isee;
     private ProfileEventHandler h = new ProfileEventHandler(this);
@@ -91,6 +96,10 @@ public class ProfileActivity extends BaseDataActivity {
         swipeRefreshLayout.setNestedScrollingEnabled(true);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         personalId = student.getCF();
+        certificatesButton.setOnClickListener(v -> {
+            BottomSheetCertificateFragment filterFrag = BottomSheetCertificateFragment.newInstance();
+            filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());
+        });
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Thread t1 = new Thread(() -> refresh(os));
             t1.start();
@@ -183,11 +192,10 @@ public class ProfileActivity extends BaseDataActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.barcode:
-                BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(personalId);
-                identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
-                return true;
+        if (item.getItemId() == R.id.barcode) {
+            BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(personalId);
+            identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

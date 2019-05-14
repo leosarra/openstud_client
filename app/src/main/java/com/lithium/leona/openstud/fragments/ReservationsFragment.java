@@ -1,8 +1,6 @@
 package com.lithium.leona.openstud.fragments;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -15,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -151,13 +148,13 @@ public class ReservationsFragment extends BaseDataFragment {
 
     private void getFile(Activity activity, ExamReservation res) {
         boolean check = false;
-        String directory = Environment.getExternalStorageDirectory() + "/OpenStud/pdf/";
+        String directory = Environment.getExternalStorageDirectory() + "/OpenStud/pdf/reservation";
         File dirs = new File(directory);
         dirs.mkdirs();
         File pdfFile = new File(directory + res.getSessionID() + "_" + res.getExamSubject() + "_" + res.getReservationNumber() + ".pdf");
         try {
             if (pdfFile.exists()) {
-                openActionViewPDF(activity, pdfFile);
+                ClientHelper.openActionViewPDF(activity, pdfFile);
                 return;
             }
             pdfFile.createNewFile();
@@ -180,20 +177,9 @@ public class ReservationsFragment extends BaseDataFragment {
             pdfFile.delete();
             return;
         }
-        openActionViewPDF(activity, pdfFile);
+        ClientHelper.openActionViewPDF(activity, pdfFile);
     }
 
-    private void openActionViewPDF(Activity activity, File pdfFile) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
-        intent.setDataAndType(uri, "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (intent.resolveActivity(activity.getPackageManager()) != null) startActivity(intent);
-        else {
-            ExamsActivity examsActivity = (ExamsActivity) activity;
-            examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
-        }
-    }
 
     public void onResume() {
         super.onResume();
