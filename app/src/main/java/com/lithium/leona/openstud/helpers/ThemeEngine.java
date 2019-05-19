@@ -6,9 +6,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.TypedValue;
 
-import com.lithium.leona.openstud.R;
-
 import androidx.core.content.ContextCompat;
+
+import com.lithium.leona.openstud.R;
 
 public class ThemeEngine {
     private static SharedPreferences pref;

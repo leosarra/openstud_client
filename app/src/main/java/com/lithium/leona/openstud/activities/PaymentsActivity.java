@@ -5,6 +5,9 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.fragments.TabFragment;
@@ -14,8 +17,6 @@ import com.mikepenz.materialdrawer.Drawer;
 
 import java.util.Objects;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

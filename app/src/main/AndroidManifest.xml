@@ -23,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeLight">
-        <receiver android:name=".widgets.ExamsWidget"
+        <receiver
+            android:name=".widgets.ExamsWidget"
             android:label="@string/exam_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -100,7 +101,8 @@
             android:name=".activities.ClassroomTimetableActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
 
-        <receiver android:name=".widgets.GradesWidget"
+        <receiver
+            android:name=".widgets.GradesWidget"
             android:label="@string/stats_widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -110,6 +112,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/grades_widget_info" />
         </receiver>
+
         <activity
             android:name=".activities.NewsActivity"
             android:theme="@style/NoActionBarAppLightTheme" />

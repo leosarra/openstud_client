@@ -78,8 +78,10 @@ public class BottomSheetOpisFragment extends BottomSheetDialogFragment {
                     activity.runOnUiThread(notification);
                 } catch (OpenstudInvalidCredentialsException e) {
                     e.printStackTrace();
-                    if (e.isPasswordExpired()) ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                    else ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                    if (e.isPasswordExpired())
+                        ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+                    else
+                        ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
                 } finally {
                     boolean finalInvalidTokenReceived = invalidTokenReceived;
                     activity.runOnUiThread(() -> {

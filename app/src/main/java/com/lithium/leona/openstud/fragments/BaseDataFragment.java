@@ -2,10 +2,11 @@ package com.lithium.leona.openstud.fragments;
 
 import android.app.Activity;
 
+import androidx.fragment.app.Fragment;
+
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
-import androidx.fragment.app.Fragment;
 import lithium.openstud.driver.core.Openstud;
 
 public abstract class BaseDataFragment extends Fragment {

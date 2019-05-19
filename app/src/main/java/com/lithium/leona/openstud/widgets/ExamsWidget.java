@@ -89,11 +89,11 @@ public class ExamsWidget extends AppWidgetProvider {
         alarmManager.set(AlarmManager.RTC_WAKEUP, ldtUtc.toInstant().toEpochMilli(), pendingIntent);
     }
 
-    private void getUpdates(Context context, boolean cached,  AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    private void getUpdates(Context context, boolean cached, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         LocalDateTime lastUpdateTime = InfoManager.getLastExamsWidgetUpdateTime(context);
         ZonedDateTime ldtZoned = LocalDateTime.now().atZone(ZoneId.systemDefault());
         LocalDateTime ldtUtc = ldtZoned.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
-        if (!cached && (lastUpdateTime == null || ChronoUnit.HOURS.between(lastUpdateTime,ldtUtc) >= 24)) {
+        if (!cached && (lastUpdateTime == null || ChronoUnit.HOURS.between(lastUpdateTime, ldtUtc) >= 24)) {
             Handler mHandler = new Handler(Looper.getMainLooper());
             new Thread(() -> {
                 Openstud os = InfoManager.getOpenStud(context);
@@ -102,7 +102,7 @@ public class ExamsWidget extends AppWidgetProvider {
                     if (student != null) {
                         try {
                             InfoManager.getEvents(context, os, student);
-                            InfoManager.setLastExamsWidgetUpdateTime(context,ldtUtc);
+                            InfoManager.setLastExamsWidgetUpdateTime(context, ldtUtc);
                         } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
                             e.printStackTrace();
                         } catch (OpenstudInvalidCredentialsException e) {
@@ -166,7 +166,7 @@ public class ExamsWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             ComponentName thisAppWidget = new ComponentName(context.getPackageName(), ExamsWidget.class.getName());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
-            if (appWidgetIds.length>0)  scheduleNextUpdate(context);
+            if (appWidgetIds.length > 0) scheduleNextUpdate(context);
             if (Objects.equals(intent.getAction(), "MANUAL_UPDATE"))
                 onUpdateCustom(context, appWidgetManager, appWidgetIds, extras.getBoolean("cached", true));
             if (Objects.equals(intent.getAction(), "ACTION_SCHEDULED_UPDATE"))

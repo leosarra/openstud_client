@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.lithium.leona.openstud.R;
 
 import org.threeten.bp.format.DateTimeFormatter;
@@ -15,8 +18,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import lithium.openstud.driver.core.models.PaymentDescription;

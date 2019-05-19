@@ -43,31 +43,29 @@ public class WidgetHelper {
     public static List<Event> mergeExamEvents(List<Event> events) {
         LinkedList<Event> output = new LinkedList<>();
         for (Event event : events) {
-            if (event == null || event.getTitle() == null || event.getReservation() == null ) continue;
+            if (event == null || event.getTitle() == null || event.getReservation() == null)
+                continue;
             LinkedList<Event> doableCollisions = new LinkedList<>();
             boolean addedToOutput = false;
             for (Event event2 : events) {
-                if (event2 == null || event2.getTitle()==null || event2.getReservation()==null ) continue;
+                if (event2 == null || event2.getTitle() == null || event2.getReservation() == null)
+                    continue;
                 if (event != event2 && event.getTitle().equals(event2.getTitle()) && event.getReservation().getCourseCode() == event2.getReservation().getCourseCode()
                         && event.getEventDate().equals(event2.getEventDate())) {
-                    if (event.getEventType() == EventType.DOABLE && event2.getEventType() == EventType.RESERVED){
+                    if (event.getEventType() == EventType.DOABLE && event2.getEventType() == EventType.RESERVED) {
                         if (!output.contains(event2)) output.add(event2);
                         addedToOutput = true;
-                    }
-
-                    else if (event2.getEventType() == EventType.DOABLE && event.getEventType() == EventType.RESERVED) {
+                    } else if (event2.getEventType() == EventType.DOABLE && event.getEventType() == EventType.RESERVED) {
                         if (!output.contains(event)) output.add(event);
                         addedToOutput = true;
-                    }
-                    else if (!addedToOutput && !doableCollisions.contains(event2)) {
+                    } else if (!addedToOutput && !doableCollisions.contains(event2)) {
                         doableCollisions.add(event2);
                     }
                 }
             }
             if (doableCollisions.isEmpty()) {
                 if (!addedToOutput) output.add(event);
-            }
-            else {
+            } else {
                 boolean alreadyInOutput = false;
                 for (Event eventOutput : output) {
                     if (eventOutput.getTitle().equals(event.getTitle())

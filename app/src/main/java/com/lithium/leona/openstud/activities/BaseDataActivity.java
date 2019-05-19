@@ -1,9 +1,10 @@
 package com.lithium.leona.openstud.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
-import androidx.appcompat.app.AppCompatActivity;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.Student;
 

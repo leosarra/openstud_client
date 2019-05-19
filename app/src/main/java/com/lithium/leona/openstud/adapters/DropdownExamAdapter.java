@@ -8,13 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.lithium.leona.openstud.R;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import lithium.openstud.driver.core.models.Exam;
 
 public class DropdownExamAdapter extends ArrayAdapter<Exam> {

@@ -237,14 +237,16 @@
                     android:id="@+id/arrowCertificate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_alignRight="@id/certificateDescription"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_chevron_right_black_24dp"
                     android:tint="?attr/primaryTextColor"
                     android:visibility="visible" />
             </RelativeLayout>
+
             <include layout="@layout/item_divider" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -434,13 +434,13 @@ public class ClientHelper {
         Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
         intent.setDataAndType(uri, "application/pdf");
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (intent.resolveActivity(activity.getPackageManager()) != null) activity.startActivity(intent);
+        if (intent.resolveActivity(activity.getPackageManager()) != null)
+            activity.startActivity(intent);
         else {
             if (activity instanceof ExamsActivity) {
                 ExamsActivity examsActivity = (ExamsActivity) activity;
                 examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
-            }
-            else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
+            } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
         }
     }
 

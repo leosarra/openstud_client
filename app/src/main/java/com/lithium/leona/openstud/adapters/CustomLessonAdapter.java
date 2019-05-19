@@ -14,6 +14,11 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
@@ -24,10 +29,6 @@ import org.threeten.bp.LocalTime;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

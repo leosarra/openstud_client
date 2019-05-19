@@ -2,9 +2,9 @@ package com.lithium.leona.openstud.listeners;
 
 import android.view.View;
 
-import com.mikepenz.materialdrawer.Drawer;
-
 import androidx.annotation.NonNull;
+
+import com.mikepenz.materialdrawer.Drawer;
 
 public class DelayedDrawerListener implements Drawer.OnDrawerListener {
     private volatile long item_pressed = -1;

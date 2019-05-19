@@ -65,6 +65,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
     LinearLayout mainLayout;
     private Openstud os;
     private Student student;
+
     public BottomSheetCertificateFragment() {
         // Required empty public constructor
     }
@@ -72,7 +73,6 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
     public static BottomSheetCertificateFragment newInstance() {
         return new BottomSheetCertificateFragment();
     }
-
 
 
     @Override
@@ -103,7 +103,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
 
     private void setButtonsState(boolean enabled) {
         Activity activity = getActivity();
-        if (activity ==null) return;
+        if (activity == null) return;
         activity.runOnUiThread(() -> {
             registration.setEnabled(enabled);
             examsTaken.setEnabled(enabled);
@@ -116,6 +116,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
             degreeRansom.setEnabled(enabled);
         });
     }
+
     private void getCertificate(CertificateType certificate) {
         Activity activity = getActivity();
         if (activity == null) return;
@@ -141,18 +142,19 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
     }
 
 
-
     private void selectCareer(Activity activity, CertificateType cert) {
         List<Career> careers = null;
         try {
-            careers = os.getCareersChoicesForCertificate(student,cert);
+            careers = os.getCareersChoicesForCertificate(student, cert);
         } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
             activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network).show());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
             InfoManager.clearSharedPreferences(activity);
-            if (e.isPasswordExpired()) ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-            else ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            if (e.isPasswordExpired())
+                ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            else
+                ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
             e.printStackTrace();
         }
         if (careers == null) {
@@ -163,12 +165,11 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
         if (careers.isEmpty()) {
             activity.runOnUiThread(() -> Toasty.warning(activity, R.string.no_certificate).show());
             setButtonsState(true);
-        }
-        else if (careers.size() == 1) getFile(activity,cert,careers.get(0));
-        else createChoiceCareerDialog(activity,careers,cert);
+        } else if (careers.size() == 1) getFile(activity, cert, careers.get(0));
+        else createChoiceCareerDialog(activity, careers, cert);
     }
 
-    private void createChoiceCareerDialog(Activity activity, List<Career> careers, CertificateType cert){
+    private void createChoiceCareerDialog(Activity activity, List<Career> careers, CertificateType cert) {
         CharSequence[] items = new CharSequence[careers.size()];
         for (Career career : careers) {
             items[career.getIndex()] = career.getDescription();
@@ -177,7 +178,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
         builder.setTitle(activity.getString(R.string.select_careers));
         builder.setSingleChoiceItems(items, -1, (dialog, item) -> {
             dialog.dismiss();
-            new Thread(() -> getFile(activity,cert, careers.get(item))).start();
+            new Thread(() -> getFile(activity, cert, careers.get(item))).start();
         });
         activity.runOnUiThread(() -> {
             AlertDialog alert = builder.create();
@@ -185,7 +186,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
         });
     }
 
-    private void getFile(Activity activity, CertificateType cert, Career career){
+    private void getFile(Activity activity, CertificateType cert, Career career) {
         boolean check = false;
         String directory = Environment.getExternalStorageDirectory() + "/OpenStud/pdf/certs/";
         File dirs = new File(directory);
@@ -207,8 +208,10 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
             InfoManager.clearSharedPreferences(activity);
-            if (e.isPasswordExpired()) ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-            else ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            if (e.isPasswordExpired())
+                ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
+            else
+                ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
             e.printStackTrace();
         } finally {
             setButtonsState(true);
