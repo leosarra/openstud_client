@@ -247,7 +247,7 @@ public class ReservationsFragment extends BaseDataFragment {
             if (finalFlag) {
                 adapter.notifyDataSetChanged();
                 ClientHelper.updateGradesWidget(activity, false);
-                ClientHelper.updateExamWidget(activity, true);
+                ClientHelper.updateExamWidget(activity, false);
             }
             swapViews(reservations);
             swipeRefreshLayout.setRefreshing(false);
