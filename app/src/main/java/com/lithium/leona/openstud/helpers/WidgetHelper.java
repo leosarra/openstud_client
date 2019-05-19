@@ -43,11 +43,11 @@ public class WidgetHelper {
     public static List<Event> mergeExamEvents(List<Event> events) {
         LinkedList<Event> output = new LinkedList<>();
         for (Event event : events) {
+            if (event == null || event.getTitle() == null || event.getReservation() == null ) continue;
             LinkedList<Event> doableCollisions = new LinkedList<>();
             boolean addedToOutput = false;
-            if (event == null || event.getTitle() == null || event.getReservation() == null || event.getReservation() == null) continue;
             for (Event event2 : events) {
-                if (event2 == null || event2.getTitle()==null || event2.getReservation()==null || event2.getReservation() == null) continue;
+                if (event2 == null || event2.getTitle()==null || event2.getReservation()==null ) continue;
                 if (event != event2 && event.getTitle().equals(event2.getTitle()) && event.getReservation().getCourseCode() == event2.getReservation().getCourseCode()
                         && event.getEventDate().equals(event2.getEventDate())) {
                     if (event.getEventType() == EventType.DOABLE && event2.getEventType() == EventType.RESERVED){
