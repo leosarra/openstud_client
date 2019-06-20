@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -18,11 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
@@ -94,25 +88,7 @@ public class ReservationsFragment extends BaseDataFragment {
 
             @Override
             public void downloadReservationOnClick(final ExamReservation res) {
-                if (!ClientHelper.isExternalStorageAvailable() && ClientHelper.isExternalStorageReadOnly())
-                    return;
-                ClientHelper.requestReadWritePermissions(activity, new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        new Thread(() -> getFile(activity, res)).start();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
-                        ExamsActivity snackbarActivity = (ExamsActivity) activity;
-                        snackbarActivity.createTextSnackBar(R.string.no_write_permission_pdf, Snackbar.LENGTH_LONG);
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                });
+                new Thread(() -> getFile(activity, res)).start();
             }
 
             @Override
@@ -148,7 +124,7 @@ public class ReservationsFragment extends BaseDataFragment {
 
     private void getFile(Activity activity, ExamReservation res) {
         boolean check = false;
-        String directory = Environment.getExternalStorageDirectory() + "/OpenStud/pdf/reservation";
+        String directory = activity.getExternalFilesDir("/OpenStud/pdf/reservation").getPath();
         File dirs = new File(directory);
         dirs.mkdirs();
         File pdfFile = new File(directory + res.getSessionID() + "_" + res.getExamSubject() + "_" + res.getReservationNumber() + ".pdf");
