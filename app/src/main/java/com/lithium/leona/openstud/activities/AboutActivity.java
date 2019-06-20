@@ -3,7 +3,6 @@ package com.lithium.leona.openstud.activities;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,13 +19,12 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
 import com.lithium.leona.openstud.BuildConfig;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
-
-import java.util.Objects;
 
 public class AboutActivity extends MaterialAboutActivity {
 
@@ -57,7 +55,7 @@ public class AboutActivity extends MaterialAboutActivity {
     private void buildApp(Context context, MaterialAboutCard.Builder appCardBuilder) {
         int tintColor = ThemeEngine.getPrimaryTextColor(this);
         Drawable version = ContextCompat.getDrawable(context, R.drawable.ic_update_black);
-        Objects.requireNonNull(version).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        LayoutHelper.setColorSrcAtop(version,tintColor);
         appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text(getResources().getString(R.string.version))
                 .icon(version).subText(BuildConfig.VERSION_NAME).build());
@@ -72,8 +70,8 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_telegram)
                 .color(tintColor)
                 .sizeDp(22);
-        Objects.requireNonNull(email).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-        Objects.requireNonNull(person).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        LayoutHelper.setColorSrcAtop(email,tintColor);
+        LayoutHelper.setColorSrcAtop(person,tintColor);
         authorCardBuilder.title(R.string.author);
         authorCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text("Leonardo Sarra")
@@ -106,9 +104,9 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_heart)
                 .color(tintColor)
                 .sizeDp(20);
-        Objects.requireNonNull(heart).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-        Objects.requireNonNull(github).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-        Objects.requireNonNull(libraries).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        LayoutHelper.setColorSrcAtop(heart,tintColor);
+        LayoutHelper.setColorSrcAtop(github,tintColor);
+        LayoutHelper.setColorSrcAtop(libraries,tintColor);
         int id_theme = ThemeEngine.getAboutTheme(this);
         miscCardBuilder.title(R.string.about)
                 .addItem(new MaterialAboutActionItem.Builder()

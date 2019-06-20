@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.adapters;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -102,7 +101,7 @@ public class CustomLessonAdapter extends RecyclerView.Adapter<CustomLessonAdapte
         }
 
         void setDetails(CustomLesson lesson) {
-            dayWeek.getBackground().setColorFilter(LayoutHelper.getColorByAttr(context, R.attr.primaryTextColor, android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
+            LayoutHelper.setColorSrcAtop(dayWeek.getBackground(),LayoutHelper.getColorByAttr(context, R.attr.primaryTextColor, android.R.color.darker_gray));
             dayWeek.setSelection(lesson.getDayOfWeek().getValue() - 1);
             startLessonTime.setText(String.format("%02d:%02d", lesson.getStart().getHour(), lesson.getStart().getMinute()));
             endLessonTime.setText(String.format("%02d:%02d", lesson.getEnd().getHour(), lesson.getEnd().getMinute()));

@@ -1,7 +1,6 @@
 package com.lithium.leona.openstud.activities;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -15,11 +14,10 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutCard;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
-
-import java.util.Objects;
 
 public class ContributorsActivity extends MaterialAboutActivity {
     @NonNull
@@ -57,9 +55,9 @@ public class ContributorsActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_twitter)
                 .color(tintColor)
                 .sizeDp(24);
-        Objects.requireNonNull(email).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-        Objects.requireNonNull(person).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
-        Objects.requireNonNull(twitter).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        LayoutHelper.setColorSrcAtop(email,tintColor);
+        LayoutHelper.setColorSrcAtop(person,tintColor);
+        LayoutHelper.setColorSrcAtop(twitter,tintColor);
         authorCardBuilder.title(role);
         MaterialAboutActionItem.Builder generalCard = new MaterialAboutActionItem.Builder();
         MaterialAboutActionItem.Builder twitterCard = new MaterialAboutActionItem.Builder();
