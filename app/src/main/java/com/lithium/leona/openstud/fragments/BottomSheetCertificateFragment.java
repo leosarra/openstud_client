@@ -3,7 +3,6 @@ package com.lithium.leona.openstud.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +14,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -120,25 +114,10 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
     private void getCertificate(CertificateType certificate) {
         Activity activity = getActivity();
         if (activity == null) return;
-        ClientHelper.requestReadWritePermissions(activity, new PermissionListener() {
-            @Override
-            public void onPermissionGranted(PermissionGrantedResponse response) {
-                new Thread(() -> {
-                    setButtonsState(false);
-                    selectCareer(activity, certificate);
-                }).start();
-            }
-
-            @Override
-            public void onPermissionDenied(PermissionDeniedResponse response) {
-                activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_write_permission_pdf).show());
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                token.continuePermissionRequest();
-            }
-        });
+        new Thread(() -> {
+            setButtonsState(false);
+            selectCareer(activity, certificate);
+        }).start();
     }
 
 
@@ -188,7 +167,8 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
 
     private void getFile(Activity activity, CertificateType cert, Career career) {
         boolean check = false;
-        String directory = Environment.getExternalStorageDirectory() + "/OpenStud/pdf/certs/";
+
+        String directory = activity.getExternalFilesDir("/OpenStud/pdf/certs/").getPath();
         File dirs = new File(directory);
         dirs.mkdirs();
         File pdfFile = new File(directory + cert.toString() + ".pdf");
