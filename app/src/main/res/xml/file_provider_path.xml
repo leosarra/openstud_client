@@ -3,4 +3,7 @@
     <external-path
         name="pdf"
         path="OpenStud/" />
+    <external-files-path
+        name="pdf"
+        path="OpenStud" />
 </paths>
