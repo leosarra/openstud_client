@@ -125,7 +125,6 @@ public class LayoutHelper {
 
 
     public static void setColorSrcAtop(Drawable drawable, int tintColor) {
-        Objects.requireNonNull(drawable).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Objects.requireNonNull(drawable).setColorFilter(new BlendModeColorFilter(tintColor, BlendMode.SRC_ATOP));
         } else {
