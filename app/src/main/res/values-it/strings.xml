@@ -244,4 +244,6 @@
     <string name="no_certificate">Certificato non trovato</string>
     <string name="select_careers">Seleziona carriera</string>
     <string name="storage_error">Impossibile salvare il certificato</string>
+    <string name="downloading_certificate">Ottengo il certificato…</string>
+    <string name="failed_get_network_certificate">Errore di rete. Impossibile scaricare il certificato!</string>
 </resources>

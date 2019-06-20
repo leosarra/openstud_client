@@ -176,6 +176,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
             if (pdfFile.exists()) pdfFile.delete();
             pdfFile.createNewFile();
             FileOutputStream fos = new FileOutputStream(pdfFile);
+            activity.runOnUiThread(() -> Toasty.info(activity, R.string.downloading_certificate).show());
             byte[] content = os.getCertificatePDF(student, career, cert);
             fos.write(content);
             fos.close();
@@ -184,7 +185,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
             activity.runOnUiThread(() -> Toasty.error(activity, R.string.storage_error).show());
             e.printStackTrace();
         } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
-            activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network).show());
+            activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network_certificate).show());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
             InfoManager.clearSharedPreferences(activity);

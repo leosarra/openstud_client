@@ -268,4 +268,6 @@
     <string name="no_certificate">No certificate of this type was found</string>
     <string name="select_careers">Select career</string>
     <string name="storage_error">Storage error</string>
+    <string name="downloading_certificate">Obtaining certificate…</string>
+    <string name="failed_get_network_certificate">Connection error. File cannot be downloaded!</string>
 </resources>
