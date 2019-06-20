@@ -12,7 +12,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.CalendarContract;
@@ -79,6 +79,8 @@ import lithium.openstud.driver.core.models.EventType;
 import lithium.openstud.driver.core.models.ExamDone;
 import lithium.openstud.driver.core.models.ExamReservation;
 import lithium.openstud.driver.core.models.Lesson;
+
+import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 
 public class ClientHelper {
 
@@ -394,8 +396,9 @@ public class ClientHelper {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager == null) return false;
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        NetworkCapabilities activeNetworkInfo = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+        if (activeNetworkInfo == null) return false;
+        return activeNetworkInfo.hasCapability(NET_CAPABILITY_INTERNET);
     }
 
     public static boolean canPlaceReservation(ExamReservation res) {
