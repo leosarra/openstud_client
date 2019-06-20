@@ -3,8 +3,12 @@ package com.lithium.leona.openstud.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -120,6 +124,14 @@ public class LayoutHelper {
     }
 
 
+    public static void setColorSrcAtop(Drawable drawable, int tintColor) {
+        Objects.requireNonNull(drawable).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Objects.requireNonNull(drawable).setColorFilter(new BlendModeColorFilter(tintColor, BlendMode.SRC_ATOP));
+        } else {
+            Objects.requireNonNull(drawable).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
+        }
+    }
     public static Drawer applyDrawer(Activity activity, Toolbar toolbar, Student student) {
         int primaryColor = ThemeEngine.getPrimaryTextColor(activity);
         DelayedDrawerListener ddl = new DelayedDrawerListener() {
