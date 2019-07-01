@@ -95,7 +95,7 @@ public class ProfileActivity extends BaseDataActivity {
         applyInfos(student, isee);
         swipeRefreshLayout.setNestedScrollingEnabled(true);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        personalId = student.getCF();
+        personalId = student.getSocialSecurityNumber();
         certificatesButton.setOnClickListener(v -> {
             BottomSheetCertificateFragment filterFrag = BottomSheetCertificateFragment.newInstance();
             filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());
