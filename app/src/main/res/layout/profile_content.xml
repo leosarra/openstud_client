@@ -155,6 +155,65 @@
 
 
             <RelativeLayout
+                android:id="@+id/socialSecurityNumberLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:id="@+id/socialSecurityNumberIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/ic_certificate"
+                    android:tint="?attr/primaryTextColor"
+                    android:visibility="invisible" />
+
+
+                <TextView
+                    android:id="@+id/socialSecurityNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_toEndOf="@id/socialSecurityNumberIcon"
+                    android:layout_toRightOf="@id/socialSecurityNumberIcon"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="@string/personal_identifier"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?attr/primaryTextColor" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/socialSecurityNumber"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@id/socialSecurityNumberIcon"
+                    android:layout_toRightOf="@id/socialSecurityNumberIcon"
+                    android:text="@string/personal_identifier"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?attr/secondaryTextColor" />
+
+                <ImageView
+                    android:id="@+id/arrowSocialSecurityNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/socialSecurityNumber"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_chevron_right_black_24dp"
+                    android:tint="?attr/primaryTextColor"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"

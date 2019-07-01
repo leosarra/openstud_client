@@ -73,6 +73,11 @@ public class ProfileActivity extends BaseDataActivity {
     TextView studentStatus;
     @BindView(R.id.cfu)
     TextView cfu;
+    @BindView(R.id.socialSecurityNumber)
+    TextView socialSecurityNumber;
+    @BindView(R.id.socialSecurityNumberLayout)
+    RelativeLayout socialSecurityNumberLayout;
+
     @BindView(R.id.certificateLayout)
     RelativeLayout certificatesButton;
     private Drawer drawer;
@@ -99,6 +104,10 @@ public class ProfileActivity extends BaseDataActivity {
         certificatesButton.setOnClickListener(v -> {
             BottomSheetCertificateFragment filterFrag = BottomSheetCertificateFragment.newInstance();
             filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());
+        });
+        socialSecurityNumberLayout.setOnClickListener(view -> {
+            BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(personalId);
+            identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
         });
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Thread t1 = new Thread(() -> refresh(os));
@@ -145,6 +154,8 @@ public class ProfileActivity extends BaseDataActivity {
         studentId.setText(st.getStudentID());
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());
+        socialSecurityNumber.setText(st.getSocialSecurityNumber());
+
         if (isee == null) isee_field.setText(getResources().getString(R.string.isee_not_available));
         else isee_field.setText(String.valueOf(isee.getValue()));
         if (st.getCourseName() != null && !st.getCourseName().equals("")) {
