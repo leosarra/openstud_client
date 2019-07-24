@@ -270,4 +270,10 @@
     <string name="storage_error">Storage error</string>
     <string name="downloading_certificate">Obtaining certificate…</string>
     <string name="failed_get_network_certificate">Connection error. File cannot be downloaded!</string>
+    <string name="email_university">University email</string>
+    <string name="student_card">Student card</string>
+    <string name="studentId_combo">Student ID: %1$s</string>
+    <string name="birthDate_combo">Birth date: %1$s</string>
+    <string name="no_student_card_found">No student card was found!\nIn order to request it, so that you can take advantage of the benefits that it provides, you have to check InfoStud using your web browser.</string>
+    <string name="update_card_error">Can\'t update student card details</string>
 </resources>
