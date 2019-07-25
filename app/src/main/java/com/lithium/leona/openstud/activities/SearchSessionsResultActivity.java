@@ -101,7 +101,7 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new AvaiableReservationsAdapter(this, reservations, activeReservations, this::confirmReservation);
+        adapter = new AvaiableReservationsAdapter(this, reservations, activeReservations, this::confirmReservation, rv);
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
