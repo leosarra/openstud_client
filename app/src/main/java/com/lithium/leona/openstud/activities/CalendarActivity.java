@@ -39,6 +39,8 @@ import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.mikepenz.materialdrawer.Drawer;
 
+import net.cachapa.expandablelayout.ExpandableLayout;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
@@ -63,7 +65,7 @@ import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
-public class CalendarActivity extends BaseDataActivity implements AppBarLayout.OnOffsetChangedListener, DialogInterface.OnDismissListener {
+public class CalendarActivity extends BaseDataActivity implements DialogInterface.OnDismissListener {
 
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("d MMMM yyyy", Locale.getDefault());
@@ -129,7 +131,6 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         lessonOptionsEnabled = PreferenceManager.isLessonOptionEnabled(this);
         lessonsEnabled = PreferenceManager.isLessonEnabled(this);
-        appBarLayout.addOnOffsetChangedListener(this);
         compactCalendarView.setLocale(TimeZone.getDefault(), Locale.getDefault());
         compactCalendarView.setShouldDrawDaysHeader(true);
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -387,8 +388,9 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
     void animateExpansion() {
         float rotation = isExpanded ? 0 : 180;
         ViewCompat.animate(arrow).rotation(rotation).start();
-
         isExpanded = !isExpanded;
+        ExpandableLayout expandableLayout = findViewById(R.id.collapsingToolbarLayout);
+        expandableLayout.setExpanded(!expandableLayout.isExpanded(), true);
         appBarLayout.setExpanded(isExpanded, true);
     }
 
@@ -441,17 +443,6 @@ public class CalendarActivity extends BaseDataActivity implements AppBarLayout.O
             h.sendEmptyMessage(ClientHelper.Status.FAILED_DELETE.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
-        }
-    }
-
-    @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
-        if (Math.abs(offset) < appBarLayout.getTotalScrollRange() / 2) {
-            if (!isExpanded) ViewCompat.animate(arrow).rotation(180).start();
-            isExpanded = true;
-        } else {
-            if (isExpanded) ViewCompat.animate(arrow).rotation(0).start();
-            isExpanded = false;
         }
     }
 
