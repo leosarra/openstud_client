@@ -95,7 +95,7 @@ public class ReservationsFragment extends BaseDataFragment {
             public void addCalendarOnClick(ExamReservation res) {
                 ClientHelper.addReservationToCalendar(activity, res);
             }
-        });
+        }, rv);
         rv.setAdapter(adapter);
         swipeRefreshLayout.measure(1, 1);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);

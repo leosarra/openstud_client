@@ -9,118 +9,153 @@
     card_view:cardBackgroundColor="?attr/backgroundCardColor"
     card_view:cardCornerRadius="4dp">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp">
+        android:paddingBottom="3dp">
 
-        <TextView
-            android:id="@+id/nameExam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:padding="1dp"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/nameTeacher"
+        <LinearLayout
+            android:id="@+id/title_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="?attr/primaryTextColor" />
-
-        <TextView
-            android:id="@+id/dateExam"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="?attr/primaryTextColor" />
-
-        <TextView
-            android:id="@+id/reservationInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="?attr/primaryTextColor" />
-
-        <TextView
-            android:id="@+id/reservationNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="?attr/primaryTextColor" />
-
-        <TextView
-            android:id="@+id/ssdExam"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="1dp"
-            android:textColor="?attr/primaryTextColor" />
+            android:orientation="horizontal"
+            android:paddingStart="8dp">
 
-        <TextView
-            android:id="@+id/cfuExam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:textColor="?attr/primaryTextColor" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/nameExam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:paddingTop="8dp"
+                android:paddingBottom="5dp"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/reservation_options"
-                android:layout_width="27dp"
-                android:layout_height="33dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/description_reservation_options"
-                android:src="@drawable/ic_more_vert_black_24dp"
-                android:tint="?attr/primaryTextColor"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="1.0"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/icon_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:paddingTop="8dp"
+                android:paddingRight="5dp"
+                android:src="@drawable/ic_expand_more_black_24dp"
+                android:tint="?attr/primaryTextColor" />
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/get_reservation"
-                style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="121dp"
-                android:layout_height="42dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="0.5"
-                android:drawableStart="@drawable/ic_get_small"
-                android:drawableTint="?attr/colorButtonNav"
-                android:text="@string/receipt"
-                android:textColor="?attr/colorButtonNav"
-                android:textSize="14sp"
-                android:theme="@style/ButtonReservations"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/reservation_options"
-                card_view:layout_constraintHorizontal_bias="1.0"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                card_view:layout_constraintVertical_bias="1.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/fixed_description_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="8dp">
+            <TextView
+                android:id="@+id/nameTeacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/primaryTextColor" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/dateExam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/primaryTextColor" />
+        </LinearLayout>
 
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expandable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/backgroundCardColor"
+            card_view:el_duration="300"
+            card_view:el_expanded="false"
+            card_view:el_parallax="0.5"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:id="@+id/reservationNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/ssdExam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1dp"
+                    android:textColor="?attr/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/cfuExam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1dp"
+                    android:textColor="?attr/primaryTextColor" />
+
+                <TextView
+                    android:id="@+id/reservationInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/primaryTextColor" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/reservation_options"
+                        android:layout_width="27dp"
+                        android:layout_height="33dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/description_reservation_options"
+                        android:src="@drawable/ic_more_vert_black_24dp"
+                        android:tint="?attr/primaryTextColor"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toEndOf="parent"
+                        card_view:layout_constraintHorizontal_bias="1.0"
+                        card_view:layout_constraintStart_toStartOf="parent"
+                        card_view:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/get_reservation"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="121dp"
+                        android:layout_height="42dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="0.5"
+                        android:drawableStart="@drawable/ic_get_small"
+                        android:drawableTint="?attr/colorButtonNav"
+                        android:text="@string/receipt"
+                        android:textColor="?attr/colorButtonNav"
+                        android:textSize="14sp"
+                        android:theme="@style/ButtonReservations"
+                        card_view:layout_constraintBottom_toBottomOf="parent"
+                        card_view:layout_constraintEnd_toStartOf="@+id/reservation_options"
+                        card_view:layout_constraintHorizontal_bias="1.0"
+                        card_view:layout_constraintStart_toStartOf="parent"
+                        card_view:layout_constraintTop_toTopOf="parent"
+                        card_view:layout_constraintVertical_bias="1.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
