@@ -20,7 +20,6 @@
             android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp"
             android:orientation="horizontal"
             android:paddingStart="8dp">
 
@@ -32,7 +31,7 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:paddingTop="8dp"
-                android:paddingBottom="5dp"
+                android:paddingBottom="4dp"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="16sp"
                 android:textStyle="bold" />
