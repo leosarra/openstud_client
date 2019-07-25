@@ -31,6 +31,12 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/nameTeacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/primaryTextColor" />
+
+            <TextView
                 android:id="@+id/startDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,12 +50,6 @@
 
             <TextView
                 android:id="@+id/where"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/primaryTextColor" />
-
-            <TextView
-                android:id="@+id/nameTeacher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/primaryTextColor" />

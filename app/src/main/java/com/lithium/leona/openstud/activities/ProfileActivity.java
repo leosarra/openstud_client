@@ -23,6 +23,7 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.fragments.BottomSheetCertificateFragment;
 import com.lithium.leona.openstud.fragments.BottomSheetPersonalIdentifier;
+import com.lithium.leona.openstud.fragments.BottomSheetStudentCard;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
@@ -55,9 +56,9 @@ public class ProfileActivity extends BaseDataActivity {
     Toolbar toolbar;
     @BindView(R.id.collapsingToolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.studentId)
-    TextView studentId;
     @BindView(R.id.birthDate)
+    TextView studentId;
+    @BindView(R.id.studentId)
     TextView birthDate;
     @BindView(R.id.birthPlace)
     TextView birthPlace;
@@ -73,13 +74,17 @@ public class ProfileActivity extends BaseDataActivity {
     TextView studentStatus;
     @BindView(R.id.cfu)
     TextView cfu;
+    @BindView(R.id.socialSecurityNumber)
+    TextView socialSecurityNumber;
+    @BindView(R.id.socialSecurityNumberLayout)
+    RelativeLayout socialSecurityNumberLayout;
+
     @BindView(R.id.certificateLayout)
     RelativeLayout certificatesButton;
     private Drawer drawer;
     private Isee isee;
     private ProfileEventHandler h = new ProfileEventHandler(this);
     private LocalDateTime lastUpdate;
-    private String personalId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +100,14 @@ public class ProfileActivity extends BaseDataActivity {
         applyInfos(student, isee);
         swipeRefreshLayout.setNestedScrollingEnabled(true);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
-        personalId = student.getSocialSecurityNumber();
         certificatesButton.setOnClickListener(v -> {
             BottomSheetCertificateFragment filterFrag = BottomSheetCertificateFragment.newInstance();
             filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());
+        });
+        socialSecurityNumberLayout.setOnClickListener(view -> {
+            String socialNumber = student.getSocialSecurityNumber();
+            BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(socialNumber);
+            identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
         });
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Thread t1 = new Thread(() -> refresh(os));
@@ -145,6 +154,7 @@ public class ProfileActivity extends BaseDataActivity {
         studentId.setText(st.getStudentID());
         birthDate.setText((st.getBirthDate().format(formatter)));
         birthPlace.setText(st.getBirthPlace());
+        socialSecurityNumber.setText(st.getSocialSecurityNumber());
         if (isee == null) isee_field.setText(getResources().getString(R.string.isee_not_available));
         else isee_field.setText(String.valueOf(isee.getValue()));
         if (st.getCourseName() != null && !st.getCourseName().equals("")) {
@@ -181,7 +191,6 @@ public class ProfileActivity extends BaseDataActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (personalId == null) return false;
         getMenuInflater().inflate(R.menu.action_bar_profile, menu);
         Drawable drawable = menu.findItem(R.id.barcode).getIcon();
         drawable = DrawableCompat.wrap(drawable);
@@ -193,8 +202,8 @@ public class ProfileActivity extends BaseDataActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.barcode) {
-            BottomSheetPersonalIdentifier identifierFrag = BottomSheetPersonalIdentifier.newInstance(personalId);
-            identifierFrag.show(getSupportFragmentManager(), identifierFrag.getTag());
+            BottomSheetStudentCard cardFrag = BottomSheetStudentCard.newInstance();
+            cardFrag.show(getSupportFragmentManager(), cardFrag.getTag());
             return true;
         }
         return super.onOptionsItemSelected(item);

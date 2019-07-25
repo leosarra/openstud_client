@@ -29,6 +29,7 @@ import lithium.openstud.driver.core.models.Isee;
 import lithium.openstud.driver.core.models.Lesson;
 import lithium.openstud.driver.core.models.News;
 import lithium.openstud.driver.core.models.Student;
+import lithium.openstud.driver.core.models.StudentCard;
 import lithium.openstud.driver.core.models.Tax;
 import lithium.openstud.driver.exceptions.OpenstudConnectionException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
@@ -49,6 +50,7 @@ public class InfoManager {
     private static List<Event> events;
     private static List<String> filter;
     private static List<Event> theatre_events;
+    private static StudentCard card;
 
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
@@ -124,9 +126,42 @@ public class InfoManager {
             prefsEditor.putString("student", json);
             prefsEditor.commit();
         }
-        return student;
+        return newStudent;
     }
 
+
+    public static StudentCard getStudentCardCached(Context context, Openstud os) {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        String oldObj;
+        Gson gson = new Gson();
+        synchronized (InfoManager.class) {
+            if (card != null) return card;
+            oldObj = pref.getString("studentCard", null);
+        }
+        StudentCard ret = null;
+        try {
+            ret = gson.fromJson(oldObj, StudentCard.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    public static StudentCard getStudentCard(Context context, Openstud os, Student student) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
+        setupSharedPreferences(context);
+        if (os == null) return null;
+        Gson gson = new Gson();
+        StudentCard newCard = os.getStudentCard(student);
+        synchronized (InfoManager.class) {
+            card = newCard;
+            SharedPreferences.Editor prefsEditor = pref.edit();
+            String json = gson.toJson(card);
+            prefsEditor.putString("studentCard", json);
+            prefsEditor.commit();
+        }
+        return newCard;
+    }
 /*
     public static Map<String, List<Lesson>> getTimetableCached(Context context, Openstud os) {
         setupSharedPreferences(context);
@@ -600,6 +635,7 @@ public class InfoManager {
         events = null;
         filter = null;
         theatre_events = null;
+        card = null;
     }
 
     public static synchronized String getStudentId(Context context) {
