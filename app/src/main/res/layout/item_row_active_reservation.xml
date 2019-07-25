@@ -44,7 +44,6 @@
                 android:layout_weight="0.1"
                 android:paddingTop="8dp"
                 android:paddingRight="5dp"
-                android:src="@drawable/ic_expand_more_black_24dp"
                 android:tint="?attr/primaryTextColor" />
         </LinearLayout>
 
