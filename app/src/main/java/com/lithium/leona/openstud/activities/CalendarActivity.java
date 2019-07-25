@@ -74,6 +74,8 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
     RelativeLayout mainLayout;
     @BindView(R.id.app_bar_layout)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsingToolbarLayout)
+    ExpandableLayout expandableLayout;
     @BindView(R.id.compactcalendar_view)
     CompactCalendarView compactCalendarView;
     @BindView(R.id.toolbar)
@@ -167,6 +169,9 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         if (savedInstanceState == null) refreshEvents();
         swipeRefreshLayout.setOnRefreshListener(this::refreshEvents);
+        if (expandableLayout.isExpanded()) {
+            ViewCompat.animate(arrow).rotation(180).start();
+        }
 
     }
 
@@ -389,7 +394,6 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
         float rotation = isExpanded ? 0 : 180;
         ViewCompat.animate(arrow).rotation(rotation).start();
         isExpanded = !isExpanded;
-        ExpandableLayout expandableLayout = findViewById(R.id.collapsingToolbarLayout);
         expandableLayout.setExpanded(!expandableLayout.isExpanded(), true);
         appBarLayout.setExpanded(isExpanded, true);
     }
