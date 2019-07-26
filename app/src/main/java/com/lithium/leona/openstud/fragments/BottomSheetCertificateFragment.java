@@ -170,6 +170,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
 
         String directory = activity.getExternalFilesDir("/OpenStud/pdf/certs/").getPath();
         File dirs = new File(directory);
+        if (!directory.endsWith("/")) directory = directory + "/";
         dirs.mkdirs();
         File pdfFile = new File(directory + cert.toString() + ".pdf");
         try {
