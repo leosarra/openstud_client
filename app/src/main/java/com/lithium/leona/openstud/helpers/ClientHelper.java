@@ -26,6 +26,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -434,17 +435,26 @@ public class ClientHelper {
 
     public static void openActionViewPDF(Activity activity, File pdfFile) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
-        intent.setDataAndType(uri, "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (intent.resolveActivity(activity.getPackageManager()) != null)
-            activity.startActivity(intent);
-        else {
+        try {
+            Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (intent.resolveActivity(activity.getPackageManager()) != null)
+                activity.startActivity(intent);
+            else {
+                if (activity instanceof ExamsActivity) {
+                    ExamsActivity examsActivity = (ExamsActivity) activity;
+                    examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
+                } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
+            }
+        } catch (IllegalArgumentException e) {
+            Crashlytics.logException(e);
             if (activity instanceof ExamsActivity) {
                 ExamsActivity examsActivity = (ExamsActivity) activity;
-                examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
-            } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
+                examsActivity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
+            } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_io).show());
         }
+
     }
 
     private static String simpleStringXOR(String input, String key) {
