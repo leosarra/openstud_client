@@ -1,6 +1,5 @@
 package com.lithium.leona.openstud.activities;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,8 +12,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -191,11 +188,15 @@ public class ProfileActivity extends BaseDataActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        /**
+         * The student card feature is temporary disabled because InfoStud APIs are not reliable at the time of writing.
+         * This feature will be enabled later on when Sapienza University will fix the things on their end.
         getMenuInflater().inflate(R.menu.action_bar_profile, menu);
         Drawable drawable = menu.findItem(R.id.barcode).getIcon();
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
         menu.findItem(R.id.barcode).setIcon(drawable);
+         **/
         return true;
     }
 
