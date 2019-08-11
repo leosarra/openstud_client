@@ -152,7 +152,7 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         Gson gson = new Gson();
-        StudentCard newCard = os.getStudentCard(student);
+        StudentCard newCard = os.getStudentCard(student, true);
         synchronized (InfoManager.class) {
             card = newCard;
             SharedPreferences.Editor prefsEditor = pref.edit();
