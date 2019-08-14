@@ -2,6 +2,7 @@ package com.lithium.leona.openstud.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -15,6 +16,7 @@ import com.lithium.leona.openstud.helpers.LayoutHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class WebViewActivity extends BaseDataActivity {
 
@@ -22,6 +24,8 @@ public class WebViewActivity extends BaseDataActivity {
     WebView webView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.progressBar)
+    MaterialProgressBar progressBar;
     WebViewClient client;
     private boolean javascriptInjected = false;
     @Override
@@ -32,6 +36,7 @@ public class WebViewActivity extends BaseDataActivity {
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
         setupWebView(getIntent());
     }
 
@@ -45,9 +50,17 @@ public class WebViewActivity extends BaseDataActivity {
         setTitle(title);
         if (subtitle != null) toolbar.setSubtitle(subtitle);
         client = new WebViewClient() {
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                if (progressBar.getVisibility() != View.VISIBLE) progressBar.setVisibility(View.VISIBLE);
+            }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                if (progressBar.getVisibility() == View.VISIBLE) progressBar.setVisibility(View.INVISIBLE);
                 inject(view, url, type);
             }
 
@@ -76,7 +89,7 @@ public class WebViewActivity extends BaseDataActivity {
                                 + "studentid.value = '" + student.getStudentID() + "';"
                                 + "password.value = '" + os.getStudentPassword() + "';"
                                 + "login[0].click();" +
-                                "}, 500)})()");
+                                "}, 100)})()");
                 javascriptInjected = true;
             }
             else if (url.contains("logout")) {
