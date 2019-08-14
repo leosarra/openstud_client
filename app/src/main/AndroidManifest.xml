@@ -22,6 +22,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeLight">
+        <activity
+            android:name=".activities.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:theme="@style/NoActionBarAppLightTheme" />
+
         <receiver
             android:name=".widgets.ExamsWidget"
             android:label="@string/exam_widget">
