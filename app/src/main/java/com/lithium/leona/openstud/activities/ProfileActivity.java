@@ -36,6 +36,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import lithium.openstud.driver.core.Openstud;
 import lithium.openstud.driver.core.models.Isee;
 import lithium.openstud.driver.core.models.Student;
@@ -75,9 +76,11 @@ public class ProfileActivity extends BaseDataActivity {
     TextView socialSecurityNumber;
     @BindView(R.id.socialSecurityNumberLayout)
     RelativeLayout socialSecurityNumberLayout;
-
     @BindView(R.id.certificateLayout)
     RelativeLayout certificatesButton;
+    @OnClick(R.id.emailLayout) void onEmailClick() {
+        ClientHelper.createWebViewActivity(this,"Email", student.getEmail(), os.getConfig().getEmailURL(), ClientHelper.WebViewType.EMAIL);
+    }
     private Drawer drawer;
     private Isee isee;
     private ProfileEventHandler h = new ProfileEventHandler(this);
