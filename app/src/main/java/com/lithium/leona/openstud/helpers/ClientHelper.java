@@ -213,7 +213,7 @@ public class ClientHelper {
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra("title", title);
         intent.putExtra("subtitle", subtitle);
-        intent.putExtra("webviewType", type);
+        intent.putExtra("webviewType", type.getValue());
         intent.putExtra("url", url);
         context.startActivity(intent);
     }
