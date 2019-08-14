@@ -25,7 +25,8 @@
         <activity
             android:name=".activities.WebViewActivity"
             android:label="@string/title_activity_web_view"
-            android:theme="@style/NoActionBarAppLightTheme" />
+            android:theme="@style/NoActionBarAppLightTheme"
+            android:configChanges="orientation|screenSize"/>
 
         <receiver
             android:name=".widgets.ExamsWidget"

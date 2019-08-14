@@ -36,8 +36,11 @@ public class WebViewActivity extends BaseDataActivity {
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
         setupWebView(getIntent());
+        if (savedInstanceState == null) {
+            String url = getIntent().getExtras().getString("url", null);
+            if (url!=null) webView.loadUrl(url);
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -45,7 +48,6 @@ public class WebViewActivity extends BaseDataActivity {
         Bundle bdl = intent.getExtras();
         String title = bdl.getString("title");
         String subtitle = bdl.getString("subtitle", null);
-        String url = bdl.getString("url");
         int type = bdl.getInt("webviewType");
         setTitle(title);
         if (subtitle != null) toolbar.setSubtitle(subtitle);
@@ -70,9 +72,6 @@ public class WebViewActivity extends BaseDataActivity {
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.setWebViewClient(client);
-        webView.loadUrl(url);
-
-
     }
 
     private void inject(WebView view, String url, int type) {
@@ -102,5 +101,17 @@ public class WebViewActivity extends BaseDataActivity {
         else {
             throw new IllegalArgumentException("WebView type not supported");
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        webView.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        webView.restoreState(savedInstanceState);
     }
 }
