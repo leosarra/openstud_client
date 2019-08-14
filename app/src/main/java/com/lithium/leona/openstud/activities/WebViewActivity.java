@@ -31,7 +31,6 @@ public class WebViewActivity extends BaseDataActivity {
         setContentView(R.layout.activity_web_view);
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
-        WebView.setWebContentsDebuggingEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         setupWebView(getIntent());
     }
