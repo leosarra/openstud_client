@@ -55,8 +55,6 @@ public class WebViewActivity extends BaseDataActivity {
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setAllowContentAccess(true);
-        webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.setWebViewClient(client);
         webView.loadUrl(url);
