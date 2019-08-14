@@ -90,6 +90,7 @@ public class WebViewActivity extends BaseDataActivity {
                                 + "password.value = '" + os.getStudentPassword() + "';"
                                 + "login[0].click();" +
                                 "}, 100)})()");
+                else view.setVisibility(View.VISIBLE);
                 javascriptInjected = true;
             }
             else if (url.contains("logout")) {
