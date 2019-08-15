@@ -28,6 +28,7 @@ public class WebViewActivity extends BaseDataActivity {
     MaterialProgressBar progressBar;
     WebViewClient client;
     private boolean javascriptInjected = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,7 @@ public class WebViewActivity extends BaseDataActivity {
         setupWebView(getIntent());
         if (savedInstanceState == null) {
             String url = getIntent().getExtras().getString("url", null);
-            if (url!=null) webView.loadUrl(url);
+            if (url != null) webView.loadUrl(url);
         }
     }
 
@@ -56,13 +57,16 @@ public class WebViewActivity extends BaseDataActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if (progressBar.getVisibility() != View.VISIBLE) progressBar.setVisibility(View.VISIBLE);
+                if (progressBar.getVisibility() != View.VISIBLE)
+                    progressBar.setVisibility(View.VISIBLE);
+                handleLoading(webView, url, type);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (progressBar.getVisibility() == View.VISIBLE) progressBar.setVisibility(View.INVISIBLE);
+                if (progressBar.getVisibility() == View.VISIBLE)
+                    progressBar.setVisibility(View.INVISIBLE);
                 inject(view, url, type);
             }
 
@@ -74,37 +78,55 @@ public class WebViewActivity extends BaseDataActivity {
         webView.setWebViewClient(client);
     }
 
-    private void inject(WebView view, String url, int type) {
-        if (type == ClientHelper.WebViewType.EMAIL.getValue()) {
-            if (url.startsWith("https://login.studenti.uniroma1.it") && !url.contains("logout")) {
-                view.setVisibility(View.GONE);
-                if (!javascriptInjected) view.loadUrl(
-                        "javascript:(function() { " +
-                                "setTimeout(function(){" +
-                                "var studentid = document.getElementById('username');"
-                                + "var password = document.getElementById('password');"
-                                + "var login = document.getElementsByName('samlButton');"
-                                + "if (password == undefined || studentid == undefined || login == undefined || login.length == 0) return;"
-                                + "studentid.value = '" + student.getStudentID() + "';"
-                                + "password.value = '" + os.getStudentPassword() + "';"
-                                + "login[0].click();" +
-                                "}, 100)})()");
-                else view.setVisibility(View.VISIBLE);
-                javascriptInjected = true;
-            }
-            else if (url.contains("logout")) {
-                view.setVisibility(View.GONE);
-                onBackPressed();
-            }
-            else view.setVisibility(View.VISIBLE);
-        }
-        else {
-            throw new IllegalArgumentException("WebView type not supported");
+    private void handleLoading(WebView view, String url, int type) {
+        switch (os.getProvider()) {
+            case SAPIENZA:
+                if (type == ClientHelper.WebViewType.EMAIL.getValue()) {
+                    if (url.startsWith("https://login.studenti.uniroma1.it") && !url.contains("logout")) {
+                        view.setVisibility(View.GONE);
+                    } else if (url.contains("logout")) view.setVisibility(View.GONE);
+                } else view.setVisibility(View.VISIBLE);
+                break;
+
+            // Right now only Sapienza is supported
+            default:
+                throw new IllegalArgumentException("Provider not supported");
         }
     }
 
+    private void inject(WebView view, String url, int type) {
+        switch (os.getProvider()) {
+            case SAPIENZA:
+                if (type == ClientHelper.WebViewType.EMAIL.getValue()) {
+                    if (url.startsWith("https://login.studenti.uniroma1.it") && !url.contains("logout")) {
+                        if (!javascriptInjected) {
+                            view.loadUrl(
+                                    "javascript:(function() { " +
+                                            "setTimeout(function(){" +
+                                            "var studentid = document.getElementById('username');"
+                                            + "var password = document.getElementById('password');"
+                                            + "var login = document.getElementsByName('samlButton');"
+                                            + "if (password == undefined || studentid == undefined || login == undefined || login.length == 0) return;"
+                                            + "studentid.value = '" + student.getStudentID() + "';"
+                                            + "password.value = '" + os.getStudentPassword() + "';"
+                                            + "login[0].click();" +
+                                            "}, 100)})()");
+                        }
+                        javascriptInjected = true;
+                    } else if (url.contains("logout")) onBackPressed();
+                    else view.setVisibility(View.VISIBLE);
+                }
+                break;
+
+            // Right now only Sapienza is supported
+            default:
+                throw new IllegalArgumentException("Provider not supported");
+        }
+
+    }
+
     @Override
-    protected void onSaveInstanceState (Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         webView.saveState(outState);
     }
