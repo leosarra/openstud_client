@@ -63,7 +63,7 @@ public class GradesWidget extends AppWidgetProvider {
             numFormat.setMinimumFractionDigits(1);
             views.setTextViewText(R.id.totalCFU, String.valueOf(OpenstudHelper.getSumCFU(exams)));
             views.setTextViewText(R.id.weightedValue, String.valueOf(numFormat.format(OpenstudHelper.computeWeightedAverage(exams, PreferenceManager.getLaudeValue(context)))));
-            views.setTextViewText(R.id.baseFinalGrade, String.valueOf(OpenstudHelper.computeBaseGraduation(exams, PreferenceManager.getLaudeValue(context))));
+            views.setTextViewText(R.id.baseFinalGrade, String.valueOf(OpenstudHelper.computeBaseGraduation(exams, PreferenceManager.getLaudeValue(context), PreferenceManager.isMinMaxExamIgnoredInBaseGraduation(context))));
             appWidgetManager.updateAppWidget(appWidgetId, views);
         } else {
             views.setTextViewText(R.id.totalCFU, "--");
