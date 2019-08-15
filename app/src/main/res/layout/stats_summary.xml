@@ -20,15 +20,37 @@
             android:layout_height="33dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="98dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="3"
             android:padding="1dp"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"
             card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@+id/weightedValue"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/my_stats"
+            card_view:layout_constraintVertical_bias="0.0"
+            tools:text="--" />
+
+        <TextView
+            android:id="@+id/baseGraduation"
+            android:layout_width="wrap_content"
+            android:layout_height="33dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.69"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/my_stats"
             card_view:layout_constraintVertical_bias="0.0"
@@ -38,18 +60,20 @@
             android:id="@+id/totalCFU"
             android:layout_width="wrap_content"
             android:layout_height="33dp"
-            android:layout_marginStart="98dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="8dp"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:gravity="center"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/weightedValue"
+            card_view:layout_constraintHorizontal_bias="1.0"
+            card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/my_stats"
-            card_view:layout_constraintVertical_bias="0.06"
+            card_view:layout_constraintVertical_bias="0.0"
             tools:text="--" />
 
         <TextView
@@ -58,17 +82,18 @@
             android:layout_height="33dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="32dp"
             android:layout_marginBottom="8dp"
+            android:gravity="center"
             android:textColor="?attr/primaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.501"
+            card_view:layout_constraintHorizontal_bias="0.37"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/my_stats"
-            card_view:layout_constraintVertical_bias="0.06"
+            card_view:layout_constraintVertical_bias="0.0"
             tools:text="--" />
 
         <ImageView
@@ -113,9 +138,10 @@
             android:text="@string/arithmetic"
             android:textColor="?attr/secondaryTextColor"
             card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="@+id/arithmeticValue"
             card_view:layout_constraintStart_toStartOf="@+id/arithmeticValue"
             card_view:layout_constraintTop_toBottomOf="@+id/arithmeticValue"
-            card_view:layout_constraintVertical_bias="1.0" />
+            card_view:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textView3"
@@ -125,6 +151,7 @@
             android:text="@string/weighted"
             android:textColor="?attr/secondaryTextColor"
             card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="@+id/weightedValue"
             card_view:layout_constraintStart_toStartOf="@+id/weightedValue"
             card_view:layout_constraintTop_toBottomOf="@+id/weightedValue"
             card_view:layout_constraintVertical_bias="1.0" />
@@ -134,11 +161,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:text="@string/presentation"
+            android:textColor="?attr/secondaryTextColor"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="@+id/baseGraduation"
+            card_view:layout_constraintStart_toStartOf="@+id/baseGraduation"
+            card_view:layout_constraintTop_toBottomOf="@+id/baseGraduation"
+            card_view:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="@string/ects"
             android:textColor="?attr/secondaryTextColor"
             card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="@+id/totalCFU"
             card_view:layout_constraintStart_toStartOf="@+id/totalCFU"
             card_view:layout_constraintTop_toBottomOf="@+id/totalCFU"
-            card_view:layout_constraintVertical_bias="1.0" />
+            card_view:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

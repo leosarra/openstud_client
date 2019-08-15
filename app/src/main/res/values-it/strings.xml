@@ -252,4 +252,5 @@
     <string name="birthDate_combo">Nato il %1$s</string>
     <string name="no_student_card_found">Nessuna carta studente risulta attualmente attiva!\nPer richiederla, cosí da usufruire dei vantaggi offerti, é necessario collegarsi al sito web di InfoStud.</string>
     <string name="update_card_error">Impossibile aggiornare i dettagli della carta studente</string>
+    <string name="presentation">Base Laurea</string>
 </resources>
