@@ -187,7 +187,7 @@
     <string name="key_exam_date" translatable="false">key_exam_date</string>
     <string name="show_exam_date">Show passed exam date</string>
     <string name="show_exam_date_description">Show the day an exam was passed by the student</string>
-    <string name="show_options_lesson">Add option to export lessons to system calendar</string>
+    <string name="show_options_lesson">Enable export of lessons to the calendar</string>
     <string name="show_options_lesson_description">Show an icon to let you add a lesson to your system calendar from the \'\'Classroom timetable\'\' and \'\'Calendar\'\' screens</string>
     <string name="key_options_lesson" translatable="false">key_options_lesson</string>
     <string name="pref_title_lessons">Lessons</string>
@@ -276,6 +276,10 @@
     <string name="birthDate_combo">Birth date: %1$s</string>
     <string name="no_student_card_found">No student card was found!\nIn order to request it, so that you can take advantage of the benefits that it provides, you have to check InfoStud using your web browser.</string>
     <string name="update_card_error">Can\'t update student card details</string>
-    <string name="title_activity_web_view">WebView</string>
+    <string name="title_activity_web_view" translatable="false">WebView</string>
     <string name="presentation">Base laurea</string>
+    <string name="key_minmax_remove" translatable="false">key_minmax_remove</string>
+    <string name="ignore_minmax_exam">Ignore best/worse exam in base grade</string>
+    <string name="ignore_minmax_exam_description">Don\'t consider your best/worse exam when computing the base graduation mark</string>
+    <string name="change_value_30l">Change the value of the \"30L\" mark used when computing the GPA</string>
 </resources>

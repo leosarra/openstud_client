@@ -43,6 +43,13 @@ public class PreferenceManager {
         }
     }
 
+    public static boolean isMinMaxExamIgnoredInBaseGraduation(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean(context.getResources().getString(R.string.key_minmax_remove), false);
+        }
+    }
+
     public static void setBiometricsEnabled(Context context, boolean enabled) {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
