@@ -46,6 +46,7 @@ import com.lithium.leona.openstud.activities.ProfileActivity;
 import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.activities.WebViewActivity;
 import com.lithium.leona.openstud.data.CustomCourse;
 import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -206,6 +207,15 @@ public class ClientHelper {
             //No browser that supports custom tabs
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         }
+    }
+
+    public static void createWebViewActivity(Context context, String title, String subtitle, String url, ClientHelper.WebViewType type) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("subtitle", subtitle);
+        intent.putExtra("webviewType", type.getValue());
+        intent.putExtra("url", url);
+        context.startActivity(intent);
     }
 
     public static void createConfirmDeleteReservationDialog(Activity activity, final ExamReservation res, Runnable action) {
@@ -502,6 +512,20 @@ public class ClientHelper {
             return value;
         }
 
+    }
+
+
+    public enum WebViewType {
+        EMAIL(0);
+        private final int value;
+
+        WebViewType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     public enum Sort {
