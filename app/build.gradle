@@ -47,9 +47,9 @@ android {
     }
 
     productFlavors {
-        floss {
+        foss {
             dimension "license"
-            versionNameSuffix "-FLOSS"
+            versionNameSuffix "-FOSS"
         }
         full {
             dimension "license"
