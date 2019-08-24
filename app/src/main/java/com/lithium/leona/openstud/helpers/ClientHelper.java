@@ -60,6 +60,8 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -465,7 +467,15 @@ public class ClientHelper {
     }
 
     public static void reportException(Exception e) {
-        if (BuildConfig.FLAVOR.equals("full")) com.crashlytics.android.Crashlytics.logException(e);
+        if (BuildConfig.FLAVOR.equals("full")) {
+            try {
+                Class crashlytics = Class.forName("com.crashlytics.android.Crashlytics");
+                Method logException = crashlytics.getMethod("logException", Throwable.class);
+                logException.invoke(crashlytics,e);
+            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     private static String simpleStringXOR(String input, String key) {
