@@ -26,7 +26,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.crashlytics.android.Crashlytics;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -95,7 +94,7 @@ public class ClientHelper {
         return calendar.getTime();
     }
 
-    public static List<Event> orderByStartTime(List<Event> events, boolean ascending) {
+    public static void orderByStartTime(List<Event> events, boolean ascending) {
         Collections.sort(events, (o1, o2) -> {
             if (o1.getStart() == null && o2.getStart() == null) return 0;
             if (ascending)
@@ -108,10 +107,9 @@ public class ClientHelper {
                 else return o2.getStart().compareTo(o1.getStart());
             }
         });
-        return events;
     }
 
-    public static List<Event> orderEventByDate(List<Event> events, boolean ascending) {
+    public static void orderEventByDate(List<Event> events, boolean ascending) {
         Collections.sort(events, (o1, o2) -> {
             if (o1.getEventDate() == null && o2.getEventDate() == null) return 0;
             if (ascending)
@@ -124,7 +122,6 @@ public class ClientHelper {
                 else return o2.getEventDate().compareTo(o1.getEventDate());
             }
         });
-        return events;
     }
 
     public static ArrayList<Entry> generateMarksPoints(List<ExamDone> exams, int laude) {
@@ -458,13 +455,17 @@ public class ClientHelper {
                 } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
             }
         } catch (IllegalArgumentException e) {
-            Crashlytics.logException(e);
+            ClientHelper.reportException(e);
             if (activity instanceof ExamsActivity) {
                 ExamsActivity examsActivity = (ExamsActivity) activity;
                 examsActivity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
             } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_io).show());
         }
 
+    }
+
+    public static void reportException(Exception e) {
+        if (BuildConfig.FLAVOR.equals("full")) com.crashlytics.android.Crashlytics.logException(e);
     }
 
     private static String simpleStringXOR(String input, String key) {
