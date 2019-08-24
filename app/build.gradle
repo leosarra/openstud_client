@@ -49,7 +49,6 @@ android {
     productFlavors {
         floss {
             dimension "license"
-            applicationIdSuffix ".floss"
             versionNameSuffix "-FLOSS"
         }
         full {
