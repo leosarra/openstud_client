@@ -60,13 +60,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    gradle.startParameter.getTaskNames().each { task ->
-        if(task.toLowerCase().contains("full")) {
-            implementation 'com.google.firebase:firebase-core:17.1.0'
-            implementation 'com.google.firebase:firebase-perf:19.0.0'
-            implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-        }
-    }
+    fullImplementation 'com.google.firebase:firebase-core:17.1.0'
+    fullImplementation 'com.google.firebase:firebase-perf:19.0.0'
+    fullImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'androidx.core:core:1.0.2'
