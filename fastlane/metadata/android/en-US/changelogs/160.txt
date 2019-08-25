@@ -1,0 +1,2 @@
+* Added support for Student's email
+* Fixed a visual bug when adding a custom lesson
