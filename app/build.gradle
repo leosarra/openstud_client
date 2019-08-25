@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 gradle.startParameter.getTaskNames().each { task ->
     if(task.toLowerCase().contains("full")) {
         apply plugin: 'io.fabric'
-
+        apply plugin: 'com.google.gms.google-services'
+        apply plugin: 'com.google.firebase.firebase-perf'
     }
 }
 
@@ -97,11 +98,4 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation "androidx.annotation:annotation:1.1.0"
-}
-
-gradle.startParameter.getTaskNames().each { task ->
-    if(task.toLowerCase().contains("full")) {
-        apply plugin: 'com.google.gms.google-services'
-        apply plugin: 'com.google.firebase.firebase-perf'
-    }
 }
