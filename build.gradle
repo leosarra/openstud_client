@@ -5,8 +5,12 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven {
-            url 'https://maven.fabric.io/public'
+        gradle.startParameter.getTaskNames().each { task ->
+            if(task.toLowerCase().contains("full")) {
+                maven {
+                    url 'https://maven.fabric.io/public'
+                }
+            }
         }
     }
     dependencies {
