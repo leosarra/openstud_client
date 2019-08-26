@@ -1,21 +1,19 @@
 apply plugin: 'com.android.application'
-gradle.startParameter.getTaskNames().each { task ->
-    if(task.toLowerCase().contains("full")) {
-        apply plugin: 'io.fabric'
-        apply plugin: 'com.google.gms.google-services'
-        apply plugin: 'com.google.firebase.firebase-perf'
-    }
+if (isGooglePlayFlavor()) {
+    apply plugin: 'io.fabric'
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.firebase-perf'
 }
 
 android {
-    flavorDimensions "license"
+    flavorDimensions "releaseType"
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.lithium.leona.openstud"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 160
-        versionName "1.25.4"
+        versionCode 161
+        versionName "1.25.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -49,10 +47,10 @@ android {
 
     productFlavors {
         foss {
-            dimension "license"
+            dimension "releaseType"
         }
-        full {
-            dimension "license"
+        play {
+            dimension "releaseType"
         }
     }
 
@@ -61,9 +59,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    fullImplementation 'com.google.firebase:firebase-core:17.1.0'
-    fullImplementation 'com.google.firebase:firebase-perf:19.0.0'
-    fullImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    playImplementation 'com.google.firebase:firebase-core:17.1.0'
+    playImplementation 'com.google.firebase:firebase-perf:19.0.0'
+    playImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'androidx.core:core:1.0.2'
