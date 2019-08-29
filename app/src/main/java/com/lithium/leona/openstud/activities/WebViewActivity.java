@@ -1,7 +1,10 @@
 package com.lithium.leona.openstud.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +16,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+
+import java.net.URISyntaxException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +59,33 @@ public class WebViewActivity extends BaseDataActivity {
         if (subtitle != null) toolbar.setSubtitle(subtitle);
         client = new WebViewClient() {
 
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("intent://")) {
+                    try {
+                        Context context = view.getContext();
+                        Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+
+                        if (intent != null) {
+                            view.stopLoading();
+
+                            PackageManager packageManager = context.getPackageManager();
+                            ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                            if (info != null) {
+                                context.startActivity(intent);
+                            } else {
+                                String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                                if (fallbackUrl == null || fallbackUrl.isEmpty()) fallbackUrl = intent.getStringExtra("link");
+                                if (fallbackUrl != null && !fallbackUrl.isEmpty()) view.loadUrl(fallbackUrl);
+                            }
+                            return true;
+                        }
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return false;
+            }
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
