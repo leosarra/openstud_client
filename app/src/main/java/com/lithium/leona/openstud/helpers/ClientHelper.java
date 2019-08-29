@@ -267,7 +267,8 @@ public class ClientHelper {
             Intent intent = new Intent(activity, ProfileActivity.class);
             activity.startActivity(intent);
         } else if (item == LayoutHelper.Selection.EXIT.getValue()) {
-            InfoManager.clearSharedPreferences(activity.getApplication());
+            InfoManager.clearSharedPreferences(activity);
+            PreferenceManager.setBiometricsEnabled(activity, false);
             Intent i = new Intent(activity, LauncherActivity.class);
             activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         } else if (item == LayoutHelper.Selection.CLASSROOMS.getValue()) {
