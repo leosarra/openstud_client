@@ -8,6 +8,8 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -54,6 +56,7 @@ public class WebViewActivity extends BaseDataActivity {
         Bundle bdl = intent.getExtras();
         String title = bdl.getString("title");
         String subtitle = bdl.getString("subtitle", null);
+        boolean clearCookies = bdl.getBoolean("clearCookies", true);
         int type = bdl.getInt("webviewType");
         setTitle(title);
         if (subtitle != null) toolbar.setSubtitle(subtitle);
@@ -65,10 +68,8 @@ public class WebViewActivity extends BaseDataActivity {
                     try {
                         Context context = view.getContext();
                         Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
-
                         if (intent != null) {
                             view.stopLoading();
-
                             PackageManager packageManager = context.getPackageManager();
                             ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
                             if (info != null) {
@@ -103,7 +104,11 @@ public class WebViewActivity extends BaseDataActivity {
             }
 
         };
-
+        if (clearCookies) {
+            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().flush();
+        }
+        webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
