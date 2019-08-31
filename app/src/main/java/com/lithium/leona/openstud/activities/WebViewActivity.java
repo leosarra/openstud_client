@@ -117,8 +117,8 @@ public class WebViewActivity extends BaseDataActivity {
             case SAPIENZA:
                 if (type == ClientHelper.WebViewType.EMAIL.getValue()) {
                     if (url.startsWith("https://login.studenti.uniroma1.it") && !url.contains("logout")) {
-                        view.setVisibility(View.GONE);
-                    } else if (url.contains("logout")) view.setVisibility(View.GONE);
+                        view.setVisibility(View.INVISIBLE);
+                    } else if (url.contains("logout")) view.setVisibility(View.INVISIBLE);
                 } else view.setVisibility(View.VISIBLE);
                 break;
 
