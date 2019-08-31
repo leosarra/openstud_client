@@ -153,7 +153,7 @@ public class InfoManager {
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = gson.toJson(student);
             prefsEditor.putString("student", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newStudent;
     }
@@ -187,7 +187,7 @@ public class InfoManager {
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = gson.toJson(card);
             prefsEditor.putString("studentCard", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newCard;
     }
@@ -286,7 +286,7 @@ public class InfoManager {
             obj = gson.toJson(fakeExams, listType);
             SharedPreferences.Editor prefsEditor = pref.edit();
             prefsEditor.putString("fakeExams", obj);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
     }
 
@@ -345,7 +345,7 @@ public class InfoManager {
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = gson.toJson(isee);
             prefsEditor.putString("isee", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return isee;
     }
@@ -651,7 +651,7 @@ public class InfoManager {
 
     public static synchronized void clearSharedPreferences(Context context) {
         setupSharedPreferences(context);
-        pref.edit().clear().commit();
+        pref.edit().clear().apply();
         os = null;
         student = null;
         paidTaxes = null;
