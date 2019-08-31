@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.webkit.CookieManager;
 
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKeys;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
@@ -12,7 +15,9 @@ import com.lithium.leona.openstud.helpers.ClientHelper;
 
 import org.threeten.bp.LocalDateTime;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +44,7 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 public class InfoManager {
     private static Openstud os;
     private static SharedPreferences pref;
+    private static SharedPreferences encryptedPref;
     private static Student student;
     private static Isee isee;
     private static List<Tax> paidTaxes;
@@ -54,8 +60,24 @@ public class InfoManager {
     private static StudentCard card;
 
     private static synchronized void setupSharedPreferences(Context context) {
-        if (pref != null) return;
-        pref = context.getSharedPreferences("OpenStudPref", 0); // 0 - for private mode
+        if (pref != null && encryptedPref != null) return;
+        if (encryptedPref == null) {
+            try {
+                String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+                encryptedPref = EncryptedSharedPreferences.create(
+                        "OpenStudPrefEncrypted",
+                        masterKeyAlias,
+                        context,
+                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+                );
+            } catch (GeneralSecurityException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (pref == null) {
+            pref = context.getSharedPreferences("OpenStudPref", 0);
+        }
     }
 
     public static void clearCookies() {
@@ -629,6 +651,7 @@ public class InfoManager {
     public static synchronized void clearSharedPreferences(Context context) {
         setupSharedPreferences(context);
         pref.edit().clear().commit();
+        encryptedPref.edit().clear().commit();
         os = null;
         student = null;
         paidTaxes = null;
@@ -649,7 +672,14 @@ public class InfoManager {
         setupSharedPreferences(context);
         String id = null;
         try {
-            id = pref.getString("studentId", null);
+            id = encryptedPref.getString("studentId", null);
+            if (id == null) {
+                id = pref.getString("studentId", null);
+                if (id != null) {
+                    encryptedPref.edit().putString("studentId", id).apply();
+                    pref.edit().remove("studentId").apply();
+                }
+            }
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -658,12 +688,20 @@ public class InfoManager {
 
     private static synchronized String getPassword(Context context) {
         setupSharedPreferences(context);
-        return pref.getString("password", null);
+        String password = encryptedPref.getString("password", null);
+        if (password == null) {
+            password = pref.getString("password", null);
+            if (password != null) {
+                encryptedPref.edit().putString("password", password).apply();
+                pref.edit().remove("password").apply();
+            }
+        }
+        return password;
     }
 
     private static synchronized void setNamePassword(Context context, String id, String password) {
         setupSharedPreferences(context);
-        SharedPreferences.Editor editor = pref.edit();
+        SharedPreferences.Editor editor = encryptedPref.edit();
         editor.putString("studentId", id);
         editor.putString("password", password);
         editor.apply();
