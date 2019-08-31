@@ -92,9 +92,10 @@ dependencies {
     implementation 'com.github.LithiumSR:CompactCalendarView:3.1'
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation "androidx.security:security-crypto:1.0.0-alpha02"
+    implementation "androidx.annotation:annotation:1.1.0"
     testImplementation 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation "androidx.annotation:annotation:1.1.0"
 }
