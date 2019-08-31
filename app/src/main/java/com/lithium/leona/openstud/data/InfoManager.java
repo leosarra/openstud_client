@@ -136,6 +136,9 @@ public class InfoManager {
         Student ret = null;
         try {
             ret = gson.fromJson(oldObj, Student.class);
+            synchronized (InfoManager.class) {
+                student = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -171,6 +174,9 @@ public class InfoManager {
         StudentCard ret = null;
         try {
             ret = gson.fromJson(oldObj, StudentCard.class);
+            synchronized (InfoManager.class) {
+                card = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -242,6 +248,9 @@ public class InfoManager {
         List<Event> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                events = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -329,6 +338,9 @@ public class InfoManager {
         Isee ret = null;
         try {
             ret = gson.fromJson(oldObj, Isee.class);
+            synchronized (InfoManager.class) {
+                isee = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -364,6 +376,9 @@ public class InfoManager {
         List<Tax> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                paidTaxes = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -384,6 +399,9 @@ public class InfoManager {
         List<ExamDone> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                examsDone = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -421,6 +439,9 @@ public class InfoManager {
         List<ExamDoable> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                examsDoable = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -460,6 +481,9 @@ public class InfoManager {
         List<ExamReservation> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                reservations = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -514,6 +538,9 @@ public class InfoManager {
         List<Tax> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                unpaidTaxes = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -571,6 +598,9 @@ public class InfoManager {
         List<News> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                news = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -612,6 +642,9 @@ public class InfoManager {
         List<Event> ret = null;
         try {
             ret = gson.fromJson(oldObj, listType);
+            synchronized (InfoManager.class) {
+                theatre_events = ret;
+            }
         } catch (JsonParseException e) {
             e.printStackTrace();
         }
@@ -820,6 +853,18 @@ public class InfoManager {
             fake.removeAll(remove);
             InfoManager.saveFakeExams(context, fake);
         }
+    }
+
+    private static void migratePasswordPreference(SharedPreferences from, SharedPreferences to) {
+        String id = from.getString("studentId", null);
+        String pass = from.getString("password", null);
+        String profile = from.getString("student", "");
+        SharedPreferences.Editor editor = to.edit();
+        editor.putString("studentID", id);
+        editor.putString("password", pass);
+        editor.putString("student", profile);
+        from.edit().remove("studentId").remove("password").remove("student").apply();
+        editor.apply();
     }
 
     private static void migratePreference(SharedPreferences from, SharedPreferences to) {
