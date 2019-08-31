@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import lithium.openstud.driver.core.Openstud;
@@ -44,7 +45,6 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 public class InfoManager {
     private static Openstud os;
     private static SharedPreferences pref;
-    private static SharedPreferences encryptedPref;
     private static Student student;
     private static Isee isee;
     private static List<Tax> paidTaxes;
@@ -60,23 +60,24 @@ public class InfoManager {
     private static StudentCard card;
 
     private static synchronized void setupSharedPreferences(Context context) {
-        if (pref != null && encryptedPref != null) return;
-        if (encryptedPref == null) {
-            try {
-                String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-                encryptedPref = EncryptedSharedPreferences.create(
-                        "OpenStudPrefEncrypted",
-                        masterKeyAlias,
-                        context,
-                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-                );
-            } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
+        if (pref != null) return;
+        try {
+            String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+            pref = EncryptedSharedPreferences.create(
+                    "OpenStudPrefEncrypted",
+                    masterKeyAlias,
+                    context,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+            SharedPreferences clearPref = context.getSharedPreferences("OpenStudPref", 0);
+            if (clearPref.getString("studentId", null) != null) {
+                migratePreference(clearPref, pref);
+                clearPref.edit().clear().apply();
             }
-        }
-        if (pref == null) {
-            pref = context.getSharedPreferences("OpenStudPref", 0);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            ClientHelper.reportException(e);
         }
     }
 
@@ -651,7 +652,6 @@ public class InfoManager {
     public static synchronized void clearSharedPreferences(Context context) {
         setupSharedPreferences(context);
         pref.edit().clear().commit();
-        encryptedPref.edit().clear().commit();
         os = null;
         student = null;
         paidTaxes = null;
@@ -672,11 +672,11 @@ public class InfoManager {
         setupSharedPreferences(context);
         String id = null;
         try {
-            id = encryptedPref.getString("studentId", null);
+            id = pref.getString("studentId", null);
             if (id == null) {
                 id = pref.getString("studentId", null);
                 if (id != null) {
-                    encryptedPref.edit().putString("studentId", id).apply();
+                    pref.edit().putString("studentId", id).apply();
                     pref.edit().remove("studentId").apply();
                 }
             }
@@ -688,11 +688,11 @@ public class InfoManager {
 
     private static synchronized String getPassword(Context context) {
         setupSharedPreferences(context);
-        String password = encryptedPref.getString("password", null);
+        String password = pref.getString("password", null);
         if (password == null) {
             password = pref.getString("password", null);
             if (password != null) {
-                encryptedPref.edit().putString("password", password).apply();
+                pref.edit().putString("password", password).apply();
                 pref.edit().remove("password").apply();
             }
         }
@@ -701,7 +701,7 @@ public class InfoManager {
 
     private static synchronized void setNamePassword(Context context, String id, String password) {
         setupSharedPreferences(context);
-        SharedPreferences.Editor editor = encryptedPref.edit();
+        SharedPreferences.Editor editor = pref.edit();
         editor.putString("studentId", id);
         editor.putString("password", password);
         editor.apply();
@@ -820,5 +820,28 @@ public class InfoManager {
             fake.removeAll(remove);
             InfoManager.saveFakeExams(context, fake);
         }
+    }
+
+    private static void migratePreference(SharedPreferences from, SharedPreferences to) {
+        Set<? extends Map.Entry<String, ?>> entries = from.getAll().entrySet();
+        SharedPreferences.Editor editor = to.edit();
+        for (Map.Entry<String, ?> entry : entries) {
+            Object value = entry.getValue();
+            String key = entry.getKey();
+            if (value instanceof String) {
+                editor.putString(key, ((String) value));
+            } else if (value instanceof Set) {
+                editor.putStringSet(key, (Set<String>) value);
+            } else if (value instanceof Integer) {
+                editor.putInt(key, (Integer) value);
+            } else if (value instanceof Long) {
+                editor.putLong(key, (Long) value);
+            } else if (value instanceof Float) {
+                editor.putFloat(key, (Float) value);
+            } else if (value instanceof Boolean) {
+                editor.putBoolean(key, (Boolean) value);
+            }
+        }
+        editor.apply();
     }
 }
