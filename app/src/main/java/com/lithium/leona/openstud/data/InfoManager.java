@@ -71,10 +71,7 @@ public class InfoManager {
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
             SharedPreferences clearPref = context.getSharedPreferences("OpenStudPref", 0);
-            if (clearPref.getString("studentId", null) != null) {
-                migratePreference(clearPref, pref);
-                clearPref.edit().clear().apply();
-            }
+            if (isLoginMigrationRequired(clearPref)) migratePreference(clearPref, pref);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
             ClientHelper.reportException(e);
@@ -856,15 +853,15 @@ public class InfoManager {
     }
 
     private static void migratePasswordPreference(SharedPreferences from, SharedPreferences to) {
-        String id = from.getString("studentId", null);
         String pass = from.getString("password", null);
-        String profile = from.getString("student", "");
         SharedPreferences.Editor editor = to.edit();
-        editor.putString("studentID", id);
         editor.putString("password", pass);
-        editor.putString("student", profile);
         from.edit().remove("studentId").remove("password").remove("student").apply();
         editor.apply();
+    }
+
+    private static boolean isLoginMigrationRequired(SharedPreferences pref) {
+        return pref.getString("studentId", null) != null;
     }
 
     private static void migratePreference(SharedPreferences from, SharedPreferences to) {
@@ -888,5 +885,6 @@ public class InfoManager {
             }
         }
         editor.apply();
+        from.edit().clear().apply();
     }
 }
