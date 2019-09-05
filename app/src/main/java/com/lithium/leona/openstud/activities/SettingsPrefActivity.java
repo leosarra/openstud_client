@@ -37,6 +37,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
     @BindView(R.id.main_layout)
     ConstraintLayout mainLayout;
+    BiometricPrompt pendingPrompt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +75,14 @@ public class SettingsPrefActivity extends AppCompatActivity {
 
     private void createBiometricDialog(CheckBoxPreference preference) {
         ExecutorService exe = Executors.newSingleThreadExecutor();
-        BiometricPrompt prompt = new BiometricPrompt(this, exe, new BiometricPrompt.AuthenticationCallback() {
+        pendingPrompt = new BiometricPrompt(this, exe, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
                 if (errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT)
                     LayoutHelper.createTextSnackBar(mainLayout, R.string.no_biometric_hw_found, Snackbar.LENGTH_LONG);
+                else if (errorCode == BiometricPrompt.ERROR_HW_UNAVAILABLE)
+                    LayoutHelper.createTextSnackBar(mainLayout, R.string.biometric_unavailable, Snackbar.LENGTH_LONG);
                 else if (errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS)
                     LayoutHelper.createTextSnackBar(mainLayout, R.string.no_biometrics_found, Snackbar.LENGTH_LONG);
                 else if (errorCode == BiometricPrompt.ERROR_LOCKOUT || errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT)
@@ -102,7 +105,13 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 .setTitle(this.getResources().getString(R.string.biometric_login_enable))
                 .setNegativeButtonText(this.getResources().getString(R.string.delete_abort))
                 .build();
-        prompt.authenticate(promptInfo);
+        pendingPrompt.authenticate(promptInfo);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (pendingPrompt != null) pendingPrompt.cancelAuthentication();
+        super.onSaveInstanceState(outState);
     }
 
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {

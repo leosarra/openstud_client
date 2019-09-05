@@ -211,9 +211,10 @@
     <string name="event_theatre_where">Location: %1$s</string>
     <string name="key_biometrics" translatable="false">key_biometrics</string>
     <string name="login_no_biometrics_found">Biometric login disabled because no available biometric inputs were found</string>
-    <string name="login_no_biometric_hw_found">Biometric login disabled because the hardware isn\'t compatible</string>
+    <string name="login_no_biometric_hw_found">The device doesn\'t have a compatible biometric sensor</string>
     <string name="no_biometrics_found">Can\'t enable the feature because no registered biometric inputs were found</string>
-    <string name="no_biometric_hw_found">Can\'t enable the feature because the hardware isn\'t compatible</string>
+    <string name="no_biometric_hw_found">The device doesn\'t have a compatible biometric sensor</string>
+    <string name="biometric_unavailable">Biometric hardware is unavailable. Try again later</string>
     <string name="pref_title_security">Security</string>
     <string name="enable_biometric_login">Enable biometric login (Experimental)</string>
     <string name="enable_biometric_login_description">Force the user to login using a biometric input (e.g: fingerprint, iris).</string>
@@ -276,5 +277,5 @@
     <string name="birthDate_combo">Birth date: %1$s</string>
     <string name="no_student_card_found">No student card was found!\nIn order to request it, so that you can take advantage of the benefits that it provides, you have to check InfoStud using your web browser.</string>
     <string name="update_card_error">Can\'t update student card details</string>
-    <string name="title_activity_web_view">WebView</string>
+    <string name="title_activity_web_view" translatable="false">WebView</string>
 </resources>

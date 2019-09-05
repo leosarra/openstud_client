@@ -188,14 +188,15 @@
     <string name="event_theatre_when">Inizio alle ore %1$s</string>
     <string name="event_theatre_where">Presso: %1$s</string>
     <string name="login_no_biometrics_found">Login biometrico disattivato perché nessun input valido è disponibile</string>
-    <string name="login_no_biometric_hw_found">Login biometrico disattivato perché il telefono non risulta compatibile</string>
-    <string name="no_biometrics_found">Impossibile attivare la funzionalità perché non é presente un input registrato</string>
-    <string name="no_biometric_hw_found">Impossibile attivare la funzionalità perché il telefono non risulta compatibile</string>
+    <string name="login_no_biometric_hw_found">Login biometrico disattivato per mancanza di un sensore biometrico</string>
+    <string name="no_biometrics_found">Impossibile attivare la funzionalità perché non è presente un input biometrico registrato</string>
+    <string name="no_biometric_hw_found">Il dispositivo non dispone di alcun sensore biometrico compatibile</string>
+    <string name="biometric_unavailable">L\'hardware biometrico non è disponibile. Riprova più tardi</string>
     <string name="pref_title_security">Sicurezza</string>
     <string name="enable_biometric_login">Utilizza login biometrico (Beta)</string>
     <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico (es: impronta, iride).</string>
     <string name="warning">Avviso</string>
-    <string name="biometric_warning">Dal prossimo avvio l\'applicazione utilizzerà in fase di login gli input biometrici configurati dal proprietario nel telefono.\n\nSe nessun input é disponibile la funzionalitá verrá automaticamente disattivata.</string>
+    <string name="biometric_warning">Dal prossimo avvio l\'applicazione utilizzerà in fase di login gli input biometrici configurati dal proprietario nel telefono.\n\nSe nessun input è disponibile la funzionalitá verrá automaticamente disattivata.</string>
     <string name="biometric_login">Login biometrico</string>
     <string name="biometric_login_enable">Abilita login biometrico</string>
     <string name="biometric_lockout">Login biometrico disattivato a causa di troppi tentativi falliti. Riprova piú tardi</string>
@@ -250,6 +251,6 @@
     <string name="student_card">Carta studente</string>
     <string name="studentId_combo">Matricola: %1$s</string>
     <string name="birthDate_combo">Nato il %1$s</string>
-    <string name="no_student_card_found">Nessuna carta studente risulta attualmente attiva!\nPer richiederla, cosí da usufruire dei vantaggi offerti, é necessario collegarsi al sito web di InfoStud.</string>
+    <string name="no_student_card_found">Nessuna carta studente risulta attualmente attiva!\nPer richiederla, cosí da usufruire dei vantaggi offerti, è necessario collegarsi al sito web di InfoStud.</string>
     <string name="update_card_error">Impossibile aggiornare i dettagli della carta studente</string>
 </resources>
