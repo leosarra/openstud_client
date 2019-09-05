@@ -189,7 +189,7 @@
     <string name="event_theatre_where">Presso: %1$s</string>
     <string name="login_no_biometrics_found">Login biometrico disattivato perché nessun input valido è disponibile</string>
     <string name="login_no_biometric_hw_found">Login biometrico disattivato per mancanza di un sensore biometrico</string>
-    <string name="no_biometrics_found">Impossibile attivare la funzionalità perché non è presente un input biometrico registrato</string>
+    <string name="no_biometrics_found">Impossibile attivare la funzionalità perché non è presente un input biometrico configurato sul dispositivo</string>
     <string name="no_biometric_hw_found">Il dispositivo non dispone di alcun sensore biometrico compatibile</string>
     <string name="biometric_unavailable">L\'hardware biometrico non è disponibile. Riprova più tardi</string>
     <string name="pref_title_security">Sicurezza</string>

@@ -212,7 +212,7 @@
     <string name="key_biometrics" translatable="false">key_biometrics</string>
     <string name="login_no_biometrics_found">Biometric login disabled because no available biometric inputs were found</string>
     <string name="login_no_biometric_hw_found">The device doesn\'t have a compatible biometric sensor</string>
-    <string name="no_biometrics_found">Can\'t enable the feature because no registered biometric inputs were found</string>
+    <string name="no_biometrics_found">Can\'t enable the feature because the device doesn\'t have any biometric input configured</string>
     <string name="no_biometric_hw_found">The device doesn\'t have a compatible biometric sensor</string>
     <string name="biometric_unavailable">Biometric hardware is unavailable. Try again later</string>
     <string name="pref_title_security">Security</string>
