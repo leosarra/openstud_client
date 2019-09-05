@@ -2,6 +2,7 @@ package com.lithium.leona.openstud.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.webkit.CookieManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -55,6 +56,11 @@ public class InfoManager {
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
         pref = context.getSharedPreferences("OpenStudPref", 0); // 0 - for private mode
+    }
+
+    public static void clearCookies() {
+        CookieManager.getInstance().removeAllCookies(null);
+        CookieManager.getInstance().flush();
     }
 
     public static Openstud getOpenStud(Context context) {
@@ -636,6 +642,7 @@ public class InfoManager {
         filter = null;
         theatre_events = null;
         card = null;
+        clearCookies();
     }
 
     public static synchronized String getStudentId(Context context) {

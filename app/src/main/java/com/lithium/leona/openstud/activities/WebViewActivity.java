@@ -8,7 +8,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -16,6 +15,7 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.widget.Toolbar;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 
@@ -104,10 +104,7 @@ public class WebViewActivity extends BaseDataActivity {
             }
 
         };
-        if (clearCookies) {
-            CookieManager.getInstance().removeAllCookies(null);
-            CookieManager.getInstance().flush();
-        }
+        if (clearCookies) InfoManager.clearCookies();
         webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
@@ -120,8 +117,8 @@ public class WebViewActivity extends BaseDataActivity {
             case SAPIENZA:
                 if (type == ClientHelper.WebViewType.EMAIL.getValue()) {
                     if (url.startsWith("https://login.studenti.uniroma1.it") && !url.contains("logout")) {
-                        view.setVisibility(View.GONE);
-                    } else if (url.contains("logout")) view.setVisibility(View.GONE);
+                        view.setVisibility(View.INVISIBLE);
+                    } else if (url.contains("logout")) view.setVisibility(View.INVISIBLE);
                 } else view.setVisibility(View.VISIBLE);
                 break;
 
