@@ -193,7 +193,7 @@
     <string name="no_biometric_hw_found">Il dispositivo non dispone di alcun sensore biometrico compatibile</string>
     <string name="biometric_unavailable">L\'hardware biometrico non è disponibile. Riprova più tardi</string>
     <string name="pref_title_security">Sicurezza</string>
-    <string name="enable_biometric_login">Utilizza login biometrico (Beta)</string>
+    <string name="enable_biometric_login">Utilizza login biometrico</string>
     <string name="enable_biometric_login_description">Obbliga l\'utente ad accedere utilizzando un sistema biometrico (es: impronta, iride).</string>
     <string name="warning">Avviso</string>
     <string name="biometric_warning">Dal prossimo avvio l\'applicazione utilizzerà in fase di login gli input biometrici configurati dal proprietario nel telefono.\n\nSe nessun input è disponibile la funzionalitá verrá automaticamente disattivata.</string>
