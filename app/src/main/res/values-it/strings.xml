@@ -253,4 +253,9 @@
     <string name="birthDate_combo">Nato il %1$s</string>
     <string name="no_student_card_found">Nessuna carta studente risulta attualmente attiva!\nPer richiederla, cosí da usufruire dei vantaggi offerti, è necessario collegarsi al sito web di InfoStud.</string>
     <string name="update_card_error">Impossibile aggiornare i dettagli della carta studente</string>
+    <string name="presentation">Base Laurea</string>
+    <string name="ignore_minmax_exam">Ignora migliore/peggiore esame nella presentazione</string>
+    <string name="ignore_minmax_exam_description">Non considerare il migliore e il peggiore esame nel calcolo del voto di presentazione della laurea</string>
+    <string name="change_value_30l">Cambia il valore del voto \"30L\" utilizzato nel calcolo della media ponderata e aritmetica</string>
+    <string name="laude_value_set_error">Magari fosse così facile...</string>
 </resources>

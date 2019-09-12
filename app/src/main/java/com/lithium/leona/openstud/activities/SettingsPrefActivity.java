@@ -175,6 +175,8 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 if (valid) {
                     PreferenceManager.setStatsNotificationEnabled(getContext(), false);
                     ClientHelper.updateGradesWidget(activity, true);
+                } else {
+                    LayoutHelper.createTextSnackBar(getView(), R.string.laude_value_set_error, Snackbar.LENGTH_LONG);
                 }
                 return valid;
             });

@@ -76,6 +76,8 @@ public class StatsActivity extends BaseDataActivity {
     TextView weightedValue;
     @BindView(R.id.totalCFU)
     TextView totalCFU;
+    @BindView(R.id.baseGraduation)
+    TextView baseGraduation;
     @BindView(R.id.graph)
     LineChart graph;
     @BindView(R.id.graph2)
@@ -92,6 +94,7 @@ public class StatsActivity extends BaseDataActivity {
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private int laude;
+    private boolean minMaxIgnoreInBase;
     private List<ExamDone> examsFake;
     private FakeExamAdapter adapter;
     private boolean showIcon = false;
@@ -132,7 +135,9 @@ public class StatsActivity extends BaseDataActivity {
         super.onResume();
         LocalDateTime time = getTimer();
         if (firstStart) firstStart = false;
-        else if (PreferenceManager.getLaudeValue(this) != laude || time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30)
+        else if (PreferenceManager.getLaudeValue(this) != laude
+                || PreferenceManager.isMinMaxExamIgnoredInBaseGraduation(this) != minMaxIgnoreInBase
+                || time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30)
             refreshExamsDone();
     }
 
@@ -144,6 +149,7 @@ public class StatsActivity extends BaseDataActivity {
                 totalCFU.setText("--");
                 arithmeticValue.setText("--");
                 weightedValue.setText("--");
+                baseGraduation.setText("--");
                 graphCard.setVisibility(View.GONE);
                 graphCard2.setVisibility(View.GONE);
                 return;
@@ -151,6 +157,7 @@ public class StatsActivity extends BaseDataActivity {
             setIconVisibility(true);
             showLaudeNotification();
             laude = PreferenceManager.getLaudeValue(this);
+            minMaxIgnoreInBase = PreferenceManager.isMinMaxExamIgnoredInBaseGraduation(this);
             exams.removeAll(examsFake);
             exams.addAll(examsFake);
             updateGraphs();
@@ -166,8 +173,18 @@ public class StatsActivity extends BaseDataActivity {
             numFormat.setMaximumFractionDigits(2);
             numFormat.setMinimumFractionDigits(1);
             totalCFU.setText(String.valueOf(OpenstudHelper.getSumCFU(exams)));
-            arithmeticValue.setText(numFormat.format(OpenstudHelper.computeArithmeticAverage(exams, laude)));
-            weightedValue.setText(numFormat.format(OpenstudHelper.computeWeightedAverage(exams, laude)));
+            double arithmetic = OpenstudHelper.computeArithmeticAverage(exams, laude);
+            double weighted = OpenstudHelper.computeWeightedAverage(exams, laude);
+            int base = OpenstudHelper.computeBaseGraduation(exams,laude, minMaxIgnoreInBase);
+            if (arithmetic == -1) {
+                arithmeticValue.setText("--");
+            } else arithmeticValue.setText(numFormat.format(arithmetic));
+            if (weighted == -1) {
+                weightedValue.setText("--");
+            } else weightedValue.setText(numFormat.format(weighted));
+            if (base == -1) {
+                baseGraduation.setText("--");
+            } else baseGraduation.setText(String.valueOf(base));
             makeAverageGraph();
             makeGradeBarGraph();
         });
