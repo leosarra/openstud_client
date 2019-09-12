@@ -69,7 +69,6 @@
     <string name="delete_abort">Abort</string>
     <string name="receipt">Receipt</string>
     <string name="delete_reservation">Delete reservation</string>
-
     <string name="search_sessions">Sessions</string>
     <string name="start_date_reservation">Start reservations: %1$s</string>
     <string name="end_date_reservation">End reservations: %1$s</string>
@@ -87,10 +86,8 @@
     <string name="question_concerning_openstud">Any question?</string>
     <string name="open_source_libs">Open source libraries</string>
     <string name="no_sessions_found">No sessions found</string>
-
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings" tools:ignore="MissingTranslation">Settings</string>
-
     <string name="pref_ringtone_silent" tools:ignore="MissingTranslation">Silent</string>
     <string name="pref_title_themes">Appearance</string>
     <string name="pref_header_other">Other</string>
@@ -211,11 +208,12 @@
     <string name="event_theatre_where">Location: %1$s</string>
     <string name="key_biometrics" translatable="false">key_biometrics</string>
     <string name="login_no_biometrics_found">Biometric login disabled because no available biometric inputs were found</string>
-    <string name="login_no_biometric_hw_found">Biometric login disabled because the hardware isn\'t compatible</string>
-    <string name="no_biometrics_found">Can\'t enable the feature because no registered biometric inputs were found</string>
-    <string name="no_biometric_hw_found">Can\'t enable the feature because the hardware isn\'t compatible</string>
+    <string name="login_no_biometric_hw_found">The device doesn\'t have a compatible biometric sensor</string>
+    <string name="no_biometrics_found">Can\'t enable the feature because the device doesn\'t have any biometric input configured</string>
+    <string name="no_biometric_hw_found">The device doesn\'t have a compatible biometric sensor</string>
+    <string name="biometric_unavailable">Biometric hardware is unavailable. Try again later</string>
     <string name="pref_title_security">Security</string>
-    <string name="enable_biometric_login">Enable biometric login (Experimental)</string>
+    <string name="enable_biometric_login">Enable biometric login</string>
     <string name="enable_biometric_login_description">Force the user to login using a biometric input (e.g: fingerprint, iris).</string>
     <string name="warning">Warning</string>
     <string name="biometric_warning">From the next start the app will request a biometric input already configured in the phone settings .\n\nIf no method of input is available this feature will be automatically disabled.</string>

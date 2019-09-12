@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputEditText;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.LoginActivity;
 import com.lithium.leona.openstud.helpers.ClientHelper;
@@ -29,7 +29,7 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
     String questionText;
     String studentID;
     @BindView(R.id.questionInput)
-    EditText questionInput;
+    TextInputEditText questionInput;
     @BindView(R.id.question)
     TextView question;
     @BindView(R.id.confirm)
@@ -79,7 +79,7 @@ public class BottomSheetRecoveryFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.recovery_password, container, false);
+        View v = inflater.inflate(R.layout.recovery_pwd, container, false);
         ButterKnife.bind(this, v);
         ClientHelper.setDialogView(v, getDialog(), BottomSheetBehavior.STATE_EXPANDED);
         if (questionText == null || studentID == null) dismiss();

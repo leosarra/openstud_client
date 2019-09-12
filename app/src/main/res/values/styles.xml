@@ -172,7 +172,7 @@
         <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
     </style>
 
-    <style name="StatsThemeEditText">
+    <style name="StatsThemeEditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <!-- Used for the bottom line when not selected / focused -->
         <item name="colorControlNormal">@android:color/darker_gray</item>
         <item name="android:textColorHint">?attr/secondaryTextColor</item>
