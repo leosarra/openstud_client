@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.AvaiableReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -101,11 +102,21 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        adapter = new AvaiableReservationsAdapter(this, reservations, activeReservations, this::confirmReservation);
+        adapter = new AvaiableReservationsAdapter(this, reservations, activeReservations, this::confirmReservation, rv);
         rv.setAdapter(adapter);
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
         if (savedInstanceState == null) refreshAvaiableReservations();
+        else {
+            Gson gson = new Gson();
+            List<ExamReservation> saved = gson.fromJson(savedInstanceState.getString("reservations", "null"), new TypeToken<List<ExamReservation>>() {
+            }.getType());
+            if (saved != null) {
+                reservations.clear();
+                reservations.addAll(saved);
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private boolean confirmReservation(ExamReservation res) {
@@ -226,6 +237,15 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         });
     }
 
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        synchronized (this) {
+            Gson gson = new Gson();
+            String json = gson.toJson(reservations, new TypeToken<List<ExamReservation>>() {
+            }.getType());
+            outState.putString("reservations", json);
+        }
+    }
     private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }

@@ -274,6 +274,7 @@
     <string name="birthDate_combo">Birth date: %1$s</string>
     <string name="no_student_card_found">No student card was found!\nIn order to request it, so that you can take advantage of the benefits that it provides, you have to check InfoStud using your web browser.</string>
     <string name="update_card_error">Can\'t update student card details</string>
+    <string name="reservation_period">Reservation period:  %1$s -  %2$s</string>
     <string name="title_activity_web_view" translatable="false">WebView</string>
     <string name="presentation">Base laurea</string>
     <string name="key_minmax_remove" translatable="false">key_minmax_remove</string>
