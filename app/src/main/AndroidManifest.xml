@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lithium.leona.openstud">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-
+    <uses-permission android:name="android.permission.CAMERA" tools:node="remove" />
     <meta-data
         android:name="google_analytics_adid_collection_enabled"
         android:value="false" />
@@ -21,7 +22,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeLight">
+        android:theme="@style/AppThemeLight"
+        android:hardwareAccelerated="true">
+        <activity
+            android:name=".activities.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:theme="@style/NoActionBarAppLightTheme"
+            android:configChanges="orientation|screenSize"/>
+
         <receiver
             android:name=".widgets.ExamsWidget"
             android:label="@string/exam_widget">

@@ -11,9 +11,9 @@ import android.widget.RemoteViewsService;
 
 import androidx.core.content.ContextCompat;
 
-import com.crashlytics.android.Crashlytics;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.InfoManager;
+import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.WidgetHelper;
 
 import org.threeten.bp.format.DateTimeFormatter;
@@ -66,7 +66,7 @@ public class ExamsFactory implements RemoteViewsService.RemoteViewsFactory {
             else remoteViews.setViewVisibility(R.id.countdown, View.VISIBLE);
             return remoteViews;
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            ClientHelper.reportException(e);
         }
         return null;
     }

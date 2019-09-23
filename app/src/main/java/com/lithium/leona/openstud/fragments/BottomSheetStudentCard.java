@@ -100,7 +100,6 @@ public class BottomSheetStudentCard extends BottomSheetDialogFragment {
             dismiss();
             return null;
         }
-        setBrightness(activity, 1F);
         progressLayout.setVisibility(View.VISIBLE);
         contentLayout.setVisibility(View.GONE);
         os = InfoManager.getOpenStud(activity);
@@ -179,6 +178,7 @@ public class BottomSheetStudentCard extends BottomSheetDialogFragment {
             birthDate.setText(activity.getResources().getString(R.string.birthDate_combo, formatter.format(student.getBirthDate())));
             progressLayout.setVisibility(View.GONE);
             contentLayout.setVisibility(View.VISIBLE);
+            setBrightness(activity, 1F);
         });
     }
 

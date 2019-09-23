@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class PreferenceManager {
-    public final static boolean BIOMETRIC_FEATURE_AVAILABLE = false;
+    public final static boolean BIOMETRIC_FEATURE_AVAILABLE = true;
     private static SharedPreferences pref;
     private static List<CustomCourse> courses;
 
@@ -40,6 +40,13 @@ public class PreferenceManager {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
             return pref.getBoolean(context.getResources().getString(R.string.key_biometrics), false);
+        }
+    }
+
+    public static boolean isMinMaxExamIgnoredInBaseGraduation(Context context) {
+        setupSharedPreferences(context);
+        synchronized (PreferenceManager.class) {
+            return pref.getBoolean(context.getResources().getString(R.string.key_minmax_remove), false);
         }
     }
 

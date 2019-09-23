@@ -256,6 +256,7 @@
                     android:textColor="?attr/secondaryTextColor" />
             </RelativeLayout>
 
+            <include layout="@layout/item_divider" />
 
             <RelativeLayout
                 android:id="@+id/emailLayout"
@@ -263,7 +264,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <ImageView

@@ -11,17 +11,25 @@
             android:summary="@string/show_exam_date_description"
             android:title="@string/show_exam_date"
             app:iconSpaceReserved="false" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/key_minmax_remove"
+            android:summary="@string/ignore_minmax_exam_description"
+            android:title="@string/ignore_minmax_exam"
+            app:iconSpaceReserved="false" />
         <EditTextPreference
             android:defaultValue="30"
             android:inputType="number"
             android:key="@string/key_default_laude"
             android:numeric="integer"
             android:title="@string/default_laude"
+            android:summary="@string/change_value_30l"
             app:iconSpaceReserved="false" />
         <Preference
             android:key="@string/key_delete"
             android:title="@string/delete_pdf"
             app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -65,6 +73,7 @@
         android:key="@string/key_security_category"
         android:title="@string/pref_title_security"
         app:iconSpaceReserved="false">
+
         <CheckBoxPreference
             android:clickable="false"
             android:defaultValue="false"

@@ -45,6 +45,7 @@ import com.lithium.leona.openstud.activities.ProfileActivity;
 import com.lithium.leona.openstud.activities.SearchClassroomActivity;
 import com.lithium.leona.openstud.activities.SettingsPrefActivity;
 import com.lithium.leona.openstud.activities.StatsActivity;
+import com.lithium.leona.openstud.activities.WebViewActivity;
 import com.lithium.leona.openstud.data.CustomCourse;
 import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -59,6 +60,8 @@ import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.temporal.ChronoUnit;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -93,7 +96,7 @@ public class ClientHelper {
         return calendar.getTime();
     }
 
-    public static List<Event> orderByStartTime(List<Event> events, boolean ascending) {
+    public static void orderByStartTime(List<Event> events, boolean ascending) {
         Collections.sort(events, (o1, o2) -> {
             if (o1.getStart() == null && o2.getStart() == null) return 0;
             if (ascending)
@@ -106,10 +109,9 @@ public class ClientHelper {
                 else return o2.getStart().compareTo(o1.getStart());
             }
         });
-        return events;
     }
 
-    public static List<Event> orderEventByDate(List<Event> events, boolean ascending) {
+    public static void orderEventByDate(List<Event> events, boolean ascending) {
         Collections.sort(events, (o1, o2) -> {
             if (o1.getEventDate() == null && o2.getEventDate() == null) return 0;
             if (ascending)
@@ -122,7 +124,6 @@ public class ClientHelper {
                 else return o2.getEventDate().compareTo(o1.getEventDate());
             }
         });
-        return events;
     }
 
     public static ArrayList<Entry> generateMarksPoints(List<ExamDone> exams, int laude) {
@@ -207,6 +208,15 @@ public class ClientHelper {
         }
     }
 
+    public static void createWebViewActivity(Context context, String title, String subtitle, String url, ClientHelper.WebViewType type) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("subtitle", subtitle);
+        intent.putExtra("webviewType", type.getValue());
+        intent.putExtra("url", url);
+        context.startActivity(intent);
+    }
+
     public static void createConfirmDeleteReservationDialog(Activity activity, final ExamReservation res, Runnable action) {
         if (activity == null) return;
         int themeId = ThemeEngine.getAlertDialogTheme(activity);
@@ -257,7 +267,8 @@ public class ClientHelper {
             Intent intent = new Intent(activity, ProfileActivity.class);
             activity.startActivity(intent);
         } else if (item == LayoutHelper.Selection.EXIT.getValue()) {
-            InfoManager.clearSharedPreferences(activity.getApplication());
+            InfoManager.clearSharedPreferences(activity);
+            PreferenceManager.setBiometricsEnabled(activity, false);
             Intent i = new Intent(activity, LauncherActivity.class);
             activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         } else if (item == LayoutHelper.Selection.CLASSROOMS.getValue()) {
@@ -434,16 +445,37 @@ public class ClientHelper {
 
     public static void openActionViewPDF(Activity activity, File pdfFile) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
-        intent.setDataAndType(uri, "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (intent.resolveActivity(activity.getPackageManager()) != null)
-            activity.startActivity(intent);
-        else {
+        try {
+            Uri uri = FileProvider.getUriForFile(activity, "com.lithium.leona.openstud.provider", pdfFile);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (intent.resolveActivity(activity.getPackageManager()) != null)
+                activity.startActivity(intent);
+            else {
+                if (activity instanceof ExamsActivity) {
+                    ExamsActivity examsActivity = (ExamsActivity) activity;
+                    examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
+                } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
+            }
+        } catch (IllegalArgumentException e) {
+            ClientHelper.reportException(e);
             if (activity instanceof ExamsActivity) {
                 ExamsActivity examsActivity = (ExamsActivity) activity;
-                examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
-            } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
+                examsActivity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
+            } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_io).show());
+        }
+
+    }
+
+    public static void reportException(Exception e) {
+        if (BuildConfig.FLAVOR.equals("full")) {
+            try {
+                Class crashlytics = Class.forName("com.crashlytics.android.Crashlytics");
+                Method logException = crashlytics.getMethod("logException", Throwable.class);
+                logException.invoke(crashlytics,e);
+            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -481,7 +513,7 @@ public class ClientHelper {
         OK(0), CONNECTION_ERROR(1), INVALID_RESPONSE(2), INVALID_CREDENTIALS(3), USER_NOT_ENABLED(4), UNEXPECTED_VALUE(5),
         EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
         PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15), FAIL_LOGIN(16), ENABLE_BUTTONS(17), RECOVERY_OK(18), INVALID_ANSWER(19),
-        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23), MAINTENANCE(24), NO_BIOMETRICS(25), LOCKOUT_BIOMETRICS(26), NO_BIOMETRIC_HW(27);
+        INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23), MAINTENANCE(24), NO_BIOMETRICS(25), LOCKOUT_BIOMETRICS(26), NO_BIOMETRIC_HW(27), BIOMETRIC_UNAVAILABLE (28);
         private final int value;
 
         Status(int value) {
@@ -492,6 +524,20 @@ public class ClientHelper {
             return value;
         }
 
+    }
+
+
+    public enum WebViewType {
+        EMAIL(0);
+        private final int value;
+
+        WebViewType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     public enum Sort {

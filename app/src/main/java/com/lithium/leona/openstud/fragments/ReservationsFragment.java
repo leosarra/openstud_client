@@ -23,6 +23,7 @@ import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
 
@@ -124,10 +125,11 @@ public class ReservationsFragment extends BaseDataFragment {
 
     private void getFile(Activity activity, ExamReservation res) {
         boolean check = false;
-        String directory = activity.getExternalFilesDir("/OpenStud/pdf/reservation").getPath();
+        String directory = activity.getExternalFilesDir("/OpenStud/pdf/reservations/").getPath();
         File dirs = new File(directory);
+        if (!directory.endsWith("/")) directory = directory + "/";
         dirs.mkdirs();
-        File pdfFile = new File(directory + res.getSessionID() + "_" + res.getExamSubject() + "_" + res.getReservationNumber() + ".pdf");
+        File pdfFile = new File(directory + res.getSessionID() + "_" + StringUtils.abbreviate(res.getExamSubject(),30) + "_" + res.getReservationNumber() + ".pdf");
         try {
             if (pdfFile.exists()) {
                 ClientHelper.openActionViewPDF(activity, pdfFile);

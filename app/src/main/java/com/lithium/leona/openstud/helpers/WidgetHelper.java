@@ -91,7 +91,8 @@ public class WidgetHelper {
                 }
             }
         }
-        return ClientHelper.orderEventByDate(output, true);
+        ClientHelper.orderEventByDate(output, true);
+        return output;
     }
 
 }
