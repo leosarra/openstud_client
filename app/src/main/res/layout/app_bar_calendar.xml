@@ -13,39 +13,6 @@
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:expanded="false">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            android:minHeight="?attr/actionBarSize"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:statusBarScrim="?attr/colorPrimaryDark">
-
-            <LinearLayout
-                android:id="@+id/compactcalendar_view_container"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:paddingTop="?attr/actionBarSize"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="1.0">
-
-                <com.github.sundeepk.compactcalendarview.CompactCalendarView
-                    android:id="@+id/compactcalendar_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    app:compactCalendarBackgroundColor="?attr/colorPrimary"
-                    app:compactCalendarCurrentDayBackgroundColor="#ff7f07"
-                    app:compactCalendarCurrentSelectedDayBackgroundColor="#baf25358"
-                    app:compactCalendarTextColor="#fff"
-                    app:compactCalendarTextSize="12sp"
-                    app:compactCalendarUppercaseWeekDaysHeader="true" />
-            </LinearLayout>
-
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -102,8 +69,27 @@
 
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/collapsingToolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:el_duration="300"
+            app:el_expanded="false"
+            app:el_parallax="0.5">
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            <com.github.sundeepk.compactcalendarview.CompactCalendarView
+                android:id="@+id/compactcalendar_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                app:compactCalendarBackgroundColor="?attr/colorPrimary"
+                app:compactCalendarCurrentDayBackgroundColor="#ff7f07"
+                app:compactCalendarCurrentSelectedDayBackgroundColor="#baf25358"
+                app:compactCalendarTextColor="#fff"
+                app:compactCalendarTextSize="12sp"
+                app:compactCalendarUppercaseWeekDaysHeader="true" />
+        </net.cachapa.expandablelayout.ExpandableLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
