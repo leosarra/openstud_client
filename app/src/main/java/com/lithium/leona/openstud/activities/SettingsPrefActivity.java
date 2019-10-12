@@ -125,7 +125,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
             if (activity == null) return;
             addPreferencesFromResource(R.xml.pref_main);
             alertDialogTheme = ThemeEngine.getAlertDialogTheme(activity);
-            oldTheme = ThemeEngine.getTheme(activity);
+            oldTheme = PreferenceManager.getTheme(activity);
             Preference theme = findPreference(getString(R.string.key_theme));
             theme.setOnPreferenceChangeListener((preference, o) -> {
                 String newTheme = o.toString();
@@ -133,7 +133,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 if (context == null) return false;
                 int id = Integer.parseInt(newTheme);
                 if (ThemeEngine.Theme.getTheme(id) == oldTheme) return false;
-                ThemeEngine.setTheme(context, ThemeEngine.Theme.getTheme(id));
+                PreferenceManager.setTheme(context, ThemeEngine.Theme.getTheme(id));
                 oldTheme = ThemeEngine.Theme.getTheme(id);
                 activity.createRestartDialog(alertDialogTheme);
                 return true;
