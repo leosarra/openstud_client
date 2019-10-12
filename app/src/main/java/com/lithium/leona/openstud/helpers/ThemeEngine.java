@@ -2,7 +2,6 @@ package com.lithium.leona.openstud.helpers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.TypedValue;
@@ -13,20 +12,9 @@ import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.data.PreferenceManager;
 
 public class ThemeEngine {
-    private static SharedPreferences pref;
-
-    private static void setupSharedPreferences(Context context) {
-        if (pref != null) return;
-        pref = context.getSharedPreferences("ThemePrefs", 0); // 0 - for private mode
-    }
-
     public static void applyExamTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.ExamDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -40,12 +28,8 @@ public class ThemeEngine {
     }
 
     public static void applyProfileTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -60,12 +44,8 @@ public class ThemeEngine {
     }
 
     public static void applyPaymentsTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -79,12 +59,8 @@ public class ThemeEngine {
     }
 
     public static void applySearchTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -98,12 +74,8 @@ public class ThemeEngine {
     }
 
     public static void applyStatsTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -117,12 +89,8 @@ public class ThemeEngine {
     }
 
     public static void applySearchClassroomTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -136,12 +104,8 @@ public class ThemeEngine {
     }
 
     public static void applyClassroomTimetableTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -175,13 +139,8 @@ public class ThemeEngine {
     }
 
     public static void applyAboutTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity))
-                    activity.setTheme(R.style.AppTheme_MaterialAboutActivityLight);
-                else activity.setTheme(R.style.AppTheme_MaterialAboutActivityDark);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.AppTheme_MaterialAboutActivityLight);
                 break;
@@ -195,12 +154,8 @@ public class ThemeEngine {
     }
 
     public static void applyCalendarTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -214,11 +169,8 @@ public class ThemeEngine {
     }
 
     public static int getDialogTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) return R.style.ThemeLightDialog;
-                else return R.style.ThemeDarkDialog;
             case LIGHT:
                 return R.style.ThemeLightDialog;
             case DARK:
@@ -231,11 +183,8 @@ public class ThemeEngine {
     }
 
     public static int getAlertDialogTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) return R.style.ThemeLightAlertDialog;
-                else return R.style.ThemeDarkAlertDialog;
             case LIGHT:
                 return R.style.ThemeLightAlertDialog;
             case DARK:
@@ -248,12 +197,8 @@ public class ThemeEngine {
     }
 
     public static void applySettingsTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.PreferencesLight);
-                else activity.setTheme(R.style.PreferencesDark);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.PreferencesLight);
                 break;
@@ -267,11 +212,8 @@ public class ThemeEngine {
     }
 
     public static int getAboutTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) return R.style.AboutLibrariesThemeLight;
-                else return R.style.AboutLibrariesThemeDark;
             case LIGHT:
                 return R.style.AboutLibrariesThemeLight;
             case DARK:
@@ -284,12 +226,8 @@ public class ThemeEngine {
     }
 
     public static void applyNewsTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -303,12 +241,8 @@ public class ThemeEngine {
     }
 
     public static void applyCustomCourseTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
-                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
-                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -322,11 +256,8 @@ public class ThemeEngine {
     }
 
     public static int getDatePickerTheme(Activity activity) {
-        Theme theme = PreferenceManager.getTheme(activity);
+        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(activity)) return R.style.DatePickerLightTheme;
-                else return R.style.DatePickerDarkTheme;
             case LIGHT:
                 return R.style.DatePickerLightTheme;
             case DARK:
@@ -339,11 +270,8 @@ public class ThemeEngine {
     }
 
     public static int getTimePickerTheme(Context context) {
-        Theme theme = PreferenceManager.getTheme(context);
+        Theme theme = resolveTheme(context,PreferenceManager.getTheme(context));
         switch (theme) {
-            case SYSTEM:
-                if (isLightTheme(context)) return R.style.TimePickerDialogLightTheme;
-                else return R.style.TimePickerDialogDarkTheme;
             case LIGHT:
                 return R.style.TimePickerDialogLightTheme;
             case DARK:
@@ -366,15 +294,23 @@ public class ThemeEngine {
         return false;
     }
 
-    private static boolean isDarkSystemThemeEnabled(Context activity) {
-        if (activity == null) return true;
-        switch (activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+    private static boolean isDarkSystemThemeEnabled(Context context) {
+        if (context == null) return false;
+        switch (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
             case Configuration.UI_MODE_NIGHT_YES:
                 return true;
             case Configuration.UI_MODE_NIGHT_NO:
                 return false;
         }
         return false;
+    }
+
+    private static Theme resolveTheme(Context context, Theme theme) {
+        if (theme == Theme.SYSTEM){
+            if (isLightTheme(context)) return Theme.LIGHT;
+            else return Theme.DARK;
+        }
+        return theme;
     }
 
     public enum Theme {
