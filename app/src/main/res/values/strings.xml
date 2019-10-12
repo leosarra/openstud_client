@@ -94,7 +94,7 @@
     <string name="delete_pdf">Delete cached PDF files</string>
     <string name="pref_title_stats">Stats</string>
     <string name="summary_theme">Choose OpenStud theme</string>
-    <string name="key_theme" translatable="false">key_theme_select</string>
+    <string name="key_theme" translatable="false">key_app_theme</string>
     <string name="title_theme">Theme</string>
     <string name="default_laude">Value \"30L\"</string>
     <string name="default_laute_value" translatable="false">Value \"30L\"</string>

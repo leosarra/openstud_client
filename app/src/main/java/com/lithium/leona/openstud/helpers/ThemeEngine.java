@@ -3,12 +3,14 @@ package com.lithium.leona.openstud.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.TypedValue;
 
 import androidx.core.content.ContextCompat;
 
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.data.PreferenceManager;
 
 public class ThemeEngine {
     private static SharedPreferences pref;
@@ -18,19 +20,13 @@ public class ThemeEngine {
         pref = context.getSharedPreferences("ThemePrefs", 0); // 0 - for private mode
     }
 
-    public static void setTheme(Context context, Theme theme) {
-        setupSharedPreferences(context);
-        pref.edit().putInt("Theme", theme.getValue()).commit();
-    }
-
-    public static Theme getTheme(Context context) {
-        setupSharedPreferences(context);
-        return ThemeEngine.Theme.getTheme(pref.getInt("Theme", 0));
-    }
-
     public static void applyExamTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.ExamDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -44,8 +40,12 @@ public class ThemeEngine {
     }
 
     public static void applyProfileTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -60,8 +60,12 @@ public class ThemeEngine {
     }
 
     public static void applyPaymentsTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -75,8 +79,12 @@ public class ThemeEngine {
     }
 
     public static void applySearchTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -90,8 +98,12 @@ public class ThemeEngine {
     }
 
     public static void applyStatsTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -105,8 +117,12 @@ public class ThemeEngine {
     }
 
     public static void applySearchClassroomTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -120,8 +136,12 @@ public class ThemeEngine {
     }
 
     public static void applyClassroomTimetableTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -155,8 +175,13 @@ public class ThemeEngine {
     }
 
     public static void applyAboutTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity))
+                    activity.setTheme(R.style.AppTheme_MaterialAboutActivityLight);
+                else activity.setTheme(R.style.AppTheme_MaterialAboutActivityDark);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.AppTheme_MaterialAboutActivityLight);
                 break;
@@ -170,8 +195,12 @@ public class ThemeEngine {
     }
 
     public static void applyCalendarTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -185,8 +214,11 @@ public class ThemeEngine {
     }
 
     public static int getDialogTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) return R.style.ThemeLightDialog;
+                else return R.style.ThemeDarkDialog;
             case LIGHT:
                 return R.style.ThemeLightDialog;
             case DARK:
@@ -199,8 +231,11 @@ public class ThemeEngine {
     }
 
     public static int getAlertDialogTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) return R.style.ThemeLightAlertDialog;
+                else return R.style.ThemeDarkAlertDialog;
             case LIGHT:
                 return R.style.ThemeLightAlertDialog;
             case DARK:
@@ -213,8 +248,12 @@ public class ThemeEngine {
     }
 
     public static void applySettingsTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.PreferencesLight);
+                else activity.setTheme(R.style.PreferencesDark);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.PreferencesLight);
                 break;
@@ -228,8 +267,11 @@ public class ThemeEngine {
     }
 
     public static int getAboutTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) return R.style.AboutLibrariesThemeLight;
+                else return R.style.AboutLibrariesThemeDark;
             case LIGHT:
                 return R.style.AboutLibrariesThemeLight;
             case DARK:
@@ -242,8 +284,12 @@ public class ThemeEngine {
     }
 
     public static void applyNewsTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -257,8 +303,12 @@ public class ThemeEngine {
     }
 
     public static void applyCustomCourseTheme(Activity activity) {
-        Theme theme = getTheme(activity);
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) activity.setTheme(R.style.NoActionBarAppLightTheme);
+                else activity.setTheme(R.style.NoActionBarAppDarkTheme);
+                break;
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
                 break;
@@ -271,9 +321,12 @@ public class ThemeEngine {
         }
     }
 
-    public static int getDatePickerTheme(Context context) {
-        Theme theme = getTheme(context);
+    public static int getDatePickerTheme(Activity activity) {
+        Theme theme = PreferenceManager.getTheme(activity);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(activity)) return R.style.DatePickerLightTheme;
+                else return R.style.DatePickerDarkTheme;
             case LIGHT:
                 return R.style.DatePickerLightTheme;
             case DARK:
@@ -286,8 +339,11 @@ public class ThemeEngine {
     }
 
     public static int getTimePickerTheme(Context context) {
-        Theme theme = getTheme(context);
+        Theme theme = PreferenceManager.getTheme(context);
         switch (theme) {
+            case SYSTEM:
+                if (isLightTheme(context)) return R.style.TimePickerDialogLightTheme;
+                else return R.style.TimePickerDialogDarkTheme;
             case LIGHT:
                 return R.style.TimePickerDialogLightTheme;
             case DARK:
@@ -300,16 +356,29 @@ public class ThemeEngine {
     }
 
     public static boolean isLightTheme(Context context) {
-        Theme theme = getTheme(context);
+        Theme theme = PreferenceManager.getTheme(context);
         switch (theme) {
+            case SYSTEM:
+                return !isDarkSystemThemeEnabled(context);
             case LIGHT:
                 return true;
         }
         return false;
     }
 
+    private static boolean isDarkSystemThemeEnabled(Context activity) {
+        if (activity == null) return true;
+        switch (activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                return true;
+            case Configuration.UI_MODE_NIGHT_NO:
+                return false;
+        }
+        return false;
+    }
+
     public enum Theme {
-        LIGHT(0), DARK(1), BLACK(2);
+        SYSTEM(0), LIGHT(1), DARK(2), BLACK(3);
         private int value;
 
         Theme(int value) {
@@ -317,13 +386,14 @@ public class ThemeEngine {
         }
 
         public static Theme getTheme(int theme) {
-            if (theme == 0) return LIGHT;
-            else if (theme == 1) return DARK;
-            else if (theme == 2) return BLACK;
-            else return LIGHT;
+            if (theme == 0) return SYSTEM;
+            else if (theme == 1) return LIGHT;
+            else if (theme == 2) return DARK;
+            else if (theme == 3) return BLACK;
+            else return SYSTEM;
         }
 
-        private int getValue() {
+        public int getValue() {
             return value;
         }
     }
