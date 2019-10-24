@@ -194,7 +194,16 @@ public class LoginActivity extends AppCompatActivity {
             InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
-            h.sendEmptyMessage(ClientHelper.getStatusFromLoginException(e).getValue());
+            ClientHelper.Status status = ClientHelper.getStatusFromLoginException(e);
+            if (status == ClientHelper.Status.INVALID_CREDENTIALS) {
+                Message msg = new Message();
+                Bundle data = new Bundle();
+                data.putInt("maxAttempts", e.getMaxAttempts());
+                data.putInt("attemptNumber", e.getAttemptNumber());
+                msg.setData(data);
+                msg.what = status.getValue();
+                h.sendMessage(msg);
+            } else h.sendEmptyMessage(status.getValue());
             e.printStackTrace();
         } catch (OpenstudUserNotEnabledException e) {
             h.sendEmptyMessage(ClientHelper.Status.USER_NOT_ENABLED.getValue());
@@ -301,7 +310,22 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    Bundle data = msg.getData();
+                    boolean fired = false;
+                    if (msg.getData() != null) {
+                        int maxAttempts = data.getInt("maxAttempts", -1);
+                        int attemptNumber = data.getInt("attemptNumber", -1);
+                        if (maxAttempts != -1 && attemptNumber != -1) {
+                            fired = true;
+                            int attemptsLeft = maxAttempts - attemptNumber;
+                            if (attemptsLeft == 1)
+                                LayoutHelper.createTextSnackBar(activity.layout, activity.getResources().getString(R.string.invalid_password_error_with_counter_singular, String.valueOf(attemptsLeft)), Snackbar.LENGTH_LONG);
+                            else
+                                LayoutHelper.createTextSnackBar(activity.layout, activity.getResources().getString(R.string.invalid_password_error_with_counter_plural, String.valueOf(attemptsLeft)), Snackbar.LENGTH_LONG);
+                        }
+                        if (!fired)
+                            LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+                    }
                 } else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.ACCOUNT_BLOCKED).getValue()) {

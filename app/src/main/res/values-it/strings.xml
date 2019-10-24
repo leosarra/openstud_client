@@ -258,6 +258,8 @@
     <string name="ignore_minmax_exam">Ignora migliore/peggiore esame nella presentazione</string>
     <string name="ignore_minmax_exam_description">Non considerare il migliore e il peggiore esame nel calcolo del voto di presentazione della laurea</string>
     <string name="change_value_30l">Cambia il valore del voto \"30L\" utilizzato nel calcolo della media ponderata e aritmetica</string>
-    <string name="laude_value_set_error">Magari fosse così facile...</string>
+    <string name="laude_value_set_error">Magari fosse così facile…</string>
     <string name="account_blocked_error">Account bloccato. Contattare la segreteria studenti</string>
+    <string name="invalid_password_error_with_counter_singular">Credenziali errate! %1$s tentativo rimasto</string>
+    <string name="invalid_password_error_with_counter_plural">Credenziali errate! %1$s tentativi rimasti</string>
 </resources>
