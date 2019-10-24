@@ -215,6 +215,8 @@ public class LoginActivity extends AppCompatActivity {
         if (error == -1) return;
         else if (error == ClientHelper.Status.INVALID_CREDENTIALS.getValue())
             LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+        else if (error == ClientHelper.Status.ACCOUNT_BLOCKED.getValue())
+            LayoutHelper.createTextSnackBar(layout, R.string.account_blocked_error, Snackbar.LENGTH_LONG);
         else if (error == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue())
             LayoutHelper.createTextSnackBar(layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
         else if (error == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue())
