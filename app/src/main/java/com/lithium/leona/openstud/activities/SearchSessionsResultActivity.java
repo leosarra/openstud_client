@@ -244,6 +244,7 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
             outState.putString("reservations", json);
         }
     }
+
     private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }

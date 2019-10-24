@@ -107,43 +107,43 @@ public class BottomSheetStudentCard extends BottomSheetDialogFragment {
         if (student == null) dismiss();
         else {
             cachedCard = InfoManager.getStudentCardCached(activity, os);
-            if (cachedCard!=null) applyCard(activity, cachedCard);
+            if (cachedCard != null) applyCard(activity, cachedCard);
             getCard(activity);
         }
         return null;
     }
 
-    private void getCard(Activity activity){
+    private void getCard(Activity activity) {
         new Thread(() -> {
             try {
-                StudentCard card = InfoManager.getStudentCard(activity,os,student);
+                StudentCard card = InfoManager.getStudentCard(activity, os, student);
                 if (card != null && card.equals(cachedCard)) return;
                 applyCard(activity, card);
             } catch (OpenstudConnectionException e) {
                 e.printStackTrace();
                 if (cachedCard == null) {
-                    activity.runOnUiThread(() -> Toasty.error(activity,R.string.connection_error).show());
+                    activity.runOnUiThread(() -> Toasty.error(activity, R.string.connection_error).show());
                     dismiss();
                 } else {
-                    activity.runOnUiThread(() -> Toasty.warning(activity,R.string.update_card_error).show());
+                    activity.runOnUiThread(() -> Toasty.warning(activity, R.string.update_card_error).show());
                 }
             } catch (OpenstudInvalidResponseException e) {
                 e.printStackTrace();
                 if (cachedCard == null) {
-                    activity.runOnUiThread(() -> Toasty.error(activity,R.string.invalid_response_error).show());
+                    activity.runOnUiThread(() -> Toasty.error(activity, R.string.invalid_response_error).show());
                     dismiss();
                 } else {
-                    activity.runOnUiThread(() -> Toasty.warning(activity,R.string.update_card_error).show());
+                    activity.runOnUiThread(() -> Toasty.warning(activity, R.string.update_card_error).show());
                 }
             } catch (OpenstudInvalidCredentialsException e) {
                 e.printStackTrace();
-                ClientHelper.rebirthApp(activity,ClientHelper.getStatusFromLoginException(e).getValue());
+                ClientHelper.rebirthApp(activity, ClientHelper.getStatusFromLoginException(e).getValue());
                 if (cachedCard == null) dismiss();
             }
         }).start();
     }
 
-    private synchronized void applyCard(Activity activity, StudentCard card){
+    private synchronized void applyCard(Activity activity, StudentCard card) {
         if (card == null) {
             activity.runOnUiThread(() -> {
                 subtitle.setText(R.string.no_student_card_found);
@@ -154,7 +154,8 @@ public class BottomSheetStudentCard extends BottomSheetDialogFragment {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         byte[] photoBytes = card.getImage();
         Bitmap bmpPhoto = null;
-        if (photoBytes != null) bmpPhoto = BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length);
+        if (photoBytes != null)
+            bmpPhoto = BitmapFactory.decodeByteArray(photoBytes, 0, photoBytes.length);
         Bitmap bmpBarcode = null;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {

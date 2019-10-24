@@ -13,7 +13,7 @@ import com.lithium.leona.openstud.data.PreferenceManager;
 
 public class ThemeEngine {
     public static void applyExamTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -28,7 +28,7 @@ public class ThemeEngine {
     }
 
     public static void applyProfileTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -44,7 +44,7 @@ public class ThemeEngine {
     }
 
     public static void applyPaymentsTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -59,7 +59,7 @@ public class ThemeEngine {
     }
 
     public static void applySearchTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -74,7 +74,7 @@ public class ThemeEngine {
     }
 
     public static void applyStatsTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -89,7 +89,7 @@ public class ThemeEngine {
     }
 
     public static void applySearchClassroomTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -104,7 +104,7 @@ public class ThemeEngine {
     }
 
     public static void applyClassroomTimetableTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -139,7 +139,7 @@ public class ThemeEngine {
     }
 
     public static void applyAboutTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.AppTheme_MaterialAboutActivityLight);
@@ -154,7 +154,7 @@ public class ThemeEngine {
     }
 
     public static void applyCalendarTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -169,7 +169,7 @@ public class ThemeEngine {
     }
 
     public static int getDialogTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 return R.style.ThemeLightDialog;
@@ -183,7 +183,7 @@ public class ThemeEngine {
     }
 
     public static int getAlertDialogTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 return R.style.ThemeLightAlertDialog;
@@ -197,7 +197,7 @@ public class ThemeEngine {
     }
 
     public static void applySettingsTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.PreferencesLight);
@@ -212,7 +212,7 @@ public class ThemeEngine {
     }
 
     public static int getAboutTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 return R.style.AboutLibrariesThemeLight;
@@ -226,7 +226,7 @@ public class ThemeEngine {
     }
 
     public static void applyNewsTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -241,7 +241,7 @@ public class ThemeEngine {
     }
 
     public static void applyCustomCourseTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 activity.setTheme(R.style.NoActionBarAppLightTheme);
@@ -256,7 +256,7 @@ public class ThemeEngine {
     }
 
     public static int getDatePickerTheme(Activity activity) {
-        Theme theme = resolveTheme(activity,PreferenceManager.getTheme(activity));
+        Theme theme = resolveTheme(activity, PreferenceManager.getTheme(activity));
         switch (theme) {
             case LIGHT:
                 return R.style.DatePickerLightTheme;
@@ -270,7 +270,7 @@ public class ThemeEngine {
     }
 
     public static int getTimePickerTheme(Context context) {
-        Theme theme = resolveTheme(context,PreferenceManager.getTheme(context));
+        Theme theme = resolveTheme(context, PreferenceManager.getTheme(context));
         switch (theme) {
             case LIGHT:
                 return R.style.TimePickerDialogLightTheme;
@@ -306,7 +306,7 @@ public class ThemeEngine {
     }
 
     private static Theme resolveTheme(Context context, Theme theme) {
-        if (theme == Theme.SYSTEM){
+        if (theme == Theme.SYSTEM) {
             if (isLightTheme(context)) return Theme.LIGHT;
             else return Theme.DARK;
         }

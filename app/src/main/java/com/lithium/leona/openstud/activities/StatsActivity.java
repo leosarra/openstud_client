@@ -175,7 +175,7 @@ public class StatsActivity extends BaseDataActivity {
             totalCFU.setText(String.valueOf(OpenstudHelper.getSumCFU(exams)));
             double arithmetic = OpenstudHelper.computeArithmeticAverage(exams, laude);
             double weighted = OpenstudHelper.computeWeightedAverage(exams, laude);
-            int base = OpenstudHelper.computeBaseGraduation(exams,laude, minMaxIgnoreInBase);
+            int base = OpenstudHelper.computeBaseGraduation(exams, laude, minMaxIgnoreInBase);
             if (arithmetic == -1) {
                 arithmeticValue.setText("--");
             } else arithmeticValue.setText(numFormat.format(arithmetic));

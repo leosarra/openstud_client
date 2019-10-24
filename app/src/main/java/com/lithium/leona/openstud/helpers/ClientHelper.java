@@ -456,14 +456,16 @@ public class ClientHelper {
                 if (activity instanceof ExamsActivity) {
                     ExamsActivity examsActivity = (ExamsActivity) activity;
                     examsActivity.createTextSnackBar(R.string.no_pdf_app, Snackbar.LENGTH_LONG);
-                } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
+                } else
+                    activity.runOnUiThread(() -> Toasty.error(activity, R.string.no_pdf_app).show());
             }
         } catch (IllegalArgumentException e) {
             ClientHelper.reportException(e);
             if (activity instanceof ExamsActivity) {
                 ExamsActivity examsActivity = (ExamsActivity) activity;
                 examsActivity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
-            } else activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_io).show());
+            } else
+                activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_io).show());
         }
 
     }
@@ -473,7 +475,7 @@ public class ClientHelper {
             try {
                 Class crashlytics = Class.forName("com.crashlytics.android.Crashlytics");
                 Method logException = crashlytics.getMethod("logException", Throwable.class);
-                logException.invoke(crashlytics,e);
+                logException.invoke(crashlytics, e);
             } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
                 ex.printStackTrace();
             }
@@ -521,7 +523,7 @@ public class ClientHelper {
         EXPIRED_CREDENTIALS(6), FAILED_DELETE(7), OK_DELETE(8), FAILED_GET(9), FAILED_GET_IO(10), PLACE_RESERVATION_OK(11), PLACE_RESERVATION_CONNECTION(12),
         PLACE_RESERVATION_INVALID_RESPONSE(13), ALREADY_PLACED(14), CLOSED_RESERVATION(15), FAIL_LOGIN(16), ENABLE_BUTTONS(17), RECOVERY_OK(18), INVALID_ANSWER(19),
         INVALID_STUDENT_ID(20), NO_RECOVERY(21), CONNECTION_ERROR_RECOVERY(22), RATE_LIMIT(23), MAINTENANCE(24), NO_BIOMETRICS(25), LOCKOUT_BIOMETRICS(26), NO_BIOMETRIC_HW(27),
-        BIOMETRIC_UNAVAILABLE (28), ACCOUNT_BLOCKED(29);
+        BIOMETRIC_UNAVAILABLE(28), ACCOUNT_BLOCKED(29);
         private final int value;
 
         Status(int value) {

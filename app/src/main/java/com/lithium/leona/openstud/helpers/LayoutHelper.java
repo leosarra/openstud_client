@@ -131,6 +131,7 @@ public class LayoutHelper {
             Objects.requireNonNull(drawable).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         }
     }
+
     public static Drawer applyDrawer(Activity activity, Toolbar toolbar, Student student) {
         int primaryColor = ThemeEngine.getPrimaryTextColor(activity);
         DelayedDrawerListener ddl = new DelayedDrawerListener() {

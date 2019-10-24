@@ -318,8 +318,7 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.BIOMETRIC_UNAVAILABLE.getValue()) {
+                } else if (msg.what == ClientHelper.Status.BIOMETRIC_UNAVAILABLE.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.biometric_unavailable, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.NO_BIOMETRICS.getValue() || msg.what == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()) {
                     Intent intent = new Intent(activity, ExamsActivity.class);
