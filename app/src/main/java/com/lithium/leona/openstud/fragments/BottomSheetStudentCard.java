@@ -137,7 +137,7 @@ public class BottomSheetStudentCard extends BottomSheetDialogFragment {
                 }
             } catch (OpenstudInvalidCredentialsException e) {
                 e.printStackTrace();
-                ClientHelper.rebirthApp(activity,ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                ClientHelper.rebirthApp(activity,ClientHelper.getStatusFromLoginException(e).getValue());
                 if (cachedCard == null) dismiss();
             }
         }).start();

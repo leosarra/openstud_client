@@ -194,9 +194,7 @@ public class LoginActivity extends AppCompatActivity {
             InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
-            if (e.isPasswordExpired())
-                h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-            else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            h.sendEmptyMessage(ClientHelper.getStatusFromLoginException(e).getValue());
             e.printStackTrace();
         } catch (OpenstudUserNotEnabledException e) {
             h.sendEmptyMessage(ClientHelper.Status.USER_NOT_ENABLED.getValue());
@@ -304,6 +302,8 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == (ClientHelper.Status.ACCOUNT_BLOCKED).getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.account_blocked_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.RECOVERY_OK.getValue()) {

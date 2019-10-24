@@ -282,4 +282,5 @@
     <string name="ignore_minmax_exam_description">Don\'t consider your best/worse exam when computing the base graduation mark</string>
     <string name="change_value_30l">Change the value of the \"30L\" mark used when computing the GPA</string>
     <string name="laude_value_set_error">I wish it was that simple....</string>
+    <string name="account_blocked_error">Account is blocked. Please contact the student office</string>
 </resources>

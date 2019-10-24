@@ -130,10 +130,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
             InfoManager.clearSharedPreferences(activity);
-            if (e.isPasswordExpired())
-                ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-            else
-                ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            ClientHelper.rebirthApp(activity, ClientHelper.getStatusFromLoginException(e).getValue());
             e.printStackTrace();
         }
         if (careers == null) {

@@ -70,18 +70,12 @@ public class BottomSheetOpisFragment extends BottomSheetDialogFragment {
                         invalidTokenReceived = true;
                         activity.runOnUiThread(() -> Toasty.error(activity, R.string.invalid_opis_code).show());
                     } else ClientHelper.createCustomTab(activity, link);
-                } catch (OpenstudConnectionException e) {
-                    e.printStackTrace();
-                    activity.runOnUiThread(notification);
-                } catch (OpenstudInvalidResponseException e) {
+                } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
                     e.printStackTrace();
                     activity.runOnUiThread(notification);
                 } catch (OpenstudInvalidCredentialsException e) {
                     e.printStackTrace();
-                    if (e.isPasswordExpired())
-                        ClientHelper.rebirthApp(activity, ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                    else
-                        ClientHelper.rebirthApp(activity, ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                    ClientHelper.rebirthApp(activity, ClientHelper.getStatusFromLoginException(e).getValue());
                 } finally {
                     boolean finalInvalidTokenReceived = invalidTokenReceived;
                     activity.runOnUiThread(() -> {

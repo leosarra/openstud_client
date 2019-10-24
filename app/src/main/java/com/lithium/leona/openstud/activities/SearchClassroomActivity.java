@@ -308,8 +308,6 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
                 LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, ocl);
             } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-            } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
-                ClientHelper.rebirthApp(activity, msg.what);
             } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                 LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
             }
