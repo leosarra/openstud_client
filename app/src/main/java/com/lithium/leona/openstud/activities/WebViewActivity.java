@@ -76,8 +76,10 @@ public class WebViewActivity extends BaseDataActivity {
                                 context.startActivity(intent);
                             } else {
                                 String fallbackUrl = intent.getStringExtra("browser_fallback_url");
-                                if (fallbackUrl == null || fallbackUrl.isEmpty()) fallbackUrl = intent.getStringExtra("link");
-                                if (fallbackUrl != null && !fallbackUrl.isEmpty()) view.loadUrl(fallbackUrl);
+                                if (fallbackUrl == null || fallbackUrl.isEmpty())
+                                    fallbackUrl = intent.getStringExtra("link");
+                                if (fallbackUrl != null && !fallbackUrl.isEmpty())
+                                    view.loadUrl(fallbackUrl);
                             }
                             return true;
                         }
@@ -87,6 +89,7 @@ public class WebViewActivity extends BaseDataActivity {
                 }
                 return false;
             }
+
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);

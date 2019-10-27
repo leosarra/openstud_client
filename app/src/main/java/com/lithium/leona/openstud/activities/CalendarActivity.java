@@ -237,9 +237,7 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
                 else h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
-                if (e.isPasswordExpired())
-                    h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                h.sendEmptyMessage(ClientHelper.getStatusFromLoginException(e).getValue());
                 e.printStackTrace();
             } finally {
                 runOnUiThread(() -> {
@@ -560,7 +558,8 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
                     LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.RATE_LIMIT.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.rate_limit, R.string.retry, Snackbar.LENGTH_LONG, listener);
-                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()
+                        || msg.what == ClientHelper.Status.ACCOUNT_BLOCKED.getValue()) {
                     ClientHelper.rebirthApp(activity, msg.what);
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.reservation_ok, Snackbar.LENGTH_LONG);

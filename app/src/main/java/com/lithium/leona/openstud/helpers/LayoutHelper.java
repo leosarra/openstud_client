@@ -67,10 +67,25 @@ public class LayoutHelper {
         return snackbar;
     }
 
-    public synchronized static void createActionSnackBar(View v, final int string_id, final int action_id, int length, View.OnClickListener listener) {
+    public static Snackbar createActionSnackBar(View v, final int string_id, final int action_id, int length, View.OnClickListener listener) {
         Snackbar snackbar = Snackbar
                 .make(v, string_id, length).setAction(action_id, listener);
         snackbar.show();
+        return snackbar;
+    }
+
+    public static Snackbar createTextSnackBar(View v, String text, final int action_id, int length, View.OnClickListener listener) {
+        Snackbar snackbar = Snackbar
+                .make(v, text, length).setAction(action_id, listener);
+        snackbar.show();
+        return snackbar;
+    }
+
+    public static Snackbar createTextSnackBar(View v, String text,int length) {
+        Snackbar snackbar = Snackbar
+                .make(v, text, length);
+        snackbar.show();
+        return snackbar;
     }
 
     public static void createCalendarNotification(Context context, int styleId) {
@@ -131,6 +146,7 @@ public class LayoutHelper {
             Objects.requireNonNull(drawable).setColorFilter(tintColor, PorterDuff.Mode.SRC_ATOP);
         }
     }
+
     public static Drawer applyDrawer(Activity activity, Toolbar toolbar, Student student) {
         int primaryColor = ThemeEngine.getPrimaryTextColor(activity);
         DelayedDrawerListener ddl = new DelayedDrawerListener() {

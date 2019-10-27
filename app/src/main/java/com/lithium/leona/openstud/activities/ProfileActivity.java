@@ -78,9 +78,12 @@ public class ProfileActivity extends BaseDataActivity {
     RelativeLayout socialSecurityNumberLayout;
     @BindView(R.id.certificateLayout)
     RelativeLayout certificatesButton;
-    @OnClick(R.id.emailLayout) void onEmailClick() {
-        ClientHelper.createWebViewActivity(this,"Email", student.getEmail(), os.getConfig().getEmailURL(), ClientHelper.WebViewType.EMAIL);
+
+    @OnClick(R.id.emailLayout)
+    void onEmailClick() {
+        ClientHelper.createWebViewActivity(this, "Email", student.getEmail(), os.getConfig().getEmailURL(), ClientHelper.WebViewType.EMAIL);
     }
+
     private Drawer drawer;
     private Isee isee;
     private ProfileEventHandler h = new ProfileEventHandler(this);
@@ -138,9 +141,7 @@ public class ProfileActivity extends BaseDataActivity {
             h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
-            if (e.isPasswordExpired())
-                h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-            else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            h.sendEmptyMessage(ClientHelper.getStatusFromLoginException(e).getValue());
             e.printStackTrace();
         }
         updateTimer();
@@ -194,11 +195,11 @@ public class ProfileActivity extends BaseDataActivity {
         /**
          * The student card feature is temporary disabled because InfoStud APIs are not reliable at the time of writing.
          * This feature will be enabled later on when Sapienza University will fix the things on their end.
-        getMenuInflater().inflate(R.menu.action_bar_profile, menu);
-        Drawable drawable = menu.findItem(R.id.barcode).getIcon();
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
-        menu.findItem(R.id.barcode).setIcon(drawable);
+         getMenuInflater().inflate(R.menu.action_bar_profile, menu);
+         Drawable drawable = menu.findItem(R.id.barcode).getIcon();
+         drawable = DrawableCompat.wrap(drawable);
+         DrawableCompat.setTint(drawable, ContextCompat.getColor(this, android.R.color.white));
+         menu.findItem(R.id.barcode).setIcon(drawable);
          **/
         return true;
     }
@@ -245,7 +246,7 @@ public class ProfileActivity extends BaseDataActivity {
                     LayoutHelper.createActionSnackBar(activity.mainLayout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.ACCOUNT_BLOCKED.getValue()) {
                     ClientHelper.rebirthApp(activity, msg.what);
                 }
             }

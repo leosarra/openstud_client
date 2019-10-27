@@ -194,9 +194,16 @@ public class LoginActivity extends AppCompatActivity {
             InfoManager.saveOpenStud(this, os, id, password, rememberFlag);
             h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
         } catch (OpenstudInvalidCredentialsException e) {
-            if (e.isPasswordExpired())
-                h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-            else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            ClientHelper.Status status = ClientHelper.getStatusFromLoginException(e);
+            if (status == ClientHelper.Status.INVALID_CREDENTIALS) {
+                Message msg = new Message();
+                Bundle data = new Bundle();
+                data.putInt("maxAttempts", e.getMaxAttempts());
+                data.putInt("attemptNumber", e.getAttemptNumber());
+                msg.setData(data);
+                msg.what = status.getValue();
+                h.sendMessage(msg);
+            } else h.sendEmptyMessage(status.getValue());
             e.printStackTrace();
         } catch (OpenstudUserNotEnabledException e) {
             h.sendEmptyMessage(ClientHelper.Status.USER_NOT_ENABLED.getValue());
@@ -217,6 +224,8 @@ public class LoginActivity extends AppCompatActivity {
         if (error == -1) return;
         else if (error == ClientHelper.Status.INVALID_CREDENTIALS.getValue())
             LayoutHelper.createTextSnackBar(layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+        else if (error == ClientHelper.Status.ACCOUNT_BLOCKED.getValue())
+            LayoutHelper.createTextSnackBar(layout, R.string.account_blocked_error, Snackbar.LENGTH_LONG);
         else if (error == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue())
             LayoutHelper.createTextSnackBar(layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
         else if (error == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue())
@@ -301,9 +310,26 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.user_not_enabled_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue()) {
-                    LayoutHelper.createActionSnackBar(activity.layout, R.string.invalid_password_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
+                    Bundle data = msg.getData();
+                    boolean fired = false;
+                    if (msg.getData() != null) {
+                        int maxAttempts = data.getInt("maxAttempts", -1);
+                        int attemptNumber = data.getInt("attemptNumber", -1);
+                        if (maxAttempts != -1 && attemptNumber != -1) {
+                            fired = true;
+                            int attemptsLeft = maxAttempts - attemptNumber;
+                            if (attemptsLeft == 1)
+                                LayoutHelper.createTextSnackBar(activity.layout, activity.getResources().getString(R.string.invalid_password_error_with_counter_singular, String.valueOf(attemptsLeft)), Snackbar.LENGTH_LONG);
+                            else
+                                LayoutHelper.createTextSnackBar(activity.layout, activity.getResources().getString(R.string.invalid_password_error_with_counter_plural, String.valueOf(attemptsLeft)), Snackbar.LENGTH_LONG);
+                        }
+                        if (!fired)
+                            LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_password_error, Snackbar.LENGTH_LONG);
+                    }
                 } else if (msg.what == (ClientHelper.Status.EXPIRED_CREDENTIALS).getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.expired_password_error, Snackbar.LENGTH_LONG);
+                } else if (msg.what == (ClientHelper.Status.ACCOUNT_BLOCKED).getValue()) {
+                    LayoutHelper.createTextSnackBar(activity.layout, R.string.account_blocked_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.RECOVERY_OK.getValue()) {
@@ -316,8 +342,7 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.no_recovery, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.LOCKOUT_BIOMETRICS.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.biometric_lockout, Snackbar.LENGTH_LONG);
-                }
-                else if (msg.what == ClientHelper.Status.BIOMETRIC_UNAVAILABLE.getValue()) {
+                } else if (msg.what == ClientHelper.Status.BIOMETRIC_UNAVAILABLE.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.biometric_unavailable, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.NO_BIOMETRICS.getValue() || msg.what == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()) {
                     Intent intent = new Intent(activity, ExamsActivity.class);

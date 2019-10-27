@@ -55,9 +55,9 @@ public class ContributorsActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_twitter)
                 .color(tintColor)
                 .sizeDp(24);
-        LayoutHelper.setColorSrcAtop(email,tintColor);
-        LayoutHelper.setColorSrcAtop(person,tintColor);
-        LayoutHelper.setColorSrcAtop(twitter,tintColor);
+        LayoutHelper.setColorSrcAtop(email, tintColor);
+        LayoutHelper.setColorSrcAtop(person, tintColor);
+        LayoutHelper.setColorSrcAtop(twitter, tintColor);
         authorCardBuilder.title(role);
         MaterialAboutActionItem.Builder generalCard = new MaterialAboutActionItem.Builder();
         MaterialAboutActionItem.Builder twitterCard = new MaterialAboutActionItem.Builder();

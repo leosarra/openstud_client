@@ -179,9 +179,7 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
                 h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 e.printStackTrace();
             } catch (OpenstudInvalidCredentialsException e) {
-                if (e.isPasswordExpired())
-                    h.sendEmptyMessage(ClientHelper.Status.EXPIRED_CREDENTIALS.getValue());
-                else h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+                h.sendEmptyMessage(ClientHelper.getStatusFromLoginException(e).getValue());
                 e.printStackTrace();
             }
 
@@ -246,6 +244,7 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
             outState.putString("reservations", json);
         }
     }
+
     private synchronized void updateTimer() {
         lastUpdate = LocalDateTime.now();
     }
@@ -274,7 +273,7 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.infostud_maintenance, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == ClientHelper.Status.INVALID_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.ACCOUNT_BLOCKED.getValue()) {
                     ClientHelper.rebirthApp(activity, msg.what);
                 } else if (msg.what == ClientHelper.Status.PLACE_RESERVATION_OK.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.reservation_ok, Snackbar.LENGTH_LONG);

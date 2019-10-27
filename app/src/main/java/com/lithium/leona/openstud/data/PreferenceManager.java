@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -116,7 +117,7 @@ public class PreferenceManager {
         Gson gson = new Gson();
         String json;
         synchronized (PreferenceManager.class) {
-            json = pref.getString("suggestion", "null");
+            json = pref.getString("suggestion", null);
         }
         if (json == null) return null;
         Type listType = new TypeToken<List>() {
@@ -158,6 +159,16 @@ public class PreferenceManager {
         synchronized (PreferenceManager.class) {
             pref.edit().putBoolean("classroomNotification", enabled).apply();
         }
+    }
+
+    public static void setTheme(Context context, ThemeEngine.Theme theme) {
+        setupSharedPreferences(context);
+        pref.edit().putInt("appTheme", theme.getValue()).apply();
+    }
+
+    public static ThemeEngine.Theme getTheme(Context context) {
+        setupSharedPreferences(context);
+        return ThemeEngine.Theme.getTheme(pref.getInt("appTheme", 0));
     }
 
     public synchronized static int getLaudeValue(Context context) {

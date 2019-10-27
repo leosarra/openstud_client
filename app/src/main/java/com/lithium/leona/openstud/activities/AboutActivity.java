@@ -55,7 +55,7 @@ public class AboutActivity extends MaterialAboutActivity {
     private void buildApp(Context context, MaterialAboutCard.Builder appCardBuilder) {
         int tintColor = ThemeEngine.getPrimaryTextColor(this);
         Drawable version = ContextCompat.getDrawable(context, R.drawable.ic_update_black);
-        LayoutHelper.setColorSrcAtop(version,tintColor);
+        LayoutHelper.setColorSrcAtop(version, tintColor);
         appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text(getResources().getString(R.string.version))
                 .icon(version).subText(BuildConfig.VERSION_NAME).build());
@@ -70,8 +70,8 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_telegram)
                 .color(tintColor)
                 .sizeDp(22);
-        LayoutHelper.setColorSrcAtop(email,tintColor);
-        LayoutHelper.setColorSrcAtop(person,tintColor);
+        LayoutHelper.setColorSrcAtop(email, tintColor);
+        LayoutHelper.setColorSrcAtop(person, tintColor);
         authorCardBuilder.title(R.string.author);
         authorCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text("Leonardo Sarra")
@@ -104,9 +104,9 @@ public class AboutActivity extends MaterialAboutActivity {
                 .icon(FontAwesome.Icon.faw_heart)
                 .color(tintColor)
                 .sizeDp(20);
-        LayoutHelper.setColorSrcAtop(heart,tintColor);
-        LayoutHelper.setColorSrcAtop(github,tintColor);
-        LayoutHelper.setColorSrcAtop(libraries,tintColor);
+        LayoutHelper.setColorSrcAtop(heart, tintColor);
+        LayoutHelper.setColorSrcAtop(github, tintColor);
+        LayoutHelper.setColorSrcAtop(libraries, tintColor);
         int id_theme = ThemeEngine.getAboutTheme(this);
         miscCardBuilder.title(R.string.about)
                 .addItem(new MaterialAboutActionItem.Builder()

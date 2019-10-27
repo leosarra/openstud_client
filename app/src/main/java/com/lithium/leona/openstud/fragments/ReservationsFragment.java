@@ -129,7 +129,7 @@ public class ReservationsFragment extends BaseDataFragment {
         File dirs = new File(directory);
         if (!directory.endsWith("/")) directory = directory + "/";
         dirs.mkdirs();
-        File pdfFile = new File(directory + res.getSessionID() + "_" + StringUtils.abbreviate(res.getExamSubject(),30) + "_" + res.getReservationNumber() + ".pdf");
+        File pdfFile = new File(directory + res.getSessionID() + "_" + StringUtils.abbreviate(res.getExamSubject(), 30) + "_" + res.getReservationNumber() + ".pdf");
         try {
             if (pdfFile.exists()) {
                 ClientHelper.openActionViewPDF(activity, pdfFile);
@@ -145,7 +145,7 @@ public class ReservationsFragment extends BaseDataFragment {
             h.sendEmptyMessage(ClientHelper.Status.FAILED_GET.getValue());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
-            h.sendEmptyMessage(ClientHelper.Status.INVALID_CREDENTIALS.getValue());
+            h.sendEmptyMessage(ClientHelper.getStatusFromLoginException(e).getValue());
             e.printStackTrace();
         } catch (IOException e) {
             h.sendEmptyMessage(ClientHelper.Status.FAILED_GET_IO.getValue());
@@ -305,7 +305,7 @@ public class ReservationsFragment extends BaseDataFragment {
                     activity.createRetrySnackBar(R.string.infostud_maintenance, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.USER_NOT_ENABLED.getValue()) {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
-                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue()) {
+                } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.ACCOUNT_BLOCKED.getValue()) {
                     ClientHelper.rebirthApp(activity, msg.what);
                 } else if (msg.what == (ClientHelper.Status.FAILED_DELETE).getValue()) {
                     activity.createTextSnackBar(R.string.failed_delete, Snackbar.LENGTH_LONG);
