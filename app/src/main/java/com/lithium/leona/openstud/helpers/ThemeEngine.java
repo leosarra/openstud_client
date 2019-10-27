@@ -305,7 +305,7 @@ public class ThemeEngine {
         return false;
     }
 
-    private static Theme resolveTheme(Context context, Theme theme) {
+    public static Theme resolveTheme(Context context, Theme theme) {
         if (theme == Theme.SYSTEM) {
             if (isLightTheme(context)) return Theme.LIGHT;
             else return Theme.DARK;

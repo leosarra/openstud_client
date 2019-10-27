@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
@@ -38,7 +39,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
     @BindView(R.id.main_layout)
     ConstraintLayout mainLayout;
     BiometricPrompt pendingPrompt;
-
+    PreferenceFragmentCompat prefFrag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,10 @@ public class SettingsPrefActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.settings);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new MainPreferenceFragment()).commit();
+        FragmentManager fm = getSupportFragmentManager();
+        if (savedInstanceState != null) prefFrag = (PreferenceFragmentCompat) fm.getFragment(savedInstanceState, "prefFrag");
+        else prefFrag =  new MainPreferenceFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, prefFrag).commit();
 
     }
 
@@ -112,6 +116,7 @@ public class SettingsPrefActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         if (pendingPrompt != null) pendingPrompt.cancelAuthentication();
         super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, "prefFrag", prefFrag);
     }
 
     public static class MainPreferenceFragment extends PreferenceFragmentCompat {
@@ -135,7 +140,8 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 if (ThemeEngine.Theme.getTheme(id) == oldTheme) return false;
                 PreferenceManager.setTheme(context, ThemeEngine.Theme.getTheme(id));
                 oldTheme = ThemeEngine.Theme.getTheme(id);
-                activity.createRestartDialog(alertDialogTheme);
+                //activity.createRestartDialog(alertDialogTheme);
+                activity.recreate();
                 return true;
             });
             Preference delete = findPreference(getString(R.string.key_delete));
@@ -206,6 +212,5 @@ public class SettingsPrefActivity extends AppCompatActivity {
                 findPreference(getString(R.string.key_security_category)).setVisible(false);
         }
     }
-
 
 }
