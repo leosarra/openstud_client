@@ -87,6 +87,7 @@ public class ExamsDoneFragment extends BaseDataFragment {
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
+        setRefreshing(false);
         if (savedInstanceState == null) refreshExamsDone();
         return v;
     }
@@ -118,6 +119,7 @@ public class ExamsDoneFragment extends BaseDataFragment {
     private void refreshExamsDone() {
         final Activity activity = getActivity();
         if (activity == null || os == null) return;
+        System.out.println("AGGIORNO");
         setRefreshing(true);
         setButtonReloadStatus(false);
         new Thread(() -> {
@@ -172,7 +174,7 @@ public class ExamsDoneFragment extends BaseDataFragment {
                 adapter.notifyDataSetChanged();
             }
             swapViews(exams);
-            swipeRefreshLayout.setRefreshing(false);
+            setRefreshing(false);
             emptyButton.setEnabled(true);
         });
     }

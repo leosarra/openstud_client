@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.EventTheatreAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
@@ -29,7 +27,6 @@ import com.mikepenz.materialdrawer.Drawer;
 import org.threeten.bp.ZoneId;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,8 +74,7 @@ public class EventsActivity extends BaseDataActivity {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.DAY_OF_YEAR, 7);
-        defaultDate = setTodayLessonFromBundle(savedInstanceState);
-
+        defaultDate = getDefaultDateFromBundle(savedInstanceState);
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         emptyText.setText(getResources().getString(R.string.no_events));
         drawer = LayoutHelper.applyDrawer(this, toolbar, student);
@@ -116,31 +112,33 @@ public class EventsActivity extends BaseDataActivity {
         if (cached_events != null && !cached_events.isEmpty()) {
             events.clear();
             events.addAll(cached_events);
-            refreshEvents(false);
+            applyEvents(defaultDate);
         }
         if (savedInstanceState == null) refreshEvents(true);
     }
 
     private void refreshEvents(boolean refresh) {
         new Thread(() -> {
-            try {
-                if (refresh) {
-                    setRefreshing(true);
-                    List<Event> newEvents = InfoManager.getEventsUniversity(this, os);
-                    if (newEvents != null && !newEvents.equals(events)) {
-                        events.clear();
-                        events.addAll(newEvents);
+            synchronized (this) {
+                try {
+                    if (refresh) {
+                        setRefreshing(true);
+                        List<Event> newEvents = InfoManager.getEventsUniversity(this, os);
+                        if (newEvents != null && !newEvents.equals(events)) {
+                            events.clear();
+                            events.addAll(newEvents);
+                        }
                     }
+                } catch (OpenstudConnectionException e) {
+                    e.printStackTrace();
+                    h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
+                } catch (OpenstudInvalidResponseException e) {
+                    e.printStackTrace();
+                    h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
                 }
-            } catch (OpenstudConnectionException e) {
-                e.printStackTrace();
-                h.sendEmptyMessage(ClientHelper.Status.CONNECTION_ERROR.getValue());
-            } catch (OpenstudInvalidResponseException e) {
-                e.printStackTrace();
-                h.sendEmptyMessage(ClientHelper.Status.INVALID_RESPONSE.getValue());
+                applyEvents(horizontalCalendar.getSelectedDate());
+                setRefreshing(false);
             }
-            applyEvents(horizontalCalendar.getSelectedDate());
-            setRefreshing(false);
         }).start();
     }
 
@@ -174,13 +172,12 @@ public class EventsActivity extends BaseDataActivity {
         });
     }
 
-    private Calendar setTodayLessonFromBundle(Bundle savedInstance) {
+    private Calendar getDefaultDateFromBundle(Bundle savedInstance) {
         if (savedInstance != null) {
-            String jsonDate = savedInstance.getString("currentDate", null);
-            Gson gson = new Gson();
-            Type typeCalendar = new TypeToken<Calendar>() {
-            }.getType();
-            return gson.fromJson(jsonDate, typeCalendar);
+            long currentDateInMillis = savedInstance.getLong("currentDateInMillis", -1);
+            Calendar today = Calendar.getInstance();
+            today.setTimeInMillis(currentDateInMillis);
+            return today;
         } else {
             Calendar today = Calendar.getInstance();
             today.set(Calendar.HOUR_OF_DAY, 0);
@@ -199,12 +196,9 @@ public class EventsActivity extends BaseDataActivity {
     }
 
     public void onSaveInstanceState(Bundle savedInstance) {
-        Gson gson = new Gson();
-        Type typeCalendar = new TypeToken<Calendar>() {
-        }.getType();
-        String jsonCalendar = gson.toJson(horizontalCalendar.getSelectedDate(), typeCalendar);
-        savedInstance.putString("currentDate", jsonCalendar);
         super.onSaveInstanceState(savedInstance);
+        savedInstance.putLong("currentDateInMillis", horizontalCalendar.getSelectedDate().getTimeInMillis());
+        System.out.println("saved"+horizontalCalendar.getSelectedDate());
     }
 
 
