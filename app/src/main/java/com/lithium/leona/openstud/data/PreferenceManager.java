@@ -3,12 +3,14 @@ package com.lithium.leona.openstud.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,9 +18,11 @@ public class PreferenceManager {
     public final static boolean BIOMETRIC_FEATURE_AVAILABLE = true;
     private static SharedPreferences pref;
     private static List<CustomCourse> courses;
+    private static Moshi moshi;
 
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
+        if (moshi == null) moshi = new Moshi.Builder().build();
         pref = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -76,10 +80,8 @@ public class PreferenceManager {
     public static void saveSuggestions(Context context, List suggestions) {
         setupSharedPreferences(context);
         synchronized (PreferenceManager.class) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List>() {
-            }.getType();
-            String json = gson.toJson(suggestions, listType);
+            JsonAdapter<List> jsonAdapter = moshi.adapter(List.class);
+            String json = jsonAdapter.toJson(suggestions);
             pref.edit().putString("suggestion", json).apply();
         }
     }
@@ -87,25 +89,28 @@ public class PreferenceManager {
 
     public static List<CustomCourse> getCustomCourses(Context context) {
         setupSharedPreferences(context);
-        Gson gson = new Gson();
+        JsonAdapter<List<CustomCourse>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, CustomCourse.class));
         String json;
         synchronized (PreferenceManager.class) {
-            json = pref.getString("customCourses", "null");
+            json = pref.getString("customCourses", null);
         }
-        if (json == null) return null;
-        Type listType = new TypeToken<List<CustomCourse>>() {
-        }.getType();
-        return gson.fromJson(json, listType);
+        if (json == null) return new LinkedList<>();
+        List<CustomCourse> ret = null;
+        try {
+            ret = jsonAdapter.fromJson(json);
+        } catch (JsonDataException | IOException e) {
+            e.printStackTrace();
+        }
+        if (ret == null) ret = new LinkedList<>();
+        return ret;
     }
 
 
     public static void setCustomCourses(Context context, List<CustomCourse> newCourses) {
         setupSharedPreferences(context);
-        Gson gson = new Gson();
+        JsonAdapter<List<CustomCourse>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, CustomCourse.class));
         synchronized (PreferenceManager.class) {
-            Type listType = new TypeToken<List<CustomCourse>>() {
-            }.getType();
-            pref.edit().putString("customCourses", gson.toJson(newCourses, listType)).apply();
+            pref.edit().putString("customCourses", jsonAdapter.toJson(newCourses)).apply();
             if (courses == null) courses = new LinkedList<>();
             courses.clear();
             courses.addAll(newCourses);
@@ -114,15 +119,20 @@ public class PreferenceManager {
 
     public static List getSuggestions(Context context) {
         setupSharedPreferences(context);
-        Gson gson = new Gson();
+        JsonAdapter<List> jsonAdapter = moshi.adapter(List.class);
         String json;
         synchronized (PreferenceManager.class) {
             json = pref.getString("suggestion", null);
         }
         if (json == null) return null;
-        Type listType = new TypeToken<List>() {
-        }.getType();
-        return gson.fromJson(json, listType);
+        List ret = null;
+        try {
+            ret = jsonAdapter.fromJson(json);
+        } catch (JsonDataException | IOException e) {
+            e.printStackTrace();
+        }
+        if (ret == null) return new LinkedList();
+        return ret;
     }
 
 
