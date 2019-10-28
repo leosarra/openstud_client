@@ -16,18 +16,19 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.StatsActivity;
 import com.lithium.leona.openstud.adapters.DropdownExamAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import com.warkiz.widget.IndicatorSeekBar;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,7 +49,6 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     IndicatorSeekBar grade;
     @BindView(R.id.add)
     Button add;
-
     private List<ExamDoable> examsDoable = new LinkedList<>();
 
     public BottomSheetStatsFragment() {
@@ -59,13 +59,12 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
         BottomSheetStatsFragment myFragment = new BottomSheetStatsFragment();
         if (exams != null) {
             Bundle args = new Bundle();
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<ExamDoable>>() {
-            }.getType();
+            Moshi moshi = new Moshi.Builder().build();
+            JsonAdapter<List<ExamDoable>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDoable.class));
             try {
-                args.putString("doable", gson.toJson(exams, listType));
+                args.putString("doable", jsonAdapter.toJson(exams));
                 myFragment.setArguments(args);
-            } catch (JsonParseException e) {
+            } catch (JsonDataException e) {
                 e.printStackTrace();
             }
         }
@@ -90,15 +89,15 @@ public class BottomSheetStatsFragment extends BottomSheetDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bdl = getArguments();
+        Moshi moshi = new Moshi.Builder().build();
         if (bdl != null) {
             String examsJson = bdl.getString("doable", null);
             if (examsJson != null) {
-                Gson gson = new Gson();
-                Type listType = new TypeToken<List<ExamDoable>>() {
-                }.getType();
+                JsonAdapter<List<ExamDoable>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDoable.class));
                 try {
-                    examsDoable.addAll(gson.fromJson(examsJson, listType));
-                } catch (JsonParseException e) {
+                    List<ExamDoable> examsBundle = jsonAdapter.fromJson(examsJson);
+                    if (examsBundle!=null) examsDoable.addAll(examsBundle);
+                } catch (JsonDataException | IOException e) {
                     e.printStackTrace();
                 }
             }
