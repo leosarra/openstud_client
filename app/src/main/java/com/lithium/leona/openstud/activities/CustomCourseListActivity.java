@@ -17,16 +17,16 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.CustomCourseAdapter;
 import com.lithium.leona.openstud.data.CustomCourse;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
-import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -51,13 +51,14 @@ public class CustomCourseListActivity extends AppCompatActivity {
     private CustomCourseAdapter adapter;
     private List<CustomCourse> courses;
     private boolean firstStart = true;
-
+    private Moshi moshi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeEngine.applyCustomCourseTheme(this);
         setContentView(R.layout.activity_custom_course_list);
         ButterKnife.bind(this);
+        moshi = new Moshi.Builder().build();
         LayoutHelper.setupToolbar(this, toolbar, R.drawable.ic_baseline_arrow_back);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.courses_added);
@@ -80,9 +81,8 @@ public class CustomCourseListActivity extends AppCompatActivity {
                 int itemPosition = rv.getChildLayoutPosition(v);
                 if (itemPosition < courses.size()) {
                     Intent intent = new Intent(CustomCourseListActivity.this, AddCustomCourseActivity.class);
-                    Type listType = new TypeToken<List<CustomCourse>>() {
-                    }.getType();
-                    intent.putExtra("list", new Gson().toJson(courses, listType));
+                    JsonAdapter<List<CustomCourse>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, CustomCourse.class));
+                    intent.putExtra("list", jsonAdapter.toJson(courses));
                     intent.putExtra("position", itemPosition);
                     startActivity(intent);
                 }
@@ -112,11 +112,9 @@ public class CustomCourseListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.add:
                 Intent i = new Intent(this, AddCustomCourseActivity.class);
-                Gson gson = new Gson();
-                Type listType = new TypeToken<List<CustomCourse>>() {
-                }.getType();
+                JsonAdapter<List<CustomCourse>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, CustomCourse.class));
                 synchronized (this) {
-                    i.putExtra("list", gson.toJson(courses, listType));
+                    i.putExtra("list", jsonAdapter.toJson(courses));
                 }
                 startActivity(i);
                 return true;
