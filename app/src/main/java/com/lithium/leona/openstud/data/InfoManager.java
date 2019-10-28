@@ -3,16 +3,14 @@ package com.lithium.leona.openstud.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.webkit.CookieManager;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.BuildConfig;
 import com.lithium.leona.openstud.helpers.ClientHelper;
-
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import org.threeten.bp.LocalDateTime;
-
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +35,7 @@ import lithium.openstud.driver.exceptions.OpenstudInvalidCredentialsException;
 import lithium.openstud.driver.exceptions.OpenstudInvalidResponseException;
 
 public class InfoManager {
+    private static Moshi moshi;
     private static Openstud os;
     private static SharedPreferences pref;
     private static Student student;
@@ -105,15 +104,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
         synchronized (InfoManager.class) {
             if (student != null) return student;
             oldObj = pref.getString("student", "null");
         }
         Student ret = null;
         try {
-            ret = gson.fromJson(oldObj, Student.class);
-        } catch (JsonParseException e) {
+            JsonAdapter<Student> jsonAdapter = moshi.adapter(Student.class);
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                student = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -123,12 +125,12 @@ public class InfoManager {
     public static Student getInfoStudent(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<Student> jsonAdapter = moshi.adapter(Student.class);
         Student newStudent = os.getInfoStudent();
         synchronized (InfoManager.class) {
             student = newStudent;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            String json = gson.toJson(student);
+            String json = jsonAdapter.toJson(student);
             prefsEditor.putString("student", json);
             prefsEditor.commit();
         }
@@ -140,15 +142,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<StudentCard> jsonAdapter = moshi.adapter(StudentCard.class);
         synchronized (InfoManager.class) {
             if (card != null) return card;
             oldObj = pref.getString("studentCard", null);
         }
         StudentCard ret = null;
         try {
-            ret = gson.fromJson(oldObj, StudentCard.class);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                card = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -157,69 +162,34 @@ public class InfoManager {
     public static StudentCard getStudentCard(Context context, Openstud os, Student student) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<StudentCard> jsonAdapter = moshi.adapter(StudentCard.class);
         StudentCard newCard = os.getStudentCard(student, true);
         synchronized (InfoManager.class) {
             card = newCard;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            String json = gson.toJson(card);
+            String json = jsonAdapter.toJson(card);
             prefsEditor.putString("studentCard", json);
             prefsEditor.commit();
         }
         return newCard;
     }
-/*
-    public static Map<String, List<Lesson>> getTimetableCached(Context context, Openstud os) {
-        setupSharedPreferences(context);
-        if (os == null) return null;
-        if (!hasLogin(context)) return null;
-        String oldObj;
-        Gson gson = new Gson();
-        synchronized (InfoManager.class) {
-            if (timetable != null) return timetable;
-            oldObj = pref.getString("timetable", "null");
-        }
-        Type listType = new TypeToken<Map<String, List<Lesson>>>() {
-        }.getType();
-        return gson.fromJson(oldObj, listType);
-    }
-
-
-    public static Map<String, List<Lesson>> getTimetable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
-        setupSharedPreferences(context);
-        if (os == null) return null;
-        if (!hasLogin(context)) return null;
-        Gson gson = new Gson();
-        List<ExamDoable> doable = os.getExamsDoable();
-        Map<String, List<Lesson>> newTimetable = os.getTimetable(doable);
-        synchronized (InfoManager.class) {
-            timetable = newTimetable;
-            SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<Map<String, List<Lesson>>>() {
-            }.getType();
-            String json = gson.toJson(timetable, listType);
-            prefsEditor.putString("timetable", json);
-            prefsEditor.apply();
-        }
-        return newTimetable;
-    }
-*/
 
     public static List<Event> getEventsCached(Context context, Openstud os) {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<Event>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Event.class));
         synchronized (InfoManager.class) {
             if (events != null) return new LinkedList<>(events);
             oldObj = pref.getString("events", "null");
         }
-        Type listType = new TypeToken<List<Event>>() {
-        }.getType();
         List<Event> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                events = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -229,7 +199,7 @@ public class InfoManager {
     public static List<Event> getEvents(Context context, Openstud os, Student student) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<Event>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Event.class));
         Map<String, List<Lesson>> newTimetable = new HashMap<>();
         if (PreferenceManager.isLessonEnabled(context))
             newTimetable = os.getTimetable(os.getExamsDoable());
@@ -241,9 +211,7 @@ public class InfoManager {
         synchronized (InfoManager.class) {
             events = newEvents;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<Event>>() {
-            }.getType();
-            String json = gson.toJson(events, listType);
+            String json = jsonAdapter.toJson(events);
             prefsEditor.putString("events", json);
             prefsEditor.apply();
         }
@@ -253,14 +221,12 @@ public class InfoManager {
 
     public static void saveFakeExams(Context context, List<ExamDone> exams) {
         setupSharedPreferences(context);
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamDone>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDone.class));
         String obj;
         synchronized (InfoManager.class) {
             if (exams != null) fakeExams = new LinkedList<>(exams);
             else fakeExams = new LinkedList<>();
-            Type listType = new TypeToken<List<ExamDone>>() {
-            }.getType();
-            obj = gson.toJson(fakeExams, listType);
+            obj = jsonAdapter.toJson(fakeExams);
             SharedPreferences.Editor prefsEditor = pref.edit();
             prefsEditor.putString("fakeExams", obj);
             prefsEditor.commit();
@@ -276,17 +242,15 @@ public class InfoManager {
         if (os == null) return null;
         if (removeDuplicates) InfoManager.removeDuplicatesFakeExams(context, os);
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamDone>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDone.class));
         synchronized (InfoManager.class) {
             if (fakeExams != null) return new LinkedList<>(fakeExams);
             oldObj = pref.getString("fakeExams", null);
         }
-        Type listType = new TypeToken<List<ExamDone>>() {
-        }.getType();
         List<ExamDone> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         if (ret == null) return new LinkedList<>();
@@ -298,15 +262,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<Isee> jsonAdapter = moshi.adapter(Isee.class);
         synchronized (InfoManager.class) {
             if (isee != null) return isee;
             oldObj = pref.getString("isee", "null");
         }
         Isee ret = null;
         try {
-            ret = gson.fromJson(oldObj, Isee.class);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                isee = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -315,12 +282,12 @@ public class InfoManager {
     public static Isee getIsee(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<Isee> jsonAdapter = moshi.adapter(Isee.class);
         Isee newIsee = os.getCurrentIsee();
         synchronized (InfoManager.class) {
             isee = newIsee;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            String json = gson.toJson(isee);
+            String json = jsonAdapter.toJson(isee);
             prefsEditor.putString("isee", json);
             prefsEditor.commit();
         }
@@ -331,17 +298,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<Tax>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Tax.class));
         synchronized (InfoManager.class) {
             if (paidTaxes != null) return new LinkedList<>(paidTaxes);
             oldObj = pref.getString("paidTaxes", "null");
         }
-        Type listType = new TypeToken<List<Tax>>() {
-        }.getType();
         List<Tax> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                paidTaxes = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -351,17 +319,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamDone>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDone.class));
         synchronized (InfoManager.class) {
             if (examsDone != null) return new LinkedList<>(examsDone);
             oldObj = pref.getString("examsDone", "null");
         }
-        Type listType = new TypeToken<List<ExamDone>>() {
-        }.getType();
         List<ExamDone> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                examsDone = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -370,14 +339,12 @@ public class InfoManager {
     public static List<ExamDone> getExamsDone(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamDone>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDone.class));
         List<ExamDone> newExamsDone = os.getExamsDone();
         synchronized (InfoManager.class) {
             examsDone = newExamsDone;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<ExamDone>>() {
-            }.getType();
-            String json = gson.toJson(examsDone, listType);
+            String json = jsonAdapter.toJson(examsDone);
             prefsEditor.putString("examsDone", json);
             prefsEditor.apply();
         }
@@ -388,17 +355,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamDoable>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDoable.class));
         synchronized (InfoManager.class) {
             if (examsDoable != null) return new LinkedList<>(examsDoable);
             oldObj = pref.getString("examsDoable", "null");
         }
-        Type listType = new TypeToken<List<ExamDoable>>() {
-        }.getType();
         List<ExamDoable> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                examsDoable = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
 
@@ -408,14 +376,12 @@ public class InfoManager {
     public static List<ExamDoable> getExamsDoable(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamDoable>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamDoable.class));
         List<ExamDoable> newExamsDoable = os.getExamsDoable();
         synchronized (InfoManager.class) {
             examsDoable = newExamsDoable;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<ExamDoable>>() {
-            }.getType();
-            String json = gson.toJson(examsDoable, listType);
+            String json = jsonAdapter.toJson(examsDoable);
             prefsEditor.putString("examsDoable", json);
             prefsEditor.apply();
         }
@@ -427,17 +393,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamReservation>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamReservation.class));
         synchronized (InfoManager.class) {
             if (reservations != null) return new LinkedList<>(reservations);
             oldObj = pref.getString("reservations", "null");
         }
-        Type listType = new TypeToken<List<ExamReservation>>() {
-        }.getType();
         List<ExamReservation> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                reservations = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -446,14 +413,12 @@ public class InfoManager {
     public static List<ExamReservation> getActiveReservations(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<ExamReservation>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamReservation.class));
         List<ExamReservation> newExamsDone = os.getActiveReservations();
         synchronized (InfoManager.class) {
             reservations = newExamsDone;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<ExamReservation>>() {
-            }.getType();
-            String json = gson.toJson(reservations, listType);
+            String json = jsonAdapter.toJson(reservations);
             prefsEditor.putString("reservations", json);
             prefsEditor.apply();
         }
@@ -463,14 +428,12 @@ public class InfoManager {
     public static List<Tax> getPaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<Tax>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Tax.class));
         List<Tax> newPaidTaxes = os.getPaidTaxes();
         synchronized (InfoManager.class) {
             paidTaxes = newPaidTaxes;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<Tax>>() {
-            }.getType();
-            String json = gson.toJson(paidTaxes, listType);
+            String json = jsonAdapter.toJson(paidTaxes);
             prefsEditor.putString("paidTaxes", json);
             prefsEditor.apply();
         }
@@ -481,17 +444,18 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<Tax>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Tax.class));
         synchronized (InfoManager.class) {
             if (unpaidTaxes != null) return new LinkedList<>(unpaidTaxes);
             oldObj = pref.getString("unpaidTaxes", "null");
         }
-        Type listType = new TypeToken<List<Tax>>() {
-        }.getType();
         List<Tax> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                unpaidTaxes = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -500,14 +464,12 @@ public class InfoManager {
     public static List<Tax> getUnpaidTaxes(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException, OpenstudInvalidCredentialsException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<Tax>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Tax.class));
         List<Tax> newUnpaidTaxes = os.getUnpaidTaxes();
         synchronized (InfoManager.class) {
             unpaidTaxes = newUnpaidTaxes;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<Tax>>() {
-            }.getType();
-            String json = gson.toJson(newUnpaidTaxes, listType);
+            String json = jsonAdapter.toJson(newUnpaidTaxes);
             prefsEditor.putString("unpaidTaxes", json);
             prefsEditor.apply();
         }
@@ -517,14 +479,12 @@ public class InfoManager {
     public static List<News> getNews(Context context, Openstud os, String locale) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<News>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, News.class));
         List<News> newNews = os.getNews(locale, true, null, 0, null, null);
         synchronized (InfoManager.class) {
             news = newNews;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<News>>() {
-            }.getType();
-            String json = gson.toJson(newNews, listType);
+            String json = jsonAdapter.toJson(newNews);
             prefsEditor.putString("news", json);
             prefsEditor.apply();
         }
@@ -535,7 +495,7 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<News>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, News.class));
         synchronized (InfoManager.class) {
             if (news != null) {
                 if (!news.isEmpty() && !news.get(0).getLocale().equals(locale)) return null;
@@ -543,12 +503,13 @@ public class InfoManager {
             }
             oldObj = pref.getString("news", "null");
         }
-        Type listType = new TypeToken<List<News>>() {
-        }.getType();
         List<News> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                news = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         if (ret != null && !ret.isEmpty() && !ret.get(0).getLocale().equals(locale)) return null;
@@ -559,14 +520,12 @@ public class InfoManager {
     public static List<Event> getEventsUniversity(Context context, Openstud os) throws OpenstudConnectionException, OpenstudInvalidResponseException {
         setupSharedPreferences(context);
         if (os == null) return null;
-        Gson gson = new Gson();
+        JsonAdapter<List<Event>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Event.class));
         List<Event> newEvents = os.getNewsletterEvents();
         synchronized (InfoManager.class) {
             theatre_events = newEvents;
             SharedPreferences.Editor prefsEditor = pref.edit();
-            Type listType = new TypeToken<List<Event>>() {
-            }.getType();
-            String json = gson.toJson(newEvents, listType);
+            String json = jsonAdapter.toJson(newEvents);
             prefsEditor.putString("eventsUniversity", json);
             prefsEditor.apply();
         }
@@ -577,19 +536,20 @@ public class InfoManager {
         setupSharedPreferences(context);
         if (os == null) return null;
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<List<Event>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Event.class));
         synchronized (InfoManager.class) {
             if (theatre_events != null) {
                 return new LinkedList<>(theatre_events);
             }
             oldObj = pref.getString("eventsUniversity", "null");
         }
-        Type listType = new TypeToken<List<Event>>() {
-        }.getType();
         List<Event> ret = null;
         try {
-            ret = gson.fromJson(oldObj, listType);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+            synchronized (InfoManager.class) {
+                theatre_events = ret;
+            }
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -598,14 +558,14 @@ public class InfoManager {
     public static LocalDateTime getLastExamsWidgetUpdateTime(Context context) {
         setupSharedPreferences(context);
         String oldObj;
-        Gson gson = new Gson();
+        JsonAdapter<LocalDateTime> jsonAdapter = moshi.adapter(LocalDateTime.class);
         synchronized (InfoManager.class) {
             oldObj = pref.getString("lastUpdateWidget", "null");
         }
         LocalDateTime ret = null;
         try {
-            ret = gson.fromJson(oldObj, org.threeten.bp.LocalDateTime.class);
-        } catch (JsonParseException e) {
+            ret = jsonAdapter.fromJson(oldObj);
+        } catch (JsonDataException | IOException e) {
             e.printStackTrace();
         }
         return ret;
@@ -614,8 +574,8 @@ public class InfoManager {
     public static void setLastExamsWidgetUpdateTime(Context context, LocalDateTime time) {
         setupSharedPreferences(context);
         if (time == null) return;
-        Gson gson = new Gson();
-        String json = gson.toJson(time, LocalDateTime.class);
+        JsonAdapter<LocalDateTime> jsonAdapter = moshi.adapter(LocalDateTime.class);
+        String json = jsonAdapter.toJson(time);
         synchronized (InfoManager.class) {
             pref.edit().putString("lastUpdateWidget", json).apply();
         }
@@ -735,11 +695,9 @@ public class InfoManager {
     }
 
     private static void updateFilter(List<String> update_filter) {
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<String>>() {
-        }.getType();
+        JsonAdapter<List<String>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, String.class));
         SharedPreferences.Editor editor = pref.edit();
-        String toJson = gson.toJson(update_filter, listType);
+        String toJson = jsonAdapter.toJson(update_filter);
         editor.putString("filter_calendar", toJson);
         editor.apply();
         if (filter == null) filter = new LinkedList<>();
@@ -747,21 +705,26 @@ public class InfoManager {
         filter.addAll(update_filter);
     }
 
-    private static LinkedList<String> getExceptionFilter(Context context) {
+    private static List<String> getExceptionFilter(Context context) {
         setupSharedPreferences(context);
         if (filter != null) return new LinkedList<>(filter);
         synchronized (InfoManager.class) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>() {
-            }.getType();
+            JsonAdapter<List<String>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, String.class));
             String json = pref.getString("filter_calendar", null);
             if (json == null) {
                 filter = new LinkedList<>();
                 SharedPreferences.Editor editor = pref.edit();
-                String toJson = gson.toJson(filter, listType);
+                String toJson = jsonAdapter.toJson(filter);
                 editor.putString("filter_calendar", toJson);
                 editor.apply();
-            } else filter = gson.fromJson(json, listType);
+            } else {
+                try {
+                    filter = jsonAdapter.fromJson(json);
+                } catch (JsonDataException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (filter == null) filter = new LinkedList<>();
             return new LinkedList<>(filter);
         }
     }
