@@ -21,8 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.ClassroomAdapter;
 import com.lithium.leona.openstud.data.PreferenceManager;
@@ -32,11 +30,15 @@ import com.lithium.leona.openstud.helpers.ThemeEngine;
 import com.lithium.leona.openstud.listeners.ClickListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mikepenz.materialdrawer.Drawer;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,7 +74,7 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
     private ClassroomAdapter adapter;
     private SearchClassroomHandler h = new SearchClassroomHandler(this);
     private boolean touchBarDisabled;
-
+    private Moshi moshi;
     @OnClick(R.id.empty_button_reload)
     void onClickReloadButton() {
         searchClassrooms(searchBar.getText());
@@ -85,6 +87,7 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         ThemeEngine.applySearchClassroomTheme(this);
         setContentView(R.layout.activity_search_classroom);
         ButterKnife.bind(this);
+        moshi = new Moshi.Builder().build();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         searchBar.setPlaceHolder(getResources().getString(R.string.search_classroom));
@@ -97,10 +100,8 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         rv.setLayoutManager(llm);
         adapter = new ClassroomAdapter(mainLayout, this, classes, room -> {
             Bundle bundle = new Bundle();
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<Lesson>>() {
-            }.getType();
-            String json = gson.toJson(room.getTodayLessons(), listType);
+            JsonAdapter<List<Lesson>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Lesson.class));
+            String json = jsonAdapter.toJson(room.getTodayLessons());
             bundle.putSerializable("todayLessons", json);
             bundle.putString("roomName", room.getName());
             bundle.putInt("roomId", room.getInternalId());
@@ -122,9 +123,13 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
             searchBar.requestFocus();
             searchBar.enableSearch();
         } else {
-            Gson gson = new Gson();
-            List<Classroom> saved = gson.fromJson(savedInstanceState.getString("classes", "null"), new TypeToken<List<Classroom>>() {
-            }.getType());
+            JsonAdapter<List<Classroom>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Classroom.class));
+            List<Classroom> saved = null;
+            try {
+                saved = jsonAdapter.fromJson(savedInstanceState.getString("classes", "null"));
+            } catch (JsonDataException | IOException e) {
+                e.printStackTrace();
+            }
             if (saved != null) {
                 classes.clear();
                 classes.addAll(saved);
@@ -269,9 +274,8 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         synchronized (this) {
-            Gson gson = new Gson();
-            String json = gson.toJson(classes, new TypeToken<List<Classroom>>() {
-            }.getType());
+            JsonAdapter<List<Classroom>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Classroom.class));
+            String json = jsonAdapter.toJson(classes);
             outState.putString("classes", json);
             outState.putString("search", searchBar.getText());
         }
