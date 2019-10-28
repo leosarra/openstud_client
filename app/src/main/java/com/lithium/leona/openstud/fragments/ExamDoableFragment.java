@@ -115,7 +115,10 @@ public class ExamDoableFragment extends BaseDataFragment {
         super.onResume();
         LocalDateTime time = getTimer();
         Activity activity = getActivity();
-        if (firstStart) firstStart = false;
+        if (firstStart) {
+            firstStart = false;
+            setRefreshing(false);
+        }
         else if (activity != null && (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30))
             refreshExamsDoable();
     }
@@ -128,7 +131,7 @@ public class ExamDoableFragment extends BaseDataFragment {
         new Thread(() -> {
             List<ExamDoable> update = null;
             try {
-                update = InfoManager.getExamsDoable(activity.getApplication(), os);
+                update = InfoManager.getExamsDoable(activity, os);
                 if (update == null)
                     h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
@@ -170,7 +173,7 @@ public class ExamDoableFragment extends BaseDataFragment {
         activity.runOnUiThread(() -> {
             if (finalFlag) adapter.notifyDataSetChanged();
             swapViews(examsDoable);
-            swipeRefreshLayout.setRefreshing(false);
+            setRefreshing(false);
             emptyButton.setEnabled(true);
         });
     }
