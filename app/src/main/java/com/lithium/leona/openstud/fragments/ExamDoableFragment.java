@@ -18,13 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.activities.SearchSessionsResultActivity;
 import com.lithium.leona.openstud.adapters.ExamDoableAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
@@ -58,7 +59,7 @@ public class ExamDoableFragment extends BaseDataFragment {
     private LocalDateTime lastUpdate;
     private boolean firstStart = true;
     private ExamsDoableHandler h = new ExamsDoableHandler(this);
-
+    private Moshi moshi;
     @OnClick(R.id.empty_button_reload)
     public void OnClick(View v) {
         refreshExamsDoable();
@@ -71,6 +72,7 @@ public class ExamDoableFragment extends BaseDataFragment {
         Activity activity = getActivity();
         if (!initData() || activity == null) return v;
         ButterKnife.bind(this, v);
+        moshi = new Moshi.Builder().build();
         examsDoable = new LinkedList<>();
         emptyText.setText(getResources().getString(R.string.no_exams_doable_found));
         rv.setHasFixedSize(true);
@@ -79,9 +81,10 @@ public class ExamDoableFragment extends BaseDataFragment {
         adapter = new ExamDoableAdapter(activity, examsDoable, v1 -> {
             int itemPosition = rv.getChildLayoutPosition(v1);
             if (itemPosition < examsDoable.size()) {
+                JsonAdapter<ExamDoable> jsonAdapter = moshi.adapter(ExamDoable.class);
                 ExamDoable exam = examsDoable.get(itemPosition);
                 Intent intent = new Intent(activity, SearchSessionsResultActivity.class);
-                intent.putExtra("exam", new Gson().toJson(exam, ExamDoable.class));
+                intent.putExtra("exam", jsonAdapter.toJson(exam));
                 activity.startActivity(intent);
             }
         });
