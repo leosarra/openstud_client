@@ -22,8 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.CustomLessonAdapter;
 import com.lithium.leona.openstud.data.CustomCourse;
@@ -31,13 +29,17 @@ import com.lithium.leona.openstud.data.CustomLesson;
 import com.lithium.leona.openstud.data.PreferenceManager;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -105,10 +107,15 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     private void loadValues() {
         Intent intent = getIntent();
         String jsonList = intent.getStringExtra("list");
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<CustomCourse>>() {
-        }.getType();
-        courses = gson.fromJson(jsonList, listType);
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<List<CustomCourse>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, CustomCourse.class));
+        try {
+            if (jsonList != null) courses = jsonAdapter.fromJson(jsonList);
+            else courses = new LinkedList<>();
+        } catch (JsonDataException | IOException e) {
+            e.printStackTrace();
+            courses = new LinkedList<>();
+        }
         position = intent.getIntExtra("position", -1);
         if (position != -1) {
             CustomCourse course = courses.get(position);
