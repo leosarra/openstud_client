@@ -247,6 +247,7 @@ public class InfoManager {
         synchronized (InfoManager.class) {
             if (fakeExams != null) return new LinkedList<>(fakeExams);
             oldObj = pref.getString("fakeExams", null);
+            if (oldObj == null) return new LinkedList<>();
         }
         List<ExamDone> ret = null;
         try {
