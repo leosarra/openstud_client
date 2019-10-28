@@ -54,6 +54,7 @@ public class InfoManager {
 
     private static synchronized void setupSharedPreferences(Context context) {
         if (pref != null) return;
+        if (moshi == null) moshi = new Moshi.Builder().build();
         pref = context.getSharedPreferences("OpenStudPref", 0); // 0 - for private mode
     }
 
