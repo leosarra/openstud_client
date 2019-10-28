@@ -133,7 +133,7 @@ public class InfoManager {
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = jsonAdapter.toJson(student);
             prefsEditor.putString("student", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newStudent;
     }
@@ -170,7 +170,7 @@ public class InfoManager {
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = jsonAdapter.toJson(card);
             prefsEditor.putString("studentCard", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return newCard;
     }
@@ -230,7 +230,7 @@ public class InfoManager {
             obj = jsonAdapter.toJson(fakeExams);
             SharedPreferences.Editor prefsEditor = pref.edit();
             prefsEditor.putString("fakeExams", obj);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
     }
 
@@ -290,7 +290,7 @@ public class InfoManager {
             SharedPreferences.Editor prefsEditor = pref.edit();
             String json = jsonAdapter.toJson(isee);
             prefsEditor.putString("isee", json);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
         return isee;
     }
