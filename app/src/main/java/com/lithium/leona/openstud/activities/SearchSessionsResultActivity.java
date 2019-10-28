@@ -17,19 +17,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.AvaiableReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,7 +70,7 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
     private SearchEventHandler h = new SearchEventHandler(this);
     private List<ExamReservation> activeReservations;
     private boolean firstStart = true;
-
+    private Moshi moshi;
     @OnClick(R.id.empty_button_reload)
     public void OnClick(View v) {
         refreshAvaiableReservations();
@@ -81,9 +84,15 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         ButterKnife.bind(this);
         String jsonObject;
         Bundle extras = getIntent().getExtras();
+        Moshi moshi = new Moshi.Builder().build();
         if (extras != null) {
             jsonObject = extras.getString("exam", null);
-            exam = new Gson().fromJson(jsonObject, ExamDoable.class);
+            JsonAdapter<ExamDoable> jsonAdapter =moshi.adapter(ExamDoable.class);
+            try {
+                exam = jsonAdapter.fromJson(jsonObject);
+            } catch (JsonDataException | IOException e) {
+                e.printStackTrace();
+            }
         }
         activeReservations = new LinkedList<>();
         List<ExamReservation> cache = InfoManager.getActiveReservationsCached(this, os);
@@ -108,9 +117,13 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
         if (savedInstanceState == null) refreshAvaiableReservations();
         else {
-            Gson gson = new Gson();
-            List<ExamReservation> saved = gson.fromJson(savedInstanceState.getString("reservations", "null"), new TypeToken<List<ExamReservation>>() {
-            }.getType());
+            JsonAdapter<List<ExamReservation>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamReservation.class));
+            List<ExamReservation> saved = null;
+            try {
+                saved = jsonAdapter.fromJson(savedInstanceState.getString("reservations", "null"));
+            } catch (JsonDataException | IOException e) {
+                e.printStackTrace();
+            }
             if (saved != null) {
                 reservations.clear();
                 reservations.addAll(saved);
@@ -238,9 +251,8 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         synchronized (this) {
-            Gson gson = new Gson();
-            String json = gson.toJson(reservations, new TypeToken<List<ExamReservation>>() {
-            }.getType());
+            JsonAdapter<List<ExamReservation>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, ExamReservation.class));
+            String json = jsonAdapter.toJson(reservations);
             outState.putString("reservations", json);
         }
     }
