@@ -100,7 +100,10 @@ public class ExamsDoneFragment extends BaseDataFragment {
             adapter.notifyDataSetChanged();
             showExamDate = !showExamDate;
         }
-        if (firstStart) firstStart = false;
+        if (firstStart) {
+            firstStart = false;
+            setRefreshing(false);
+        }
         else if (activity != null && (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30))
             refreshExamsDone();
     }
@@ -119,13 +122,12 @@ public class ExamsDoneFragment extends BaseDataFragment {
     private void refreshExamsDone() {
         final Activity activity = getActivity();
         if (activity == null || os == null) return;
-        System.out.println("AGGIORNO");
         setRefreshing(true);
         setButtonReloadStatus(false);
         new Thread(() -> {
             List<ExamDone> update = null;
             try {
-                update = InfoManager.getExamsDone(activity.getApplication(), os);
+                update = InfoManager.getExamsDone(activity, os);
                 if (update == null)
                     h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
