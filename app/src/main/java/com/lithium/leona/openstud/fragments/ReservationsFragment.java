@@ -163,7 +163,10 @@ public class ReservationsFragment extends BaseDataFragment {
         super.onResume();
         LocalDateTime time = getTimer();
         Activity activity = getActivity();
-        if (firstStart) firstStart = false;
+        if (firstStart) {
+            firstStart = false;
+            setRefreshing(false);
+        }
         else if (activity != null && (time == null || Duration.between(time, LocalDateTime.now()).toMinutes() > 30))
             refreshReservations();
         else if (activity != null && InfoManager.getReservationUpdateFlag(activity)) {
@@ -180,7 +183,7 @@ public class ReservationsFragment extends BaseDataFragment {
         new Thread(() -> {
             List<ExamReservation> update = null;
             try {
-                update = InfoManager.getActiveReservations(activity.getApplication(), os);
+                update = InfoManager.getActiveReservations(activity, os);
                 if (update == null)
                     h.sendEmptyMessage(ClientHelper.Status.UNEXPECTED_VALUE.getValue());
                 else h.sendEmptyMessage(ClientHelper.Status.OK.getValue());
@@ -228,7 +231,7 @@ public class ReservationsFragment extends BaseDataFragment {
                 ClientHelper.updateExamWidget(activity, false);
             }
             swapViews(reservations);
-            swipeRefreshLayout.setRefreshing(false);
+            setRefreshing(false);
             emptyButton.setEnabled(true);
         });
     }
