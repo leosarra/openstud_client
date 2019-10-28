@@ -17,19 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.adapters.EventAdapter;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.LayoutHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -71,7 +73,7 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
     private EventAdapter adapter;
     private int roomId;
     private ClassroomTimetableHandler h = new ClassroomTimetableHandler(this);
-
+    private Moshi moshi;
     @SuppressLint("UseSparseArrays")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
         ThemeEngine.applyClassroomTimetableTheme(this);
         setContentView(R.layout.activity_classroom_timetable);
         ButterKnife.bind(this);
+        moshi = new Moshi.Builder().build();
         Activity activity = this;
         Bundle bundle = this.getIntent().getExtras();
         roomId = bundle.getInt("roomId", -1);
@@ -195,25 +198,22 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
         today.set(Calendar.MILLISECOND, 0);
         String lessonsJson = bundle.getString("todayLessons", null);
         if (lessonsJson == null) return;
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<Lesson>>() {
-        }.getType();
-        List<Lesson> newLessons = gson.fromJson(lessonsJson, listType);
-        applyLessons(today, newLessons);
+        JsonAdapter<List<Lesson>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, Lesson.class));
+        List<Lesson> newLessons = null;
+        try {
+            newLessons = jsonAdapter.fromJson(lessonsJson);
+        } catch (JsonDataException | IOException e) {
+            e.printStackTrace();
+        }
+        if (newLessons!=null) applyLessons(today, newLessons);
         runOnUiThread(() -> adapter.notifyDataSetChanged());
     }
 
     public void onSaveInstanceState(Bundle savedInstance) {
-
-        Gson gson = new Gson();
-        Type typeMap = new TypeToken<Map<Long, List<Lesson>>>() {
-        }.getType();
-        Type typeCalendar = new TypeToken<Calendar>() {
-        }.getType();
-        String jsonMap = gson.toJson(cachedLessons, typeMap);
-        String jsonCalendar = gson.toJson(horizontalCalendar.getSelectedDate(), typeCalendar);
+        JsonAdapter<Map<Long,List<Lesson>>> jsonAdapterMap = moshi.adapter(Types.newParameterizedType(Map.class, Long.class, Types.newParameterizedType(List.class, Lesson.class)));
+        String jsonMap = jsonAdapterMap.toJson(cachedLessons);
         savedInstance.putString("cachedLessons", jsonMap);
-        savedInstance.putString("currentDate", jsonCalendar);
+        savedInstance.putLong("currentDate", horizontalCalendar.getSelectedDate().getTimeInMillis());
         super.onSaveInstanceState(savedInstance);
     }
 
@@ -225,19 +225,19 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
         defaultDate.set(Calendar.SECOND, 0);
         defaultDate.set(Calendar.MILLISECOND, 0);
         if (savedInstance != null) {
-            String jsonDate = savedInstance.getString("currentDate", null);
-            Gson gson = new Gson();
-            Type typeCalendar = new TypeToken<Calendar>() {
-            }.getType();
-            if (jsonDate != null) defaultDate = gson.fromJson(jsonDate, typeCalendar);
+            long currentDateMillis = savedInstance.getLong("currentDate", -1);
+            JsonAdapter<Map<Long,List<Lesson>>> jsonAdapterMap = moshi.adapter(Types.newParameterizedType(Map.class, Long.class, Types.newParameterizedType(List.class, Lesson.class)));
+            defaultDate = Calendar.getInstance();
+            defaultDate.setTimeInMillis(currentDateMillis);
             String json = savedInstance.getString("cachedLessons", null);
-            if (json == null) cachedLessons = new HashMap<>();
-            else {
-                Type type = new TypeToken<Map<Long, List<Lesson>>>() {
-                }.getType();
-
-                cachedLessons = gson.fromJson(json, type);
+            if (json != null) {
+                try {
+                    cachedLessons = jsonAdapterMap.fromJson(json);
+                } catch (JsonDataException | IOException e) {
+                    e.printStackTrace();
+                }
             }
+            if (json == null) cachedLessons = new HashMap<>();
         }
     }
 
