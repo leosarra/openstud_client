@@ -16,15 +16,17 @@ import androidx.core.widget.CompoundButtonCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lithium.leona.openstud.R;
 import com.lithium.leona.openstud.activities.CalendarActivity;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
 import com.lithium.leona.openstud.helpers.ThemeEngine;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,10 +47,9 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
     public static BottomSheetFilterEventFragment newInstance(List<String> names) {
         BottomSheetFilterEventFragment myFragment = new BottomSheetFilterEventFragment();
         Bundle args = new Bundle();
-        Gson gson = new Gson();
-        Type listType = new TypeToken<List<String>>() {
-        }.getType();
-        String json = gson.toJson(names, listType);
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<List<String>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, String.class));
+        String json = jsonAdapter.toJson(names);
         args.putSerializable("filter_elements", json);
         myFragment.setArguments(args);
         return myFragment;
@@ -63,15 +64,21 @@ public class BottomSheetFilterEventFragment extends BottomSheetDialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bdl = getArguments();
+        Moshi moshi = new Moshi.Builder().build();
         if (bdl != null) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<String>>() {
-            }.getType();
+            JsonAdapter<List<String>> jsonAdapter = moshi.adapter(Types.newParameterizedType(List.class, String.class));
             String json = bdl.getString("filter_elements", null);
             if (json != null) {
-                List<String> passedElements = gson.fromJson(json, listType);
-                elements.clear();
-                elements.addAll(passedElements);
+                List<String> passedElements = null;
+                try {
+                    passedElements = jsonAdapter.fromJson(json);
+                } catch (JsonDataException | IOException e) {
+                    e.printStackTrace();
+                }
+                if (passedElements!=null) {
+                    elements.clear();
+                    elements.addAll(passedElements);
+                }
             }
         }
     }
