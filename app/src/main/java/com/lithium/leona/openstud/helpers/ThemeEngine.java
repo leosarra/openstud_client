@@ -118,24 +118,27 @@ public class ThemeEngine {
         }
     }
 
-    public static int getPrimaryTextColor(Activity activity) {
+    public static int resolveColorFromAttribute(Context context, int attribute, int fallbackColor) {
         int tintColor;
         TypedValue tV = new TypedValue();
-        Resources.Theme theme = activity.getTheme();
-        boolean success = theme.resolveAttribute(R.attr.primaryTextColor, tV, true);
+        Resources.Theme theme = context.getTheme();
+        boolean success = theme.resolveAttribute(attribute, tV, true);
         if (success) tintColor = tV.data;
-        else tintColor = ContextCompat.getColor(activity, android.R.color.white);
+        else tintColor = ContextCompat.getColor(context, fallbackColor);
         return tintColor;
     }
 
+    public static int getPrimaryTextColor(Activity activity) {
+        return ThemeEngine.resolveColorFromAttribute(activity, R.attr.primaryTextColor, android.R.color.white);
+    }
+
     public static int getSecondaryTextColor(Activity activity) {
-        int tintColor;
-        TypedValue tV = new TypedValue();
-        Resources.Theme theme = activity.getTheme();
-        boolean success = theme.resolveAttribute(R.attr.secondaryTextColor, tV, true);
-        if (success) tintColor = tV.data;
-        else tintColor = ContextCompat.getColor(activity, android.R.color.darker_gray);
-        return tintColor;
+        return ThemeEngine.resolveColorFromAttribute(activity, R.attr.secondaryTextColor, android.R.color.darker_gray);
+    }
+
+    public static int getSpinnerColorId(Context context) {
+        if (ThemeEngine.isLightTheme(context)) return R.color.refreshLight;
+        else return R.color.refreshDark;
     }
 
     public static void applyAboutTheme(Activity activity) {
