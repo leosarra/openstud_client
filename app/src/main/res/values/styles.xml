@@ -27,8 +27,8 @@
         <item name="secondaryTextColor">#d3696969</item>
         <item name="dividerColor">#B6B6B6</item>
         <item name="backgroundColor">@color/lightBackgroundCardLayout</item>
-        <item name="backgroundCardColor">#FFFFFF</item>
-        <item name="bottomNavColor">#FFFFFF</item>
+        <item name="backgroundCardColor">@color/white</item>
+        <item name="bottomNavColor">@color/white</item>
         <item name="defaultTextNav">#737373</item>
         <item name="certifiedExamColor">@color/green</item>
         <item name="nonPassedExamColor">@color/red</item>
@@ -42,6 +42,8 @@
         <item name="searchBarTheme">@style/LightSearchBar</item>
         <item name="ToolBarStyle">@style/ToolBarStyleDefault</item>
         <item name="SpinnerTheme">@style/SpinnerLight</item>
+        <item name="SwipeSpinnerBackgroundColor">@color/white</item>
+        <item name="SwipeSpinnerColor">@color/refreshLight</item>
     </style>
 
     <style name="AppThemeDark" parent="MaterialDrawerTheme.Light.DarkToolbar">
@@ -85,6 +87,8 @@
         <item name="material_drawer_header_selection_subtext">#96F4F4F6</item>
         <item name="material_drawer_legacy_style">false</item>
         <item name="SpinnerTheme">@style/SpinnerDark</item>
+        <item name="SwipeSpinnerBackgroundColor">#585555</item>
+        <item name="SwipeSpinnerColor">@color/refreshDark</item>
     </style>
 
     <style name="AppThemeBlack" parent="MaterialDrawerTheme.Light.DarkToolbar">
@@ -128,7 +132,8 @@
         <item name="material_drawer_header_selection_subtext">#96F4F4F6</item>
         <item name="material_drawer_legacy_style">false</item>
         <item name="SpinnerTheme">@style/SpinnerDark</item>
-
+        <item name="SwipeSpinnerBackgroundColor">#413F3F</item>
+        <item name="SwipeSpinnerColor">@color/refreshDark</item>
     </style>
 
     <style name="popupMenuStyle" parent="Theme.AppCompat.Light.DarkActionBar">

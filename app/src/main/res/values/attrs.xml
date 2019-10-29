@@ -24,5 +24,7 @@
         <attr name="searchBarTheme" format="reference" />
         <attr name="ToolBarStyle" format="reference" />
         <attr name="SpinnerTheme" format="reference" />
+        <attr name="SwipeSpinnerBackgroundColor" format="color" />
+        <attr name="SwipeSpinnerColor" format="color" />
     </declare-styleable>
 </resources>
