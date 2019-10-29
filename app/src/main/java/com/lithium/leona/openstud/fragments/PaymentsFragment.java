@@ -23,6 +23,7 @@ import com.lithium.leona.openstud.activities.PaymentsActivity;
 import com.lithium.leona.openstud.adapters.TaxAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
@@ -97,9 +98,10 @@ public class PaymentsFragment extends BaseDataFragment {
         adapter = new TaxAdapter(activity, taxes, mode);
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshId = ThemeEngine.getSpinnerColorId(activity);
+        swipeRefreshLayout.setColorSchemeResources(refreshId, refreshId, refreshId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(activity, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
-
         refresh();
         return v;
     }

@@ -102,7 +102,9 @@ public class ProfileActivity extends BaseDataActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         applyInfos(student, isee);
         swipeRefreshLayout.setNestedScrollingEnabled(true);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshColorId = ThemeEngine.getSpinnerColorId(this);
+        swipeRefreshLayout.setColorSchemeResources(refreshColorId, refreshColorId, refreshColorId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(this, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         certificatesButton.setOnClickListener(v -> {
             BottomSheetCertificateFragment filterFrag = BottomSheetCertificateFragment.newInstance();
             filterFrag.show(getSupportFragmentManager(), filterFrag.getTag());

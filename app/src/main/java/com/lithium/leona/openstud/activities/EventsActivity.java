@@ -101,7 +101,9 @@ public class EventsActivity extends BaseDataActivity {
         });
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.events);
         rv.setAdapter(adapter);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshColorId = ThemeEngine.getSpinnerColorId(this);
+        swipeRefreshLayout.setColorSchemeResources(refreshColorId, refreshColorId, refreshColorId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(this, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         swipeRefreshLayout.setOnRefreshListener(() -> refreshEvents(true));
         emptyButton.setOnClickListener(v -> {
             if (!swipeRefreshLayout.isRefreshing())

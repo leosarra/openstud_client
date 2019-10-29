@@ -104,7 +104,9 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         rv.setLayoutManager(llm);
         adapter = new AvaiableReservationsAdapter(this, reservations, activeReservations, this::confirmReservation, rv);
         rv.setAdapter(adapter);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshColorId = ThemeEngine.getSpinnerColorId(this);
+        swipeRefreshLayout.setColorSchemeResources(refreshColorId, refreshColorId, refreshColorId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(this, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         swipeRefreshLayout.setOnRefreshListener(this::refreshAvaiableReservations);
         if (savedInstanceState == null) refreshAvaiableReservations();
         else {

@@ -22,6 +22,7 @@ import com.lithium.leona.openstud.activities.ExamsActivity;
 import com.lithium.leona.openstud.adapters.ActiveReservationsAdapter;
 import com.lithium.leona.openstud.data.InfoManager;
 import com.lithium.leona.openstud.helpers.ClientHelper;
+import com.lithium.leona.openstud.helpers.ThemeEngine;
 
 import org.apache.commons.lang3.StringUtils;
 import org.threeten.bp.Duration;
@@ -99,7 +100,9 @@ public class ReservationsFragment extends BaseDataFragment {
         }, rv);
         rv.setAdapter(adapter);
         swipeRefreshLayout.measure(1, 1);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshId = ThemeEngine.getSpinnerColorId(activity);
+        swipeRefreshLayout.setColorSchemeResources(refreshId, refreshId, refreshId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(activity, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         swipeRefreshLayout.setOnRefreshListener(this::refreshReservations);
         swipeRefreshLayout.setEnabled(false);
         new Thread(() -> {

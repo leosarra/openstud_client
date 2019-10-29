@@ -379,7 +379,9 @@ public class StatsActivity extends BaseDataActivity {
             removeFakeExam(position);
         });
         rv.setAdapter(adapter);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshColorId = ThemeEngine.getSpinnerColorId(this);
+        swipeRefreshLayout.setColorSchemeResources(refreshColorId, refreshColorId, refreshColorId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(this, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         swipeRefreshLayout.setOnRefreshListener(this::refreshExamsDone);
         adapter.notifyDataSetChanged();
         ItemTouchHelper.Callback callback =

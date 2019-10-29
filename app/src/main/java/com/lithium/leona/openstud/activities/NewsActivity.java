@@ -90,7 +90,9 @@ public class NewsActivity extends BaseDataActivity {
             }
         });
         rv.setAdapter(adapter);
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshColorId = ThemeEngine.getSpinnerColorId(this);
+        swipeRefreshLayout.setColorSchemeResources(refreshColorId, refreshColorId, refreshColorId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(this, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         List<News> news_cached = InfoManager.getNewsCached(this, os, locale);
         if (news_cached != null && !news_cached.isEmpty()) {
             news.addAll(news_cached);

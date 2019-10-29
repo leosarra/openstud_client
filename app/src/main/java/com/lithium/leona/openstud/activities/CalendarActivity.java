@@ -166,7 +166,9 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
         RelativeLayout datePickerButton = findViewById(R.id.date_picker_button);
         datePickerButton.setOnClickListener(v -> animateExpansion());
         emptyText.setText(getResources().getString(R.string.no_events));
-        swipeRefreshLayout.setColorSchemeResources(R.color.refresh1, R.color.refresh2, R.color.refresh3);
+        int refreshColorId = ThemeEngine.getSpinnerColorId(this);
+        swipeRefreshLayout.setColorSchemeResources(refreshColorId, refreshColorId, refreshColorId);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ThemeEngine.resolveColorFromAttribute(this, R.attr.SwipeSpinnerBackgroundColor, R.color.white));
         if (savedInstanceState == null) refreshEvents();
         swipeRefreshLayout.setOnRefreshListener(this::refreshEvents);
         if (expandableLayout.isExpanded()) {
