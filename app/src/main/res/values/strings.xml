@@ -276,7 +276,7 @@
     <string name="update_card_error">Can\'t update student card details</string>
     <string name="reservation_period">Reservation period:  %1$s -  %2$s</string>
     <string name="title_activity_web_view" translatable="false">WebView</string>
-    <string name="presentation">Base laurea</string>
+    <string name="presentation">Base grade</string>
     <string name="key_minmax_remove" translatable="false">key_minmax_remove</string>
     <string name="ignore_minmax_exam">Ignore best/worse exam in base grade</string>
     <string name="ignore_minmax_exam_description">Don\'t consider your best/worse exam when computing the base graduation mark</string>
