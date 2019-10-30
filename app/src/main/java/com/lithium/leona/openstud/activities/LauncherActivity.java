@@ -34,7 +34,6 @@ public class LauncherActivity extends AppCompatActivity {
     private void startLogin(Bundle bundle) {
         Intent intent = new Intent(LauncherActivity.this, LoginActivity.class);
         if (bundle != null) intent.putExtras(bundle);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         LauncherActivity.this.finish();
     }
