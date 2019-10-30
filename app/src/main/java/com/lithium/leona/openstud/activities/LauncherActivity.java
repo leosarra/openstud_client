@@ -22,6 +22,7 @@ public class LauncherActivity extends AppCompatActivity {
             if (bdl != null) intent.putExtras(bdl);
             if (!PreferenceManager.isBiometricsEnabled(this)) startActivity(intent);
             else startLogin(bdl);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         } else {
             Intent intent = new Intent(LauncherActivity.this, LoginActivity.class);
             if (bdl != null) intent.putExtras(bdl);
