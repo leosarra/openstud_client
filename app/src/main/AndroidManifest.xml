@@ -62,7 +62,8 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/LoginTheme" />
+            android:theme="@style/LoginTheme"
+            android:noHistory="true"/>
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/NoActionBarAppLightTheme" />
