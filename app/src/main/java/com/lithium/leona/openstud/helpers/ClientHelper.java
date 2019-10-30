@@ -272,6 +272,7 @@ public class ClientHelper {
             PreferenceManager.setBiometricsEnabled(activity, false);
             Intent i = new Intent(activity, LauncherActivity.class);
             activity.startActivity(i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         } else if (item == LayoutHelper.Selection.CLASSROOMS.getValue()) {
             if (activity instanceof SearchClassroomActivity) return;
             Intent intent = new Intent(activity, SearchClassroomActivity.class);
