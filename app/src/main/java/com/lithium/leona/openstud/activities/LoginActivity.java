@@ -297,8 +297,8 @@ public class LoginActivity extends AppCompatActivity {
                         ClientHelper.updateExamWidget(activity, false);
                     }
                     Intent intent = new Intent(activity, ExamsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     activity.startActivity(intent);
+                    activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR.getValue()) {
                     LayoutHelper.createActionSnackBar(activity.layout, R.string.connection_error, R.string.retry, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.CONNECTION_ERROR_RECOVERY.getValue()) {
@@ -346,7 +346,6 @@ public class LoginActivity extends AppCompatActivity {
                     LayoutHelper.createTextSnackBar(activity.layout, R.string.biometric_unavailable, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.NO_BIOMETRICS.getValue() || msg.what == ClientHelper.Status.NO_BIOMETRIC_HW.getValue()) {
                     Intent intent = new Intent(activity, ExamsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     intent.putExtra("error", msg.what);
                     activity.startActivity(intent);
                 }
