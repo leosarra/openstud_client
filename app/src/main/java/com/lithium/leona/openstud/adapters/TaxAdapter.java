@@ -28,17 +28,24 @@ public class TaxAdapter extends RecyclerView.Adapter<TaxAdapter.TaxHolder> {
     private List<Tax> taxes;
     private Context context;
     private int mode;
+    private View.OnClickListener onClickListener;
 
-    public TaxAdapter(Context context, List<Tax> taxes, int mode) {
+    public TaxAdapter(Context context, List<Tax> taxes, int mode, View.OnClickListener listener) {
         this.taxes = taxes;
         this.context = context;
         this.mode = mode;
+        this.onClickListener = listener;
     }
 
     @NonNull
     @Override
     public TaxHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_row_tax, parent, false);
+        View view;
+        if (mode == Mode.PAID.getValue()) view = LayoutInflater.from(context).inflate(R.layout.item_row_tax_paid, parent, false);
+        else {
+            view = LayoutInflater.from(context).inflate(R.layout.item_row_tax_unpaid, parent, false);
+            view.setOnClickListener(onClickListener);
+        }
         TaxHolder holder = new TaxHolder(view);
         holder.setMode(mode);
         holder.setContext(context);
