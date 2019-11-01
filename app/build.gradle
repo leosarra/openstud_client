@@ -75,7 +75,7 @@ dependencies {
     implementation 'androidx.biometric:biometric:1.0.0-rc02'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'com.github.lithiumsr:openstud_driver:0.58.19'
+    implementation 'com.github.lithiumsr:openstud_driver:0.59.2'
     implementation 'com.jakewharton:butterknife:10.1.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.mikepenz:aboutlibraries:6.2.3"
