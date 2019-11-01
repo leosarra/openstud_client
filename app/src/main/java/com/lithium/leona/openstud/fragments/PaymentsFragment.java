@@ -28,6 +28,9 @@ import com.lithium.leona.openstud.helpers.ThemeEngine;
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,7 +98,13 @@ public class PaymentsFragment extends BaseDataFragment {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        adapter = new TaxAdapter(activity, taxes, mode);
+        adapter = new TaxAdapter(activity, taxes, mode, v1 -> {
+            int itemPosition = rv.getChildLayoutPosition(v1);
+            if (itemPosition < taxes.size()) {
+                Tax tax = taxes.get(itemPosition);
+                new Thread(() -> getFile(activity, tax)).start();
+            }
+        });
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         int refreshId = ThemeEngine.getSpinnerColorId(activity);
@@ -104,6 +113,41 @@ public class PaymentsFragment extends BaseDataFragment {
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
         refresh();
         return v;
+    }
+
+    private void getFile(Activity activity, Tax tax) {
+        boolean check = false;
+        String directory = activity.getExternalFilesDir("/OpenStud/pdf/payments/").getPath();
+        File dirs = new File(directory);
+        if (!directory.endsWith("/")) directory = directory + "/";
+        dirs.mkdirs();
+        File pdfFile = new File(directory + tax.getCode() +".pdf");
+        try {
+            if (pdfFile.exists()) {
+                ClientHelper.openActionViewPDF(activity, pdfFile);
+                return;
+            }
+            pdfFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(pdfFile);
+            byte[] content = os.getPaymentSlip(tax);
+            fos.write(content);
+            fos.close();
+            check = true;
+        } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
+            h.sendEmptyMessage(ClientHelper.Status.FAILED_GET.getValue());
+            e.printStackTrace();
+        } catch (OpenstudInvalidCredentialsException e) {
+            h.sendEmptyMessage(ClientHelper.getStatusFromLoginException(e).getValue());
+            e.printStackTrace();
+        } catch (IOException e) {
+            h.sendEmptyMessage(ClientHelper.Status.FAILED_GET_IO.getValue());
+            e.printStackTrace();
+        }
+        if (!check) {
+            pdfFile.delete();
+            return;
+        }
+        ClientHelper.openActionViewPDF(activity, pdfFile);
     }
 
     @Override
@@ -232,6 +276,10 @@ public class PaymentsFragment extends BaseDataFragment {
                     activity.createTextSnackBar(R.string.user_not_enabled_error, Snackbar.LENGTH_LONG);
                 } else if (msg.what == (ClientHelper.Status.INVALID_CREDENTIALS).getValue() || msg.what == ClientHelper.Status.EXPIRED_CREDENTIALS.getValue() || msg.what == ClientHelper.Status.ACCOUNT_BLOCKED.getValue()) {
                     ClientHelper.rebirthApp(activity, msg.what);
+                } else if (msg.what == ClientHelper.Status.FAILED_GET_IO.getValue()) {
+                    activity.createActionSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG, listener);
+                } else if (msg.what == ClientHelper.Status.FAILED_GET.getValue()) {
+                    activity.createActionSnackBar(R.string.failed_get_network_payment, Snackbar.LENGTH_LONG, listener);
                 } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
                     activity.createTextSnackBar(R.string.invalid_response_error, Snackbar.LENGTH_LONG);
                 }
