@@ -126,7 +126,7 @@ public class BottomSheetCertificateFragment extends BottomSheetDialogFragment {
         try {
             careers = os.getCareersChoicesForCertificate(student, cert);
         } catch (OpenstudConnectionException | OpenstudInvalidResponseException e) {
-            activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network).show());
+            activity.runOnUiThread(() -> Toasty.error(activity, R.string.failed_get_network_certificate).show());
             e.printStackTrace();
         } catch (OpenstudInvalidCredentialsException e) {
             InfoManager.clearSharedPreferences(activity);

@@ -574,7 +574,7 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
                 } else if (msg.what == (ClientHelper.Status.OK_DELETE).getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.ok_delete, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.FAILED_GET.getValue()) {
-                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.failed_get_network, Snackbar.LENGTH_LONG);
+                    LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.failed_get_network_exam, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.CLOSED_RESERVATION.getValue()) {
                     LayoutHelper.createTextSnackBar(activity.mainLayout, R.string.closed_reservation, Snackbar.LENGTH_LONG);
                 }

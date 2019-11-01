@@ -320,7 +320,7 @@ public class ReservationsFragment extends BaseDataFragment {
                 } else if (msg.what == ClientHelper.Status.FAILED_GET_IO.getValue()) {
                     activity.createTextSnackBar(R.string.failed_get_io, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.FAILED_GET.getValue()) {
-                    activity.createTextSnackBar(R.string.failed_get_network, Snackbar.LENGTH_LONG);
+                    activity.createTextSnackBar(R.string.failed_get_network_exam, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.CLOSED_RESERVATION.getValue()) {
                     activity.createTextSnackBar(R.string.closed_reservation, Snackbar.LENGTH_LONG);
                 } else if (msg.what == ClientHelper.Status.UNEXPECTED_VALUE.getValue()) {
