@@ -113,7 +113,7 @@ public class EventTheatreAdapter extends RecyclerView.Adapter<EventTheatreAdapte
             else if (ev.getWhere() == null || ev.getWhere().trim().isEmpty())
                 txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, ev.getRoom()));
             else
-                txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, String.format("%s, %s", ev.getRoom(), ev.getWhere())));
+                txtWhere.setText(context.getResources().getString(R.string.event_theatre_where, String.format("%s. %s", ev.getRoom(), ev.getWhere())));
             txtWhen.setText(context.getResources().getString(R.string.event_theatre_when, String.format("%02d:%02d", ev.getStart().getHour(), ev.getStart().getMinute())));
         }
     }
