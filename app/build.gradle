@@ -12,8 +12,8 @@ android {
         applicationId "com.lithium.leona.openstud"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 180
-        versionName "1.28.9"
+        versionCode 182
+        versionName "1.28.10"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
