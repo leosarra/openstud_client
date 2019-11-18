@@ -140,7 +140,7 @@ public class ReservationsFragment extends BaseDataFragment {
             }
             pdfFile.createNewFile();
             FileOutputStream fos = new FileOutputStream(pdfFile);
-            byte[] content = os.getPdf(res);
+            byte[] content = os.getExamReservationPDF(res);
             fos.write(content);
             fos.close();
             check = true;
