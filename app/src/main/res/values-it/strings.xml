@@ -61,7 +61,7 @@
     <string name="retry">Riprova</string>
     <string name="invalid_response_error">Infostud non sembra funzionare correttamente</string>
     <string name="user_not_enabled_error">Utente non abilitato alla gestione su Infostud</string>
-    <string name="invalid_password_error">La credenziali inseriti sono errate</string>
+    <string name="invalid_password_error">Le credenziali inserite sono errate</string>
     <string name="device_no_internet">Il tuo dispositivo non risulta connesso a internet</string>
     <string name="search_sessions">Sessioni</string>
     <string name="info_extra_reservation">Info</string>
