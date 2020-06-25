@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -418,6 +419,7 @@ public class StatsActivity extends BaseDataActivity {
         private final WeakReference<StatsActivity> activity;
 
         private StatsHandler(StatsActivity activity) {
+            super(Looper.getMainLooper());
             this.activity = new WeakReference<>(activity);
         }
 

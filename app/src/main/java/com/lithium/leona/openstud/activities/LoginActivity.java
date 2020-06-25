@@ -282,6 +282,7 @@ public class LoginActivity extends AppCompatActivity {
         private final WeakReference<LoginActivity> mActivity;
 
         LoginEventHandler(LoginActivity activity) {
+            super(Looper.getMainLooper());
             mActivity = new WeakReference<>(activity);
         }
 

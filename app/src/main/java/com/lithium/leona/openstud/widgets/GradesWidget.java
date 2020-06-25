@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -76,7 +77,7 @@ public class GradesWidget extends AppWidgetProvider {
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        Handler mHandler = new Handler();
+        Handler mHandler = new Handler(Looper.getMainLooper());
         new Thread(() -> {
             Openstud os = InfoManager.getOpenStud(context);
             if (os != null) {

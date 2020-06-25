@@ -3,6 +3,7 @@ package com.lithium.leona.openstud.activities;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -231,6 +232,7 @@ public class ProfileActivity extends BaseDataActivity {
         private final WeakReference<ProfileActivity> mActivity;
 
         ProfileEventHandler(ProfileActivity activity) {
+            super(Looper.getMainLooper());
             mActivity = new WeakReference<>(activity);
         }
 

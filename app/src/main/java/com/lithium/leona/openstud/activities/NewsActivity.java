@@ -2,6 +2,7 @@ package com.lithium.leona.openstud.activities;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
@@ -212,6 +213,7 @@ public class NewsActivity extends BaseDataActivity {
         private final WeakReference<NewsActivity> activity;
 
         private NewsHandler(NewsActivity activity) {
+            super(Looper.getMainLooper());
             this.activity = new WeakReference<>(activity);
         }
 

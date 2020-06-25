@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
@@ -247,6 +248,7 @@ public class ClassroomTimetableActivity extends BaseDataActivity {
         private final WeakReference<ClassroomTimetableActivity> activity;
 
         private ClassroomTimetableHandler(ClassroomTimetableActivity activity) {
+            super(Looper.getMainLooper());
             this.activity = new WeakReference<>(activity);
         }
 

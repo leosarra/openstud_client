@@ -3,6 +3,7 @@ package com.lithium.leona.openstud.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -259,6 +260,7 @@ public class SearchSessionsResultActivity extends BaseDataActivity {
         private final WeakReference<SearchSessionsResultActivity> mActivity;
 
         SearchEventHandler(SearchSessionsResultActivity activity) {
+            super(Looper.getMainLooper());
             mActivity = new WeakReference<>(activity);
         }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -222,7 +223,7 @@ public class AddCustomCourseActivity extends AppCompatActivity {
     private synchronized void removeLesson(CustomLesson lesson, int position) {
         lessons.remove(lesson);
         adapter.notifyItemRemoved(position);
-        new Handler().postDelayed(() -> adapter.notifyDataSetChanged(), 250);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> adapter.notifyDataSetChanged(), 250);
     }
 
 

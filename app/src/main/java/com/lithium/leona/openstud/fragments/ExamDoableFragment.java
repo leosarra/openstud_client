@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -219,6 +220,7 @@ public class ExamDoableFragment extends BaseDataFragment {
         private final WeakReference<ExamDoableFragment> frag;
 
         private ExamsDoableHandler(ExamDoableFragment frag) {
+            super(Looper.getMainLooper());
             this.frag = new WeakReference<>(frag);
         }
 

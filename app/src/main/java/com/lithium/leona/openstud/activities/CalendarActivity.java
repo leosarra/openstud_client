@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -544,6 +545,7 @@ public class CalendarActivity extends BaseDataActivity implements DialogInterfac
         private final WeakReference<CalendarActivity> mActivity;
 
         CalendarEventHandler(CalendarActivity activity) {
+            super(Looper.getMainLooper());
             mActivity = new WeakReference<>(activity);
         }
 

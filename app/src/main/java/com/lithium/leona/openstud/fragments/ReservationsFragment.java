@@ -3,6 +3,7 @@ package com.lithium.leona.openstud.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -293,6 +294,7 @@ public class ReservationsFragment extends BaseDataFragment {
         private final WeakReference<ReservationsFragment> frag;
 
         private ReservationsHandler(ReservationsFragment frag) {
+            super(Looper.getMainLooper());
             this.frag = new WeakReference<>(frag);
         }
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -284,7 +285,7 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         if (searchBar.isSearchEnabled() && searchBar.getText().trim().isEmpty())
             searchBar.disableSearch();
         else if (searchBar.isSearchEnabled()) searchBar.hideSuggestionsList();
-        new Handler().postDelayed(() -> touchBarDisabled = false, 500);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> touchBarDisabled = false, 500);
         return gd.onTouchEvent(event);
     }
 
@@ -292,6 +293,7 @@ public class SearchClassroomActivity extends BaseDataActivity implements Materia
         private final WeakReference<SearchClassroomActivity> activity;
 
         private SearchClassroomHandler(SearchClassroomActivity activity) {
+            super(Looper.getMainLooper());
             this.activity = new WeakReference<>(activity);
         }
 
