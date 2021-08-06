@@ -38,7 +38,6 @@ android {
     buildTypes.each {
         it.buildConfigField 'String', 'DEC_SECRET', DEC_SECRET
         it.buildConfigField 'String', 'TIMETABLE_KEY_HEX', TIMETABLE_KEY_HEX
-        it.buildConfigField 'String', 'INFOSTUD_API_KEY', INFOSTUD_API_KEY
     }
 
     productFlavors {
